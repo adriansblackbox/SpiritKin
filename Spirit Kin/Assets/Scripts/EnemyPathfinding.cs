@@ -5,26 +5,33 @@ using UnityEngine.AI;
 
 public class EnemyPathfinding : MonoBehaviour
 {
+    public Vector3 spawnLocation;
     public GameObject player;
     public GameObject eneME;
     
     public NavMeshAgent enemyMe;
+    public NavMeshPath path;
 
     // Start is called before the first frame update
     void Start()
     {
+        path = new NavMeshPath();
         player = GameObject.FindWithTag("Player"); 
+        spawnLocation = eneME.transform.position;
         enemyMe = eneME.GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("coom");
-         if(true) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-            Debug.Log("BIG COOM");
+        enemyMe.CalculatePath(player.transform.position, path);
+        if(path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
             enemyMe.SetDestination(player.transform.position);
-            Debug.Log("NUTTE");
+        }
+        else{
+            enemyMe.SetDestination(spawnLocation);
+            // Player not close enough. Patrol behavior.
+            // Consider adding rules for if player tries to exploit AI by attacking them from outside the navmesh range
         } 
     }
 }

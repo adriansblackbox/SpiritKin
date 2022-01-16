@@ -557,7 +557,7 @@ MonoBehaviour:
   m_AgentTypeID: 0
   m_CollectObjects: 1
   m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Center: {x: 0, y: 4, z: 0}
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 127
@@ -1216,7 +1216,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a27e8c07199a14290045a17a6a820c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnLocation: {x: 0, y: 0, z: 0}
   player: {fileID: 919132148322181330}
+  eneME: {fileID: 1482134715}
+  enemyMe: {fileID: 1482134721}
 --- !u!195 &1482134721
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1599,7 +1602,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a27e8c07199a14290045a17a6a820c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnLocation: {x: 0, y: 0, z: 0}
   player: {fileID: 919132148322181330}
+  eneME: {fileID: 1931316336}
+  enemyMe: {fileID: 1931316342}
 --- !u!195 &1931316342
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1664,7 +1670,6 @@ GameObject:
   - component: {fileID: 2071980705}
   - component: {fileID: 2071980704}
   - component: {fileID: 2071980703}
-  - component: {fileID: 2071980707}
   - component: {fileID: 2071980709}
   - component: {fileID: 2071980708}
   m_Layer: 7
@@ -1750,18 +1755,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2071980707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2071980702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2be8797a5a68a984da1094596b83a70b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2071980708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1774,7 +1767,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a27e8c07199a14290045a17a6a820c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnLocation: {x: 0, y: 0, z: 0}
   player: {fileID: 919132148322181330}
+  eneME: {fileID: 2071980702}
+  enemyMe: {fileID: 2071980709}
 --- !u!195 &2071980709
 NavMeshAgent:
   m_ObjectHideFlags: 0
