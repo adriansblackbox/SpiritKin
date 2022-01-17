@@ -42,7 +42,7 @@ public class Lock_Target : MonoBehaviour
         Vector3.Lerp(GetComponent<Player_Controller>().CinemachineCameraTarget.transform.forward, focusTarget, Time.deltaTime * 20f);
         
         // Cancel lock
-        if(Input.GetButtonDown("R3 Button")){
+        if(Input.GetButtonDown("R3 Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             Target = null;
             GetComponent<Player_Controller>()._cinemachineTargetPitch = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
             GetComponent<Player_Controller>()._cinemachineTargetYaw = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
@@ -56,7 +56,7 @@ public class Lock_Target : MonoBehaviour
     }
 
     private void FindTarget(){
-        if(Input.GetButtonDown("R3 Button")){
+        if(Input.GetButtonDown("R3 Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             Target = FindObjectOfType<Lockable_Targets>().AssessTarget();
             GetComponent<Player_Controller>().RotateOnMoveDirection = false;
             GetComponent<Player_Controller>().SprintSpeed = GetComponent<Player_Controller>().WalkSpeed;

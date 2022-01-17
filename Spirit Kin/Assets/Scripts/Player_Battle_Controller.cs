@@ -11,6 +11,11 @@ public class Player_Battle_Controller : MonoBehaviour
     private float TotalLungeTime = 0.3f;
     public float LungeCoolDown = 0f;
     public Vector3 DodgeDirection;
+    public GameObject Sword;
+
+    private void Start() {
+        Sword.GetComponent<Collider>().enabled = false;
+    }
     void Update()
     {
         if(DodgeTime > 0){
@@ -22,6 +27,7 @@ public class Player_Battle_Controller : MonoBehaviour
             LungeTime -= Time.deltaTime;
         }else if(LungeCoolDown > 0){
             LungeCoolDown -= Time.deltaTime;
+            Sword.GetComponent<Collider>().enabled = false;
         }
 
         if(GetComponent<Lock_Target>().Target != null && DodgeCoolDown <= 0)
@@ -30,16 +36,17 @@ public class Player_Battle_Controller : MonoBehaviour
             Attack();
     }
     private void Dodge(){
-        if(Input.GetButtonDown("A Button")){
+        if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.LeftShift)){
             DodgeTime = TotalDodgeTime;
             DodgeCoolDown = 1f;
             DodgeDirection = GetComponent<Player_Controller>().moveDirection;
         }
     }
     private void Attack(){
-        if(Input.GetButtonDown("X Button")){
+        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
             LungeTime = TotalLungeTime;
             LungeCoolDown = 0.1f;
+            Sword.GetComponent<Collider>().enabled = true;
         }
     }
 }
