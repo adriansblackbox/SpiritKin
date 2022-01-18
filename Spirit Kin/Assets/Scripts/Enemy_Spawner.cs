@@ -28,9 +28,13 @@ public class Enemy_Spawner : MonoBehaviour
     private void calculateEnemyLimits() 
     {
         if (currentRound % 2 == 1) //lower limit increments every other round
+        {
             lowerLimitEnemyCount++;
-        else if (currentRound != 2 && currentRound % 2 == 0 && upperLimitEnemyCount - lowerLimitEnemyCount == 2) //upper limit increments every round after the lower limit increments
+        }
+        else if (currentRound != 2 && currentRound % 2 == 0 && upperLimitEnemyCount - lowerLimitEnemyCount == 1) //upper limit increments every round after the lower limit increments
+        {
             upperLimitEnemyCount++;
+        }
     }
 
     //Spawns all enemies for a round around each shrine
@@ -44,7 +48,7 @@ public class Enemy_Spawner : MonoBehaviour
             //current shrine
             Transform shrine = shrineContainer.transform.GetChild(i);
             //number of enemies that should be at current shrine
-            int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount);
+            int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
             Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.y + ")");
             //if not enough enemies at shrine spawn more
             if (shrine.GetChild(0).childCount < enemyCount)
@@ -55,10 +59,11 @@ public class Enemy_Spawner : MonoBehaviour
                 {
                     //choose a random location in the range around the shrine
                     Vector3 enemyPosition = chooseLocation(shrine);
-                    Debug.Log(enemyPosition);
+                    //spawn in enemy
                     GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
                     //put in enemy container
                     enemy.transform.parent = shrine.GetChild(0);
+
                     // //decide whether or not they are going to be a cluster
                     // if (Random.Range(0.0f, 1.0f) > 0.2f) //non-cluster 80%
                     // {
