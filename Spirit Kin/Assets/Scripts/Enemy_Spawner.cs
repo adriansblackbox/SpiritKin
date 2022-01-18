@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Enemy_Spawner : MonoBehaviour
 {
-    public int shrineSpawnRange; //range around the shrine where enemies can be spawned
-    public int enemyNoSpawnRadius; //ensure distance from current enemies to desired spawn point is > than enemyNoSpawnRadius
+    public float shrineSpawnRange; //range around the shrine where enemies can be spawned
+    public float enemyNoSpawnRadius; //ensure distance from current enemies to desired spawn point is > than enemyNoSpawnRadius
     public int clusterChance; //chance that the enemy that spawns is a cluster of 2 or 3 (80% 2 enemies, 20% 3 enemies)
 
     [SerializeField] int currentRound = 1;
@@ -28,13 +28,9 @@ public class Enemy_Spawner : MonoBehaviour
     private void calculateEnemyLimits() 
     {
         if (currentRound % 2 == 1) //lower limit increments every other round
-        {
             lowerLimitEnemyCount++;
-        }
         else if (currentRound != 2 && currentRound % 2 == 0 && upperLimitEnemyCount - lowerLimitEnemyCount == 1) //upper limit increments every round after the lower limit increments
-        {
             upperLimitEnemyCount++;
-        }
     }
 
     //Spawns all enemies for a round around each shrine
@@ -49,7 +45,7 @@ public class Enemy_Spawner : MonoBehaviour
             Transform shrine = shrineContainer.transform.GetChild(i);
             //number of enemies that should be at current shrine
             int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
-            Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.y + ")");
+            Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.z + ")");
             //if not enough enemies at shrine spawn more
             if (shrine.GetChild(0).childCount < enemyCount)
             {
@@ -84,12 +80,9 @@ public class Enemy_Spawner : MonoBehaviour
         {
             float xPos = Random.Range(shrine.position.x - shrineSpawnRange, shrine.position.x + shrineSpawnRange);
             float zPos = Random.Range(shrine.position.z - shrineSpawnRange, shrine.position.z + shrineSpawnRange);
-            Vector3 test = new Vector3(xPos, 0.0f, zPos);
+            Vector3 test = new Vector3(xPos, 10.0f, zPos);
             if (shrine.GetChild(0).childCount == 0) //if no enemies then location is valid
-            {
-                Debug.Log("ENEMY ATTEMPTING TO BE SPAWNED IN AT: (" + xPos + ", " + zPos + ")");
                 return (test);
-            }
             else //check current enemies
             {
                 //go through each enemy already spawned
@@ -99,15 +92,13 @@ public class Enemy_Spawner : MonoBehaviour
                 {
                     Transform enemy = shrine.GetChild(0).GetChild(i);
                     //check if any enemies are too close
+                    Debug.Log(Vector3.Distance(test, enemy.position));
                     if (Vector3.Distance(test, enemy.position) < enemyNoSpawnRadius)
                         validLocation = false;
                 }
                 //if no enemies were too close return the spawn location
                 if (validLocation)
-                {
-                    Debug.Log("ENEMY ATTEMPTING TO BE SPAWNED IN AT: (" + xPos + ", " + zPos + ")");
-                    return (test); 
-                }
+                    return (test);
             }
         }
     }
