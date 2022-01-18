@@ -7,11 +7,11 @@ public class Lock_Target : MonoBehaviour
 {
     private float _defaultSensitivity;
     private float _defaultSprintSpeed;
-    public Transform Target = null;
     private Animator _animator;
-
+    public Transform Target = null;
     public CinemachineVirtualCamera FollowCamera;
-
+    private float inputX;
+    private float inputY;
     
     private void Start() {
         _defaultSensitivity = GetComponent<Player_Controller>().MouseSensitivity;
@@ -27,8 +27,15 @@ public class Lock_Target : MonoBehaviour
             FindTarget();
         }
     }
+    private void FixedUpdate() {
+        inputX = Mathf.Lerp(inputX, Input.GetAxis("Horizontal"), Time.deltaTime*10f);
+        inputY = Mathf.Lerp(inputY, Input.GetAxis("Vertical"), Time.deltaTime*10f);
+        _animator.SetFloat("X Direction", inputX);
+        _animator.SetFloat("Z Direction", inputY);
+    }
     
     private void LockOnTarget(){
+        _animator.SetLayerWeight(1, Mathf.Lerp(_animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
         FollowCamera.LookAt = Target;
         Vector3 _worldAimTarget = new Vector3(Target.position.x, Target.position.y, Target.position.z);
         _worldAimTarget.y = transform.position.y;

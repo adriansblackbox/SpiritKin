@@ -28,8 +28,8 @@ public class Player_Controller : MonoBehaviour
     public float _cinemachineTargetYaw;
 	public float _cinemachineTargetPitch;
     private float _cameraNoise;
-    private Vector3 targetDirection;
-    public Vector3 moveDirection;
+    public Vector3 targetDirection;
+    private Vector3 moveDirection;
     private float _trajectorySpeed = 5f;
     private float _speedChangeRateDEF;
 
@@ -136,7 +136,8 @@ public class Player_Controller : MonoBehaviour
             _speed =  Mathf.Lerp(_speed, 10f, Time.deltaTime * 8f);;
             moveDirection = targetDirection =  transform.forward;
         }else if(GetComponent<Player_Battle_Controller>().LungeCoolDown > 0){
-            _speed = Mathf.Lerp(_speed, 0f, Time.deltaTime * 16f);
+            //_speed = Mathf.Lerp(_speed, 0f, Time.deltaTime * 16f);
+            _speed = 0f;
             moveDirection = targetDirection = transform.forward;
         }
     }
