@@ -71,9 +71,9 @@ public class Player_Controller : MonoBehaviour
         float input_y = Input.GetAxis("Vertical");
         Vector3 inputDirection = new Vector3(input_x, 0.0f, input_y).normalized;
         if(Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")){
-            _targetSpeed = SprintSpeed;
+            _targetSpeed = SprintSpeed * new Vector2(input_x, input_y).magnitude;
         }else{                           
-            _targetSpeed = WalkSpeed;
+            _targetSpeed = WalkSpeed * new Vector2(input_x, input_y).magnitude;
         }if(inputDirection == Vector3.zero){
             _targetSpeed = 0.0f;
         }

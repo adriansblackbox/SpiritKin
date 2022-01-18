@@ -26,12 +26,10 @@ public class Lock_Target : MonoBehaviour
             DelockTarget();
             FindTarget();
         }
-    }
-    private void FixedUpdate() {
         inputX = Mathf.Lerp(inputX, Input.GetAxis("Horizontal"), Time.deltaTime*10f);
         inputY = Mathf.Lerp(inputY, Input.GetAxis("Vertical"), Time.deltaTime*10f);
-        _animator.SetFloat("X Direction", inputX);
-        _animator.SetFloat("Z Direction", inputY);
+        _animator.SetFloat("X Direction", inputX * 2f);
+        _animator.SetFloat("Z Direction", inputY * 2f);
     }
     
     private void LockOnTarget(){
