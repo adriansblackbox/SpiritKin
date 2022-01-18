@@ -6,7 +6,6 @@ public class Enemy_Spawner : MonoBehaviour
 {
     public float shrineSpawnRange; //range around the shrine where enemies can be spawned
     public float enemyNoSpawnRadius; //ensure distance from current enemies to desired spawn point is > than enemyNoSpawnRadius
-    public int clusterChance; //chance that the enemy that spawns is a cluster of 2 or 3 (80% 2 enemies, 20% 3 enemies)
 
     [SerializeField] int currentRound = 1;
     [SerializeField] int lowerLimitEnemyCount = 2;
@@ -59,16 +58,6 @@ public class Enemy_Spawner : MonoBehaviour
                     GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
                     //put in enemy container
                     enemy.transform.parent = shrine.GetChild(0);
-
-                    // //decide whether or not they are going to be a cluster
-                    // if (Random.Range(0.0f, 1.0f) > 0.2f) //non-cluster 80%
-                    // {
-                    //     //instantiate single enemy at location
-                    // }
-                    // else //cluster 20%
-                    // {
-                        //instantiate a cluster of 2 or 3
-                    // }
                 }
             }
         }       
