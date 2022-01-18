@@ -27,11 +27,9 @@ public class Enemy_Spawner : MonoBehaviour
     //increments limits to help in scaling difficulty
     private void calculateEnemyLimits() 
     {
-        //lower limit increments every other round
-        if (currentRound % 2 == 1) 
+        if (currentRound % 2 == 1) //lower limit increments every other round
             lowerLimitEnemyCount++;
-        //upper limit increments every round after the lower limit increments
-        else if (currentRound != 2 && currentRound % 2 == 0 && upperLimitEnemyCount - lowerLimitEnemyCount == 2) 
+        else if (currentRound != 2 && currentRound % 2 == 0 && upperLimitEnemyCount - lowerLimitEnemyCount == 2) //upper limit increments every round after the lower limit increments
             upperLimitEnemyCount++;
     }
 
@@ -47,7 +45,7 @@ public class Enemy_Spawner : MonoBehaviour
             Transform shrine = shrineContainer.transform.GetChild(i);
             //number of enemies that should be at current shrine
             int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount);
-            Debug.Log("At least " + enemyCount + "enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.y + ")");
+            Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.y + ")");
             //if not enough enemies at shrine spawn more
             if (shrine.GetChild(0).childCount < enemyCount)
             {
@@ -57,7 +55,7 @@ public class Enemy_Spawner : MonoBehaviour
                 {
                     //choose a random location in the range around the shrine
                     Vector3 enemyPosition = chooseLocation(shrine);
-
+                    Debug.Log(enemyPosition);
                     GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
                     //put in enemy container
                     enemy.transform.parent = shrine.GetChild(0);
@@ -80,11 +78,11 @@ public class Enemy_Spawner : MonoBehaviour
         while (true) 
         {
             float xPos = Random.Range(shrine.position.x - shrineSpawnRange, shrine.position.x + shrineSpawnRange);
-            float yPos = Random.Range(shrine.position.y - shrineSpawnRange, shrine.position.y + shrineSpawnRange);
-            Vector3 test = new Vector3(xPos, yPos, 0.0f);
+            float zPos = Random.Range(shrine.position.z - shrineSpawnRange, shrine.position.z + shrineSpawnRange);
+            Vector3 test = new Vector3(xPos, 0.0f, zPos);
             if (shrine.GetChild(0).childCount == 0) //if no enemies then location is valid
             {
-                Debug.Log("ENEMY ATTEMPTING TO BE SPAWNED IN AT: (" + xPos + ", " + yPos + ")");
+                Debug.Log("ENEMY ATTEMPTING TO BE SPAWNED IN AT: (" + xPos + ", " + zPos + ")");
                 return (test);
             }
             else //check current enemies
@@ -102,7 +100,7 @@ public class Enemy_Spawner : MonoBehaviour
                 //if no enemies were too close return the spawn location
                 if (validLocation)
                 {
-                    Debug.Log("ENEMY ATTEMPTING TO BE SPAWNED IN AT: (" + xPos + ", " + yPos + ")");
+                    Debug.Log("ENEMY ATTEMPTING TO BE SPAWNED IN AT: (" + xPos + ", " + zPos + ")");
                     return (test); 
                 }
             }
