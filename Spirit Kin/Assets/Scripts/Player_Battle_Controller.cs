@@ -39,7 +39,6 @@ public class Player_Battle_Controller : MonoBehaviour
             distanceFromTarget = (GetComponent<Lock_Target>().Target.position - this.transform.position).magnitude;
         }else
             distanceFromTarget = 100f;
-        Debug.Log(distanceFromTarget);
         if(distanceFromTarget <= 2f){
             LungeTime = 0f;
         }
