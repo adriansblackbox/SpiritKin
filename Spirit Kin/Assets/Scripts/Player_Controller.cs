@@ -28,8 +28,8 @@ public class Player_Controller : MonoBehaviour
     public float _cinemachineTargetYaw;
 	public float _cinemachineTargetPitch;
     private float _cameraNoise;
-    private Vector3 targetDirection;
-    public Vector3 moveDirection;
+    public Vector3 targetDirection;
+    private Vector3 moveDirection;
     private float _trajectorySpeed = 5f;
     private float _speedChangeRateDEF;
 
@@ -71,9 +71,9 @@ public class Player_Controller : MonoBehaviour
         float input_y = Input.GetAxis("Vertical");
         Vector3 inputDirection = new Vector3(input_x, 0.0f, input_y).normalized;
         if(Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")){
-            _targetSpeed = SprintSpeed;
+            _targetSpeed = SprintSpeed * new Vector2(input_x, input_y).magnitude;
         }else{                           
-            _targetSpeed = WalkSpeed;
+            _targetSpeed = WalkSpeed * new Vector2(input_x, input_y).magnitude;
         }if(inputDirection == Vector3.zero){
             _targetSpeed = 0.0f;
         }
@@ -136,7 +136,8 @@ public class Player_Controller : MonoBehaviour
             _speed =  Mathf.Lerp(_speed, 10f, Time.deltaTime * 8f);;
             moveDirection = targetDirection =  transform.forward;
         }else if(GetComponent<Player_Battle_Controller>().LungeCoolDown > 0){
-            _speed = Mathf.Lerp(_speed, 0f, Time.deltaTime * 16f);
+            //_speed = Mathf.Lerp(_speed, 0f, Time.deltaTime * 16f);
+            _speed = 0f;
             moveDirection = targetDirection = transform.forward;
         }
     }

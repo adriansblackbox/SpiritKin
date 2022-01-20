@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move : MonoBehaviour
+public class PlaySound : MonoBehaviour
 {
+    AudioSource AudioSourceStatic;
     // Start is called before the first frame update
-    public AudioClip waterSound;
     void Start()
     {
         
@@ -14,6 +14,12 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1f * Time.deltaTime);
+        
+    }
+    public void Playsound(AudioSource source, AudioClip clip, float pitch)
+    {
+        AudioSourceStatic.PlayOneShot(clip);
     }
 }
+
+
