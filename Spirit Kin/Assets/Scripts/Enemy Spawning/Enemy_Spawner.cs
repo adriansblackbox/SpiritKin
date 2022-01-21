@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy_Spawner : MonoBehaviour
 {
     [SerializeField] int currentRound = 0;
-    [SerializeField] int lowerLimitEnemyCount = 2;
+    [SerializeField] int lowerLimitEnemyCount = 1;
     [SerializeField] int upperLimitEnemyCount = 4;
 
     public GameObject shrineContainer;
@@ -28,21 +28,21 @@ public class Enemy_Spawner : MonoBehaviour
     public void Update()
     {
         myTime += Time.deltaTime;
-        for (int i = 0; i < shrineCount; i++)
+        if (myTime > 3) //every 15 seconds
         {
-            Transform shrine = shrineContainer.transform.GetChild(i);
-            //spawn an enemy at a shrine if there are 3 conditions met
-                //1: The shrine must be cursed
-                //2: There must have been at least [spawnInterval] seconds that have passed
-                //3: The current amount of enemies instanced [amountAlreadySpawned] must be less than the max amount to be instanced for the current cursing [enemiesToSpawnWhenCursed]
-            if (shrine.GetComponent<Shrine>().cursed && myTime > spawnInterval && shrine.GetComponent<Shrine>().amountAlreadySpawned < shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed)
+            for (int i = 0; i < shrineCount; i++)
             {
-                spawnEnemy(shrine);
+                Transform shrine = shrineContainer.transform.GetChild(i);
+                float temp = Random.Range(0.0f, 1.0f);
+                if (temp < 0.15 && currentCursedShrines < maxCursedShrines) //15% chance for shrine to be activated
+                {
+                    shrine.GetComponent<Shrine>().cursed = true;
+                    currentCursedShrines++;
+                    Debug.Log("Shrine located at: (" + shrine.position.x + ", " + shrine.position.z + ") has been activated");
+                }
             }
-        }
-        if (myTime > spawnInterval)
             myTime = 0;
-        
+        }
     }
 
     //call when a new round starts to handle spawning of enemies
@@ -76,7 +76,7 @@ public class Enemy_Spawner : MonoBehaviour
         }
     }
 
-    private void spawnEnemy(Transform shrineToSpawnAt)
+    public void spawnEnemy(Transform shrineToSpawnAt)
     {
         //find a randomized location for the enemy to spawn
         Vector3 enemyPosition = chooseLocation(shrineToSpawnAt);
@@ -139,7 +139,6 @@ public class Enemy_Spawner : MonoBehaviour
                 {
                     Transform enemy = shrine.GetChild(0).GetChild(i);
                     //check if any enemies are too close
-                    Debug.Log(Vector3.Distance(test, enemy.position));
                     if (Vector3.Distance(test, enemy.position) < enemyNoSpawnRadius)
                         validLocation = false;
                 }

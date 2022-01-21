@@ -22,16 +22,14 @@ public class Shrine : MonoBehaviour
 
     public void Update()
     {
-        myTime += Time.deltaTime;
-        if (myTime > 3) //every 15 seconds
+        myTime += Time.deltaTime;    
+        //spawn an enemy at a shrine if there are 3 conditions met
+            //1: The shrine must be cursed
+            //2: There must have been at least [spawnInterval] seconds that have passed
+            //3: The current amount of enemies instanced [amountAlreadySpawned] must be less than the max amount to be instanced for the current cursing [enemiesToSpawnWhenCursed]
+        if (cursed && myTime > es.spawnInterval && amountAlreadySpawned < enemiesToSpawnWhenCursed)
         {
-            float temp = Random.Range(0.0f, 1.0f);
-            if (temp < 0.15 && es.currentCursedShrines < es.maxCursedShrines) //15% chance for shrine to be activated
-            {
-                cursed = true;
-                es.currentCursedShrines++;
-                Debug.Log("Shrine has been activated");
-            }
+            es.spawnEnemy(transform);
             myTime = 0;
         }
     }
