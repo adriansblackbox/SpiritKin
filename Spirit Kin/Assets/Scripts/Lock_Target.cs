@@ -7,11 +7,11 @@ public class Lock_Target : MonoBehaviour
 {
     private float _defaultSensitivity;
     private float _defaultSprintSpeed;
-    public Transform Target = null;
     private Animator _animator;
-
+    public Transform Target = null;
     public CinemachineVirtualCamera FollowCamera;
-
+    private float inputX;
+    private float inputY;
     
     private void Start() {
         _defaultSensitivity = GetComponent<Player_Controller>().MouseSensitivity;
@@ -26,9 +26,14 @@ public class Lock_Target : MonoBehaviour
             DelockTarget();
             FindTarget();
         }
+        inputX = Mathf.Lerp(inputX, Input.GetAxis("Horizontal"), Time.deltaTime*10f);
+        inputY = Mathf.Lerp(inputY, Input.GetAxis("Vertical"), Time.deltaTime*10f);
+        _animator.SetFloat("X Direction", inputX * 2f);
+        _animator.SetFloat("Z Direction", inputY * 2f);
     }
     
     private void LockOnTarget(){
+        _animator.SetLayerWeight(1, Mathf.Lerp(_animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
         FollowCamera.LookAt = Target;
         Vector3 _worldAimTarget = new Vector3(Target.position.x, Target.position.y, Target.position.z);
         _worldAimTarget.y = transform.position.y;
@@ -42,7 +47,7 @@ public class Lock_Target : MonoBehaviour
         Vector3.Lerp(GetComponent<Player_Controller>().CinemachineCameraTarget.transform.forward, focusTarget, Time.deltaTime * 20f);
         
         // Cancel lock
-        if(Input.GetButtonDown("R3 Button")){
+        if(Input.GetButtonDown("R3 Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             Target = null;
             GetComponent<Player_Controller>()._cinemachineTargetPitch = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
             GetComponent<Player_Controller>()._cinemachineTargetYaw = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
@@ -56,7 +61,7 @@ public class Lock_Target : MonoBehaviour
     }
 
     private void FindTarget(){
-        if(Input.GetButtonDown("R3 Button")){
+        if(Input.GetButtonDown("R3 Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             Target = FindObjectOfType<Lockable_Targets>().AssessTarget();
             GetComponent<Player_Controller>().RotateOnMoveDirection = false;
             GetComponent<Player_Controller>().SprintSpeed = GetComponent<Player_Controller>().WalkSpeed;
