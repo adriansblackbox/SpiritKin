@@ -80,6 +80,19 @@ public class Enemy_Controller : MonoBehaviour
         switch (EnemyMotion)
         {
             case MotionState.Patroling:
+
+                //GOAL IS TO HAVE THEM PATROL NOT JUST RANDOMLY WANDER (MIGHT BE WORTH TO EXPLORE WANDERING AT A LATER TIME)
+                    //THEREFORE THE ENEMIES WOULD HAVE TO WALK PARALLEL WITH THE EDGES OF THE SHRINE OR IN A CIRCLE AROUND THE SHRINE OR JUST ENSURE THEY DONT WALK DIRECTLY AT THE SHRINE BECAUSE THAT DEFEATS THE PURPOSE
+
+                //NECESSARY VARIABLES
+                    //Destination Point
+                    //Last Quadrant (WANT ENEMY TO MOVE QUADRANTS EVERY OTHER DESTINATION POINT TO MAKE IT FEEL LIKE THEY ARE ACTUALLY PATROLING AND WALKING AROUND THE SHRINE PROTECTING IT)
+
+                //CONSIDERATIONS
+                    //MAYBE ENEMY HAS TO PATROL TO AT LEAST 1 or 2 DESTINATION POINTS BEFORE THEY HAVE A CHANCE TO SWAP STATES
+
+
+                //CHECK IF NEED TO SWAP STATES
                 if (myTime > swapStateInterval)
                 {
                     //check with Shrine_Controller if need to relocate
@@ -95,6 +108,8 @@ public class Enemy_Controller : MonoBehaviour
                 }            
                 break;
             case MotionState.Idling:
+
+                //CHECK IF NEED TO SWAP STATES
                 if (myTime > swapStateInterval)
                 {
                     //check with Shrine_Controller if need to relocate
@@ -124,5 +139,49 @@ public class Enemy_Controller : MonoBehaviour
             default:
                 break;
         }
+    }
+    //4 cases
+        //Quadrant 1, or Upper Left
+            //x is negative
+            //z is positive
+        //Quadrant 2, or Upper Right
+            //x is positive
+            //z is positive
+        //Quadrant 3, or Lower Left
+            //x is negative
+            //z is negative
+        //Quadrant 4, or Lower Right
+            //x is positive
+            //z is negative
+
+    //WE NEED TO IMPLEMENT MY SPAWNING CODE BEFORE THIS WORKS BECAUSE IT DEPENDS ON THE SHRINE BEING THE PARENT OF THIS GAMEOBJECT
+    private int getQuadrant()
+    {
+
+        Transform shrine = transform.parent;
+
+        if (transform.position.x < shrine.position.x && transform.position.z > shrine.position.z) //Quadrant 1
+        {
+            Debug.Log("Current Quadrant is 1");
+            return 1;
+        }
+        else if (transform.position.x > shrine.position.x && transform.position.z > shrine.position.z) //Quadrant 2
+        {
+            Debug.Log("Current Quadrant is 2");
+            return 2;
+        }
+        else if (transform.position.x < shrine.position.x && transform.position.z < shrine.position.z) //Quadrant 3
+        {
+            Debug.Log("Current Quadrant is 3");
+            return 3;
+        }
+        else if (transform.position.x > shrine.position.x && transform.position.z < shrine.position.z) //Quadrant 4
+        {
+            Debug.Log("Current Quadrant is 4");
+            return 4;
+        }
+        //if cant find quadrant
+        Debug.Log("Unable to determine which quadrant enemy is in");
+        return 0;
     }
 }
