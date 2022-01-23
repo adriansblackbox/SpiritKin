@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy_Controller : MonoBehaviour
 {
@@ -50,6 +51,11 @@ public class Enemy_Controller : MonoBehaviour
     public MotionState EnemyMotion;
     public AttackState EnemyAttack;
 
+    public NavMeshAgent ThisEnemy;
+    public NavMeshPath path;
+    public GameObject Me;
+    public GameObject player;
+
     public float patrolToIdleChance;
     public float idleToPatrolChance;
 
@@ -60,6 +66,9 @@ public class Enemy_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        path = new UnityEngine.AI.NavMeshPath();
+        player = GameObject.FindWithTag("Player");
+        ThisEnemy = Me.GetComponent<UnityEngine.AI.NavMeshAgent>();
         EnemyMotion = MotionState.Idling;
         EnemyAttack = AttackState.NotAttacking;
     }
@@ -99,8 +108,16 @@ public class Enemy_Controller : MonoBehaviour
                 }
                 break;
             case MotionState.Alerted:
+                // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
                 break;
             case MotionState.Chasing:
+                ThisEnemy.CalculatePath(player.transform.position, path);
+                if(path.status == UnityEngine.AI.NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
+                    //if(Vector3.distance(player.transform.position, shrine.transform.position)){
+                    ThisEnemy.SetDestination(player.transform.position);
+                    //}
+                }
+                else {}
                 break;
             case MotionState.Returning:
                 break;

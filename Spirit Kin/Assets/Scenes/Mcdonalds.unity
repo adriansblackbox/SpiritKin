@@ -2258,6 +2258,7 @@ MonoBehaviour:
   LungeTime: 0
   LungeCoolDown: 0
   DodgeDirection: {x: 0, y: 0, z: 0}
+  Sword: {fileID: 0}
 --- !u!114 &1151036152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2296,7 +2297,7 @@ MonoBehaviour:
   AimCamera: {fileID: 1939652791}
   _cinemachineTargetYaw: 0
   _cinemachineTargetPitch: 0
-  moveDirection: {x: 0, y: 0, z: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
 --- !u!143 &1151036154
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3108,7 +3109,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 9dfe901bddc983b47beebdd464d4a0ef, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 431f46c66a67af94eae100bad0530cc8, type: 2}
 --- !u!4 &1577329181
 Transform:
   m_ObjectHideFlags: 0
