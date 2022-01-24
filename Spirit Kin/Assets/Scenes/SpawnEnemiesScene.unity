@@ -495,16 +495,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 968260927}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfba6081b4427c541b7c221e13e12551, type: 3}
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shrineSpawnRange: 0
-  enemyNoSpawnRadius: 0
-  currentRound: 0
-  lowerLimitEnemyCount: 2
-  upperLimitEnemyCount: 4
-  shrineContainer: {fileID: 0}
-  enemyPrefab: {fileID: 0}
+  cursed: 0
+  shrineSpawnRange: 100
+  enemiesToSpawnWhenCursed: 0
+  amountAlreadySpawned: 0
 --- !u!65 &968260930
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -729,13 +726,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfba6081b4427c541b7c221e13e12551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shrineSpawnRange: 100
-  enemyNoSpawnRadius: 40
-  currentRound: 1
+  currentRound: 0
   lowerLimitEnemyCount: 2
   upperLimitEnemyCount: 4
   shrineContainer: {fileID: 817803657}
   enemyPrefab: {fileID: 6902548776422435902, guid: 7108ae63ac95d204f899aed75a189231, type: 3}
+  enemyNoSpawnRadius: 40
+  spawnInterval: 3
+  currentCursedShrines: 0
+  maxCursedShrines: 2
 --- !u!4 &1141052840
 Transform:
   m_ObjectHideFlags: 0
@@ -1188,16 +1187,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1522699114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfba6081b4427c541b7c221e13e12551, type: 3}
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shrineSpawnRange: 0
-  enemyNoSpawnRadius: 0
-  currentRound: 0
-  lowerLimitEnemyCount: 2
-  upperLimitEnemyCount: 4
-  shrineContainer: {fileID: 0}
-  enemyPrefab: {fileID: 0}
+  cursed: 0
+  shrineSpawnRange: 100
+  enemiesToSpawnWhenCursed: 0
+  amountAlreadySpawned: 0
 --- !u!65 &1522699117
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1451,16 +1447,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1687442672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfba6081b4427c541b7c221e13e12551, type: 3}
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shrineSpawnRange: 0
-  enemyNoSpawnRadius: 0
-  currentRound: 0
-  lowerLimitEnemyCount: 2
-  upperLimitEnemyCount: 4
-  shrineContainer: {fileID: 0}
-  enemyPrefab: {fileID: 0}
+  cursed: 0
+  shrineSpawnRange: 100
+  enemiesToSpawnWhenCursed: 0
+  amountAlreadySpawned: 0
 --- !u!65 &1687442675
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1789,16 +1782,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1766028299}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfba6081b4427c541b7c221e13e12551, type: 3}
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shrineSpawnRange: 0
-  enemyNoSpawnRadius: 0
-  currentRound: 0
-  lowerLimitEnemyCount: 2
-  upperLimitEnemyCount: 4
-  shrineContainer: {fileID: 0}
-  enemyPrefab: {fileID: 0}
+  cursed: 0
+  shrineSpawnRange: 100
+  enemiesToSpawnWhenCursed: 0
+  amountAlreadySpawned: 0
 --- !u!1 &2126832235
 GameObject:
   m_ObjectHideFlags: 0
