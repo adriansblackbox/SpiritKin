@@ -12,6 +12,7 @@ public class Player_Controller : MonoBehaviour
     public float SpeedChangeRate = 10.0f;
     public float MouseSensitivity = 300f;
     public float StickLookSensitivity = 200f;
+    public float PlayerHeight = 2f;
 
     public bool RotateOnMoveDirection = true;
 
@@ -32,6 +33,7 @@ public class Player_Controller : MonoBehaviour
     private Vector3 moveDirection;
     private float _trajectorySpeed = 5f;
     private float _speedChangeRateDEF;
+    private float _gravity = -9.8f;
 
     private CharacterController _controller;
     private Animator _animator;
@@ -51,7 +53,7 @@ public class Player_Controller : MonoBehaviour
     {
         CinemachineCameraTarget.transform.position = new Vector3(
             transform.position.x,
-            transform.position.y + 1.6f,
+            transform.position.y + PlayerHeight,
             transform.position.z
         );
         // If the speed change rate has been altered due to frantic change in direction,
@@ -60,6 +62,14 @@ public class Player_Controller : MonoBehaviour
             SpeedChangeRate = Mathf.Lerp(SpeedChangeRate, _speedChangeRateDEF, Time.deltaTime * 5f);
         }
         Move();
+        Gravity();
+    }
+    private void Gravity(){
+        if(this.GetComponent<CharacterController>().isGrounded){
+            _gravity = -9.18f * Time.deltaTime;
+        }else{
+            _gravity -= 9.18f * Time.deltaTime;
+        }
     }
     void LateUpdate(){
         if(GetComponent<Lock_Target>().Target == null)
@@ -109,7 +119,8 @@ public class Player_Controller : MonoBehaviour
         moveDirection = Vector3.Lerp(moveDirection, targetDirection, Time.deltaTime * _trajectorySpeed);
         OverrideDirection();
 
-        _controller.Move(moveDirection.normalized * _speed * Time.deltaTime);
+        moveDirection = moveDirection.normalized;
+        _controller.Move(new Vector3(moveDirection.x * _speed, _gravity, moveDirection.z * _speed) * Time.deltaTime);
         _animator.SetFloat("Speed", _animationBlend);
         float inputMagnitude = inputDirection.magnitude;
         if(inputMagnitude > 0)
@@ -126,12 +137,6 @@ public class Player_Controller : MonoBehaviour
             moveDirection = targetDirection = GetComponent<Player_Battle_Controller>().DodgeDirection;
             SpeedChangeRate = 0f;
         }
-        if(GetComponent<Lock_Target>().Target == null && (targetDirection - moveDirection).magnitude > 1f && Mathf.Round(SpeedChangeRate) >= _speedChangeRateDEF){
-            _speed = 0;
-            _targetSpeed = 0;
-            SpeedChangeRate = 1f;
-        }
-
         if(GetComponent<Player_Battle_Controller>().LungeTime > 0){
             _speed =  Mathf.Lerp(_speed, 10f, Time.deltaTime * 8f);;
             moveDirection = targetDirection =  transform.forward;
