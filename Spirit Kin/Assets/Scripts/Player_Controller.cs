@@ -120,7 +120,7 @@ public class Player_Controller : MonoBehaviour
         OverrideDirection();
 
         moveDirection = moveDirection.normalized;
-        _controller.Move(new Vector3(moveDirection.x * _speed, _gravity, moveDirection.z * _speed) * Time.deltaTime);
+        _controller.Move(new Vector3(moveDirection.x, _gravity, moveDirection.z) * _speed * Time.deltaTime);
         _animator.SetFloat("Speed", _animationBlend);
         float inputMagnitude = inputDirection.magnitude;
         if(inputMagnitude > 0)
@@ -141,9 +141,12 @@ public class Player_Controller : MonoBehaviour
             _speed =  Mathf.Lerp(_speed, 10f, Time.deltaTime * 8f);;
             moveDirection = targetDirection =  transform.forward;
         }else if(GetComponent<Player_Battle_Controller>().LungeCoolDown > 0){
-            //_speed = Mathf.Lerp(_speed, 0f, Time.deltaTime * 16f);
             _speed = 0f;
             moveDirection = targetDirection = transform.forward;
+        }
+        if((moveDirection - targetDirection).magnitude >= 1.5f){
+            _speed = 0;
+            moveDirection = targetDirection;
         }
     }
 
