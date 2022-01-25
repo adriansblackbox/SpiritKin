@@ -24,35 +24,66 @@ public class Camera_Controller : MonoBehaviour
         PlayerButton.onClick.AddListener(() => swapCameras("Player"));
     }
 
+    public void Update(){
+        if(Input.GetKey(KeyCode.UpArrow)){
+            ShrineCam.SetActive(true);
+            PlayerCam.SetActive(false);
+            ShrineCam.transform.position = new Vector3(0, ShrineCam.transform.position.y, 300);  
+        }
+
+        if(Input.GetKey(KeyCode.DownArrow)){
+            ShrineCam.SetActive(true);
+            PlayerCam.SetActive(false);
+            ShrineCam.transform.position = new Vector3(0, ShrineCam.transform.position.y, -300);    
+        }
+
+        if(Input.GetKey(KeyCode.LeftArrow)){
+            ShrineCam.SetActive(true);
+            PlayerCam.SetActive(false);
+            ShrineCam.transform.position = new Vector3(-300, ShrineCam.transform.position.y, 0);   
+        }
+
+        if(Input.GetKey(KeyCode.RightArrow)){
+            ShrineCam.SetActive(true); 
+            PlayerCam.SetActive(false);
+            ShrineCam.transform.position = new Vector3(300, ShrineCam.transform.position.y, 0);  
+        }
+
+        if(Input.GetKey(KeyCode.P)){
+            ShrineCam.SetActive(false);
+            PlayerCam.SetActive(true);
+        }
+    }
+
     public void swapCameras(string dir)
     {
         if (dir == "Player")
         {
-            ShrineCam.GetComponent<Camera>().enabled = false;
-            PlayerCam.GetComponent<Camera>().enabled = true;
+            ShrineCam.SetActive(false);
+            PlayerCam.SetActive(true);
         }
         else if (dir == "Up")
         {
-            ShrineCam.GetComponent<Camera>().enabled = true;
-            PlayerCam.GetComponent<Camera>().enabled = false;
+            ShrineCam.SetActive(true);
+            PlayerCam.SetActive(false);
             ShrineCam.transform.position = new Vector3(0, ShrineCam.transform.position.y, 300);            
         }
         else if (dir == "Right")
         {
-            ShrineCam.GetComponent<Camera>().enabled = true;
-            PlayerCam.GetComponent<Camera>().enabled = false;
+            ShrineCam.SetActive(true);            
+            PlayerCam.SetActive(false);
             ShrineCam.transform.position = new Vector3(300, ShrineCam.transform.position.y, 0);       
         }
         else if (dir == "Down")
         {
-            ShrineCam.GetComponent<Camera>().enabled = true;
-            PlayerCam.GetComponent<Camera>().enabled = false;
+            ShrineCam.SetActive(true);
+            PlayerCam.SetActive(false);
             ShrineCam.transform.position = new Vector3(0, ShrineCam.transform.position.y, -300);            
         }
         else if (dir == "Left")
         {
-            ShrineCam.GetComponent<Camera>().enabled = true;
-            PlayerCam.GetComponent<Camera>().enabled = false;
+            ShrineCam.SetActive(true);
+            PlayerCam.SetActive(false);
             ShrineCam.transform.position = new Vector3(-300, ShrineCam.transform.position.y, 0);            
         }
     }
