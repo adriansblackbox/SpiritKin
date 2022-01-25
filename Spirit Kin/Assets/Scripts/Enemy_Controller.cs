@@ -30,6 +30,8 @@ public class Enemy_Controller : MonoBehaviour
         //else
             //Stay idle
 
+
+    //ADD HITSTUN STATE
     public enum MotionState {
         Patroling,
         Idling,
@@ -42,6 +44,7 @@ public class Enemy_Controller : MonoBehaviour
     //Enemies will surround player
         //They will attack once at a time
 
+    //ADD HITSTUN STATE
     public enum AttackState {
         Attacking,
         Surrounding,
