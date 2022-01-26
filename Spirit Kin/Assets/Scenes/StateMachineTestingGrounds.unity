@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645233, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2211,14 +2211,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentRound: 0
-  lowerLimitEnemyCount: 2
-  upperLimitEnemyCount: 4
+  lowerLimitEnemyCount: 4
+  upperLimitEnemyCount: 6
   shrineContainer: {fileID: 954743418}
   enemyPrefab: {fileID: 5466169016768112854, guid: c2e28454de3efef4291346698097f31c, type: 3}
   enemyNoSpawnRadius: 40
   spawnInterval: 3
   currentCursedShrines: 0
-  maxCursedShrines: 2
+  maxCursedShrines: 1
 --- !u!4 &866988123
 Transform:
   m_ObjectHideFlags: 0

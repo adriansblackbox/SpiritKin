@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4582267893233665633}
   - component: {fileID: 4582267893233665632}
   - component: {fileID: 4582267893233665635}
+  - component: {fileID: 8309410573585618767}
   m_Layer: 7
   m_Name: Generic_Enemy
   m_TagString: Enemy
@@ -126,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5466169016768112854}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5a27e8c07199a14290045a17a6a820c, type: 3}
   m_Name: 
@@ -135,3 +136,22 @@ MonoBehaviour:
   player: {fileID: 0}
   eneME: {fileID: 5466169016768112854}
   enemyMe: {fileID: 4582267893233665632}
+--- !u!114 &8309410573585618767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5466169016768112854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyMotion: 0
+  EnemyAttack: 2
+  ThisEnemy: {fileID: 0}
+  player: {fileID: 0}
+  patrolToIdleChance: 0
+  idleToPatrolChance: 0
+  swapStateInterval: 0
