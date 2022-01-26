@@ -72,7 +72,6 @@ public class Enemy_Spawner : MonoBehaviour
         {
             Transform shrine = shrineContainer.transform.GetChild(i);
             shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
-            Debug.Log("Enemies to be spawned when shrine located at: (" + shrine.position.x + ", " + shrine.position.z + ") is cursed is " + shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed);
         }
     }
 

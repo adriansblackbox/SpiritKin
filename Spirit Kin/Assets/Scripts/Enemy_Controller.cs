@@ -72,7 +72,7 @@ public class Enemy_Controller : MonoBehaviour
         path = new UnityEngine.AI.NavMeshPath();
         player = GameObject.FindWithTag("Player");
         ThisEnemy = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        EnemyMotion = MotionState.Patroling;
+        EnemyMotion = MotionState.Idling;
         EnemyAttack = AttackState.NotAttacking;
         sc = transform.parent.parent.GetComponent<Shrine_Controller>();
         shrine = transform.parent.parent;
@@ -118,18 +118,30 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Idling:
 
-                //CHECK IF NEED TO SWAP STATES
-                if (myTime > swapStateInterval)
+                //check if in idle range [0.25 * spawn range to 0.5 * spawn range]
+                    //do nothing
+                //else
+                    //move to idle range
+                        //select a random distance within the idle range
+                if ((Vector3.Distance(shrine.position, transform.position) < shrine.GetComponent<Shrine>().shrineSpawnRange * 0.20 
+                    || Vector3.Distance(shrine.position, transform.position) > shrine.GetComponent<Shrine>().shrineSpawnRange * 0.55)
+                    && !ThisEnemy.hasPath)
                 {
-                    //check with Shrine_Controller if need to relocate
-                    float temp = Random.Range(0.0f, 1.0f);
-                    if (temp < idleToPatrolChance) //swap states
-                    {
-                        EnemyMotion = MotionState.Patroling;
-                        Debug.Log("Now Patrol");
-                    }
-                    myTime = 0;
+                    ThisEnemy.SetDestination(findIdleSpot());
                 }
+
+                //CHECK IF NEED TO SWAP STATES
+                // if (myTime > swapStateInterval)
+                // {
+                //     //check with Shrine_Controller if need to relocate
+                //     float temp = Random.Range(0.0f, 1.0f);
+                //     if (temp < idleToPatrolChance) //swap states
+                //     {
+                //         EnemyMotion = MotionState.Patroling;
+                //         Debug.Log("Now Patrol");
+                //     }
+                //     myTime = 0;
+                // }
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
@@ -149,6 +161,53 @@ public class Enemy_Controller : MonoBehaviour
                 break;
         }
     }
+
+    //FIRST ENEMY SPAWNED TAKES AN INDIRECT PATH TO THEIR LOCATION
+    private Vector3 findIdleSpot()
+    {
+        if (sc.checkValidity(getQuadrant())) 
+        {
+            while(true){
+                float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
+                float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.25f;
+
+                float xpos = 0; 
+                float zpos = 0; 
+
+                if (quadrant == 1)
+                {
+                    xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
+                    zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+                }
+                else if (quadrant == 2)
+                {
+                    xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
+                    zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+                }
+                else if (quadrant == 3)
+                {
+                    xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
+                    zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
+                }
+                else if (quadrant == 4)
+                {
+                    xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
+                    zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
+                }
+                
+                //ADJUST Y POS TO ALIGN WITH BLOCKOUT
+                Vector3 point = new Vector3(xpos, 0.0f, zpos);
+
+                ThisEnemy.CalculatePath(point, path);
+                if(path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
+                    Debug.Log("TARGET LOCATION IS: " + point);
+                    return point;
+                }
+            }
+        }
+        return new Vector3(0,0,0);        
+    }
+
     //4 cases
         //Quadrant 1, or Upper Left
             //x is negative
@@ -163,6 +222,7 @@ public class Enemy_Controller : MonoBehaviour
             //x is positive
             //z is negative
 
+
     private Vector3 findNextWaypoint() 
     {
         if (timesPatroled == 0) //guaranteed to stay in current quadrant
@@ -174,13 +234,37 @@ public class Enemy_Controller : MonoBehaviour
                     float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 1.5f;
                     float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
 
-                    float xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-                    float zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+                    float xpos = 0; 
+                    float zpos = 0; 
 
-                    Vector3 point = new Vector3(xpos, shrine.position.y, zpos);
+                    if (quadrant == 1)
+                    {
+                        xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
+                        zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+                    }
+                    else if (quadrant == 2)
+                    {
+                        xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
+                        zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+                    }
+                    else if (quadrant == 3)
+                    {
+                        xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
+                        zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
+                    }
+                    else if (quadrant == 4)
+                    {
+                        xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
+                        zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
+                    }
+                    
+                    //ADJUST Y POS TO ALIGN WITH BLOCKOUT
+                    Vector3 point = new Vector3(xpos, 0.0f, zpos);
 
                     ThisEnemy.CalculatePath(point, path);
-                    if(path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
+                    Debug.Log("Distance to Waypoint: " + Vector3.Distance(transform.position, point));
+                    if(path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, point) > 40f) { // Check if point is on navmesh
+                        Debug.Log("TARGET LOCATION IS: " + point);
                         return point;
                     }
                 }
