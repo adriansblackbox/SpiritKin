@@ -75,8 +75,8 @@ public class Enemy_Controller : MonoBehaviour
         EnemyMotion = MotionState.Patroling;
         EnemyAttack = AttackState.NotAttacking;
         sc = transform.parent.parent.GetComponent<Shrine_Controller>();
-        determineQuadrant();
         shrine = transform.parent.parent;
+        determineQuadrant();
     }
 
     // Update is called once per frame
@@ -97,9 +97,9 @@ public class Enemy_Controller : MonoBehaviour
                 //CONSIDERATIONS
                     //MAYBE ENEMY HAS TO PATROL TO AT LEAST 1 or 2 DESTINATION POINTS BEFORE THEY HAVE A CHANCE TO SWAP STATES
                 
-                
-                findNextWaypoint();
-
+                if(ThisEnemy.remainingDistance < 0.01f){
+                    ThisEnemy.SetDestination(findNextWaypoint());
+                }                
 
                 //CHECK IF NEED TO SWAP STATES
                 // if (myTime > swapStateInterval)
@@ -170,13 +170,20 @@ public class Enemy_Controller : MonoBehaviour
             Debug.Log("Is Quadrant " + getQuadrant() + " a valid location: " + sc.checkValidity(getQuadrant()));
             if (sc.checkValidity(getQuadrant())) 
             {
+                while(true){
                     float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 1.5f;
                     float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
 
                     float xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
                     float zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
 
-                    return new Vector3(xpos, shrine.position.y, zpos);
+                    Vector3 point = new Vector3(xpos, shrine.position.y, zpos);
+
+                    ThisEnemy.CalculatePath(point, path);
+                    if(path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
+                        return point;
+                    }
+                }
             }
         }
         // else if (timesPatroled == 1) //50% chance to move quadrants
