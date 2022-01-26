@@ -3462,6 +3462,27 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 986923023805056906, guid: 1427f112cccf5b64ea0f9d9ee0546089, type: 3}
+--- !u!1 &1542647937 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1230903320015684901, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+  m_PrefabInstance: {fileID: 1642808970}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1542647942
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542647937}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 126
+  m_CollisionDetection: 1
 --- !u!1 &1559525709 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4566169875137798768, guid: 1427f112cccf5b64ea0f9d9ee0546089, type: 3}
@@ -3614,6 +3635,31 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1902970663300751793, guid: 1427f112cccf5b64ea0f9d9ee0546089, type: 3}
+--- !u!1 &1638765462 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
+  m_PrefabInstance: {fileID: 7384544203768078212}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1638765468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638765462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ed244c8dc46df249835a41dad57dbd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  armor:
+    baseValue: 0
+  damage:
+    baseValue: 0
+  speed:
+    baseValue: 0
 --- !u!1 &1638849525 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8700725330082129686, guid: 1427f112cccf5b64ea0f9d9ee0546089, type: 3}
@@ -3640,6 +3686,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 726751332149355760, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1230903320015684901, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_TagString
+      value: Player Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900198676254564255, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.9964099
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900198676254564255, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.9964099
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900198676254564255, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.9964099
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900198676254564255, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.081
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900198676254564255, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.146
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900198676254564255, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.621
+      objectReference: {fileID: 0}
     - target: {fileID: 7421676503820473879, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -4900,6 +4978,10 @@ PrefabInstance:
     - target: {fileID: 6192531991054698252, guid: 0b818338e7b231644951c6508b80153d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6192531991054698255, guid: 0b818338e7b231644951c6508b80153d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b818338e7b231644951c6508b80153d, type: 3}

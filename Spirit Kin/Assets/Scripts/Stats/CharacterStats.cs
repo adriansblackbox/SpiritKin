@@ -20,9 +20,6 @@ public class CharacterStats : MonoBehaviour
     }
 
     void Update (){
-        if(Input.GetKeyDown(KeyCode.T)){
-            TakeDamage(10);
-        }
     }
     public void TakeDamage (int damage){
         //armor system
@@ -36,10 +33,15 @@ public class CharacterStats : MonoBehaviour
             Die();
         }
     }
-
     public virtual void Die (){
         //Die in some way
         
         Debug.Log(transform.name + " died.");
+        Destroy(this.gameObject);
+    }
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.CompareTag("Player Sword")){
+            TakeDamage(34);
+        }
     }
 }
