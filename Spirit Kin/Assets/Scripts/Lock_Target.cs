@@ -45,12 +45,13 @@ public class Lock_Target : MonoBehaviour
         focusTarget = new Vector3(focusTarget.x, focusTarget.y - 0.15f, focusTarget.z);
         GetComponent<Player_Controller>().CinemachineCameraTarget.transform.forward =
         Vector3.Lerp(GetComponent<Player_Controller>().CinemachineCameraTarget.transform.forward, focusTarget, Time.deltaTime * 20f);
+
+        GetComponent<Player_Controller>()._cinemachineTargetPitch = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
+        GetComponent<Player_Controller>()._cinemachineTargetYaw = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         
         // Cancel lock
         if(Input.GetButtonDown("R3 Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             Target = null;
-            GetComponent<Player_Controller>()._cinemachineTargetPitch = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
-            GetComponent<Player_Controller>()._cinemachineTargetYaw = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         }
     }
     private void DelockTarget(){

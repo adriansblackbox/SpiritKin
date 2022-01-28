@@ -122,7 +122,7 @@ public class Player_Controller : MonoBehaviour
     }
     private void OverrideDirection(){
         if(GetComponent<Player_Battle_Controller>().DodgeTime > GetComponent<Player_Battle_Controller>().TotalDodgeTime/2){
-            _speed = Mathf.Lerp(_speed, 20f, Time.deltaTime * 20f);
+            _speed = Mathf.Lerp(_speed, 50f, Time.deltaTime * 20f);
             moveDirection = targetDirection = GetComponent<Player_Battle_Controller>().DodgeDirection;
         }else if(GetComponent<Player_Battle_Controller>().DodgeTime > 0){
             _speed = Mathf.Lerp(_speed, 0.1f, Time.deltaTime * 20f);
@@ -130,7 +130,7 @@ public class Player_Controller : MonoBehaviour
             SpeedChangeRate = 0f;
         }
         if(GetComponent<Player_Battle_Controller>().LungeTime > 0){
-            _speed =  Mathf.Lerp(_speed, 10f, Time.deltaTime * 8f);;
+            _speed =  Mathf.Lerp(_speed, 20f, Time.deltaTime * 8f);;
             moveDirection = targetDirection =  transform.forward;
         }else if(GetComponent<Player_Battle_Controller>().LungeCoolDown > 0){
             _speed = 0f;
