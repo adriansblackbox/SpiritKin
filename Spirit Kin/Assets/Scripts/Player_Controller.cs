@@ -33,7 +33,7 @@ public class Player_Controller : MonoBehaviour
     private Vector3 moveDirection;
     private float _trajectorySpeed = 5f;
     private float _speedChangeRateDEF;
-    private float _gravity;
+    private float _gravity = -20f;
 
     private CharacterController _controller;
     private Animator _animator;
@@ -105,23 +105,14 @@ public class Player_Controller : MonoBehaviour
             if(RotateOnMoveDirection)
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
-        _gravity += Physics.gravity.y * Time.deltaTime;
         targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-        if(Physics.Raycast(transform.position, Vector3.down, out hitInfo, _controller.height)){
-            targetDirection = Vector3.ProjectOnPlane(targetDirection, hitInfo.normal).normalized;
-            _gravity = targetDirection.y;
-        }
-        // Gravity
-        Debug.Log(_gravity);
         // move the player
         // If the player is performing any kind of action, the direction and speed is modified
         // before teh controller moves the characrter
         moveDirection = Vector3.Lerp(moveDirection, targetDirection, Time.deltaTime * _trajectorySpeed);
-
         OverrideDirection();
         moveDirection.Normalize();
-        moveDirection.y = _gravity;
-        _controller.Move( moveDirection * _speed * Time.deltaTime);
+        _controller.Move(new Vector3(moveDirection.x * _speed, _gravity, moveDirection.z * _speed) * Time.deltaTime);
         _animator.SetFloat("Speed", _animationBlend);
         float inputMagnitude = inputDirection.magnitude;
         if(inputMagnitude > 0)
