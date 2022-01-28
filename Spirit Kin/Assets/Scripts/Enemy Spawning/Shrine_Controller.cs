@@ -12,12 +12,18 @@ public class Shrine_Controller : MonoBehaviour
                     //if enemy is not current chasing player change the randomly selected enemies to relocating state
                         //send them to a neighboring quadrant for ease of use    
 
+    private Transform enemiesContainer;
 
-    public bool checkValidity(int quadrant)
+    private void Start() 
+    {
+        enemiesContainer = transform.GetChild(0);
+    }
+
+
+    public bool checkIfNeedRelocate(int quadrant)
     {
         
         //check if quadrant has > 50% of enemies if so return false
-        var enemiesContainer = transform.GetChild(0);
         if (enemiesContainer.childCount >= 4) {
             float numberOfEnemiesInSelectedQuadrant = 0;
             for (int i = 0; i < enemiesContainer.childCount; i++)
@@ -29,13 +35,44 @@ public class Shrine_Controller : MonoBehaviour
                 //RETURN TRUE
             //ELSE 
                 //RETURN FALSE
-            Debug.Log("Shrine at (" + transform.position.x + ", " + transform.position.z + ") has " + enemiesContainer.childCount + " Enemies");
-            Debug.Log("Shrine at (" + transform.position.x + ", " + transform.position.z + ") has " + numberOfEnemiesInSelectedQuadrant + " Enemies in Quadrant #" + quadrant);
             if (numberOfEnemiesInSelectedQuadrant / (float) enemiesContainer.childCount > 0.5f)
-                return false;
-            else  
                 return true;
+            else  
+                return false;
         }
         return true;
+    }
+
+    public float checkPatrol(float baseChance)
+    {
+        //go through enemies
+            //if > 50% are patroling special chance to go idle
+            //else normal chance
+        var enemyCount = enemiesContainer.childCount;
+        float enemiesPatrolingCount = 0.0f;
+        for (int i = 0; i < enemyCount; i++)
+        {
+            if (enemiesContainer.GetChild(i).GetComponent<Enemy_Controller>().EnemyMotion == Enemy_Controller.MotionState.Patroling) enemiesPatrolingCount += 1;
+        }
+        if (enemiesPatrolingCount / (float) enemyCount > 0.5f)
+            return baseChance * 1.5f;
+        return baseChance;
+    }
+
+    public float checkIdle(float baseChance)
+    {
+        //go through enemies
+            //if < .25f are patroling special chance to go idle
+            //else normal chance
+        var enemyCount = enemiesContainer.childCount;
+        float enemiesPatrolingCount = 0.0f;
+        for (int i = 0; i < enemyCount; i++)
+        {
+            if (enemiesContainer.GetChild(i).GetComponent<Enemy_Controller>().EnemyMotion == Enemy_Controller.MotionState.Patroling) enemiesPatrolingCount += 1;
+        }
+        if (enemiesPatrolingCount / (float) enemyCount < 0.4f)
+            return baseChance * 1.5f;
+        else
+            return baseChance;
     }
 }
