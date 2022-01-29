@@ -129,13 +129,6 @@ public class Player_Controller : MonoBehaviour
             moveDirection = targetDirection = GetComponent<Player_Battle_Controller>().DodgeDirection;
             SpeedChangeRate = 0f;
         }
-        if(GetComponent<Player_Battle_Controller>().LungeTime > 0){
-            _speed =  Mathf.Lerp(_speed, 20f, Time.deltaTime * 8f);;
-            moveDirection = targetDirection =  transform.forward;
-        }else if(GetComponent<Player_Battle_Controller>().LungeCoolDown > 0){
-            _speed = 0f;
-            moveDirection = targetDirection = transform.forward;
-        }
         if((moveDirection - targetDirection).magnitude >= 1.5f){
             _speed = 0;
             moveDirection = targetDirection;

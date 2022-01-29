@@ -13,9 +13,14 @@ public class Player_Battle_Controller : MonoBehaviour
     private float distanceFromTarget;
     public Vector3 DodgeDirection;
     public GameObject Sword;
+    public float AttackCoolDownTime = 1f;
+    public int numOfClicks = 0;
+    private Animator animator;
+    private float ComboTimeDelay;
 
     private void Start() {
         Sword.GetComponent<Collider>().enabled = false;
+        animator = GetComponent<Animator>();
     }
     void Update()
     {
@@ -24,24 +29,23 @@ public class Player_Battle_Controller : MonoBehaviour
         }else if(DodgeCoolDown > 0){
             DodgeCoolDown -= Time.deltaTime;
         }
-        if(LungeTime > 0){
-            LungeTime -= Time.deltaTime;
-        }else if(LungeCoolDown > 0){
-            LungeCoolDown -= Time.deltaTime;
-            Sword.GetComponent<Collider>().enabled = false;
-        }
 
         if(GetComponent<Lock_Target>().Target != null && DodgeCoolDown <= 0)
             Dodge();
-        if(LungeCoolDown <= 0)
-            Attack();
         if(GetComponent<Lock_Target>().Target != null){
             distanceFromTarget = (GetComponent<Lock_Target>().Target.position - this.transform.position).magnitude;
-        }else
+        }else{
             distanceFromTarget = 100f;
-        if(distanceFromTarget <= 2f){
-            LungeTime = 0f;
         }
+
+        if(ComboTimeDelay < 0.9){
+            ComboTimeDelay += Time.deltaTime;
+        }else{
+            numOfClicks = 0;
+            animator.SetInteger("attackTicks", numOfClicks);
+        }
+        if(ComboTimeDelay >= 0.7f )
+            Attack();
     }
     private void Dodge(){
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.LeftShift)){
@@ -51,10 +55,11 @@ public class Player_Battle_Controller : MonoBehaviour
         }
     }
     private void Attack(){
-        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
-            LungeTime = TotalLungeTime;
-            LungeCoolDown = 0.1f;
+        if(Input.GetButton("X Button") || Input.GetKey(KeyCode.Mouse0)){
+            ComboTimeDelay = 0f;
             Sword.GetComponent<Collider>().enabled = true;
+            numOfClicks++;
+            animator.SetInteger("attackTicks", numOfClicks);
         }
     }
 }
