@@ -20,7 +20,7 @@ public class Player_Controller : MonoBehaviour
     public CinemachineVirtualCamera FollowCamera;
     public CinemachineVirtualCamera AimCamera;
 
-    private float _speed;
+    public float _speed;
     private float _targetSpeed;
     private float _animationBlend;
     private float _targetRotation = 0.0f;
@@ -36,6 +36,7 @@ public class Player_Controller : MonoBehaviour
     private float _gravity = -20f;
 
     private CharacterController _controller;
+    private Player_Battle_Controller _battle_controller;
     private Animator _animator;
 	private GameObject _mainCamera;
     private bool _isGrounded;
@@ -46,6 +47,7 @@ public class Player_Controller : MonoBehaviour
     }
     void Start()
     {
+        _battle_controller = GetComponent<Player_Battle_Controller>();
         Cursor.lockState = CursorLockMode.Locked;
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
@@ -102,7 +104,7 @@ public class Player_Controller : MonoBehaviour
             _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
             // rotate to face input direction relative to camera position
-            if(RotateOnMoveDirection)
+            if(RotateOnMoveDirection && !_battle_controller.isAttacking)
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
         targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
@@ -121,15 +123,26 @@ public class Player_Controller : MonoBehaviour
         _animator.SetFloat("MotionSpeed", 1f);
     }
     private void OverrideDirection(){
-        if(GetComponent<Player_Battle_Controller>().DodgeTime > GetComponent<Player_Battle_Controller>().TotalDodgeTime/2){
+         if((moveDirection - targetDirection).magnitude >= 1.5f){
+            _speed = 0;
+            moveDirection = targetDirection;
+        }
+        if(_battle_controller.DodgeTime > _battle_controller.TotalDodgeTime/2){
             _speed = Mathf.Lerp(_speed, 50f, Time.deltaTime * 20f);
-            moveDirection = targetDirection = GetComponent<Player_Battle_Controller>().DodgeDirection;
-        }else if(GetComponent<Player_Battle_Controller>().DodgeTime > 0){
+            moveDirection = targetDirection = _battle_controller.DodgeDirection;
+        }else if(_battle_controller.DodgeTime > 0){
             _speed = Mathf.Lerp(_speed, 0.1f, Time.deltaTime * 20f);
-            moveDirection = targetDirection = GetComponent<Player_Battle_Controller>().DodgeDirection;
+            moveDirection = targetDirection = _battle_controller.DodgeDirection;
             SpeedChangeRate = 0f;
         }
-        if((moveDirection - targetDirection).magnitude >= 1.5f){
+        if(_battle_controller.isAttacking){
+            moveDirection = _battle_controller.LungeDirection;
+            _speed = 50f - _battle_controller.ComboTimeDelay * 100f;
+            _speed = Mathf.Clamp(_speed, 0f, 10f);
+        }
+        if((moveDirection - targetDirection).magnitude >= 1.5f && 
+            _battle_controller.DodgeTime <= 0 &&
+            !_battle_controller.isAttacking){
             _speed = 0;
             moveDirection = targetDirection;
         }

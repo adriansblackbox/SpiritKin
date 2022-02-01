@@ -7,13 +7,15 @@ public class Player_Battle_Controller : MonoBehaviour
     public float DodgeTime = 0;
     private float DodgeCoolDown = 0f;
     public float TotalDodgeTime = 0.2f;
-    private float distanceFromTarget;
+    public float distanceFromTarget;
     public Vector3 DodgeDirection;
     public GameObject Sword;
     public int numOfClicks = 0;
     private Animator animator;
-    private float ComboTimeDelay;
+    public float ComboTimeDelay;
     private float TotalAnimationTime;
+    public bool isAttacking = false;
+    public Vector3 LungeDirection;
 
     private void Start() {
         Sword.GetComponent<Collider>().enabled = false;
@@ -21,21 +23,26 @@ public class Player_Battle_Controller : MonoBehaviour
     }
     void Update()
     {
+        // If ther player is locked onto a target, they are allowed to dodge
+        // After a cool down period
+        if(GetComponent<Lock_Target>().Target != null && DodgeCoolDown <= 0)
+            Dodge();
+        if(ComboTimeDelay >= TotalAnimationTime - (TotalAnimationTime/2) || numOfClicks == 0)
+            Attack();
+        //Dodge Timers
         if(DodgeTime > 0){
             DodgeTime -= Time.deltaTime;
         }else if(DodgeCoolDown > 0){
             DodgeCoolDown -= Time.deltaTime;
         }
-
-        if(GetComponent<Lock_Target>().Target != null && DodgeCoolDown <= 0)
-            Dodge();
+        // Tracking distance away from target
         if(GetComponent<Lock_Target>().Target != null){
             distanceFromTarget = (GetComponent<Lock_Target>().Target.position - this.transform.position).magnitude;
         }else{
             distanceFromTarget = 100f;
         }
 
-        //Handels animating combos
+        // Handels animating combos
         if(FindObjectOfType<Lock_Target>().Target == null){
             TotalAnimationTime = animator.GetCurrentAnimatorStateInfo(0).length;
         }else{
@@ -44,12 +51,11 @@ public class Player_Battle_Controller : MonoBehaviour
         if(ComboTimeDelay < TotalAnimationTime){
             ComboTimeDelay += Time.deltaTime;
         }else{
+            isAttacking = false;
             numOfClicks = 0;
             ComboTimeDelay = 0;
             animator.SetInteger("attackTicks", numOfClicks);
         }
-        if(ComboTimeDelay >= TotalAnimationTime - (TotalAnimationTime/3) || numOfClicks == 0)
-            Attack();
     }
     private void Dodge(){
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.LeftShift)){
@@ -59,7 +65,9 @@ public class Player_Battle_Controller : MonoBehaviour
         }
     }
     private void Attack(){
-        if(Input.GetButton("X Button") || Input.GetKey(KeyCode.Mouse0)){
+        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
+            LungeDirection = transform.forward;
+            isAttacking = true;
             ComboTimeDelay = 0f;
             Sword.GetComponent<Collider>().enabled = true;
             numOfClicks++;
