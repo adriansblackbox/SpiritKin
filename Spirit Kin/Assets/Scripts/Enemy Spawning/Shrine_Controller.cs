@@ -40,7 +40,7 @@ public class Shrine_Controller : MonoBehaviour
             else  
                 return false;
         }
-        return true;
+        return false;
     }
 
     public float checkPatrol(float baseChance)

@@ -50,10 +50,12 @@ public class Enemy_Controller : MonoBehaviour
     public NavMeshAgent ThisEnemy;
     public NavMeshPath path;
     public GameObject player;
+    public GameObject alertBox;
 
     public float patrolToIdleChance;
     public float idleToPatrolChance;
     public float swapStateInterval;
+    public float returnDist;
 
     private float myTime;
 
@@ -61,9 +63,7 @@ public class Enemy_Controller : MonoBehaviour
 
     //ENEMY VARIABLES
     [SerializeField] int quadrant;
-
     private int timesPatroled;
-
     private Shrine_Controller sc;
 
     // Start is called before the first frame update
@@ -72,7 +72,7 @@ public class Enemy_Controller : MonoBehaviour
         path = new UnityEngine.AI.NavMeshPath();
         player = GameObject.FindWithTag("Player");
         ThisEnemy = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        EnemyMotion = MotionState.Idling;
+        EnemyMotion = MotionState.Chasing;
         EnemyAttack = AttackState.NotAttacking;
         sc = transform.parent.parent.GetComponent<Shrine_Controller>();
         shrine = transform.parent.parent;
@@ -82,6 +82,15 @@ public class Enemy_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (EnemyMotion == MotionState.Alerted)
+        {
+            alertBox.SetActive(true);
+        } else {
+            alertBox.SetActive(false);
+        }
+
+        Debug.Log(EnemyMotion);
+
         myTime += Time.deltaTime;
         switch (EnemyMotion)
         {
@@ -140,15 +149,23 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
+                
+                //possibly IEnumerator to decide next state
+                    //enter alerted
+                    //after x seconds decide which next state is best
+                
+                //transform.LookAt(player.transform);
                 break;
             case MotionState.Chasing:
-                // ThisEnemy.CalculatePath(player.transform.position, path);
-                // if(path.status == UnityEngine.AI.NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-                //     //if(Vector3.distance(player.transform.position, shrine.transform.position)){
-                //     ThisEnemy.SetDestination(player.transform.position);
-                //     //}
-                // }
-                // else {}
+                ThisEnemy.CalculatePath(player.transform.position, path);
+                if (path.status == UnityEngine.AI.NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
+                    if (Vector3.Distance(transform.position, shrine.transform.position) < returnDist){
+                        ThisEnemy.SetDestination(player.transform.position);
+                    } else {
+                        EnemyMotion = MotionState.Alerted;
+                        ThisEnemy.ResetPath();
+                    }
+                }
                 break;
             case MotionState.Returning:
                 break;
@@ -244,8 +261,6 @@ public class Enemy_Controller : MonoBehaviour
         //Quadrant 4, or Lower Right
             //x is positive
             //z is negative
-
-
     private Vector3 findNextWaypoint() 
     {
         if (true) //guaranteed to stay in current quadrant //TIMES PATROLED = 0
@@ -287,26 +302,7 @@ public class Enemy_Controller : MonoBehaviour
                 }
             }
         }
-        // else if (timesPatroled == 1) //50% chance to move quadrants
-        // {
-
-        // }
-        // else //guaranteed to move quadrants
-        // {
-
-        // }
-
-
-        //select a quadrant for next waypoint
-            //if enemy has not yet reached a waypoint in its current quadrant
-                //select its current quadrant and check with shrine controller that its okay to stay
-                    //if its okay to stay get a random location > 50 (adjustable) units from the enemy and return the Vector3
-                    //else select one of the neighboring quadrants for its next waypoint & repeat check with shrine controller
-                        //if its okay get a random location > 50 (adjustable) units from the enemy and return the Vector3
-                        //else choose its other neighbor that wasn't chosen and get a random location > 50 (adjustable) units from the enemy and return the Vector3
-        return new Vector3(0,0,0);
     }
-
     
     private void determineQuadrant()
     {
