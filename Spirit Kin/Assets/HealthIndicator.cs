@@ -5,8 +5,15 @@ using UnityEngine.UI;
 
 public class HealthIndicator : MonoBehaviour
 {
+    //.81 start to move mask
+    //.19 mask missing
+
+    //top end is 0.81 health circle = 1.00 mask
+
+    //bottom end is 0.19 health circle = 0.00 mask
+
     public Image healthCircle;
-    public float health = 0;
+    public float health = 100;
     public float maxHealth = 100;
 
     void Update()
@@ -14,8 +21,6 @@ public class HealthIndicator : MonoBehaviour
         adjustHealth();
     }
 
-    //-100 y is 0 health
-    //0 y is 100 health
     public void adjustHealth()
     {
         healthCircle.fillAmount = health/maxHealth;
