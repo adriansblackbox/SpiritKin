@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyMotion: 0
+  EnemyMotion: 3
   EnemyAttack: 2
   ThisEnemy: {fileID: 0}
   player: {fileID: 0}
@@ -140,7 +140,8 @@ MonoBehaviour:
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.15
   swapStateInterval: 10
-  returnDist: 100
+  returnDist: 50
+  decisionTime: 1
   quadrant: 0
 --- !u!1 &7326527266680008334
 GameObject:

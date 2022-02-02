@@ -29,9 +29,9 @@ public class Enemy_Controller : MonoBehaviour
         Patroling,
         Idling,
         Alerted,
+        Seeking,
         Chasing,
-        Returning,
-        Relocating
+        AfterChase
     }
 
     //Enemies will surround player
@@ -55,9 +55,13 @@ public class Enemy_Controller : MonoBehaviour
     public float patrolToIdleChance;
     public float idleToPatrolChance;
     public float swapStateInterval;
-    public float returnDist;
+    public float returnDist = 100;
+
+    //time for enemy to decide next action after reaching edge of chase distance
+    public float decisionTime = 1f; 
 
     private float myTime;
+    private Vector3 startOfPath;
 
     private Transform shrine;
 
@@ -149,25 +153,48 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                
-                //possibly IEnumerator to decide next state
-                    //enter alerted
-                    //after x seconds decide which next state is best
+
+                //on an interval
+                    //track a delta float of distance between player and enemy
+                    //significantly away from the enemy -> enemy returns to what it was doing
+                    //significatnly towards the enemy -> enemy chases player
+                    //if neither threshold is reached -> seek the player
                 
                 //transform.LookAt(player.transform);
                 break;
+            case MotionState.Seeking:
+                if (!ThisEnemy.hasPath)
+                    ThisEnemy.CalculatePath(player.transform.position, path);
+                //reached end of path without entering chasing
+                if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance + 0.01f)
+                {
+                    ThisEnemy.ResetPath();
+                    //IEnumerator pause for 3 seconds then return to what they were previously doing
+
+                }
+                else
+                {
+                    //check if need to enter chasing
+
+                }
+                    
+                break;
             case MotionState.Chasing:
+                if (!ThisEnemy.hasPath)
+                    startOfPath = transform.position;
                 ThisEnemy.CalculatePath(player.transform.position, path);
                 if (path.status == UnityEngine.AI.NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-                    if (Vector3.Distance(transform.position, shrine.transform.position) < returnDist){
+                    if (Vector3.Distance(transform.position, startOfPath) < returnDist){
                         ThisEnemy.SetDestination(player.transform.position);
                     } else {
-                        EnemyMotion = MotionState.Alerted;
+                        EnemyMotion = MotionState.AfterChase;
                         ThisEnemy.ResetPath();
                     }
                 }
                 break;
-            case MotionState.Returning:
+            case MotionState.AfterChase:
+                //should i keep chasing or should i return to my prior commitment
+                StartCoroutine(decideNextAction());
                 break;
             default:
                 break;
@@ -336,5 +363,22 @@ public class Enemy_Controller : MonoBehaviour
     public int getQuadrant()
     {
         return quadrant;
+    }
+
+    IEnumerator decideNextAction() 
+    {
+        float distBeforeDecision = Vector3.Distance(transform.position, player.transform.position);
+        //track player's current distance from enemy
+        yield return new WaitForSeconds(decisionTime);
+        float distAfterDecision = Vector3.Distance(transform.position, player.transform.position);
+        //compare new distance to old & make decision
+        if (distAfterDecision > distBeforeDecision)
+        {
+            EnemyMotion = MotionState.Idling;
+        }
+        else
+        {
+            EnemyMotion = MotionState.Chasing;
+        }
     }
 }
