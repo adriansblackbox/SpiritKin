@@ -22,20 +22,20 @@ public class Enemy_Controller : MonoBehaviour
             //Standard chance each interval
         //else
             //Stay idle
+    //Enemies will surround player
+        //They will attack once at a time
 
-
+///////////////////////////////////////////////////STATES
+    
     //ADD HITSTUN STATE
     public enum MotionState {
-        Patroling,
-        Idling,
         Alerted,
+        Idling,
+        Patroling,
         Seeking,
         Chasing,
         AfterChase
     }
-
-    //Enemies will surround player
-        //They will attack once at a time
 
     //ADD HITSTUN STATE
     public enum AttackState {
@@ -46,11 +46,6 @@ public class Enemy_Controller : MonoBehaviour
 
     public MotionState EnemyMotion;
     public AttackState EnemyAttack;
-
-    public NavMeshAgent ThisEnemy;
-    public NavMeshPath path;
-    public GameObject player;
-    public GameObject alertBox;
 
     public float patrolToIdleChance;
     public float idleToPatrolChance;
@@ -65,10 +60,34 @@ public class Enemy_Controller : MonoBehaviour
 
     private Transform shrine;
 
-    //ENEMY VARIABLES
     [SerializeField] int quadrant;
     private int timesPatroled;
     private Shrine_Controller sc;
+
+    public int numTimesCheckIfNeedChase;
+
+    //threshold for the enemy to go from alerted into chase
+        //represents 1/2 second of movement
+    public float chaseThreshold;
+
+    //threshold for the enemy to go from alerted into idle
+        //represents distance after chase threshold checks
+    public float idleThreshold;
+
+//////////////////////////////////////////////////NAVMESH
+
+    public NavMeshAgent ThisEnemy;
+    public NavMeshPath path;
+    public GameObject player;
+    public GameObject alertBox;
+
+/////////////////////////////////////////////////SPHERECASTING
+    public float raycastRadius;
+    public float targetDetectionRange;
+
+    private RaycastHit hitInfo;
+    private bool hasDetectedPlayer = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -76,7 +95,7 @@ public class Enemy_Controller : MonoBehaviour
         path = new UnityEngine.AI.NavMeshPath();
         player = GameObject.FindWithTag("Player");
         ThisEnemy = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        EnemyMotion = MotionState.Chasing;
+        EnemyMotion = MotionState.Idling;
         EnemyAttack = AttackState.NotAttacking;
         sc = transform.parent.parent.GetComponent<Shrine_Controller>();
         shrine = transform.parent.parent;
@@ -86,6 +105,10 @@ public class Enemy_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //spherecast to check for player
+        checkForPlayer();
+
         if (EnemyMotion == MotionState.Alerted)
         {
             alertBox.SetActive(true);
@@ -135,8 +158,6 @@ public class Enemy_Controller : MonoBehaviour
                     ThisEnemy.SetDestination(findIdleSpot());
                 }
 
-                //DO WE NEED TO RELOCATE?
-
                 if (myTime > swapStateInterval) {
                     if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f)
                     {
@@ -153,31 +174,24 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-
-                //on an interval
-                    //track a delta float of distance between player and enemy
-                    //significantly away from the enemy -> enemy returns to what it was doing
-                    //significatnly towards the enemy -> enemy chases player
-                    //if neither threshold is reached -> seek the player
-                
-                //transform.LookAt(player.transform);
+                StartCoroutine(decideAlertedAction());
                 break;
             case MotionState.Seeking:
-                if (!ThisEnemy.hasPath)
+                if (!ThisEnemy.hasPath) {
                     ThisEnemy.CalculatePath(player.transform.position, path);
+                    ThisEnemy.SetDestination(player.transform.position);
+                }
                 //reached end of path without entering chasing
                 if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance + 0.01f)
                 {
                     ThisEnemy.ResetPath();
                     //IEnumerator pause for 3 seconds then return to what they were previously doing
-
                 }
                 else
                 {
                     //check if need to enter chasing
 
                 }
-                    
                 break;
             case MotionState.Chasing:
                 if (!ThisEnemy.hasPath)
@@ -194,12 +208,14 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.AfterChase:
                 //should i keep chasing or should i return to my prior commitment
-                StartCoroutine(decideNextAction());
+                StartCoroutine(decideActionAfterChase());
                 break;
             default:
                 break;
         }
     }
+
+///////////////////////////////////////////////////STATES    
 
     //FIRST ENEMY SPAWNED TAKES AN INDIRECT PATH TO THEIR LOCATION
     private Vector3 findIdleSpot()
@@ -365,7 +381,8 @@ public class Enemy_Controller : MonoBehaviour
         return quadrant;
     }
 
-    IEnumerator decideNextAction() 
+    //AFTER ENEMY HAS REACHED ITS CHASE LIMIT
+    IEnumerator decideActionAfterChase() 
     {
         float distBeforeDecision = Vector3.Distance(transform.position, player.transform.position);
         //track player's current distance from enemy
@@ -380,5 +397,103 @@ public class Enemy_Controller : MonoBehaviour
         {
             EnemyMotion = MotionState.Chasing;
         }
+    }
+
+    //after 0.5 & 1.5 seconds
+        //track a delta float of distance between player and enemy
+        //significantly away from the enemy -> enemy returns to what it was doing
+        //significatnly towards the enemy -> enemy chases player
+        //if neither threshold is reached -> seek the player      
+    IEnumerator decideAlertedAction()
+    {
+        float firstDist;
+        float delta;
+        float beforeDist;
+        float afterDist = 0f;
+
+        transform.LookAt(player.transform);
+
+        ThisEnemy.CalculatePath(player.transform.position, path);
+        firstDist = ThisEnemy.remainingDistance;
+        for (int i = 0; i < numTimesCheckIfNeedChase; i++)
+        {
+            ThisEnemy.CalculatePath(player.transform.position, path);
+            beforeDist = ThisEnemy.remainingDistance;
+            yield return new WaitForSeconds(0.5f);
+            ThisEnemy.CalculatePath(player.transform.position, path);
+            afterDist = ThisEnemy.remainingDistance;
+
+            //two cases
+            //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
+            //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
+            delta = beforeDist - afterDist;
+
+            if (delta > chaseThreshold)
+            {
+                Debug.Log("CHASING PLAYER");
+                EnemyMotion = MotionState.Chasing;
+                yield return null;
+            }
+            else
+            {
+                Debug.Log("No need to chase player");
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        //don't need to chase
+            //enter seek or idle based on final check
+            //has the player signifcantly moved away from the enemy
+        if (firstDist - afterDist < idleThreshold)
+        {
+            EnemyMotion = MotionState.Idling;
+            Debug.Log("Idle After Alerted");
+        }
+        else
+        {
+            EnemyMotion = MotionState.Seeking;
+            Debug.Log("SEEKING THIS MF");
+        }
+    }
+
+/////////////////////////////////////////////////SPHERECASTING
+    private void checkForPlayer()
+    {
+        hasDetectedPlayer = Physics.SphereCast(transform.position, raycastRadius, transform.forward, out hitInfo, targetDetectionRange);
+
+        if (hasDetectedPlayer)
+        {
+            if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
+            {
+                Debug.Log("Player Detected!");
+                ThisEnemy.ResetPath();
+                EnemyMotion = MotionState.Alerted;
+            }
+            else if (hitInfo.transform.CompareTag("Player") && EnemyMotion == MotionState.Seeking)
+            {
+                Debug.Log("Player Detected & Chasing after Seeking!");
+                EnemyMotion = MotionState.Chasing;
+            }
+            else if (!hitInfo.transform.CompareTag("Player"))
+            {
+                hasDetectedPlayer = false;
+                Debug.Log("No Player Here");
+            }
+                
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (hasDetectedPlayer)
+        {
+            Gizmos.color = Color.red;
+        }
+        else
+        {
+            Gizmos.color = Color.green;
+        }
+        Gizmos.matrix = transform.localToWorldMatrix;
+
+        Gizmos.DrawCube(new Vector3(0f, 0f, targetDetectionRange / 2f), new Vector3(raycastRadius, raycastRadius / 5, targetDetectionRange));
     }
 }

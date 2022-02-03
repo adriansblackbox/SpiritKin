@@ -132,17 +132,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyMotion: 3
+  EnemyMotion: 1
   EnemyAttack: 2
-  ThisEnemy: {fileID: 0}
-  player: {fileID: 0}
-  alertBox: {fileID: 7326527266680008334}
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.15
   swapStateInterval: 10
   returnDist: 50
   decisionTime: 1
   quadrant: 0
+  numTimesCheckIfNeedChase: 4
+  chaseThreshold: 1
+  idleThreshold: -10
+  ThisEnemy: {fileID: 0}
+  player: {fileID: 0}
+  alertBox: {fileID: 7326527266680008334}
+  raycastRadius: 5
+  targetDetectionRange: 25
 --- !u!1 &7326527266680008334
 GameObject:
   m_ObjectHideFlags: 0
