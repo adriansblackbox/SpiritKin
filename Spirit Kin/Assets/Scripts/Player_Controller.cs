@@ -13,6 +13,7 @@ public class Player_Controller : MonoBehaviour
     public float MouseSensitivity = 300f;
     public float StickLookSensitivity = 200f;
     public float PlayerHeight = 2f;
+    public float TempSpeed = 0f;
 
     public bool RotateOnMoveDirection = true;
 
@@ -84,17 +85,19 @@ public class Player_Controller : MonoBehaviour
         }
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
         float speedOffset = 0.1f;
-        if (currentHorizontalSpeed < _targetSpeed - speedOffset || currentHorizontalSpeed > _targetSpeed + speedOffset)
-        {
-            // creates curved result rather than a linear one giving a more organic speed change
-            // note T in Lerp is clamped, so we don't need to clamp our speed
-            _speed = Mathf.Lerp(currentHorizontalSpeed, _targetSpeed, Time.deltaTime * SpeedChangeRate);
-            // round speed to 3 decimal places
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
-        }
-        else
-        {
-            _speed = _targetSpeed;
+        if(!_battle_controller.isAttacking){
+            if (currentHorizontalSpeed < _targetSpeed - speedOffset || currentHorizontalSpeed > _targetSpeed + speedOffset)
+            {
+                // creates curved result rather than a linear one giving a more organic speed change
+                // note T in Lerp is clamped, so we don't need to clamp our speed
+                _speed = Mathf.Lerp(currentHorizontalSpeed, _targetSpeed, Time.deltaTime * SpeedChangeRate);
+                // round speed to 3 decimal places
+                _speed = Mathf.Round(_speed * 1000f) / 1000f;
+            }
+            else
+            {
+                _speed = _targetSpeed;
+            }
         }
         _animationBlend = Mathf.Lerp(_animationBlend, _targetSpeed, Time.deltaTime * SpeedChangeRate);
         // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -131,14 +134,14 @@ public class Player_Controller : MonoBehaviour
             _speed = Mathf.Lerp(_speed, 50f, Time.deltaTime * 20f);
             moveDirection = targetDirection = _battle_controller.DodgeDirection;
         }else if(_battle_controller.DodgeTime > 0){
-            _speed = Mathf.Lerp(_speed, 0.1f, Time.deltaTime * 20f);
+            _speed = Mathf.Lerp(_speed, 5f, Time.deltaTime * 20f);
             moveDirection = targetDirection = _battle_controller.DodgeDirection;
             SpeedChangeRate = 0f;
         }
         if(_battle_controller.isAttacking){
             moveDirection = _battle_controller.LungeDirection;
-            _speed = 50f - _battle_controller.ComboTimeDelay * 100f;
-            _speed = Mathf.Clamp(_speed, 0f, 10f);
+            TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * 5f);
+            _speed = TempSpeed;
         }
         if((moveDirection - targetDirection).magnitude >= 1.5f && 
             _battle_controller.DodgeTime <= 0 &&

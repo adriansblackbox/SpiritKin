@@ -16,18 +16,20 @@ public class Player_Battle_Controller : MonoBehaviour
     private float TotalAnimationTime;
     public bool isAttacking = false;
     public Vector3 LungeDirection;
+    private Player_Controller _controller;
 
     private void Start() {
         Sword.GetComponent<Collider>().enabled = false;
         animator = GetComponent<Animator>();
+        _controller = GetComponent<Player_Controller>();
     }
     void Update()
     {
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
-        if(GetComponent<Lock_Target>().Target != null && DodgeCoolDown <= 0)
+        if(GetComponent<Lock_Target>().Target != null && DodgeCoolDown <= 0 && !isAttacking)
             Dodge();
-        if(ComboTimeDelay >= TotalAnimationTime - (TotalAnimationTime/2) || numOfClicks == 0)
+        if((ComboTimeDelay >= TotalAnimationTime - (TotalAnimationTime/2) || numOfClicks == 0) && DodgeTime <= 0)
             Attack();
         //Dodge Timers
         if(DodgeTime > 0){
@@ -65,7 +67,17 @@ public class Player_Battle_Controller : MonoBehaviour
         }
     }
     private void Attack(){
-        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
+        if(Input.GetButton("X Button") || Input.GetKey(KeyCode.Mouse0)){
+            if((Input.GetButton("A Button") || Input.GetKey(KeyCode.LeftShift)) && GetComponent<Lock_Target>().Target == null){
+                //Dash Attack
+                _controller.TempSpeed = 100f;
+            }else{
+                //Normal Attack
+                _controller.TempSpeed = 20f;
+            }
+            if( GetComponent<Lock_Target>().Target != null && DodgeCoolDown >= 0.8f && DodgeTime <=0){
+                _controller.TempSpeed = 100f;
+            }
             LungeDirection = transform.forward;
             isAttacking = true;
             ComboTimeDelay = 0f;
