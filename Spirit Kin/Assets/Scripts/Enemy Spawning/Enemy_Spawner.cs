@@ -72,7 +72,6 @@ public class Enemy_Spawner : MonoBehaviour
         {
             Transform shrine = shrineContainer.transform.GetChild(i);
             shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
-            Debug.Log("Enemies to be spawned when shrine located at: (" + shrine.position.x + ", " + shrine.position.z + ") is cursed is " + shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed);
         }
     }
 
@@ -127,7 +126,7 @@ public class Enemy_Spawner : MonoBehaviour
         {
             float xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
             float zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
-            Vector3 test = new Vector3(xPos, 10.0f, zPos);
+            Vector3 test = new Vector3(xPos, 0.0f, zPos);
             if (shrine.GetChild(0).childCount == 0) //if no enemies then location is valid
                 return (test);
             else //check current enemies

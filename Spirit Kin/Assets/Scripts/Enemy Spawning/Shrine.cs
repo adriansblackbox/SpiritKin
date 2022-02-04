@@ -17,7 +17,7 @@ public class Shrine : MonoBehaviour
 
     public void Start()
     {
-        es = GameObject.Find("SpawnManager").GetComponent<Enemy_Spawner>();
+        es = GameObject.Find("TestManager").GetComponent<Enemy_Spawner>();
     }
 
     public void Update()
