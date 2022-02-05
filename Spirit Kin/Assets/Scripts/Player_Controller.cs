@@ -117,7 +117,7 @@ public class Player_Controller : MonoBehaviour
         moveDirection = Vector3.Lerp(moveDirection, targetDirection, Time.deltaTime * _trajectorySpeed);
         OverrideDirection();
         moveDirection.Normalize();
-        Debug.Log(moveDirection);
+        //Debug.Log(moveDirection);
         _controller.Move(new Vector3(moveDirection.x, _gravity, moveDirection.z) * _speed * Time.deltaTime);
         _animator.SetFloat("Speed", _animationBlend);
         float inputMagnitude = inputDirection.magnitude;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy_Spawner : MonoBehaviour
 {
@@ -122,13 +123,19 @@ public class Enemy_Spawner : MonoBehaviour
     private Vector3 chooseLocation(Transform shrine)
     {
         var shrineScript = shrine.GetComponent<Shrine>();
-        while (true) 
+        while (true) //RUN 1000 TIMES THEN GIVE UP RATHER THAN WHILE TRUE
         {
             float xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
             float zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
-            Vector3 test = new Vector3(xPos, 0.0f, zPos);
+            
+            Vector3 test = new Vector3(xPos, shrine.position.y, zPos);
+
+            NavMeshHit navHit;
+
+            NavMesh.SamplePosition(test, out navHit, shrineScript.shrineSpawnRange, NavMesh.AllAreas);
+
             if (shrine.GetChild(0).childCount == 0) //if no enemies then location is valid
-                return (test);
+                return (navHit.position);
             else //check current enemies
             {
                 //go through each enemy already spawned
@@ -138,12 +145,12 @@ public class Enemy_Spawner : MonoBehaviour
                 {
                     Transform enemy = shrine.GetChild(0).GetChild(i);
                     //check if any enemies are too close
-                    if (Vector3.Distance(test, enemy.position) < enemyNoSpawnRadius)
+                    if (Vector3.Distance(navHit.position, enemy.position) < enemyNoSpawnRadius)
                         validLocation = false;
                 }
                 //if no enemies were too close return the spawn location
                 if (validLocation)
-                    return (test);
+                    return (navHit.position);
             }
         }
     }

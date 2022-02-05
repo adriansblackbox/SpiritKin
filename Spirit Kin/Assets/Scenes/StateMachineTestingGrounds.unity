@@ -2075,15 +2075,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 866988121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfba6081b4427c541b7c221e13e12551, type: 3}
+  m_Script: {fileID: 11500000, guid: 35550142568c1844383a836b13719bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentRound: 0
-  lowerLimitEnemyCount: 4
-  upperLimitEnemyCount: 6
+  lowerLimitEnemyCount: 0
+  upperLimitEnemyCount: 1
   shrineContainer: {fileID: 954743418}
   enemyPrefab: {fileID: 5466169016768112854, guid: c2e28454de3efef4291346698097f31c, type: 3}
-  enemyNoSpawnRadius: 40
+  enemyNoSpawnRadius: 5
   spawnInterval: 3
   currentCursedShrines: 0
   maxCursedShrines: 1
@@ -3921,10 +3921,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DodgeTime: 0
   TotalDodgeTime: 0.4
-  LungeTime: 0
-  LungeCoolDown: 0
+  distanceFromTarget: 0
   DodgeDirection: {x: 0, y: 0, z: 0}
   Sword: {fileID: 0}
+  numOfClicks: 0
+  ComboTimeDelay: 0
+  isAttacking: 0
+  LungeDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &1717090167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3957,10 +3960,13 @@ MonoBehaviour:
   SpeedChangeRate: 5
   MouseSensitivity: 200
   StickLookSensitivity: 100
+  PlayerHeight: 2
+  TempSpeed: 0
   RotateOnMoveDirection: 1
   CinemachineCameraTarget: {fileID: 1412401028}
   FollowCamera: {fileID: 621109498}
   AimCamera: {fileID: 1473105310}
+  _speed: 0
   _cinemachineTargetYaw: 0
   _cinemachineTargetPitch: 0
   targetDirection: {x: 0, y: 0, z: 0}

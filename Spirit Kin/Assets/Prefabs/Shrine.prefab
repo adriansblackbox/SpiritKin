@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6738803524394422914}
   - component: {fileID: 6799075702819248385}
   - component: {fileID: 7476676180760937383}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shrine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursed: 0
-  shrineSpawnRange: 100
+  shrineSpawnRange: 50
   enemiesToSpawnWhenCursed: 0
   amountAlreadySpawned: 0
 --- !u!114 &7476676180760937383
@@ -135,7 +135,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2670040156660248802}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
