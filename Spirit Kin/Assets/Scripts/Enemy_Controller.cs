@@ -71,8 +71,6 @@ public class Enemy_Controller : MonoBehaviour
         //represents 1/2 second of movement
     public float chaseThreshold;
 
-    Coroutine killHelper;
-
 //////////////////////////////////////////////////NAVMESH
 
     public NavMeshAgent ThisEnemy;
@@ -108,6 +106,7 @@ public class Enemy_Controller : MonoBehaviour
         //spherecast to check for player
         checkForPlayer();
 
+        // Kill coroutine stank
         if (EnemyMotion == MotionState.Alerted)
         {
             alertBox.SetActive(true);
@@ -163,10 +162,10 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                killHelper = StartCoroutine(decideAlertedAction());
+                StartCoroutine(decideAlertedAction());
                 break;
             case MotionState.Seeking:
-                StopCoroutine(killHelper);
+                StopCoroutine(decideAlertedAction());
                 if (!ThisEnemy.hasPath) {
                     ThisEnemy.CalculatePath(player.transform.position, path);
                     ThisEnemy.SetDestination(player.transform.position);
@@ -178,7 +177,7 @@ public class Enemy_Controller : MonoBehaviour
                 }
                 break;
             case MotionState.Chasing:
-                StopCoroutine(killHelper);
+                StopCoroutine(decideAlertedAction());
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
                 ThisEnemy.CalculatePath(player.transform.position, path);
@@ -429,9 +428,11 @@ public class Enemy_Controller : MonoBehaviour
         //don't need to chase
             //enter seek or idle based on final check
             //has the player signifcantly moved away from the enemy
-        ThisEnemy.ResetPath();
-        EnemyMotion = MotionState.Seeking;
-        Debug.Log("SEEKING THIS MF");
+        if(EnemyMotion != MotionState.Chasing){
+            ThisEnemy.ResetPath();
+            EnemyMotion = MotionState.Seeking;
+            Debug.Log("SEEKING THIS MF");
+        }
     }
 
 /////////////////////////////////////////////////SPHERECASTING
