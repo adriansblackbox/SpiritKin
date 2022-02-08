@@ -71,6 +71,9 @@ public class Enemy_Controller : MonoBehaviour
         //represents 1/2 second of movement
     public float chaseThreshold;
 
+    //if enemy just alerted startCoroutine -> turn back to false
+    private bool justAlerted;
+
 //////////////////////////////////////////////////NAVMESH
 
     public NavMeshAgent ThisEnemy;
@@ -84,6 +87,15 @@ public class Enemy_Controller : MonoBehaviour
 
     private RaycastHit hitInfo;
     private bool hasDetectedPlayer = false;
+
+
+/////////////////////////////////////////////////STATE INDICATOR ABOVE ENEMY'S HEAD FOR TESTING
+    public Material alertedMaterial;
+    public Material seekingMaterial;
+    public Material chasingMaterial;
+    public Material relocatingMaterial;
+    public Material idlingMaterial;
+    public Material patrolingMaterial;
 
 
     // Start is called before the first frame update
@@ -106,15 +118,31 @@ public class Enemy_Controller : MonoBehaviour
         //spherecast to check for player
         checkForPlayer();
 
-        // Kill coroutine stank
+        // update box above enemies head to tell what state they are in
         if (EnemyMotion == MotionState.Alerted)
         {
-            alertBox.SetActive(true);
-        } else {
-            alertBox.SetActive(false);
+            alertBox.GetComponent<MeshRenderer>().material = alertedMaterial;
+        } 
+        else if (EnemyMotion == MotionState.Seeking)
+        {
+            alertBox.GetComponent<MeshRenderer>().material = seekingMaterial;
         }
-
-        Debug.Log(EnemyMotion);
+        else if (EnemyMotion == MotionState.Chasing)
+        {
+            alertBox.GetComponent<MeshRenderer>().material = chasingMaterial;
+        }
+        else if (EnemyMotion == MotionState.Idling)
+        {
+            alertBox.GetComponent<MeshRenderer>().material = idlingMaterial;
+        }
+        else if (EnemyMotion == MotionState.Patroling)
+        {
+            alertBox.GetComponent<MeshRenderer>().material = patrolingMaterial;
+        }
+        else if (EnemyMotion == MotionState.Relocating)
+        {
+            alertBox.GetComponent<MeshRenderer>().material = relocatingMaterial;
+        }
 
         myTime += Time.deltaTime;
         switch (EnemyMotion)
@@ -127,7 +155,6 @@ public class Enemy_Controller : MonoBehaviour
                     {
                         EnemyMotion = MotionState.Idling;
                         timesPatroled = 0;
-                        Debug.Log("Now " + EnemyMotion);
                     } else {
                         ThisEnemy.SetDestination(findNextWaypoint());
                     }
@@ -143,7 +170,6 @@ public class Enemy_Controller : MonoBehaviour
                         if (temp < sc.checkIdle(idleToPatrolChance)) //swap states
                         {
                             EnemyMotion = MotionState.Patroling;
-                            Debug.Log("Now " + EnemyMotion);
                         }                    
                     }
                     myTime = 0.0f;
@@ -162,7 +188,12 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                StartCoroutine(decideAlertedAction());
+                if (justAlerted)
+                {
+                    justAlerted = false;
+                    StartCoroutine(decideAlertedAction());
+                }
+
                 break;
             case MotionState.Seeking:
                 StopCoroutine(decideAlertedAction());
@@ -335,22 +366,18 @@ public class Enemy_Controller : MonoBehaviour
     {
         if (transform.position.x < shrine.position.x && transform.position.z > shrine.position.z) //Quadrant 1
         {
-            Debug.Log("Current Quadrant is 1");
             quadrant = 1;
         }
         else if (transform.position.x > shrine.position.x && transform.position.z > shrine.position.z) //Quadrant 2
         {
-            Debug.Log("Current Quadrant is 2");
             quadrant = 2;
         }
         else if (transform.position.x < shrine.position.x && transform.position.z < shrine.position.z) //Quadrant 3
         {
-            Debug.Log("Current Quadrant is 3");
             quadrant = 3;
         }
         else if (transform.position.x > shrine.position.x && transform.position.z < shrine.position.z) //Quadrant 4
         {
-            Debug.Log("Current Quadrant is 4");
             quadrant = 4;
         }
     }
@@ -391,47 +418,52 @@ public class Enemy_Controller : MonoBehaviour
         //if neither threshold is reached -> seek the player      
     IEnumerator decideAlertedAction()
     {
-        float firstDist;
         float delta;
-        float beforeDist;
+        float beforeDist = 0f;
         float afterDist = 0f;
 
         transform.LookAt(player.transform);
-
-        ThisEnemy.CalculatePath(player.transform.position, path);
-        firstDist = ThisEnemy.remainingDistance;
         for (int i = 0; i < numTimesCheckIfNeedChase; i++)
         {
-            ThisEnemy.CalculatePath(player.transform.position, path);
-            beforeDist = ThisEnemy.remainingDistance;
+            //get distance before
+            if (ThisEnemy.CalculatePath(player.transform.position, path))
+            {
+                ThisEnemy.SetDestination(player.transform.position);
+                beforeDist = ThisEnemy.remainingDistance;
+                ThisEnemy.ResetPath();
+            }
+
+            //wait half second
             yield return new WaitForSeconds(0.5f);
-            ThisEnemy.CalculatePath(player.transform.position, path);
-            afterDist = ThisEnemy.remainingDistance;
+
+            //get distance after
+            if (ThisEnemy.CalculatePath(player.transform.position, path))
+            {
+                ThisEnemy.SetDestination(player.transform.position);
+                afterDist = ThisEnemy.remainingDistance;
+                ThisEnemy.ResetPath();
+            }
 
             //two cases
             //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
             //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
-            delta = beforeDist - afterDist;
+            Debug.Log("Before Dist: " + beforeDist);
+            Debug.Log("After Dist: " + afterDist);
 
+            delta = beforeDist - afterDist;
             if (delta > chaseThreshold)
             {
-                Debug.Log("CHASING PLAYER");
+                Debug.Log("Delta -> chaseThreshold -> NOW CHASING");
                 ThisEnemy.ResetPath();
                 EnemyMotion = MotionState.Chasing;
                 yield break;
             }
-            else
-            {
-                Debug.Log("No need to chase player");
-            }
         }
-        //don't need to chase
-            //enter seek or idle based on final check
-            //has the player signifcantly moved away from the enemy
-        if(EnemyMotion != MotionState.Chasing){
+        if (EnemyMotion != MotionState.Chasing) 
+        {
             ThisEnemy.ResetPath();
             EnemyMotion = MotionState.Seeking;
-            Debug.Log("SEEKING THIS MF");
+            Debug.Log("Didn't need to chase player -> Seeking after alerted");
         }
     }
 
@@ -444,9 +476,10 @@ public class Enemy_Controller : MonoBehaviour
         {
             if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
             {
-                Debug.Log("Player Detected!");
+                Debug.Log("Current State: " + EnemyMotion + " -> Player Detected!");
                 ThisEnemy.ResetPath();
                 EnemyMotion = MotionState.Alerted;
+                justAlerted = true;
             }
             else if (hitInfo.transform.CompareTag("Player") && EnemyMotion == MotionState.Seeking)
             {
@@ -457,9 +490,7 @@ public class Enemy_Controller : MonoBehaviour
             else if (!hitInfo.transform.CompareTag("Player"))
             {
                 hasDetectedPlayer = false;
-                Debug.Log("No Player Here");
             }
-                
         }
     }
 

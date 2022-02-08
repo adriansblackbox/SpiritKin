@@ -39,7 +39,6 @@ public class Enemy_Spawner : MonoBehaviour
                 {
                     shrine.GetComponent<Shrine>().cursed = true;
                     currentCursedShrines++;
-                    Debug.Log("Shrine located at: (" + shrine.position.x + ", " + shrine.position.z + ") has been activated");
                 }
             }
             myTime = 0;
