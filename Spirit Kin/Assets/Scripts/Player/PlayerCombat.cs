@@ -4,93 +4,86 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    public float DodgeTime = 0;
-    private float DodgeCoolDown = 0f;
-    public float TotalDodgeTime = 0.2f;
-    public float distanceFromTarget;
-    public Vector3 DodgeDirection;
-    public GameObject Sword;
-    public int numOfClicks = 0;
+    [SerializeField] private float DodgeTime = 0.5f;
+     [SerializeField] private GameObject Sword;
+    [HideInInspector] public bool isAttacking = false;
+    [HideInInspector] public bool isDodging = false;
+    private float dodgeTimeItter = 0;
+    private float dodgeCoolDown = 0f;
+    private float comboTimeDelay;
+    private float totalAnimationTime;
+    private int numOfClicks = 0;
     private Animator animator;
-    public float ComboTimeDelay;
-    private float TotalAnimationTime;
-    public bool isAttacking = false;
-    public bool isDodging = false;
-    public Vector3 LungeDirection;
-    private PlayerController _controller;
+    private PlayerController controller;
 
     private void Start() {
         Sword.GetComponent<Collider>().enabled = false;
         animator = GetComponent<Animator>();
-        _controller = GetComponent<PlayerController>();
+        controller = GetComponent<PlayerController>();
     }
     void Update()
     {
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
-        if(GetComponent<LockTarget>().Target != null && DodgeCoolDown <= 0 && !isAttacking)
+        if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f && !isAttacking){
             Dodge();
-        if((ComboTimeDelay >= TotalAnimationTime - (TotalAnimationTime/2) || numOfClicks == 0) && DodgeTime <= 0)
+        }
+        if((comboTimeDelay >= totalAnimationTime - (totalAnimationTime/2) || numOfClicks == 0) && dodgeTimeItter <= 0.0f){
             Attack();
+        }
         //Dodge Timers
-        if(DodgeTime > 0){
-            DodgeTime -= Time.deltaTime;
-        }else if(DodgeCoolDown > 0){
-            DodgeCoolDown -= Time.deltaTime;
+        if(dodgeTimeItter > 0){
+            dodgeTimeItter -= Time.deltaTime;
+        }else if(dodgeCoolDown > 0){
+            dodgeCoolDown -= Time.deltaTime;
             isDodging = false;
         }
-        // Tracking distance away from target
-        if(GetComponent<LockTarget>().Target != null){
-            distanceFromTarget = (GetComponent<LockTarget>().Target.position - this.transform.position).magnitude;
-        }else{
-            distanceFromTarget = 100f;
-        }
-
         // Handels animating combos
         if(FindObjectOfType<LockTarget>().Target == null){
-            TotalAnimationTime = animator.GetCurrentAnimatorStateInfo(0).length;
+            totalAnimationTime = animator.GetCurrentAnimatorStateInfo(0).length;
         }else{
-            TotalAnimationTime = animator.GetCurrentAnimatorStateInfo(1).length;
+            totalAnimationTime = animator.GetCurrentAnimatorStateInfo(1).length;
         }
-        if(ComboTimeDelay < TotalAnimationTime){
-            ComboTimeDelay += Time.deltaTime;
+        if(comboTimeDelay < totalAnimationTime){
+            comboTimeDelay += Time.deltaTime;
         }else{
             isAttacking = false;
             numOfClicks = 0;
-            ComboTimeDelay = 0;
+            comboTimeDelay = 0;
             animator.SetInteger("attackTicks", numOfClicks);
         }
     }
     private void Dodge(){
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.LeftShift)){
-            _controller.TempSpeed = 80f;
+            controller.TempSpeed = 80f;
             isDodging = true;
-            DodgeTime = TotalDodgeTime;
-            DodgeCoolDown = 1f;
+            dodgeTimeItter = DodgeTime;
+            dodgeCoolDown = 0.5f;
         }
     }
     private void Attack(){
         if(Input.GetButton("X Button") || Input.GetKey(KeyCode.Mouse0)){
-            if((Input.GetButton("A Button") || Input.GetKey(KeyCode.LeftShift)) && GetComponent<LockTarget>().Target == null
-                && _controller.speed > _controller.WalkSpeed){
-                //Dash Attack
-                _controller.TempSpeed = 90f;
-            }else{
-                //Normal Attack
-                _controller.TempSpeed = 20f;
-            }
-            if( GetComponent<LockTarget>().Target != null && DodgeCoolDown >= 0.8f && DodgeTime <=0){
-                _controller.TempSpeed = 60f;
-            }
-            LungeDirection = transform.forward;
             isAttacking = true;
-            ComboTimeDelay = 0f;
+            comboTimeDelay = 0f;
             Sword.GetComponent<Collider>().enabled = true;
             numOfClicks++;
             if(numOfClicks > 3){
                 numOfClicks = 1;
             }
             animator.SetInteger("attackTicks", numOfClicks);
+            // lunge movement
+            if((Input.GetButton("A Button") || Input.GetKey(KeyCode.LeftShift)) && GetComponent<LockTarget>().Target == null
+                && controller.speed > controller.WalkSpeed){
+                // dash Attack
+                controller.TempSpeed = 90f;
+            }else{
+                // normal Attack
+                controller.TempSpeed = 20f;
+            }
+            if( GetComponent<LockTarget>().Target != null && dodgeCoolDown > 0.0f && dodgeTimeItter <= 0.0f){
+                // critical Attack
+                controller.TempSpeed = 60f;
+            }
         }
     }
 }
