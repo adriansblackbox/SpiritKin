@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     private float targetSpeed;
     private float targetRotation = 0.0f;
     private float rotationVelocity;
-    private float gravity = -20f;
+    private float gravity = -15f;
     private float input_x;
     private float input_y;
     private float animationBlend;

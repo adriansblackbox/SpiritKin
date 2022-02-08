@@ -65,7 +65,7 @@ public class LockTarget : MonoBehaviour
         GetComponent<PlayerController>().CinemachineTargetPitch = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
         GetComponent<PlayerController>().CinemachineTargetYaw = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         // Cancel lock
-        if(Input.GetAxis("Left Trigger") <= 0 || Input.GetKeyDown(KeyCode.Mouse2)){
+        if((Input.GetAxisRaw("Left Trigger") <= 0 && !Input.GetKey(KeyCode.Mouse1)) || Input.GetKeyUp(KeyCode.Mouse1)){
             Target = null;
         }
     }
@@ -79,7 +79,7 @@ public class LockTarget : MonoBehaviour
     }
 
     private void FindTarget(){
-        if(Input.GetAxisRaw("Left Trigger") > 0.5f || Input.GetKeyDown(KeyCode.Mouse2)){
+        if(Input.GetAxisRaw("Left Trigger") > 0.5f || Input.GetKeyDown(KeyCode.Mouse1)){
             Target = FindObjectOfType<LockableTargets>().AssessTarget();
             GetComponent<PlayerController>().RotateOnMoveDirection = false;
             GetComponent<PlayerController>().SprintSpeed = GetComponent<PlayerController>().WalkSpeed;
