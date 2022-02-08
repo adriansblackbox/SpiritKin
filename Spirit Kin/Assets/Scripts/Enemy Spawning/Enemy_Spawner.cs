@@ -123,14 +123,17 @@ public class Enemy_Spawner : MonoBehaviour
     private Vector3 chooseLocation(Transform shrine)
     {
         var shrineScript = shrine.GetComponent<Shrine>();
-        while (true) //RUN 1000 TIMES THEN GIVE UP RATHER THAN WHILE TRUE
-        {
-            float xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
-            float zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
-            
-            Vector3 test = new Vector3(xPos, shrine.position.y, zPos);
+        float xPos;
+        float zPos;
+        Vector3 test;
 
-            NavMeshHit navHit;
+        NavMeshHit navHit;
+        for (int i = 0; i < 10; ++i) //RUN 1000 TIMES THEN GIVE UP RATHER THAN WHILE TRUE
+        {
+            xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
+            zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
+            
+            test = new Vector3(xPos, shrine.position.y, zPos);
 
             NavMesh.SamplePosition(test, out navHit, shrineScript.shrineSpawnRange, NavMesh.AllAreas);
 
@@ -141,7 +144,7 @@ public class Enemy_Spawner : MonoBehaviour
                 //go through each enemy already spawned
                 int currentEnemies = shrine.GetChild(0).childCount;
                 bool validLocation = true;
-                for (int i = 0; i < currentEnemies; i++)
+                for (int j = 0; j < currentEnemies; ++j)
                 {
                     Transform enemy = shrine.GetChild(0).GetChild(i);
                     //check if any enemies are too close
@@ -153,5 +156,11 @@ public class Enemy_Spawner : MonoBehaviour
                     return (navHit.position);
             }
         }
+        xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
+        zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
+        test = new Vector3(xPos, shrine.position.y, zPos);
+
+        NavMesh.SamplePosition(test, out navHit, shrineScript.shrineSpawnRange, NavMesh.AllAreas);
+        return navHit.position;
     }
 }
