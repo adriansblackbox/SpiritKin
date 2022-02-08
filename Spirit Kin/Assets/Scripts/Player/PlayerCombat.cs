@@ -28,7 +28,7 @@ public class PlayerCombat : MonoBehaviour
         if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f && !isAttacking){
             Dodge();
         }
-        if((comboTimeDelay >= totalAnimationTime - (totalAnimationTime/2) || numOfClicks == 0) && dodgeTimeItter <= 0.0f){
+        if((comboTimeDelay >= totalAnimationTime - (totalAnimationTime/2)  || numOfClicks == 0) && dodgeTimeItter <= 0.0f){
             Attack();
         }
         //Dodge Timers
@@ -55,6 +55,9 @@ public class PlayerCombat : MonoBehaviour
     }
     private void Dodge(){
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.LeftShift)){
+            if(isAttacking){
+                isAttacking = false;
+            }
             controller.TempSpeed = 80f;
             isDodging = true;
             dodgeTimeItter = DodgeTime;

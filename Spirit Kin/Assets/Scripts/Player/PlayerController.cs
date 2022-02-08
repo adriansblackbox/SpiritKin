@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] public float WalkSpeed = 2.0f;
     [SerializeField] public float SprintSpeed = 5.0f;
+    [SerializeField] private float MinimumSpeed = 5f;
     [SerializeField] private float RotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private float gravity = -20f;
     private float input_x;
     private float input_y;
+    private float animationBlend;
     private Vector3 targetMoveDirection;
     private Vector3 moveDirection;
     private Vector2 inputDirection;
@@ -79,6 +81,9 @@ public class PlayerController : MonoBehaviour
         // round speed to 3 decimal places
         speed = Mathf.Lerp(speed, targetSpeed, Time.deltaTime * SpeedChangeRate);
         speed = Mathf.Round(speed * 1000f) / 1000f;
+        if(targetSpeed != 0.0f){
+            speed = Mathf.Clamp(speed, MinimumSpeed, float.MaxValue);
+        }
         // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
         // if there is a move input rotate player when the player is moving
         inputDirection.Normalize();
@@ -108,6 +113,9 @@ public class PlayerController : MonoBehaviour
             // the player's body
             moveDirection = transform.GetChild(0).gameObject.transform.forward;
         }
+        if(combatScript.isDodging){
+            moveDirection = targetMoveDirection;
+        }
         // TempSpeed is altered by the PlayerCombat script
         TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * CombatSpeedDropoff);
         // move direction is normalized, and the caharacter controller applies contstant
@@ -116,7 +124,8 @@ public class PlayerController : MonoBehaviour
         controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
     }
     private void Animation(){
-        animator.SetFloat("Speed", speed);
+        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 10f);
+        animator.SetFloat("Speed", animationBlend);
         // adjusting the motion speed variable with the input magnitude allows
         // the player to slowly creep up to a full speed on their controller
         if(inputDirection.magnitude > 0){

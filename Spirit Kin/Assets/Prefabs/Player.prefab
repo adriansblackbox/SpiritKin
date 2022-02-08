@@ -2133,13 +2133,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930ef1f61251d44968e52c6979bcfa03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WalkSpeed: 15
+  WalkSpeed: 10
   SprintSpeed: 30
+  MinimumSpeed: 7.5
   RotationSmoothTime: 0.15
   SpeedChangeRate: 8
   MouseSensitivity: 200
   StickLookSensitivity: 100
-  MoveToTargetSpeed: 3
+  MoveToTargetSpeed: 4
+  CombatSpeedDropoff: 5
   TempSpeed: 0
   CinemachineTargetYaw: 0
   CinemachineTargetPitch: 0
@@ -2158,10 +2160,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a135c7c8bf6f4a15be6a7f29743b2c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
+  NormToCombatSpeed: 5
+  RotateToTargetSpeed: 10
+  CamRotateToTargetSpeed: 5
   LookAtRoot: {fileID: 1289081377}
-  PlayerBody: {fileID: 617773006068336580}
   FollowCamera: {fileID: 0}
+  Target: {fileID: 0}
 --- !u!114 &7905162984969030825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2174,16 +2178,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec54212f371e4ea4888ce61341b42d78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DodgeTime: 0
-  TotalDodgeTime: 0.4
-  distanceFromTarget: 0
-  DodgeDirection: {x: 0, y: 0, z: 0}
+  DodgeTime: 0.5
   Sword: {fileID: 1230903320015684901}
-  numOfClicks: 0
-  ComboTimeDelay: 0
   isAttacking: 0
   isDodging: 0
-  LungeDirection: {x: 0, y: 0, z: 0}
 --- !u!82 &7905162984969030824
 AudioSource:
   m_ObjectHideFlags: 0
