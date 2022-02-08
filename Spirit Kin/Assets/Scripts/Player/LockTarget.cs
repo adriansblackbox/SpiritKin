@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class Lock_Target : MonoBehaviour
+public class LockTarget : MonoBehaviour
 {
     private float _defaultSensitivity;
     private float _defaultSprintSpeed;
@@ -14,8 +14,8 @@ public class Lock_Target : MonoBehaviour
     private float inputY;
     
     private void Start() {
-        _defaultSensitivity = GetComponent<Player_Controller>().MouseSensitivity;
-        _defaultSprintSpeed =  GetComponent<Player_Controller>().SprintSpeed;
+        _defaultSensitivity = GetComponent<PlayerController>().MouseSensitivity;
+        _defaultSprintSpeed =  GetComponent<PlayerController>().SprintSpeed;
         _animator = GetComponent<Animator>();
     }
 
@@ -41,13 +41,13 @@ public class Lock_Target : MonoBehaviour
         transform.forward = Vector3.Lerp(transform.forward, _focusDirection, Time.deltaTime * 20f);
         _animator.SetLayerWeight(1, Mathf.Lerp(_animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
         
-        Vector3 focusTarget = (Target.position - GetComponent<Player_Controller>().CinemachineCameraTarget.transform.position).normalized;
+        Vector3 focusTarget = (Target.position - GetComponent<PlayerController>().CinemachineCameraTarget.transform.position).normalized;
         focusTarget = new Vector3(focusTarget.x, focusTarget.y - 0.15f, focusTarget.z);
-        GetComponent<Player_Controller>().CinemachineCameraTarget.transform.forward =
-        Vector3.Lerp(GetComponent<Player_Controller>().CinemachineCameraTarget.transform.forward, focusTarget, Time.deltaTime * 20f);
+        GetComponent<PlayerController>().CinemachineCameraTarget.transform.forward =
+        Vector3.Lerp(GetComponent<PlayerController>().CinemachineCameraTarget.transform.forward, focusTarget, Time.deltaTime * 20f);
 
-        GetComponent<Player_Controller>()._cinemachineTargetPitch = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
-        GetComponent<Player_Controller>()._cinemachineTargetYaw = GetComponent<Player_Controller>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+        GetComponent<PlayerController>().CinemachineTargetPitch = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
+        GetComponent<PlayerController>().CinemachineTargetYaw = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         
         // Cancel lock
         if(Input.GetButtonDown("R3 Button") || Input.GetKeyDown(KeyCode.Mouse2)){
@@ -55,17 +55,17 @@ public class Lock_Target : MonoBehaviour
         }
     }
     private void DelockTarget(){
-        FollowCamera.LookAt = GetComponent<Player_Controller>().CinemachineCameraTarget.transform;
-        GetComponent<Player_Controller>().RotateOnMoveDirection = true;
-        GetComponent<Player_Controller>().SprintSpeed = _defaultSprintSpeed;
+        FollowCamera.LookAt = GetComponent<PlayerController>().CinemachineCameraTarget.transform;
+        GetComponent<PlayerController>().RotateOnMoveDirection = true;
+        GetComponent<PlayerController>().SprintSpeed = _defaultSprintSpeed;
         _animator.SetLayerWeight(1, Mathf.Lerp(_animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
     }
 
     private void FindTarget(){
         if(Input.GetButtonDown("R3 Button") || Input.GetKeyDown(KeyCode.Mouse2)){
-            Target = FindObjectOfType<Lockable_Targets>().AssessTarget();
-            GetComponent<Player_Controller>().RotateOnMoveDirection = false;
-            GetComponent<Player_Controller>().SprintSpeed = GetComponent<Player_Controller>().WalkSpeed;
+            Target = FindObjectOfType<LockableTargets>().AssessTarget();
+            GetComponent<PlayerController>().RotateOnMoveDirection = false;
+            GetComponent<PlayerController>().SprintSpeed = GetComponent<PlayerController>().WalkSpeed;
 
         }
     }

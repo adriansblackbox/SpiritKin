@@ -2074,19 +2074,16 @@ MonoBehaviour:
   WalkSpeed: 15
   SprintSpeed: 30
   RotationSmoothTime: 0.15
-  SpeedChangeRate: 10
+  SpeedChangeRate: 5
   MouseSensitivity: 200
   StickLookSensitivity: 100
   PlayerHeight: 4
   TempSpeed: 0
+  CinemachineTargetYaw: 0
+  CinemachineTargetPitch: 0
   RotateOnMoveDirection: 1
   CinemachineCameraTarget: {fileID: 0}
-  FollowCamera: {fileID: 0}
-  AimCamera: {fileID: 0}
-  _speed: 0
-  _cinemachineTargetYaw: 0
-  _cinemachineTargetPitch: 0
-  targetDirection: {x: 0, y: 0, z: 0}
+  TargetMoveDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &7905162984969030826
 MonoBehaviour:
   m_ObjectHideFlags: 0
