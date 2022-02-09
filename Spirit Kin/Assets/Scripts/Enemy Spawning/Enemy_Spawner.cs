@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Enemy_Spawner : MonoBehaviour
 {
@@ -39,6 +38,7 @@ public class Enemy_Spawner : MonoBehaviour
                 {
                     shrine.GetComponent<Shrine>().cursed = true;
                     currentCursedShrines++;
+                    Debug.Log("Shrine located at: (" + shrine.position.x + ", " + shrine.position.z + ") has been activated");
                 }
             }
             myTime = 0;
@@ -122,44 +122,29 @@ public class Enemy_Spawner : MonoBehaviour
     private Vector3 chooseLocation(Transform shrine)
     {
         var shrineScript = shrine.GetComponent<Shrine>();
-        float xPos;
-        float zPos;
-        Vector3 test;
-
-        NavMeshHit navHit;
-        for (int i = 0; i < 10; ++i) //RUN 1000 TIMES THEN GIVE UP RATHER THAN WHILE TRUE
+        while (true) 
         {
-            xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
-            zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
-            
-            test = new Vector3(xPos, shrine.position.y, zPos);
-
-            NavMesh.SamplePosition(test, out navHit, shrineScript.shrineSpawnRange, NavMesh.AllAreas);
-
+            float xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
+            float zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
+            Vector3 test = new Vector3(xPos, 0.0f, zPos);
             if (shrine.GetChild(0).childCount == 0) //if no enemies then location is valid
-                return (navHit.position);
+                return (test);
             else //check current enemies
             {
                 //go through each enemy already spawned
                 int currentEnemies = shrine.GetChild(0).childCount;
                 bool validLocation = true;
-                for (int j = 0; j < currentEnemies; ++j)
+                for (int i = 0; i < currentEnemies; i++)
                 {
                     Transform enemy = shrine.GetChild(0).GetChild(i);
                     //check if any enemies are too close
-                    if (Vector3.Distance(navHit.position, enemy.position) < enemyNoSpawnRadius)
+                    if (Vector3.Distance(test, enemy.position) < enemyNoSpawnRadius)
                         validLocation = false;
                 }
                 //if no enemies were too close return the spawn location
                 if (validLocation)
-                    return (navHit.position);
+                    return (test);
             }
         }
-        xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
-        zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
-        test = new Vector3(xPos, shrine.position.y, zPos);
-
-        NavMesh.SamplePosition(test, out navHit, shrineScript.shrineSpawnRange, NavMesh.AllAreas);
-        return navHit.position;
     }
 }
