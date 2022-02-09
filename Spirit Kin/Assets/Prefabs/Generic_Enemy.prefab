@@ -137,17 +137,22 @@ MonoBehaviour:
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.15
   swapStateInterval: 10
-  returnDist: 50
+  returnDist: 25
   decisionTime: 1
   quadrant: 0
   numTimesCheckIfNeedChase: 4
-  chaseThreshold: 1
-  idleThreshold: -10
+  chaseThreshold: 3
   ThisEnemy: {fileID: 0}
   player: {fileID: 0}
   alertBox: {fileID: 7326527266680008334}
   raycastRadius: 5
   targetDetectionRange: 25
+  alertedMaterial: {fileID: 2100000, guid: 72f77cb4a101a254bbb27d5912592a6e, type: 2}
+  seekingMaterial: {fileID: 2100000, guid: a27b87fc0e3b5dd48a41c54f034f278d, type: 2}
+  chasingMaterial: {fileID: 2100000, guid: 0b8332dcaffc8af44b17cea5add1f59c, type: 2}
+  relocatingMaterial: {fileID: 2100000, guid: 57205a5f1dee0b1418897fb1db67b506, type: 2}
+  idlingMaterial: {fileID: 2100000, guid: c6ac4204f0b3a2e4d91d5257a6e39a32, type: 2}
+  patrolingMaterial: {fileID: 2100000, guid: a91c47eb9a94e5743bb9c0406cdd3d2a, type: 2}
 --- !u!1 &7326527266680008334
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3973736293003285385
 Transform:
   m_ObjectHideFlags: 0
@@ -208,7 +213,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e59cc011b66a0a3418d3e3d939277acd, type: 2}
+  - {fileID: 2100000, guid: c6ac4204f0b3a2e4d91d5257a6e39a32, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
