@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1289081376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1289081377}
+  m_Layer: 0
+  m_Name: Look At Root
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1289081377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289081376}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.483, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7421676503820473879}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &45340227376201997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 617773006068336580}
+  m_Layer: 0
+  m_Name: Player Body
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &617773006068336580
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45340227376201997}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1752394306643792562}
+  - {fileID: 8400864607196555513}
+  m_Father: {fileID: 7421676503820473879}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &327995425168632445
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,12 +796,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2670678616747343134}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1927792475878382801}
-  m_Father: {fileID: 7421676503820473879}
+  m_Father: {fileID: 617773006068336580}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2917679892436809634
@@ -1233,12 +1295,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4764278965067565282}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0.291}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8676296977649974606}
-  m_Father: {fileID: 7421676503820473879}
+  m_Father: {fileID: 617773006068336580}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4797403221214550581
@@ -2017,8 +2079,8 @@ Transform:
   m_LocalPosition: {x: 0.3708519, y: 0.611, z: 1.2152574}
   m_LocalScale: {x: 2.3231678, y: 2.3231678, z: 2.3231678}
   m_Children:
-  - {fileID: 1752394306643792562}
-  - {fileID: 8400864607196555513}
+  - {fileID: 617773006068336580}
+  - {fileID: 1289081377}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2071,22 +2133,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930ef1f61251d44968e52c6979bcfa03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WalkSpeed: 15
+  WalkSpeed: 10
   SprintSpeed: 30
+  MinimumSpeed: 7.5
   RotationSmoothTime: 0.15
-  SpeedChangeRate: 10
+  SpeedChangeRate: 8
   MouseSensitivity: 200
   StickLookSensitivity: 100
-  PlayerHeight: 4
+  MoveToTargetSpeed: 4
+  CombatSpeedDropoff: 5
   TempSpeed: 0
+  CinemachineTargetYaw: 0
+  CinemachineTargetPitch: 0
   RotateOnMoveDirection: 1
-  CinemachineCameraTarget: {fileID: 0}
-  FollowCamera: {fileID: 0}
-  AimCamera: {fileID: 0}
-  _speed: 0
-  _cinemachineTargetYaw: 0
-  _cinemachineTargetPitch: 0
-  targetDirection: {x: 0, y: 0, z: 0}
+  CinemachineCameraTarget: {fileID: 1289081376}
+  speed: 0
 --- !u!114 &7905162984969030826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2099,8 +2160,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a135c7c8bf6f4a15be6a7f29743b2c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
+  NormToCombatSpeed: 5
+  RotateToTargetSpeed: 10
+  CamRotateToTargetSpeed: 5
+  LookAtRoot: {fileID: 1289081377}
   FollowCamera: {fileID: 0}
+  Target: {fileID: 0}
 --- !u!114 &7905162984969030825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2113,15 +2178,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec54212f371e4ea4888ce61341b42d78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DodgeTime: 0
-  TotalDodgeTime: 0.4
-  distanceFromTarget: 0
-  DodgeDirection: {x: 0, y: 0, z: 0}
+  DodgeTime: 0.5
   Sword: {fileID: 1230903320015684901}
-  numOfClicks: 0
-  ComboTimeDelay: 0
   isAttacking: 0
-  LungeDirection: {x: 0, y: 0, z: 0}
+  isDodging: 0
 --- !u!82 &7905162984969030824
 AudioSource:
   m_ObjectHideFlags: 0
