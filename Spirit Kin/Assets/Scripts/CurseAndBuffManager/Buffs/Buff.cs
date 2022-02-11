@@ -12,8 +12,8 @@ public class Buff : ScriptableObject
 	public int basePower;
 
 	[Tooltip("How long the effect will linger. Use -1 for forever, use 0 for instant.")]
-	public int duration;
+	public float duration;
 
     public bool isApplied = false;
-	
+	public bool removeFlag = false;
 }

@@ -1095,11 +1095,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: shrineSpawnRange
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476676180760937383, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
@@ -1584,6 +1588,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1289081377, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
   m_PrefabInstance: {fileID: 1642808970}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &800471318 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7905162984969030829, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+  m_PrefabInstance: {fileID: 1642808970}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &800471325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800471318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f625359af16efac4086ee4ab2e0105b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currSouls: 0
+  maxSouls: 0
+  Coins: 0
+  maxHealth: 100
+  currentHealth: 0
+  armor:
+    baseValue: 0
+  damage:
+    baseValue: 10
+  speed:
+    baseValue: 0
+  SoulsUI: {fileID: 0}
+  CoinsUI: {fileID: 0}
 --- !u!1 &851875886
 GameObject:
   m_ObjectHideFlags: 0
@@ -1845,7 +1879,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 868298881}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35550142568c1844383a836b13719bb9, type: 3}
   m_Name: 
@@ -2302,14 +2336,48 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: shrineSpawnRange
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 7476676180760937383, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+--- !u!1 &1151050458 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
+  m_PrefabInstance: {fileID: 1227123761}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1151050464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151050458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f625359af16efac4086ee4ab2e0105b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currSouls: 0
+  maxSouls: 0
+  Coins: 0
+  maxHealth: 100
+  currentHealth: 0
+  armor:
+    baseValue: 0
+  damage:
+    baseValue: 0
+  speed:
+    baseValue: 0
+  SoulsUI: {fileID: 0}
+  CoinsUI: {fileID: 0}
 --- !u!1 &1159954108
 GameObject:
   m_ObjectHideFlags: 0
@@ -2612,11 +2680,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: shrineSpawnRange
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476676180760937383, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
@@ -3064,7 +3136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: shrineSpawnRange
@@ -3073,6 +3145,10 @@ PrefabInstance:
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: enemiesToSpawnWhenCursed
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476676180760937383, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
@@ -3277,6 +3353,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.45
       objectReference: {fileID: 0}
+    - target: {fileID: 4783538471153228992, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: CoinsUI
+      value: 
+      objectReference: {fileID: 1042463428}
+    - target: {fileID: 4783538471153228992, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: SoulsUI
+      value: 
+      objectReference: {fileID: 1828932258}
     - target: {fileID: 7421676503820473879, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -3325,6 +3409,18 @@ PrefabInstance:
       propertyPath: FollowCamera
       value: 
       objectReference: {fileID: 4931512990943485761}
+    - target: {fileID: 7905162984969030827, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: WalkSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7905162984969030827, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: SprintSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7905162984969030827, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: MinimumSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7905162984969030829, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_Name
       value: Player

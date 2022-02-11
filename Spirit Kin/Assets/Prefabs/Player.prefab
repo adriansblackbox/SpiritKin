@@ -2060,6 +2060,7 @@ GameObject:
   - component: {fileID: 7905162984969030827}
   - component: {fileID: 7905162984969030826}
   - component: {fileID: 7905162984969030825}
+  - component: {fileID: 4783538471153228992}
   - component: {fileID: 7905162984969030824}
   m_Layer: 6
   m_Name: Player
@@ -2182,6 +2183,32 @@ MonoBehaviour:
   Sword: {fileID: 1230903320015684901}
   isAttacking: 0
   isDodging: 0
+--- !u!114 &4783538471153228992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905162984969030829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f625359af16efac4086ee4ab2e0105b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currSouls: 0
+  maxSouls: 20
+  Coins: 0
+  maxHealth: 100
+  currentHealth: 0
+  armor:
+    baseValue: 10
+  damage:
+    baseValue: 20
+  speed:
+    baseValue: 10
+  currSoulsUI: {fileID: 0}
+  maxSoulsUI: {fileID: 0}
+  CoinsUI: {fileID: 0}
 --- !u!82 &7905162984969030824
 AudioSource:
   m_ObjectHideFlags: 0
