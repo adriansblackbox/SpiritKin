@@ -29,7 +29,7 @@ public class Shrine : MonoBehaviour
             //3: The current amount of enemies instanced [amountAlreadySpawned] must be less than the max amount to be instanced for the current cursing [enemiesToSpawnWhenCursed]
         if (cursed && myTime > es.spawnInterval && amountAlreadySpawned < enemiesToSpawnWhenCursed)
         {
-            es.spawnEnemy(transform);
+            es.spawnEnemy(gameObject);
             myTime = 0;
         }
     }

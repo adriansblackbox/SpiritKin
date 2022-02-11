@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy_Spawner : MonoBehaviour
 {
@@ -75,17 +76,25 @@ public class Enemy_Spawner : MonoBehaviour
         }
     }
 
-    public void spawnEnemy(Transform shrineToSpawnAt)
+    public void spawnEnemy(GameObject shrineToSpawnAt)
     {
         //find a randomized location for the enemy to spawn
-        Vector3 enemyPosition = chooseLocation(shrineToSpawnAt);
+        Vector3 enemyPosition = chooseLocation(shrineToSpawnAt.transform).position;
         //spawn in enemy
         GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
+        enemy.GetComponent<Enemy_Controller>().sc = shrineToSpawnAt.GetComponent<Shrine_Controller>();
+        enemy.GetComponent<Enemy_Controller>().shrine = shrineToSpawnAt.transform;
+        enemy.GetComponent<Enemy_Controller>().shrineSpawnRange = shrineToSpawnAt.GetComponent<Shrine>().shrineSpawnRange;
+        
         //put in enemy container
-        enemy.transform.parent = shrineToSpawnAt.GetChild(0);
+        enemy.transform.parent = shrineToSpawnAt.transform.GetChild(0);
 
         //increment enemies spawned at shrine
         shrineToSpawnAt.GetComponent<Shrine>().amountAlreadySpawned++;
+        Debug.Log("Fake Crash A!");
+        if(shrineToSpawnAt.transform.GetChild(10)){}
+        enemy.GetComponent<Enemy_Controller>().enabled = true;
+        
     }
 
     //Spawns all enemies for a round around each shrine
@@ -108,7 +117,7 @@ public class Enemy_Spawner : MonoBehaviour
                 for (int j = 0; j < numberOfEnemiesToBeSpawned; j++)
                 {
                     //choose a random location in the range around the shrine
-                    Vector3 enemyPosition = chooseLocation(shrine);
+                    Vector3 enemyPosition = chooseLocation(shrine).position;
                     //spawn in enemy
                     GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
                     //put in enemy container
@@ -119,32 +128,16 @@ public class Enemy_Spawner : MonoBehaviour
     }
 
     //CURRENTLY ONLY THE X AND Z VALUES ARE CALCULATED SO THIS WILL HAVE TO BE UPDATED TO WORK WITH Y VALUES ONCE WE HAVE THE MAP IMPLEMENTED
-    private Vector3 chooseLocation(Transform shrine)
+    private NavMeshHit chooseLocation(Transform shrine)
     {
         var shrineScript = shrine.GetComponent<Shrine>();
-        while (true) 
-        {
-            float xPos = Random.Range(shrine.position.x - shrineScript.shrineSpawnRange, shrine.position.x + shrineScript.shrineSpawnRange);
-            float zPos = Random.Range(shrine.position.z - shrineScript.shrineSpawnRange, shrine.position.z + shrineScript.shrineSpawnRange);
-            Vector3 test = new Vector3(xPos, 0.0f, zPos);
-            if (shrine.GetChild(0).childCount == 0) //if no enemies then location is valid
-                return (test);
-            else //check current enemies
-            {
-                //go through each enemy already spawned
-                int currentEnemies = shrine.GetChild(0).childCount;
-                bool validLocation = true;
-                for (int i = 0; i < currentEnemies; i++)
-                {
-                    Transform enemy = shrine.GetChild(0).GetChild(i);
-                    //check if any enemies are too close
-                    if (Vector3.Distance(test, enemy.position) < enemyNoSpawnRadius)
-                        validLocation = false;
-                }
-                //if no enemies were too close return the spawn location
-                if (validLocation)
-                    return (test);
-            }
-        }
+        NavMeshHit hit;
+        Vector3 rPoint = shrine.position + (Random.insideUnitSphere * shrineScript.shrineSpawnRange);
+        Debug.Log("Point generated: " + rPoint);
+        Debug.Log("Distance to shrine: " + Vector3.Distance(rPoint, shrine.position));
+
+        NavMesh.SamplePosition(rPoint, out hit, 1.0f, NavMesh.AllAreas);
+        Debug.Log("Navhit: " + hit.position);
+        return (hit);
     }
 }
