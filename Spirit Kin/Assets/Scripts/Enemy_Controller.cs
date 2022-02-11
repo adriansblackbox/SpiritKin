@@ -254,6 +254,7 @@ public class Enemy_Controller : MonoBehaviour
                     break;
             }
         } 
+
         while(true) {
             float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
             float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.25f;
@@ -284,6 +285,7 @@ public class Enemy_Controller : MonoBehaviour
             
             //ADJUST Y POS TO ALIGN WITH BLOCKOUT
             Vector3 point = new Vector3(xpos, 0.0f, zpos);
+            NavMeshHit hit = NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
 
             ThisEnemy.CalculatePath(point, path);
             if(path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
@@ -339,6 +341,7 @@ public class Enemy_Controller : MonoBehaviour
                 
                 //ADJUST Y POS TO ALIGN WITH BLOCKOUT
                 Vector3 point = new Vector3(xpos, 0.0f, zpos);
+                NavMeshHit hit = NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
 
                 ThisEnemy.CalculatePath(point, path);
                 if(path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, point) > 40f) { // Check if point is on navmesh

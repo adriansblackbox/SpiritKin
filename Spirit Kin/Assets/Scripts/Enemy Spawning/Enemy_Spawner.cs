@@ -91,9 +91,10 @@ public class Enemy_Spawner : MonoBehaviour
 
         //increment enemies spawned at shrine
         shrineToSpawnAt.GetComponent<Shrine>().amountAlreadySpawned++;
+        enemy.GetComponent<Enemy_Controller>().enabled = true;
+
         Debug.Log("Fake Crash A!");
         if(shrineToSpawnAt.transform.GetChild(10)){}
-        enemy.GetComponent<Enemy_Controller>().enabled = true;
         
     }
 
@@ -133,11 +134,8 @@ public class Enemy_Spawner : MonoBehaviour
         var shrineScript = shrine.GetComponent<Shrine>();
         NavMeshHit hit;
         Vector3 rPoint = shrine.position + (Random.insideUnitSphere * shrineScript.shrineSpawnRange);
-        Debug.Log("Point generated: " + rPoint);
-        Debug.Log("Distance to shrine: " + Vector3.Distance(rPoint, shrine.position));
 
-        NavMesh.SamplePosition(rPoint, out hit, 1.0f, NavMesh.AllAreas);
-        Debug.Log("Navhit: " + hit.position);
+        NavMesh.SamplePosition(rPoint, out hit, 20.0f, NavMesh.AllAreas);
         return (hit);
     }
 }
