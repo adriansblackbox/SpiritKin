@@ -285,9 +285,10 @@ public class Enemy_Controller : MonoBehaviour
             
             //ADJUST Y POS TO ALIGN WITH BLOCKOUT
             Vector3 point = new Vector3(xpos, 0.0f, zpos);
-            NavMeshHit hit = NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
+            NavMeshHit hit;
+            NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
 
-            ThisEnemy.CalculatePath(point, path);
+            ThisEnemy.CalculatePath(hit.position, path);
             if(path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
                 return point;
             }
@@ -341,10 +342,11 @@ public class Enemy_Controller : MonoBehaviour
                 
                 //ADJUST Y POS TO ALIGN WITH BLOCKOUT
                 Vector3 point = new Vector3(xpos, 0.0f, zpos);
-                NavMeshHit hit = NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
+                NavMeshHit hit;
+                NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
 
-                ThisEnemy.CalculatePath(point, path);
-                if(path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, point) > 40f) { // Check if point is on navmesh
+                ThisEnemy.CalculatePath(hit.position, path);
+                if(path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, hit.position) > 40f) { // Check if point is on navmesh
                     return point;
                 }
             }
