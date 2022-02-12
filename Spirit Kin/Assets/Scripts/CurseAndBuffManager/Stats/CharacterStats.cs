@@ -28,7 +28,7 @@ public class CharacterStats : MonoBehaviour
     }
 
     void Update() {
-        SoulsUI.text = currSouls + "/" + maxHealth;
+        SoulsUI.text = currSouls + "/" + maxSouls;
         CoinsUI.text = "" + Coins;
         if (currSouls > maxSouls)
         {

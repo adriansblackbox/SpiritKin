@@ -2061,6 +2061,7 @@ GameObject:
   - component: {fileID: 7905162984969030826}
   - component: {fileID: 7905162984969030825}
   - component: {fileID: 4783538471153228992}
+  - component: {fileID: 7914444102831499579}
   - component: {fileID: 7905162984969030824}
   m_Layer: 6
   m_Name: Player
@@ -2206,9 +2207,22 @@ MonoBehaviour:
     baseValue: 20
   speed:
     baseValue: 10
-  currSoulsUI: {fileID: 0}
-  maxSoulsUI: {fileID: 0}
+  SoulsUI: {fileID: 0}
   CoinsUI: {fileID: 0}
+--- !u!114 &7914444102831499579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905162984969030829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 939b29ebe6d0e20479816374a79c7b43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curseMeter: 0
+  fillRate: 10
 --- !u!82 &7905162984969030824
 AudioSource:
   m_ObjectHideFlags: 0

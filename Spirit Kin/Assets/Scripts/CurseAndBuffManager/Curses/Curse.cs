@@ -4,8 +4,12 @@ using UnityEngine;
 
 public abstract class Curse
 {
-    public bool isApplied = false;
-    public bool removeFlag = false;
+    public string type;
+    public bool active;
+    public bool isApplied;
+    public bool removeFlag;
+
+    public Curse () {}
 
     public virtual void invokeCurse () {}
 
