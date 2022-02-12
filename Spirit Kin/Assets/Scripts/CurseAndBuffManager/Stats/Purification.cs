@@ -51,7 +51,7 @@ public class Purification : MonoBehaviour
             }
             else {
                 //PurificationState = PState.Cleared; // Send signal to player to remove a curse from their array
-                player.GetComponent<CurseMeter>().removeCurse;
+                player.GetComponent<CurseMeter>().removeCurse();
             }
         }
         isPurifying = false;

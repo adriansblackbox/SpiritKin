@@ -51,7 +51,9 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void Die (){
         //Die in some way
+        Debug.Log("Dying!");
         if(gameObject.tag == "Enemy") {
+            Debug.Log("Take me souls bro");
             GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().currSouls += currSouls;
         }
 
