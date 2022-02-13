@@ -7,10 +7,11 @@ using static Buff;
 
 public class damageCurse : Curse
 {
-    private PlayerStats pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+    private CharacterStats pStats;
     
-    public damageCurse (Sprite _image)
+    public damageCurse (Sprite _image, CharacterStats _pStats)
     {
+        pStats = _pStats;
         type = "Damage_Curse";
         isApplied = false;
         removeFlag = false;
@@ -23,13 +24,14 @@ public class damageCurse : Curse
         isApplied = true;
         GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
 
-        Buff damageDebuff = new Buff(Buff.statType.damage, -10, -1, this);
-        pStats.Buffs.Add(damageDebuff);
+        pStats.damage.AddBaseValue(-10);
     } 
 
     override public void removeCurse () 
     {
         removeFlag = false;
-        pStats.Buffs.Find(x => x.curseParent == this).removeFlag = true;
+        isApplied = false;
+        active = false;
+        pStats.damage.AddBaseValue(10);
     } 
 }

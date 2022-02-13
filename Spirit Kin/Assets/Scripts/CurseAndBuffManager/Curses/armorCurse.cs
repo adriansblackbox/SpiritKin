@@ -7,10 +7,11 @@ using static Buff;
 
 public class armorCurse : Curse
 {
-    private PlayerStats pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-    
-    public armorCurse (Sprite _image)
+    private CharacterStats pStats;
+
+    public armorCurse (Sprite _image, CharacterStats _pStats)
     {
+        pStats = _pStats;
         type = "Armor_Curse";
         isApplied = false;
         removeFlag = false;
@@ -19,16 +20,16 @@ public class armorCurse : Curse
 
     override public void invokeCurse () 
     {
-        Debug.Log(type + " Added!");
         isApplied = true;
         GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
-        Buff armorDebuff = new Buff(Buff.statType.armor, -10, -1, this);
-        pStats.Buffs.Add(armorDebuff);
+        pStats.armor.AddBaseValue(-10);
     } 
 
     override public void removeCurse () 
     {
         removeFlag = false;
-        pStats.Buffs.Find(x => x.curseParent == this).removeFlag = true;
+        isApplied = false;
+        active = false;
+        pStats.armor.AddBaseValue(10);
     } 
 }

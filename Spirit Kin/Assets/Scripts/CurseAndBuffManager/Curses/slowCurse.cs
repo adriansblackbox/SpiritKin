@@ -7,10 +7,11 @@ using static Buff;
 
 public class slowCurse : Curse
 {
-    private PlayerStats pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+    private CharacterStats pStats;
     
-    public slowCurse (Sprite _image)
+    public slowCurse (Sprite _image, CharacterStats _pStats)
     {
+        pStats = _pStats;
         type = "Slow_Curse";
         isApplied = false;
         removeFlag = false;
@@ -23,12 +24,14 @@ public class slowCurse : Curse
         isApplied = true;
         GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
 
-        pStats.Buffs.Add(new Buff(Buff.statType.speed, -10, -1, this));
+        pStats.speed.AddBaseValue(-10);
     } 
 
     override public void removeCurse () 
     {
         removeFlag = false;
-        pStats.Buffs.Find(x => x.curseParent == this).removeFlag = true;
+        isApplied = false;
+        active = false;
+        pStats.speed.AddBaseValue(10);
     } 
 }
