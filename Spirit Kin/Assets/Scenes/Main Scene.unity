@@ -536,7 +536,7 @@ GameObject:
   m_Component:
   - component: {fileID: 96312973}
   m_Layer: 5
-  m_Name: Slot2
+  m_Name: Slot1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -804,7 +804,7 @@ GameObject:
   m_Component:
   - component: {fileID: 199661557}
   m_Layer: 0
-  m_Name: Slot3
+  m_Name: Slot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2258,7 +2258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 986522612}
   m_Layer: 0
-  m_Name: Slot1
+  m_Name: Slot3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3806,7 +3806,7 @@ PrefabInstance:
     - target: {fileID: 7914444102831499579, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: Notch
       value: 
-      objectReference: {fileID: 21300000, guid: 184ff630d5530274ca545c3e773baf61, type: 3}
+      objectReference: {fileID: 21300000, guid: 4e15007e0d1571640872df4b29b6ef0a, type: 3}
     - target: {fileID: 7914444102831499579, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: slowImage
       value: 
@@ -3830,15 +3830,15 @@ PrefabInstance:
     - target: {fileID: 7914444102831499579, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: cursesUI.Array.data[0]
       value: 
-      objectReference: {fileID: 986522611}
+      objectReference: {fileID: 96312972}
     - target: {fileID: 7914444102831499579, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: cursesUI.Array.data[1]
       value: 
-      objectReference: {fileID: 96312972}
+      objectReference: {fileID: 199661556}
     - target: {fileID: 7914444102831499579, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: cursesUI.Array.data[2]
       value: 
-      objectReference: {fileID: 199661556}
+      objectReference: {fileID: 986522611}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
 --- !u!4 &1731453177 stripped
