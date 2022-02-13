@@ -4,18 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Buff;
 
-public class slowCurse : Curse
+public class damageCurse : Curse
 {
     private PlayerStats pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-    Buff speedDebuff;
+    Buff damageDebuff;
     
-    public slowCurse ()
+    public damageCurse ()
     {
-        type = "Slow_Curse";
+        type = "Damage_Curse";
         isApplied = false;
         removeFlag = false;
-        speedDebuff = new Buff(Buff.statType.speed, -10, -1);
-        image = Resources.Load<Image>("UI/Quick_Curse");
+        damageDebuff = new Buff(Buff.statType.damage, -10, -1);
+        image = Resources.Load<Image>("UI/Damage_Curse");
     }
 
     override public void invokeCurse () 
@@ -23,12 +23,12 @@ public class slowCurse : Curse
         Debug.Log(type + " Added!");
         isApplied = true;
         GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
-        pStats.Buffs.Add(speedDebuff);
+        pStats.Buffs.Add(damageDebuff);
     } 
 
     override public void removeCurse () 
     {
         removeFlag = false;
-        speedDebuff.removeFlag = true;
+        damageDebuff.removeFlag = true;
     } 
 }

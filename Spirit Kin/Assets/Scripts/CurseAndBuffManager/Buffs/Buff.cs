@@ -16,4 +16,12 @@ public class Buff : ScriptableObject
 
     public bool isApplied = false;
 	public bool removeFlag = false;
+
+	public Buff(statType _stat, int _basePower, float _duration) {
+		this.stat = _stat;
+		this.basePower = _basePower;
+		this.duration = _duration;
+		this.isApplied = false;
+		this.removeFlag = false;
+	}
 }

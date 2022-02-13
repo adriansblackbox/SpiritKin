@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using static blindCurse;
 using static invertCurse;
 using static slowCurse;
@@ -16,9 +17,9 @@ public class CurseMeter : MonoBehaviour
     public float fillRate = 10.0f;
     public List<Curse> curseArray = new List<Curse>();
     public List<Curse> activeCurses = new List<Curse>();
-    //public GameObject[] cursesUI;
-    //private GameObject curCurseUI;
-    //public image empty_notch, slow, blind, etc....
+    public GameObject[] cursesUI;
+    private GameObject curCurseUI;
+    public Image Notch;
 
     // Start is called before the first frame update
     void Start()
@@ -28,16 +29,16 @@ public class CurseMeter : MonoBehaviour
         pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>();
         soulDelta = pStats.currSouls;
 
-        blindCurse blind = new blindCurse();
+        damageCurse weak = new damageCurse();
         slowCurse slow = new slowCurse();
-        invertCurse invert = new invertCurse();
+        armorCurse frail = new armorCurse();
 
-        curseArray.Add(blind);
+        curseArray.Add(weak);
         curseArray.Add(slow);
-        curseArray.Add(invert);
+        curseArray.Add(frail);
 
         Debug.Log("Array: " + curseArray);
-        //cursesUI[1].bar.enabled = cursesUI[2].bar.enabled = false;
+        cursesUI[1].transform.Find("Bar").gameObject.active = cursesUI[2].transform.Find("Bar").gameObject.active = false;
     }
 
     // Update is called once per frame
@@ -88,14 +89,14 @@ public class CurseMeter : MonoBehaviour
         }
         newCurse = true;
     }
-    /*
+    
     private void manageCurseUI(){
-        currentCurseUI = cursesUI[activeCurses.Count];
-        currentCurseUI.getChild(0).bar.enabled = true;
-        currentCurseUI.getChild(0).fill = curseMeter;
+        curCurseUI = cursesUI[activeCurses.Count];
+        curCurseUI.transform.Find("Bar").gameObject.active = true;
+        curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
 
     }
-    */
+   
 
     public void removeCurse() 
     {
@@ -110,16 +111,19 @@ public class CurseMeter : MonoBehaviour
         activeCurses[i].isApplied = false;
         activeCurses[i].removeFlag = true;
         activeCurses.RemoveAt(i);
-        /*
-            switch(i){
-                case 0:
-                    activeCurse[1].image = activeCurse[0].image
-                case 1;
-                    activeCurse[2].image = activeCurse[1].image
-                case 2:
-                    ativeCurse[2].image = empty_notch;
-            }
-        */
+
+        switch(i){
+            case 0:
+                cursesUI[0].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite;
+                goto case 1;
+            case 1:
+                cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite;
+                goto case 2;
+            case 2:
+                cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch.sprite; // Hide curse with an invisible circle
+                break;
+        }
+    
         newCurse = true;
     }
 
@@ -130,11 +134,9 @@ public class CurseMeter : MonoBehaviour
                 Debug.Log(x);
                 if(x.active && !x.isApplied)
                 {
-                    /*
-                    currentCurse.getChild(0).image.enabled = true;
-                    currentCurse.getChild(0).image = findImage(x.type);
-                    currentCurse.getChild(1).bar.enabled = false;
-                    */
+                    curCurseUI.transform.Find("Curse").gameObject.active = true;
+                    curCurseUI.transform.Find("Curse").gameObject.GetComponent<Image>().sprite = x.image.sprite;
+                    curCurseUI.transform.Find("Bar").gameObject.active = false;
                     x.invokeCurse();
                 }
                 if(x.removeFlag) x.removeCurse();
