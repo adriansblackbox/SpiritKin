@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public abstract class Curse
 {
     public string type;
-    public Image image;
+    public Sprite image;
     public bool active;
     public bool isApplied;
     public bool removeFlag;
 
-    public Curse () {}
+    //public Curse () {}
 
     public virtual void invokeCurse () {}
 

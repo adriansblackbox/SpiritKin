@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static Buff;
@@ -7,15 +8,13 @@ using static Buff;
 public class damageCurse : Curse
 {
     private PlayerStats pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-    Buff damageDebuff;
     
-    public damageCurse ()
+    public damageCurse (Sprite _image)
     {
         type = "Damage_Curse";
         isApplied = false;
         removeFlag = false;
-        damageDebuff = new Buff(Buff.statType.damage, -10, -1);
-        image = Resources.Load<Image>("UI/Damage_Curse");
+        image = _image;
     }
 
     override public void invokeCurse () 
@@ -23,12 +22,14 @@ public class damageCurse : Curse
         Debug.Log(type + " Added!");
         isApplied = true;
         GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
+
+        Buff damageDebuff = new Buff(Buff.statType.damage, -10, -1, this);
         pStats.Buffs.Add(damageDebuff);
     } 
 
     override public void removeCurse () 
     {
         removeFlag = false;
-        damageDebuff.removeFlag = true;
+        pStats.Buffs.Find(x => x.curseParent == this).removeFlag = true;
     } 
 }

@@ -19,7 +19,7 @@ public class CurseMeter : MonoBehaviour
     public List<Curse> activeCurses = new List<Curse>();
     public GameObject[] cursesUI;
     private GameObject curCurseUI;
-    public Image Notch;
+    public Sprite Notch, weakImage, slowImage, frailImage;
 
     // Start is called before the first frame update
     void Start()
@@ -29,9 +29,9 @@ public class CurseMeter : MonoBehaviour
         pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>();
         soulDelta = pStats.currSouls;
 
-        damageCurse weak = new damageCurse();
-        slowCurse slow = new slowCurse();
-        armorCurse frail = new armorCurse();
+        damageCurse weak = new damageCurse(weakImage);
+        slowCurse slow = new slowCurse(slowImage);
+        armorCurse frail = new armorCurse(frailImage);
 
         curseArray.Add(weak);
         curseArray.Add(slow);
@@ -74,10 +74,11 @@ public class CurseMeter : MonoBehaviour
 
         if(newCurse)
         {
+            manageCurseUI();
             CurseHandler();
             newCurse = false;
         }
-        // manageCurseUI();
+        
     }
 
     public void addCurse()
@@ -120,7 +121,7 @@ public class CurseMeter : MonoBehaviour
                 cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite;
                 goto case 2;
             case 2:
-                cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch.sprite; // Hide curse with an invisible circle
+                cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch; // Hide curse with an invisible circle
                 break;
         }
     
@@ -135,7 +136,8 @@ public class CurseMeter : MonoBehaviour
                 if(x.active && !x.isApplied)
                 {
                     curCurseUI.transform.Find("Curse").gameObject.active = true;
-                    curCurseUI.transform.Find("Curse").gameObject.GetComponent<Image>().sprite = x.image.sprite;
+                    var a = x.image;
+                    curCurseUI.transform.Find("Curse").gameObject.GetComponent<Image>().sprite = a;
                     curCurseUI.transform.Find("Bar").gameObject.active = false;
                     x.invokeCurse();
                 }

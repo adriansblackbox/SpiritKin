@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static Buff;
@@ -7,15 +8,13 @@ using static Buff;
 public class slowCurse : Curse
 {
     private PlayerStats pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-    Buff speedDebuff;
     
-    public slowCurse ()
+    public slowCurse (Sprite _image)
     {
         type = "Slow_Curse";
         isApplied = false;
         removeFlag = false;
-        speedDebuff = new Buff(Buff.statType.speed, -10, -1);
-        image = Resources.Load<Image>("UI/Quick_Curse");
+        image = _image;
     }
 
     override public void invokeCurse () 
@@ -23,12 +22,13 @@ public class slowCurse : Curse
         Debug.Log(type + " Added!");
         isApplied = true;
         GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
-        pStats.Buffs.Add(speedDebuff);
+
+        pStats.Buffs.Add(new Buff(Buff.statType.speed, -10, -1, this));
     } 
 
     override public void removeCurse () 
     {
         removeFlag = false;
-        speedDebuff.removeFlag = true;
+        pStats.Buffs.Find(x => x.curseParent == this).removeFlag = true;
     } 
 }

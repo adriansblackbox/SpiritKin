@@ -7,6 +7,7 @@ public class Buff : ScriptableObject
 {
 	[SerializeField]
     public statType stat;
+	public Curse curseParent;
 	public enum statType  { none, health, armor, damage, speed };
 	[Tooltip("How powerful the base effect will be")]
 	public int basePower;
@@ -17,11 +18,12 @@ public class Buff : ScriptableObject
     public bool isApplied = false;
 	public bool removeFlag = false;
 
-	public Buff(statType _stat, int _basePower, float _duration) {
+	public Buff(statType _stat, int _basePower, float _duration, Curse _curse) {
 		this.stat = _stat;
 		this.basePower = _basePower;
 		this.duration = _duration;
 		this.isApplied = false;
 		this.removeFlag = false;
+		curseParent = _curse;
 	}
 }

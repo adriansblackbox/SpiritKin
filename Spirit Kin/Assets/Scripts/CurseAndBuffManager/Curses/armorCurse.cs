@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static Buff;
@@ -7,15 +8,13 @@ using static Buff;
 public class armorCurse : Curse
 {
     private PlayerStats pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-    Buff armorCurseDebuff;
     
-    public armorCurse ()
+    public armorCurse (Sprite _image)
     {
         type = "Armor_Curse";
         isApplied = false;
         removeFlag = false;
-        armorCurseDebuff = new Buff(Buff.statType.armor, -10, -1);
-        image = Resources.Load<Image>("UI/Armor_Curse");
+        image = _image;
     }
 
     override public void invokeCurse () 
@@ -23,12 +22,13 @@ public class armorCurse : Curse
         Debug.Log(type + " Added!");
         isApplied = true;
         GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
-        pStats.Buffs.Add(armorCurseDebuff);
+        Buff armorDebuff = new Buff(Buff.statType.armor, -10, -1, this);
+        pStats.Buffs.Add(armorDebuff);
     } 
 
     override public void removeCurse () 
     {
         removeFlag = false;
-        armorCurseDebuff.removeFlag = true;
+        pStats.Buffs.Find(x => x.curseParent == this).removeFlag = true;
     } 
 }
