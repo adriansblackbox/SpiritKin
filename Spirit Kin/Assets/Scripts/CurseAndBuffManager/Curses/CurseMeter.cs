@@ -16,6 +16,9 @@ public class CurseMeter : MonoBehaviour
     public float fillRate = 10.0f;
     public List<Curse> curseArray = new List<Curse>();
     public List<Curse> activeCurses = new List<Curse>();
+    //public GameObject[] cursesUI;
+    //private GameObject curCurseUI;
+    //public image empty_notch, slow, blind, etc....
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +37,7 @@ public class CurseMeter : MonoBehaviour
         curseArray.Add(invert);
 
         Debug.Log("Array: " + curseArray);
+        //cursesUI[1].bar.enabled = cursesUI[2].bar.enabled = false;
     }
 
     // Update is called once per frame
@@ -72,6 +76,7 @@ public class CurseMeter : MonoBehaviour
             CurseHandler();
             newCurse = false;
         }
+        // manageCurseUI();
     }
 
     public void addCurse()
@@ -83,6 +88,14 @@ public class CurseMeter : MonoBehaviour
         }
         newCurse = true;
     }
+    /*
+    private void manageCurseUI(){
+        currentCurseUI = cursesUI[activeCurses.Count];
+        currentCurseUI.getChild(0).bar.enabled = true;
+        currentCurseUI.getChild(0).fill = curseMeter;
+
+    }
+    */
 
     public void removeCurse() 
     {
@@ -92,10 +105,21 @@ public class CurseMeter : MonoBehaviour
             return;
         }
         int i = Random.Range(0, curseArray.Count - 1);
+        
         activeCurses[i].active = true;
         activeCurses[i].isApplied = false;
         activeCurses[i].removeFlag = true;
         activeCurses.RemoveAt(i);
+        /*
+            switch(i){
+                case 0:
+                    activeCurse[1].image = activeCurse[0].image
+                case 1;
+                    activeCurse[2].image = activeCurse[1].image
+                case 2:
+                    ativeCurse[2].image = empty_notch;
+            }
+        */
         newCurse = true;
     }
 
@@ -104,7 +128,15 @@ public class CurseMeter : MonoBehaviour
         curseArray.ForEach(x =>
             {
                 Debug.Log(x);
-                if(x.active && !x.isApplied) x.invokeCurse();
+                if(x.active && !x.isApplied)
+                {
+                    /*
+                    currentCurse.getChild(0).image.enabled = true;
+                    currentCurse.getChild(0).image = findImage(x.type);
+                    currentCurse.getChild(1).bar.enabled = false;
+                    */
+                    x.invokeCurse();
+                }
                 if(x.removeFlag) x.removeCurse();
             } 
         );
