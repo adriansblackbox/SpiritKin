@@ -8,6 +8,7 @@ public class Stat
     [SerializeField]
     private int baseValue;
     private List<int> modifiers = new List<int>();
+
     public int GetValue()
     {
         int finalValue = baseValue;
@@ -18,11 +19,13 @@ public class Stat
     public void AddBaseValue(int value){
         this.baseValue += value;
     }
+
     public void AddModifier(int modifier)
     {
-        if (modifier != 0)
+        if (modifier != 0) // Necessary?
             modifiers.Add(modifier);
     }
+
     public void RemoveModifier(int modifier)
     {
         if (modifier != 0)

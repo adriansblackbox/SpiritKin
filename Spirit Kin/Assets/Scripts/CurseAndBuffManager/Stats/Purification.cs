@@ -47,12 +47,11 @@ public class Purification : MonoBehaviour
         yield return new WaitForSeconds(PurificationTime);
         if(PurificationState == PState.Touching){
             if(isCursed) {
-                // haha stinky water
-                Debug.Log("spinky water");
+                // Leaving logic in here in case we decide to use it. Literally costs like 3 assembly commands.
             }
             else {
                 //PurificationState = PState.Cleared; // Send signal to player to remove a curse from their array
-                Debug.Log("Cleared a curse!");
+                player.GetComponent<CurseMeter>().removeCurse();
             }
         }
         isPurifying = false;

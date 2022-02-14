@@ -52,17 +52,20 @@ public class Enemy_Controller : MonoBehaviour
     public float swapStateInterval;
     public float returnDist = 100;
 
+    private float shrineDist;
+    public float shrineSpawnRange;
+
     //time for enemy to decide next action after reaching edge of chase distance
     public float decisionTime = 1f; 
 
     private float myTime;
     private Vector3 startOfPath;
 
-    private Transform shrine;
+    public Transform shrine;
 
     [SerializeField] int quadrant;
     private int timesPatroled;
-    private Shrine_Controller sc;
+    public Shrine_Controller sc;
 
     public int numTimesCheckIfNeedChase;
 
@@ -93,12 +96,12 @@ public class Enemy_Controller : MonoBehaviour
     void Start()
     {
         path = new UnityEngine.AI.NavMeshPath();
-        player = GameObject.FindWithTag("Player");
         ThisEnemy = GetComponent<UnityEngine.AI.NavMeshAgent>();
         EnemyMotion = MotionState.Idling;
         EnemyAttack = AttackState.NotAttacking;
-        sc = transform.parent.parent.GetComponent<Shrine_Controller>();
-        shrine = transform.parent.parent;
+        //sc = transform.parent.parent.GetComponent<Shrine_Controller>();
+        //shrine = transform.parent.parent;
+        //shrineSpawnRange = shrine.GetComponent<Shrine>().shrineSpawnRange;
         determineQuadrant();
     }
 
@@ -151,12 +154,10 @@ public class Enemy_Controller : MonoBehaviour
                 //else
                     //move to idle range
                         //select a random distance within the idle range
-                if ((Vector3.Distance(shrine.position, transform.position) < shrine.GetComponent<Shrine>().shrineSpawnRange * 0.20 
-                    || Vector3.Distance(shrine.position, transform.position) > shrine.GetComponent<Shrine>().shrineSpawnRange * 0.55)
-                    && !ThisEnemy.hasPath)
-                {
+                shrineDist = Vector3.Distance(shrine.position, transform.position);
+                if (shrineDist < shrineSpawnRange * 0.20 || shrineDist > shrineSpawnRange * 0.55 && !ThisEnemy.hasPath)
                     ThisEnemy.SetDestination(findIdleSpot());
-                }
+                
 
                 if (myTime > swapStateInterval) {
                     if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f)
@@ -253,6 +254,7 @@ public class Enemy_Controller : MonoBehaviour
                     break;
             }
         } 
+
         while(true) {
             float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
             float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.25f;
@@ -283,8 +285,10 @@ public class Enemy_Controller : MonoBehaviour
             
             //ADJUST Y POS TO ALIGN WITH BLOCKOUT
             Vector3 point = new Vector3(xpos, 0.0f, zpos);
+            NavMeshHit hit;
+            NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
 
-            ThisEnemy.CalculatePath(point, path);
+            ThisEnemy.CalculatePath(hit.position, path);
             if(path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
                 return point;
             }
@@ -338,9 +342,11 @@ public class Enemy_Controller : MonoBehaviour
                 
                 //ADJUST Y POS TO ALIGN WITH BLOCKOUT
                 Vector3 point = new Vector3(xpos, 0.0f, zpos);
+                NavMeshHit hit;
+                NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
 
-                ThisEnemy.CalculatePath(point, path);
-                if(path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, point) > 40f) { // Check if point is on navmesh
+                ThisEnemy.CalculatePath(hit.position, path);
+                if(path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, hit.position) > 40f) { // Check if point is on navmesh
                     return point;
                 }
             }
