@@ -41,6 +41,8 @@ public class CurseMeter : MonoBehaviour
 
         Debug.Log("Array: " + curseArray);
         cursesUI[1].transform.Find("Bar").gameObject.active = cursesUI[2].transform.Find("Bar").gameObject.active = false;
+        curCurseUI = cursesUI[0];
+        curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
     }
 
     // Update is called once per frame
@@ -55,7 +57,7 @@ public class CurseMeter : MonoBehaviour
         {
             if(soulDelta < pStats.currSouls) 
             {
-                if(soulDelta == 0)
+                if(soulDelta == 0) // Come up with some sort of ratio here.
                 {
                     curseMeter += (((float)pStats.currSouls - soulDelta) / (float)pStats.currSouls) / fillRate;
                 }
@@ -66,10 +68,11 @@ public class CurseMeter : MonoBehaviour
                 
                 soulDelta = pStats.currSouls;
             }
-
+            curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
             if(curseMeter >= 1f)
             {
                 curseMeter = 0;
+                curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
                 addCurse();
             }
         }
@@ -81,7 +84,6 @@ public class CurseMeter : MonoBehaviour
 
         if(newCurse)
         {
-            manageCurseUI();
             CurseHandler();
             newCurse = false;
         }
@@ -99,10 +101,33 @@ public class CurseMeter : MonoBehaviour
     }
     
     private void manageCurseUI(){
-        curCurseUI = cursesUI[activeCurses.Count];
-        curCurseUI.transform.Find("Bar").gameObject.active = true;
-        curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
+        switch(activeCurses.Count){
+            case 3:
+                cursesUI[0].transform.Find("Bar").gameObject.active = false;
+                cursesUI[1].transform.Find("Bar").gameObject.active = false;
+                cursesUI[2].transform.Find("Bar").gameObject.active = false;
+                break; // All curses active. Flow for managing player max health.
+            case 2:
+                cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
+                cursesUI[0].transform.Find("Bar").gameObject.active = false;
+                cursesUI[1].transform.Find("Bar").gameObject.active = false;
+                cursesUI[2].transform.Find("Bar").gameObject.active = true;
+                break;
+            case 1:
+                cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
+                cursesUI[0].transform.Find("Bar").gameObject.active = false;
+                cursesUI[1].transform.Find("Bar").gameObject.active = true;
+                cursesUI[2].transform.Find("Bar").gameObject.active = false;
+                break;
+            case 0:
+                cursesUI[0].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
+                cursesUI[0].transform.Find("Bar").gameObject.active = true;
+                cursesUI[1].transform.Find("Bar").gameObject.active = false;
+                cursesUI[2].transform.Find("Bar").gameObject.active = false;
+                break;
+        }
 
+        curCurseUI = cursesUI[activeCurses.Count];
     }
    
 
@@ -113,7 +138,7 @@ public class CurseMeter : MonoBehaviour
             Debug.Log("No curses to clear!");
             return;
         }
-        int i = Random.Range(0, curseArray.Count - 1);
+        int i = Random.Range(0, activeCurses.Count - 1);
         
         activeCurses[i].active = true;
         activeCurses[i].isApplied = false;
@@ -137,14 +162,19 @@ public class CurseMeter : MonoBehaviour
     {
         curseArray.ForEach(x =>
             {
-                if(x.removeFlag) x.removeCurse();
+                if(x.removeFlag) {
+                    x.removeCurse();
+                    manageCurseUI();
+                }
                 else if(x.active && !x.isApplied)
                 {
+                    manageCurseUI();
                     curCurseUI.transform.Find("Curse").gameObject.active = true;
                     var a = x.image;
                     curCurseUI.transform.Find("Curse").gameObject.GetComponent<Image>().sprite = a;
                     curCurseUI.transform.Find("Bar").gameObject.active = false;
                     x.invokeCurse();
+                    manageCurseUI();
                 }
                 
             } 
