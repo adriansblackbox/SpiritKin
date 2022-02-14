@@ -127,7 +127,9 @@ public class CurseMeter : MonoBehaviour
                 break;
         }
 
-        curCurseUI = cursesUI[activeCurses.Count];
+        if(activeCurses.Count < 3){
+            curCurseUI = cursesUI[activeCurses.Count];
+        }
     }
    
 
