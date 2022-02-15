@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Purification : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Purification : MonoBehaviour
     public Collider coll;
     public PState PurificationState;
     public float PurificationTime = 5.0f;
+    public Image PurificationMeter;
 
     // Start is called before the first frame update
     void Start()
@@ -24,45 +26,36 @@ public class Purification : MonoBehaviour
         PurificationState = PState.None;
         isCursed = false;
         isPurifying = false;
+        PurificationMeter.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch(PurificationState){ // Useful if theres stuff we wanna do every frame while colliding
-            case PState.None :
-                break;
-            case PState.Touching :
-                if(!isPurifying){
-                    StartCoroutine(PurificationTimer()); // Continuous curing effect. Consider also docking the time a bit in this flow?
-                }
-                break;
-            case PState.Cleared :
-                break;
-        } 
-    }
-
-    public IEnumerator PurificationTimer () {
-        isPurifying = true;
-        yield return new WaitForSeconds(PurificationTime);
-        if(PurificationState == PState.Touching){
-            if(isCursed) {
-                // Leaving logic in here in case we decide to use it. Literally costs like 3 assembly commands.
-            }
-            else {
-                //PurificationState = PState.Cleared; // Send signal to player to remove a curse from their array
-                player.GetComponent<CurseMeter>().removeCurse();
-            }
+        if(isPurifying){
+            player.GetComponent<CurseMeter>().curseMeter -= Time.deltaTime/2f;
+            player.GetComponent<CurseMeter>().curseMeter = Mathf.Clamp(player.GetComponent<CurseMeter>().curseMeter, 0, 1);
         }
-        isPurifying = false;
+        if(isPurifying && FindObjectOfType<CurseMeter>().activeCurses.Count > 0){
+            PurificationMeter.fillAmount -= Time.deltaTime/PurificationTime;
+        }
+        if(PurificationMeter.fillAmount <= 0){
+            player.GetComponent<CurseMeter>().removeCurse();
+            PurificationMeter.fillAmount = 1f;
+        }
+        if(FindObjectOfType<CurseMeter>().activeCurses.Count == 0){
+            PurificationMeter.enabled = false;
+        }
     }
 
     // Add : Purification shrines also restore HP?
 
     void OnTriggerEnter (Collider targetObj) {
         if (targetObj.gameObject.tag == "Player"){
+            PurificationMeter.enabled = true;
             PurificationState = PState.Touching;
-            StartCoroutine(PurificationTimer());
+            isPurifying = true;
+            PurificationMeter.fillAmount = 1f;
             Debug.Log("Starting to purify!");
         }
     }
@@ -70,8 +63,10 @@ public class Purification : MonoBehaviour
     void OnTriggerExit (Collider targetObj) {
         if (targetObj.gameObject.tag == "Player"){
             PurificationState = PState.None;
-            StopCoroutine(PurificationTimer());
             Debug.Log("Cancelled purification");
+            PurificationMeter.fillAmount = 1f;
+            PurificationMeter.enabled = false;
+            isPurifying = false;
         }
     }
 }
