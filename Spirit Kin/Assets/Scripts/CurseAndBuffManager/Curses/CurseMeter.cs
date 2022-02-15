@@ -57,14 +57,14 @@ public class CurseMeter : MonoBehaviour
         {
             if(soulDelta < pStats.currSouls) 
             {
-                if(soulDelta == 0) // Come up with some sort of ratio here.
-                {
-                    curseMeter += (((float)pStats.currSouls - soulDelta) / (float)pStats.currSouls) / fillRate;
-                }
-                else
-                {
-                    curseMeter += ((float)pStats.currSouls - (float)soulDelta) / fillRate;
-                }
+                //if(soulDelta == 0) // Come up with some sort of ratio here.
+                //{
+                    curseMeter += (((float)pStats.currSouls - soulDelta)) / fillRate;
+               // }
+                //else
+                //{
+                //    curseMeter += ((float)pStats.currSouls - (float)soulDelta) / fillRate;
+                //}
                 
                 soulDelta = pStats.currSouls;
             }
