@@ -47,6 +47,7 @@ public class PlayerCombat : MonoBehaviour
         if(comboTimeDelay < totalAnimationTime){
             comboTimeDelay += Time.deltaTime;
         }else{
+            Sword.GetComponent<Collider>().enabled = false;
             isAttacking = false;
             numOfClicks = 0;
             comboTimeDelay = 0;

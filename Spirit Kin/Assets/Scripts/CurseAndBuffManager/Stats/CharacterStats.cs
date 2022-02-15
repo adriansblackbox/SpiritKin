@@ -63,7 +63,7 @@ public class CharacterStats : MonoBehaviour
     
     private void OnTriggerEnter(Collider other) {
         if(other.gameObject.CompareTag("Player Sword")){
-            TakeDamage(damage.GetValue());
+            //TakeDamage(damage.GetValue());
         }
     }
 }
