@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
         if(targetSpeed != 0.0f){
             speed = Mathf.Clamp(speed, MinimumSpeed, float.MaxValue);
         }
+        speed = Mathf.Clamp(speed, 0.0f, SprintSpeed);
         // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
         // if there is a move input rotate player when the player is moving
         inputDirection.Normalize();
@@ -101,8 +102,8 @@ public class PlayerController : MonoBehaviour
         if(GetComponent<LockTarget>().Target != null){
             moveDirection = targetMoveDirection;
         }
-        moveDirection.Normalize();
-        controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * speed * Time.deltaTime);
+        moveDirection = moveDirection.normalized * speed;
+        controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * Time.deltaTime);
     }
      private void CombatMovement(){
         speed = 0.0f;
