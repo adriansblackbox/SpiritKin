@@ -14,7 +14,7 @@ public class SwordCollision : MonoBehaviour
             //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             Debug.DrawRay(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left) * BladeLength, Color.red);
             Debug.Log("Did Hit");
-            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(20);
+            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(1);
         }
         else
         {
