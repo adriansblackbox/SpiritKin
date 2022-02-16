@@ -30,25 +30,20 @@ public class CharacterStats : MonoBehaviour
     }
 
     void Update() {
-        if(gameObject.CompareTag("Player")){
-            SoulsUI.text = currSouls + "/" + maxSouls;
-            CoinsUI.text = "" + Coins;
-            if (currSouls > maxSouls)
-            {
-                currSouls = maxSouls;
-            }
-        }
 
-        if(!gameObject.CompareTag("Player")){
-            Debug.Log("isEnemy");
-            if(FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)){
-                Debug.Log("isBlue");
-                GetComponent<MeshRenderer>().material = blue;
-            }else{
-                Debug.Log("isRed");
-                GetComponent<MeshRenderer>().material = red;
-            }
-        }
+            
+        
+        
+        // if(!gameObject.CompareTag("Player")){
+        //     Debug.Log("isEnemy");
+        //     if(FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)){
+        //         Debug.Log("isBlue");
+        //         GetComponent<MeshRenderer>().material = blue;
+        //     }else{
+        //         Debug.Log("isRed");
+        //         GetComponent<MeshRenderer>().material = red;
+        //     }
+        // }
     }
 
     public void TakeDamage (int damage){

@@ -8,7 +8,6 @@ public class TeaShop : MonoBehaviour
     public GameObject triggerText;
     public GameObject Player;
     public GameObject teaMenu;
-    public List<Buff> Buffs = new List<Buff>();
     public Buff theBuff;
     private bool isInteractable;
     private bool isOpen;
@@ -26,7 +25,9 @@ public class TeaShop : MonoBehaviour
     private void OnTriggerStay(Collider other){
         if(other.gameObject.tag =="Player"){
             isInteractable = true;
-            triggerText.SetActive(true);
+            if(!isOpen){
+                triggerText.SetActive(true);
+            }
         }
     }
     // Update is called once per frame
@@ -39,17 +40,21 @@ public class TeaShop : MonoBehaviour
                 // if(!theBuff.isApplied){
                 //     GameObject.Find("Player").GetComponent<PlayerStats>().Buffs.Add(theBuff);
                 // }
-                // Player.GetComponent<CharacterController>().enabled=false;
+                
                 Cursor.lockState = CursorLockMode.None;
                 teaMenu.SetActive(true);
                 isOpen = true;
                 //disable player's script here
-
-                // playerStats.Buffs.Add(theBuff);
+                Player.GetComponent<PlayerController>().enabled = false;
+                Player.GetComponent<PlayerCombat>().enabled = false;
+                //disable UI
+                GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
                 Debug.Log(isOpen);
             }
         else if(Input.GetKeyDown(KeyCode.F)&& isOpen){
-            // Player.GetComponent<CharacterController>().enabled=true;
+            Player.GetComponent<PlayerController>().enabled = true;
+            Player.GetComponent<PlayerCombat>().enabled = true;
+            GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
             Cursor.lockState = CursorLockMode.Locked;
             teaMenu.SetActive(false);
             isOpen = false;
