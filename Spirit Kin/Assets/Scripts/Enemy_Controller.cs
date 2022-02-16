@@ -506,6 +506,6 @@ public class Enemy_Controller : MonoBehaviour
         }
         Gizmos.matrix = transform.localToWorldMatrix;
 
-        Gizmos.DrawCube(new Vector3(0f, 0f, targetDetectionRange / 2f), new Vector3(raycastRadius, raycastRadius / 5, targetDetectionRange - 5));
+        Gizmos.DrawWireCube(new Vector3(0f, 0f, targetDetectionRange / 2f), new Vector3(raycastRadius, raycastRadius / 5, targetDetectionRange - 5));
     }
 }
