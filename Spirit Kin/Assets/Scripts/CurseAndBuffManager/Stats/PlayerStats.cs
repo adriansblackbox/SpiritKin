@@ -120,4 +120,13 @@ public class PlayerStats : CharacterStats
         }
         x.removeFlag = true;
     }
+
+    public void addBuff(Buff x) {
+        Buffs.Add(x);
+    }
+
+    public void removeBuff(Buff x) {
+        int i = Buffs.FindIndex(y => y.teaName == x.teaName);
+        Buffs[i].removeFlag = true;
+    }
 }
