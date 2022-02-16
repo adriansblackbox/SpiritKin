@@ -47,13 +47,11 @@ public class Enemy_Controller : MonoBehaviour
     public MotionState EnemyMotion;
     public AttackState EnemyAttack;
 
-    public float patrolToIdleChance;
-    public float idleToPatrolChance;
-    public float swapStateInterval;
-    public float returnDist = 100;
-
-    private float shrineDist;
-    public float shrineSpawnRange;
+    public float patrolToIdleChance = 0.4f;
+    public float idleToPatrolChance = 0.15f;
+    public float swapStateInterval = 12f;
+    public float returnDist = 100f;
+    public float shrineSpawnRange = 200f;
 
     //time for enemy to decide next action after reaching edge of chase distance
     public float decisionTime = 1f; 
@@ -66,8 +64,9 @@ public class Enemy_Controller : MonoBehaviour
     [SerializeField] int quadrant;
     private int timesPatroled;
     public Shrine_Controller sc;
+    public Enemy_Spawner es;
 
-    public int numTimesCheckIfNeedChase;
+    public int numTimesCheckIfNeedChase = 4;
 
     //threshold for the enemy to go from alerted into chase
         //represents 1/2 second of movement
@@ -99,6 +98,8 @@ public class Enemy_Controller : MonoBehaviour
         ThisEnemy = GetComponent<UnityEngine.AI.NavMeshAgent>();
         EnemyMotion = MotionState.Idling;
         EnemyAttack = AttackState.NotAttacking;
+        player = GameObject.Find("Player");
+        es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
         //sc = transform.parent.parent.GetComponent<Shrine_Controller>();
         //shrine = transform.parent.parent;
         //shrineSpawnRange = shrine.GetComponent<Shrine>().shrineSpawnRange;
@@ -134,19 +135,22 @@ public class Enemy_Controller : MonoBehaviour
                 //CONSIDERATIONS
                     //MAYBE ENEMY HAS TO PATROL TO AT LEAST 1 or 2 DESTINATION POINTS BEFORE THEY HAVE A CHANCE TO SWAP STATES
                 
-                if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
-                    float temp = Random.Range(0.0f, 1.0f);
-                    //if > 50% patroling increase chance to swap
-                    if (temp < sc.checkPatrol(patrolToIdleChance) && timesPatroled > 2) //swap states
-                    {
-                        EnemyMotion = MotionState.Idling;
-                        timesPatroled = 0;
-                        Debug.Log("Now " + EnemyMotion);
-                    } else {
-                        ThisEnemy.SetDestination(findNextWaypoint());
-                    }
-                    timesPatroled++;
-                }                   
+
+                // if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
+                //     float temp = Random.Range(0.0f, 1.0f);
+                //     //if > 50% patroling increase chance to swap
+                //     if (temp < sc.checkPatrol(patrolToIdleChance) && timesPatroled > 2) //swap states
+                //     {
+                //         EnemyMotion = MotionState.Idling;
+                //         timesPatroled = 0;
+                //         Debug.Log("Now " + EnemyMotion);
+                //     } else {
+                //         ThisEnemy.SetDestination(findNextWaypoint());
+                //     }
+                //     timesPatroled++;
+                // }
+
+
                 break;
             case MotionState.Idling:
                 //check if in idle range [0.25 * spawn range to 0.5 * spawn range]
@@ -154,10 +158,9 @@ public class Enemy_Controller : MonoBehaviour
                 //else
                     //move to idle range
                         //select a random distance within the idle range
-                shrineDist = Vector3.Distance(shrine.position, transform.position);
+                float shrineDist = Vector3.Distance(shrine.position, transform.position);
                 if (shrineDist < shrineSpawnRange * 0.20 || shrineDist > shrineSpawnRange * 0.55 && !ThisEnemy.hasPath)
                     ThisEnemy.SetDestination(findIdleSpot());
-                
 
                 if (myTime > swapStateInterval) {
                     if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f)
@@ -193,17 +196,12 @@ public class Enemy_Controller : MonoBehaviour
                     ThisEnemy.ResetPath();
                     //IEnumerator pause for 3 seconds then return to what they were previously doing
                 }
-                else
-                {
-                    //check if need to enter chasing
-
-                }
                 break;
             case MotionState.Chasing:
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
                 ThisEnemy.CalculatePath(player.transform.position, path);
-                if (path.status == UnityEngine.AI.NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
+                if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                     if (Vector3.Distance(transform.position, startOfPath) < returnDist){
                         ThisEnemy.SetDestination(player.transform.position);
                     } else {
@@ -260,44 +258,47 @@ public class Enemy_Controller : MonoBehaviour
             }
         } 
 
-        while(true) {
-            float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
-            float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.25f;
+        return es.chooseLocation(shrine).position;  
 
-            float xpos = 0; 
-            float zpos = 0; 
+        // while(true) {
+        //     float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
+        //     float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.25f;
 
-            if (quadrant == 1)
-            {
-                xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
-                zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
-            }
-            else if (quadrant == 2)
-            {
-                xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-                zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
-            }
-            else if (quadrant == 3)
-            {
-                xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
-                zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
-            }
-            else if (quadrant == 4)
-            {
-                xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-                zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
-            }
+        //     float xpos = 0; 
+        //     float zpos = 0; 
+
+        //     if (quadrant == 1)
+        //     {
+        //         xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
+        //         zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+        //     }
+        //     else if (quadrant == 2)
+        //     {
+        //         xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
+        //         zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+        //     }
+        //     else if (quadrant == 3)
+        //     {
+        //         xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
+        //         zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
+        //     }
+        //     else if (quadrant == 4)
+        //     {
+        //         xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
+        //         zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
+        //     }
             
-            //ADJUST Y POS TO ALIGN WITH BLOCKOUT
-            Vector3 point = new Vector3(xpos, 0.0f, zpos);
-            NavMeshHit hit;
-            NavMesh.SamplePosition(point, out hit, 2000.0f, NavMesh.AllAreas);
+        //     //ADJUST Y POS TO ALIGN WITH BLOCKOUT
+        //     Vector3 point = new Vector3(xpos, shrine.position.y, zpos);
+        //     NavMeshHit hit;
+        //     NavMesh.SamplePosition(point, out hit, 200.0f, NavMesh.AllAreas);
 
-            ThisEnemy.CalculatePath(hit.position, path);
-            if(path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
-                return hit.position;
-            }
-        }      
+        //     ThisEnemy.CalculatePath(hit.position, path);
+        //     if (path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
+        //         return hit.position;
+        //     }
+        // }
+            
     }
 
     //4 cases
@@ -315,69 +316,67 @@ public class Enemy_Controller : MonoBehaviour
             //z is negative
     private Vector3 findNextWaypoint() 
     {
-        if (true) //guaranteed to stay in current quadrant //TIMES PATROLED = 0
-        {
-            while(true) {
-                float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 1.5f;
-                float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
+        return es.chooseLocation(shrine).position;
+        // if (true) //guaranteed to stay in current quadrant //TIMES PATROLED = 0
+        // {
+        //     while(true) {
+        //         float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 1.5f;
+        //         float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
 
-                float xpos = 0; 
-                float zpos = 0; 
+        //         float xpos = 0; 
+        //         float zpos = 0; 
 
-                if (quadrant == 1)
-                {
-                    xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
-                    zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
-                }
-                else if (quadrant == 2)
-                {
-                    xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-                    zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
-                }
-                else if (quadrant == 3)
-                {
-                    xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
-                    zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
-                }
-                else if (quadrant == 4)
-                {
-                    xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-                    zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
-                }
+        //         if (quadrant == 1)
+        //         {
+        //             xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
+        //             zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+        //         }
+        //         else if (quadrant == 2)
+        //         {
+        //             xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
+        //             zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
+        //         }
+        //         else if (quadrant == 3)
+        //         {
+        //             xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
+        //             zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
+        //         }
+        //         else if (quadrant == 4)
+        //         {
+        //             xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
+        //             zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
+        //         }
                 
-                //ADJUST Y POS TO ALIGN WITH BLOCKOUT
-                Vector3 point = new Vector3(xpos, 0.0f, zpos);
-                NavMeshHit hit;
-                NavMesh.SamplePosition(point, out hit, 2000.0f, NavMesh.AllAreas);
+        //         //ADJUST Y POS TO ALIGN WITH BLOCKOUT
+        //         Vector3 point = new Vector3(xpos, shrine.position.y, zpos);
+        //         NavMeshHit hit;
+        //         NavMesh.SamplePosition(point, out hit, 200.0f, NavMesh.AllAreas);
 
-                ThisEnemy.CalculatePath(hit.position, path);
-                if(path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, hit.position) > 40f) { // Check if point is on navmesh
-                    return hit.position;
-                }
-            }
-        }
+        //         ThisEnemy.CalculatePath(hit.position, path);
+        //         if (path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, hit.position) > 40f) { // Check if point is on navmesh
+        //             return hit.position;
+        //         }
+        //     }
+        // }
+        
     }
     
     private void determineQuadrant()
     {
         if (transform.position.x < shrine.position.x && transform.position.z > shrine.position.z) //Quadrant 1
         {
-            Debug.Log("Current Quadrant is 1");
             quadrant = 1;
         }
         else if (transform.position.x > shrine.position.x && transform.position.z > shrine.position.z) //Quadrant 2
         {
-            Debug.Log("Current Quadrant is 2");
             quadrant = 2;
         }
         else if (transform.position.x < shrine.position.x && transform.position.z < shrine.position.z) //Quadrant 3
         {
-            Debug.Log("Current Quadrant is 3");
             quadrant = 3;
         }
         else if (transform.position.x > shrine.position.x && transform.position.z < shrine.position.z) //Quadrant 4
         {
-            Debug.Log("Current Quadrant is 4");
             quadrant = 4;
         }
     }
@@ -432,19 +431,21 @@ public class Enemy_Controller : MonoBehaviour
             switch(flowstate) {
                 case 0:
                     ThisEnemy.CalculatePath(player.transform.position, path);
-                    if(path.status == NavMeshPathStatus.PathComplete){
+                    if (path.status == NavMeshPathStatus.PathComplete) {
                         beforeDist = ThisEnemy.remainingDistance;
                     }
-                    else{
+                    else
+                    {
                         goto case 1;
                     }
 
                     yield return new WaitForSeconds(0.5f);
                     ThisEnemy.CalculatePath(player.transform.position, path);
-                    if(path.status == NavMeshPathStatus.PathComplete) {
+                    if (path.status == NavMeshPathStatus.PathComplete) {
                         afterDist = ThisEnemy.remainingDistance;
                     }
-                    else{
+                    else
+                    {
                         goto case 1;
                     }
 
@@ -523,6 +524,6 @@ public class Enemy_Controller : MonoBehaviour
         }
         Gizmos.matrix = transform.localToWorldMatrix;
 
-        Gizmos.DrawCube(new Vector3(0f, 0f, targetDetectionRange / 2f), new Vector3(raycastRadius, raycastRadius / 5, targetDetectionRange));
+        Gizmos.DrawWireCube(new Vector3(0f, 0f, targetDetectionRange / 2f), new Vector3(raycastRadius, raycastRadius / 5, targetDetectionRange - 5));
     }
 }

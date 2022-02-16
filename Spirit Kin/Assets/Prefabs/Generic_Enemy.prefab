@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4582267893233665646}
   - component: {fileID: 4582267893233665633}
   - component: {fileID: 4582267893233665632}
-  - component: {fileID: 8309410573585618767}
+  - component: {fileID: -5264677669774739475}
   m_Layer: 7
   m_Name: Generic_Enemy
   m_TagString: Enemy
@@ -120,33 +120,34 @@ NavMeshAgent:
   m_BaseOffset: 0.50000006
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &8309410573585618767
+--- !u!114 &-5264677669774739475
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5466169016768112854}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyMotion: 1
   EnemyAttack: 2
-  patrolToIdleChance: 0.5
-  idleToPatrolChance: 0.15
-  swapStateInterval: 10
-  returnDist: 50
+  patrolToIdleChance: 15
+  idleToPatrolChance: 40
+  swapStateInterval: 5
+  returnDist: 100
+  shrineSpawnRange: 200
   decisionTime: 1
   shrine: {fileID: 0}
   quadrant: 0
   sc: {fileID: 0}
-  numTimesCheckIfNeedChase: 4
+  numTimesCheckIfNeedChase: 0
   chaseThreshold: 1
-  idleThreshold: -10
+  idleThreshold: 5
   ThisEnemy: {fileID: 4582267893233665632}
-  player: {fileID: 7905162984969030829, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+  player: {fileID: 0}
   alertBox: {fileID: 7326527266680008334}
   raycastRadius: 5
   targetDetectionRange: 25

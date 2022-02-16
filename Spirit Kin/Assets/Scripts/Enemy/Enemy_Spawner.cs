@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy_Spawner : MonoBehaviour
 {
-    [SerializeField] int currentRound = 0;
+    [SerializeField] int totalShrinesCursed = 0;
     [SerializeField] int lowerLimitEnemyCount = 1;
     [SerializeField] int upperLimitEnemyCount = 4;
 
@@ -25,7 +25,7 @@ public class Enemy_Spawner : MonoBehaviour
     public void Start()
     {
         shrineCount = nonCursedContainer.transform.childCount;
-        nextRound();
+        scaleDifficulty();
     }
 
     public void Update()
@@ -33,40 +33,38 @@ public class Enemy_Spawner : MonoBehaviour
         myTime += Time.deltaTime;
         if (myTime > shrineInterval && nonCursedContainer.transform.childCount > 0) //every 15 seconds
         {
-            int temp = Random.Range(0, nonCursedContainer.transform.GetChild(0).childCount);
+            int temp = Random.Range(0, nonCursedContainer.transform.childCount);
             Transform shrine = nonCursedContainer.transform.GetChild(temp);
             shrine.parent = cursedContainer.transform;
             shrine.GetComponent<Shrine>().cursed = true;
             currentCursedShrines++;
+            scaleDifficulty();
             myTime = 0;
         }
     }
 
-    //call when a new round starts to handle spawning of enemies
-    public void nextRound()
-    {
-        currentRound++;
-        calculateEnemyLimits();
-        selectShrineEnemyCount();
-        //removeRemainingEnemies(); remove any remaining enemies function [player should have killed all of them for round to end]
-        
-        //spawnEnemies();
-    }
-
     //increments limits to help in scaling difficulty
-    private void calculateEnemyLimits() 
+    private void scaleDifficulty() 
     {
-        if (currentRound % 2 == 1) //lower limit increments every other round
+        totalShrinesCursed++;
+        if (totalShrinesCursed % 2 == 1) //lower limit increments every other round
             lowerLimitEnemyCount++;
-        else if (currentRound != 2 && currentRound % 2 == 0 && upperLimitEnemyCount - lowerLimitEnemyCount == 1) //upper limit increments every round after the lower limit increments
+        else if (totalShrinesCursed != 2 && totalShrinesCursed % 2 == 0 && upperLimitEnemyCount - lowerLimitEnemyCount == 1) //upper limit increments every round after the lower limit increments
             upperLimitEnemyCount++;
+        selectShrineEnemyCount();
     }
 
     private void selectShrineEnemyCount()
     {
-        for (int i = 0; i < shrineCount; i++)
+        for (int i = 0; i < 4 - currentCursedShrines; i++)
         {
             Transform shrine = nonCursedContainer.transform.GetChild(i);
+            shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
+        }
+
+        for (int i = 0; i < currentCursedShrines; i++)
+        {
+            Transform shrine = cursedContainer.transform.GetChild(i);
             shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
         }
     }
@@ -86,48 +84,47 @@ public class Enemy_Spawner : MonoBehaviour
 
         //increment enemies spawned at shrine
         shrineToSpawnAt.GetComponent<Shrine>().amountAlreadySpawned++;
-        enemy.GetComponent<Enemy_Controller>().enabled = true;        
+        // enemy.GetComponent<Enemy_Controller>().enabled = true;
     }
 
     //Spawns all enemies for a round around each shrine
     //(STATIC SPAWNING CAN BE DONE ELSEWHERE THIS IS TOTALLY PROCEDURAL)
-    private void spawnEnemies() 
-    {
-        //go through each shrine
-        for (int i = 0; i < shrineCount; i++)
-        {
-            //current shrine
-            Transform shrine = nonCursedContainer.transform.GetChild(i);
-            //number of enemies that should be at current shrine
-            int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
-            //Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.z + ")");
-            //if not enough enemies at shrine spawn more
-            if (shrine.GetChild(0).childCount < enemyCount)
-            {
-                int numberOfEnemiesToBeSpawned = enemyCount - shrine.GetChild(0).childCount;
-                //spawn each enemy at a valid location
-                for (int j = 0; j < numberOfEnemiesToBeSpawned; j++)
-                {
-                    //choose a random location in the range around the shrine
-                    Vector3 enemyPosition = chooseLocation(shrine).position;
-                    //spawn in enemy
-                    GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
-                    //put in enemy container
-                    enemy.transform.parent = shrine.GetChild(0);
-                }
-            }
-        }       
-    }
+    // private void spawnEnemies() 
+    // {
+    //     //go through each shrine in cursed + each shrine in noncursed
+    //     for (int i = 0; i < shrineCount; i++)
+    //     {
+    //         //current shrine
+    //         Transform shrine = nonCursedContainer.transform.GetChild(i);
+    //         //number of enemies that should be at current shrine
+    //         int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
+    //         //Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.z + ")");
+    //         //if not enough enemies at shrine spawn more
+    //         if (shrine.GetChild(0).childCount < enemyCount)
+    //         {
+    //             int numberOfEnemiesToBeSpawned = enemyCount - shrine.GetChild(0).childCount;
+    //             //spawn each enemy at a valid location
+    //             for (int j = 0; j < numberOfEnemiesToBeSpawned; j++)
+    //             {
+    //                 //choose a random location in the range around the shrine
+    //                 Vector3 enemyPosition = chooseLocation(shrine).position;
+    //                 //spawn in enemy
+    //                 GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
+    //                 //put in enemy container
+    //                 enemy.transform.parent = shrine.GetChild(0);
+    //             }
+    //         }
+    //     }       
+    // }
 
-    //CURRENTLY ONLY THE X AND Z VALUES ARE CALCULATED SO THIS WILL HAVE TO BE UPDATED TO WORK WITH Y VALUES ONCE WE HAVE THE MAP IMPLEMENTED
-    private NavMeshHit chooseLocation(Transform shrine)
+    public NavMeshHit chooseLocation(Transform shrine)
     {
         var shrineScript = shrine.GetComponent<Shrine>();
         NavMeshHit hit;
         Vector3 rPoint = shrine.position + (Random.insideUnitSphere * shrineScript.shrineSpawnRange);
         rPoint.y = shrine.position.y;
 
-        NavMesh.SamplePosition(rPoint, out hit, 2000.0f, NavMesh.AllAreas);
+        NavMesh.SamplePosition(rPoint, out hit, 200.0f, NavMesh.AllAreas);
         return (hit);
     }
 }
