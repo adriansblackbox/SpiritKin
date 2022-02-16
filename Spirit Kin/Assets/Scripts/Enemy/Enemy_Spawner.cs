@@ -125,8 +125,9 @@ public class Enemy_Spawner : MonoBehaviour
         var shrineScript = shrine.GetComponent<Shrine>();
         NavMeshHit hit;
         Vector3 rPoint = shrine.position + (Random.insideUnitSphere * shrineScript.shrineSpawnRange);
+        rPoint.y = shrine.position.y;
 
-        NavMesh.SamplePosition(rPoint, out hit, 20.0f, NavMesh.AllAreas);
+        NavMesh.SamplePosition(rPoint, out hit, 2000.0f, NavMesh.AllAreas);
         return (hit);
     }
 }
