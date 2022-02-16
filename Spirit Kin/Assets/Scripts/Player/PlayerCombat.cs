@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] private float DodgeTime = 0.5f;
-     [SerializeField] private GameObject Sword;
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isDodging = false;
     private float dodgeTimeItter = 0;
@@ -17,7 +16,6 @@ public class PlayerCombat : MonoBehaviour
     private PlayerController controller;
 
     private void Start() {
-        Sword.GetComponent<Collider>().enabled = false;
         animator = GetComponent<Animator>();
         controller = GetComponent<PlayerController>();
     }
@@ -68,7 +66,6 @@ public class PlayerCombat : MonoBehaviour
         if(Input.GetButton("X Button") || Input.GetKey(KeyCode.Mouse0)){
             isAttacking = true;
             comboTimeDelay = 0f;
-            Sword.GetComponent<Collider>().enabled = true;
             numOfClicks++;
             if(numOfClicks > 3){
                 numOfClicks = 1;

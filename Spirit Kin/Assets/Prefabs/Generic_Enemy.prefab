@@ -112,7 +112,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0.2
+  m_StoppingDistance: 5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5466169016768112854}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
@@ -139,12 +139,14 @@ MonoBehaviour:
   swapStateInterval: 10
   returnDist: 50
   decisionTime: 1
+  shrine: {fileID: 0}
   quadrant: 0
+  sc: {fileID: 0}
   numTimesCheckIfNeedChase: 4
   chaseThreshold: 1
   idleThreshold: -10
-  ThisEnemy: {fileID: 0}
-  player: {fileID: 0}
+  ThisEnemy: {fileID: 4582267893233665632}
+  player: {fileID: 7905162984969030829, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
   alertBox: {fileID: 7326527266680008334}
   raycastRadius: 5
   targetDetectionRange: 25
