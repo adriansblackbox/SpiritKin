@@ -180,7 +180,12 @@ public class Enemy_Controller : MonoBehaviour
             case MotionState.Seeking:
                 if (!ThisEnemy.hasPath) {
                     ThisEnemy.CalculatePath(player.transform.position, path);
-                    ThisEnemy.SetDestination(player.transform.position);
+                    if (path.status == UnityEngine.AI.NavMeshPathStatus.PathComplete) {
+                        ThisEnemy.SetDestination(player.transform.position);
+                    }
+                    else{
+                        EnemyMotion = MotionState.AfterChase;
+                    }
                 }
                 //reached end of path without entering chasing
                 if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance + 0.01f)
@@ -286,11 +291,11 @@ public class Enemy_Controller : MonoBehaviour
             //ADJUST Y POS TO ALIGN WITH BLOCKOUT
             Vector3 point = new Vector3(xpos, 0.0f, zpos);
             NavMeshHit hit;
-            NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
+            NavMesh.SamplePosition(point, out hit, 2000.0f, NavMesh.AllAreas);
 
             ThisEnemy.CalculatePath(hit.position, path);
             if(path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
-                return point;
+                return hit.position;
             }
         }      
     }
@@ -343,11 +348,11 @@ public class Enemy_Controller : MonoBehaviour
                 //ADJUST Y POS TO ALIGN WITH BLOCKOUT
                 Vector3 point = new Vector3(xpos, 0.0f, zpos);
                 NavMeshHit hit;
-                NavMesh.SamplePosition(point, out hit, 20.0f, NavMesh.AllAreas);
+                NavMesh.SamplePosition(point, out hit, 2000.0f, NavMesh.AllAreas);
 
                 ThisEnemy.CalculatePath(hit.position, path);
                 if(path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, hit.position) > 40f) { // Check if point is on navmesh
-                    return point;
+                    return hit.position;
                 }
             }
         }
@@ -423,41 +428,59 @@ public class Enemy_Controller : MonoBehaviour
         firstDist = ThisEnemy.remainingDistance;
         for (int i = 0; i < numTimesCheckIfNeedChase; i++)
         {
-            ThisEnemy.CalculatePath(player.transform.position, path);
-            beforeDist = ThisEnemy.remainingDistance;
-            yield return new WaitForSeconds(0.5f);
-            ThisEnemy.CalculatePath(player.transform.position, path);
-            afterDist = ThisEnemy.remainingDistance;
+            int flowstate = 0;
+            switch(flowstate) {
+                case 0:
+                    ThisEnemy.CalculatePath(player.transform.position, path);
+                    if(path.status == NavMeshPathStatus.PathComplete){
+                        beforeDist = ThisEnemy.remainingDistance;
+                    }
+                    else{
+                        goto case 1;
+                    }
 
-            //two cases
-            //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
-            //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
-            delta = beforeDist - afterDist;
+                    yield return new WaitForSeconds(0.5f);
+                    ThisEnemy.CalculatePath(player.transform.position, path);
+                    if(path.status == NavMeshPathStatus.PathComplete) {
+                        afterDist = ThisEnemy.remainingDistance;
+                    }
+                    else{
+                        goto case 1;
+                    }
 
-            if (delta > chaseThreshold)
-            {
-                Debug.Log("CHASING PLAYER");
-                EnemyMotion = MotionState.Chasing;
-                yield return null;
+                    delta = beforeDist - afterDist;
+                    //two cases
+                    //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
+                    //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
+                    if (delta > chaseThreshold)
+                    {
+                        Debug.Log("CHASING PLAYER");
+                        EnemyMotion = MotionState.Chasing;
+                        yield return null;
+                    }
+                    else
+                    {
+                        Debug.Log("No need to chase player");
+                    }
+                    yield return new WaitForSeconds(0.5f);
+                    //don't need to chase
+                        //enter seek or idle based on final check
+                        //has the player signifcantly moved away from the enemy
+                    if (firstDist - afterDist < idleThreshold)
+                    {
+                        Debug.Log("Idle After Alerted");
+                        goto case 1;
+                    }
+                    else
+                    {
+                        EnemyMotion = MotionState.Seeking;
+                        Debug.Log("SEEKING THIS MF");
+                    }
+                    break;
+                case 1:
+                    EnemyMotion = MotionState.Idling;
+                    break;
             }
-            else
-            {
-                Debug.Log("No need to chase player");
-            }
-        }
-        yield return new WaitForSeconds(0.5f);
-        //don't need to chase
-            //enter seek or idle based on final check
-            //has the player signifcantly moved away from the enemy
-        if (firstDist - afterDist < idleThreshold)
-        {
-            EnemyMotion = MotionState.Idling;
-            Debug.Log("Idle After Alerted");
-        }
-        else
-        {
-            EnemyMotion = MotionState.Seeking;
-            Debug.Log("SEEKING THIS MF");
         }
     }
 

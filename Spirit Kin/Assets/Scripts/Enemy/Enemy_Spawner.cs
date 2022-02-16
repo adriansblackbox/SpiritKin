@@ -88,11 +88,7 @@ public class Enemy_Spawner : MonoBehaviour
 
         //increment enemies spawned at shrine
         shrineToSpawnAt.GetComponent<Shrine>().amountAlreadySpawned++;
-        enemy.GetComponent<Enemy_Controller>().enabled = true;
-
-        Debug.Log("Fake Crash A!");
-        if(shrineToSpawnAt.transform.GetChild(10)){}
-        
+        enemy.GetComponent<Enemy_Controller>().enabled = true;        
     }
 
     //Spawns all enemies for a round around each shrine
