@@ -77,10 +77,4 @@ public class CharacterStats : MonoBehaviour
         }
         Destroy(this.gameObject);
     }
-    
-    private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.CompareTag("Player Sword")){
-            //TakeDamage(damage.GetValue());
-        }
-    }
 }
