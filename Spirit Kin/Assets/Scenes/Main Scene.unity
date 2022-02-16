@@ -3770,6 +3770,10 @@ PrefabInstance:
       propertyPath: FollowCamera
       value: 
       objectReference: {fileID: 4931512990943485761}
+    - target: {fileID: 7905162984969030826, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: LetGoDistance
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 7905162984969030829, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_Name
       value: Player
@@ -4983,7 +4987,6 @@ GameObject:
   - component: {fileID: 4006280018851841621}
   - component: {fileID: 8872202123856322456}
   - component: {fileID: 6937012631312743871}
-  - component: {fileID: 76919406401734000}
   m_Layer: 0
   m_Name: Cube.283
   m_TagString: Untagged
@@ -4991,20 +4994,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &76919406401734000
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76919406401733999}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6563851455764539472, guid: 814b7b1bdb8c49349a9fbbf9ec3d7915, type: 3}
 --- !u!23 &78744540934318577
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -27524,7 +27513,7 @@ MonoBehaviour:
   m_Strategy: 0
   m_MaximumEffort: 4
   m_SmoothingTime: 0
-  m_Damping: 10
+  m_Damping: 0
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
 --- !u!4 &4931512991260226592
@@ -27589,6 +27578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 7421676502241923229}
+  _possibleTargets: []
 --- !u!65 &4931512991260226599
 BoxCollider:
   m_ObjectHideFlags: 0

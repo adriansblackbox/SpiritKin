@@ -38,7 +38,6 @@ public class Enemy_Spawner : MonoBehaviour
             shrine.parent = cursedContainer.transform;
             shrine.GetComponent<Shrine>().cursed = true;
             currentCursedShrines++;
-            Debug.Log("Shrine located at: (" + shrine.position.x + ", " + shrine.position.z + ") has been activated");
             myTime = 0;
         }
     }
@@ -47,7 +46,6 @@ public class Enemy_Spawner : MonoBehaviour
     public void nextRound()
     {
         currentRound++;
-        Debug.Log("Current Round: " + currentRound);
         calculateEnemyLimits();
         selectShrineEnemyCount();
         //removeRemainingEnemies(); remove any remaining enemies function [player should have killed all of them for round to end]
@@ -106,7 +104,7 @@ public class Enemy_Spawner : MonoBehaviour
             Transform shrine = nonCursedContainer.transform.GetChild(i);
             //number of enemies that should be at current shrine
             int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
-            Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.z + ")");
+            //Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.z + ")");
             //if not enough enemies at shrine spawn more
             if (shrine.GetChild(0).childCount < enemyCount)
             {
