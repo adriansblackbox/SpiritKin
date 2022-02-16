@@ -9,7 +9,8 @@ public class Enemy_Spawner : MonoBehaviour
     [SerializeField] int lowerLimitEnemyCount = 1;
     [SerializeField] int upperLimitEnemyCount = 4;
 
-    public GameObject shrineContainer;
+    public GameObject nonCursedContainer;
+    public GameObject cursedContainer;
     public GameObject enemyPrefab;
 
     public float enemyNoSpawnRadius; //ensure distance from current enemies to desired spawn point is > than enemyNoSpawnRadius
@@ -19,29 +20,25 @@ public class Enemy_Spawner : MonoBehaviour
 
     private float myTime;
     private int shrineCount;
+    public float shrineInterval = 15f;
 
     public void Start()
     {
-        shrineCount = shrineContainer.transform.childCount;
+        shrineCount = nonCursedContainer.transform.childCount;
         nextRound();
     }
 
     public void Update()
     {
         myTime += Time.deltaTime;
-        if (myTime > 3) //every 15 seconds
+        if (myTime > shrineInterval && nonCursedContainer.transform.childCount > 0) //every 15 seconds
         {
-            for (int i = 0; i < shrineCount; i++)
-            {
-                Transform shrine = shrineContainer.transform.GetChild(i);
-                float temp = Random.Range(0.0f, 1.0f);
-                if (temp < 0.15 && currentCursedShrines < maxCursedShrines) //15% chance for shrine to be activated
-                {
-                    shrine.GetComponent<Shrine>().cursed = true;
-                    currentCursedShrines++;
-                    Debug.Log("Shrine located at: (" + shrine.position.x + ", " + shrine.position.z + ") has been activated");
-                }
-            }
+            int temp = Random.Range(0, nonCursedContainer.transform.GetChild(0).childCount);
+            Transform shrine = nonCursedContainer.transform.GetChild(temp);
+            shrine.parent = cursedContainer.transform;
+            shrine.GetComponent<Shrine>().cursed = true;
+            currentCursedShrines++;
+            Debug.Log("Shrine located at: (" + shrine.position.x + ", " + shrine.position.z + ") has been activated");
             myTime = 0;
         }
     }
@@ -71,7 +68,7 @@ public class Enemy_Spawner : MonoBehaviour
     {
         for (int i = 0; i < shrineCount; i++)
         {
-            Transform shrine = shrineContainer.transform.GetChild(i);
+            Transform shrine = nonCursedContainer.transform.GetChild(i);
             shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
         }
     }
@@ -106,7 +103,7 @@ public class Enemy_Spawner : MonoBehaviour
         for (int i = 0; i < shrineCount; i++)
         {
             //current shrine
-            Transform shrine = shrineContainer.transform.GetChild(i);
+            Transform shrine = nonCursedContainer.transform.GetChild(i);
             //number of enemies that should be at current shrine
             int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
             Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.z + ")");

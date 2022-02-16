@@ -14,14 +14,30 @@ public class Shrine : MonoBehaviour
     //TRACK HOW MANY ENEMIES THE PLAYER HAS BEATEN
     
     private float myTime;
+    public float TotalCurseTime = 3f;
+    private float CurCurseTime = 0f;
+    public GameObject Beacon;
 
     public void Start()
     {
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
+        Beacon.SetActive(false);
     }
 
     public void Update()
     {
+        if(CurCurseTime < TotalCurseTime && cursed){
+            CurCurseTime += Time.deltaTime;
+        }else if(cursed){
+            Debug.Log("YOU SUCK");
+            // For the laughs
+            //Application.Quit();
+        }
+        if(cursed){
+            Beacon.SetActive(true);
+        }else{
+            Beacon.SetActive(false);
+        }
         myTime += Time.deltaTime;    
         //spawn an enemy at a shrine if there are 3 conditions met
             //1: The shrine must be cursed
@@ -29,7 +45,7 @@ public class Shrine : MonoBehaviour
             //3: The current amount of enemies instanced [amountAlreadySpawned] must be less than the max amount to be instanced for the current cursing [enemiesToSpawnWhenCursed]
         if (cursed && myTime > es.spawnInterval && amountAlreadySpawned < enemiesToSpawnWhenCursed)
         {
-            es.spawnEnemy(gameObject);
+            //es.spawnEnemy(gameObject);
             myTime = 0;
         }
     }
