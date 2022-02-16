@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 1220209}
   - component: {fileID: 1220208}
   m_Layer: 0
-  m_Name: TeaShopCollider
+  m_Name: TeaShop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1997,7 +1997,7 @@ GameObject:
   - component: {fileID: 429098289}
   - component: {fileID: 429098288}
   m_Layer: 0
-  m_Name: TeaShop
+  m_Name: TeaShopMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3781,7 +3781,7 @@ RectTransform:
   - {fileID: 263822225}
   - {fileID: 1320278931}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4316,7 +4316,7 @@ Transform:
   - {fileID: 36997220}
   - {fileID: 1356204464}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1042463426
 GameObject:
@@ -5388,7 +5388,7 @@ RectTransform:
   - {fileID: 1667953560}
   - {fileID: 444441823}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -29995,6 +29995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 7421676502241923229}
+  _possibleTargets: []
 --- !u!65 &4931512991260226599
 BoxCollider:
   m_ObjectHideFlags: 0
