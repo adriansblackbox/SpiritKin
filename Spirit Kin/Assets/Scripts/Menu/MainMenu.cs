@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
-    public AudioSource PlaybuttonSFX;
-    public AudioSource OptionbuttonSFX;
+    public AudioClip PlaybuttonSFX;
+    public AudioClip OptionbuttonSFX;
+    public AudioSource MenuSounds;
     private bool check = false;
     public void PlayGame (){
-        PlaybuttonSFX.Play();
+        MenuSounds.PlayOneShot(PlaybuttonSFX);
         check = true;
     }
 
@@ -18,12 +19,12 @@ public class MainMenu : MonoBehaviour
 
     public void Option()
     {
-        OptionbuttonSFX.Play();
+       MenuSounds.PlayOneShot(OptionbuttonSFX);
     }
 
     public void Update()
     {
-        if (!PlaybuttonSFX.isPlaying && check)
+        if (!MenuSounds.isPlaying && check)
         {
             check = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
