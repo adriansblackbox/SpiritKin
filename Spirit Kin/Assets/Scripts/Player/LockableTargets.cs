@@ -5,7 +5,7 @@ using UnityEngine;
 public class LockableTargets : MonoBehaviour
 {
     public Transform Player;
-    private List<GameObject> _possibleTargets = new List<GameObject>();
+    public List<GameObject> _possibleTargets = new List<GameObject>();
     private Vector3 _minDistance;
     private Transform _Target;
     void Update()

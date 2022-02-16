@@ -39,7 +39,6 @@ public class CurseMeter : MonoBehaviour
         curseArray.Add(slow);
         curseArray.Add(frail);
 
-        Debug.Log("Array: " + curseArray);
         cursesUI[1].transform.Find("Bar").gameObject.active = cursesUI[2].transform.Find("Bar").gameObject.active = false;
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;

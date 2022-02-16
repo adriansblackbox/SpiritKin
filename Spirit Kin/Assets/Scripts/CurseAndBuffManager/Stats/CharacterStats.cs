@@ -17,22 +17,37 @@ public class CharacterStats : MonoBehaviour
 
     public Text SoulsUI;
     public Text CoinsUI;
+    public Material blue;
+    public Material red;
     
     void Awake ()
     {
         currentHealth = maxHealth;
-        if(gameObject.tag != "Player")
-        {
-            enabled = false; // Disables the update function for non-players. Collision still triggers.
-        }
+        //if(gameObject.tag != "Player")
+        //{
+        //    enabled = false; // Disables the update function for non-players. Collision still triggers.
+        //}
     }
 
     void Update() {
-        SoulsUI.text = currSouls + "/" + maxSouls;
-        CoinsUI.text = "" + Coins;
-        if (currSouls > maxSouls)
-        {
-            currSouls = maxSouls;
+        if(gameObject.CompareTag("Player")){
+            SoulsUI.text = currSouls + "/" + maxSouls;
+            CoinsUI.text = "" + Coins;
+            if (currSouls > maxSouls)
+            {
+                currSouls = maxSouls;
+            }
+        }
+
+        if(!gameObject.CompareTag("Player")){
+            Debug.Log("isEnemy");
+            if(FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)){
+                Debug.Log("isBlue");
+                GetComponent<MeshRenderer>().material = blue;
+            }else{
+                Debug.Log("isRed");
+                GetComponent<MeshRenderer>().material = red;
+            }
         }
     }
 
@@ -42,7 +57,7 @@ public class CharacterStats : MonoBehaviour
         damage = Mathf.Clamp(damage, 0, int.MaxValue);
 
         currentHealth -= damage;
-        Debug.Log(transform.name + " takes " + damage + " damage.");
+        //Debug.Log(transform.name + " takes " + damage + " damage.");
 
         if (currentHealth <= 0){
             Die();
@@ -51,13 +66,15 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void Die (){
         //Die in some way
-        Debug.Log("Dying!");
         if(gameObject.tag == "Enemy") {
-            Debug.Log("Take me souls bro");
             GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().currSouls += currSouls;
         }
-
-        Debug.Log(transform.name + " died.");
+        if(FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)){
+            FindObjectOfType<LockableTargets>()._possibleTargets.Remove(this.gameObject);
+        }
+        if( FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)){
+             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
+        }
         Destroy(this.gameObject);
     }
     

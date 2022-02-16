@@ -7,14 +7,17 @@ public class SwordCollision : MonoBehaviour
     public Transform BladeRayOrigin;
     public float BladeLength = 10f;
     public LayerMask layerMask;
+    public List<GameObject> immuneEnemies = new List<GameObject>();
     private void Update() {
         RaycastHit hit;
-        if (Physics.Raycast(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left), out hit, BladeLength, layerMask))
+        //checking to see if we hit an enemy
+        if (Physics.Raycast(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left), out hit, BladeLength, layerMask) && FindObjectOfType<PlayerCombat>().isAttacking)
         {
-            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             Debug.DrawRay(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left) * BladeLength, Color.red);
-            Debug.Log("Did Hit");
-            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(1);
+            if(!immuneEnemies.Contains(hit.transform.gameObject)){
+                immuneEnemies.Add(hit.transform.gameObject);
+                hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(1);
+            }
         }
         else
         {

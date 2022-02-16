@@ -29,7 +29,6 @@ public class Shrine : MonoBehaviour
         if(CurCurseTime < TotalCurseTime && cursed){
             CurCurseTime += Time.deltaTime;
         }else if(cursed){
-            Debug.Log("YOU SUCK");
             // For the laughs
             //Application.Quit();
         }

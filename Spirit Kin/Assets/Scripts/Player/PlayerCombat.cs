@@ -64,6 +64,7 @@ public class PlayerCombat : MonoBehaviour
     }
     private void Attack(){
         if(Input.GetButton("X Button") || Input.GetKey(KeyCode.Mouse0)){
+            FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
             isAttacking = true;
             comboTimeDelay = 0f;
             numOfClicks++;

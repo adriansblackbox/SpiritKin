@@ -15,6 +15,7 @@ public class LockTarget : MonoBehaviour
     [SerializeField] private float RotateToTargetSpeed = 10f;
     [SerializeField] private float CamRotateToTargetSpeed = 5f;
     [SerializeField] private Transform LookAtRoot;
+    [SerializeField] float LetGoDistance = 10f;
     [SerializeField] private CinemachineVirtualCamera FollowCamera;
     [HideInInspector] public Transform Target = null;
     private float defaultSprintSpeed;
@@ -65,7 +66,7 @@ public class LockTarget : MonoBehaviour
         GetComponent<PlayerController>().CinemachineTargetPitch = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
         GetComponent<PlayerController>().CinemachineTargetYaw = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         // Cancel lock
-        if((Input.GetAxisRaw("Left Trigger") <= 0 && !Input.GetKey(KeyCode.Mouse1)) || Input.GetKeyUp(KeyCode.Mouse1)){
+        if((Input.GetAxisRaw("Left Trigger") <= 0 && !Input.GetKey(KeyCode.Mouse1)) || Input.GetKeyUp(KeyCode.Mouse1) || (this.transform.position - Target.transform.position).magnitude > LetGoDistance){
             Target = null;
         }
     }
