@@ -33,6 +33,7 @@ public class Enemy_Controller : MonoBehaviour
         Idling,
         Patroling,
         Seeking,
+        Relocating,
         Chasing,
         AfterChase
     }
@@ -72,9 +73,8 @@ public class Enemy_Controller : MonoBehaviour
         //represents 1/2 second of movement
     public float chaseThreshold;
 
-    //threshold for the enemy to go from alerted into idle
-        //represents distance after chase threshold checks
-    public float idleThreshold;
+    //necessary for starting the coroutine
+    private bool justAlerted;
 
 //////////////////////////////////////////////////NAVMESH
 
@@ -89,6 +89,15 @@ public class Enemy_Controller : MonoBehaviour
 
     private RaycastHit hitInfo;
     private bool hasDetectedPlayer = false;
+
+/////////////////////////////////////////////////STATE BOX FOR TESTING
+
+    public Material alertedMat;
+    public Material seekingMat;
+    public Material chasingMat;
+    public Material idleMat;
+    public Material patrolMat;
+    public Material relocateMat;
 
 
     // Start is called before the first frame update
@@ -115,12 +124,28 @@ public class Enemy_Controller : MonoBehaviour
 
         if (EnemyMotion == MotionState.Alerted)
         {
-            alertBox.SetActive(true);
-        } else {
-            alertBox.SetActive(false);
+            alertBox.GetComponent<MeshRenderer>().material = alertedMat;
+        } 
+        else if (EnemyMotion == MotionState.Seeking) 
+        {
+            alertBox.GetComponent<MeshRenderer>().material = seekingMat;
+        } 
+        else if (EnemyMotion == MotionState.Idling) 
+        {
+            alertBox.GetComponent<MeshRenderer>().material = idleMat;
+        } 
+        else if (EnemyMotion == MotionState.Chasing) 
+        {
+            alertBox.GetComponent<MeshRenderer>().material = chasingMat;
+        } 
+        else if (EnemyMotion == MotionState.Relocating) 
+        {
+            alertBox.GetComponent<MeshRenderer>().material = relocateMat;
+        } 
+        else if (EnemyMotion == MotionState.Patroling) 
+        {
+            alertBox.GetComponent<MeshRenderer>().material = patrolMat;
         }
-
-        Debug.Log(EnemyMotion);
 
         myTime += Time.deltaTime;
         switch (EnemyMotion)
@@ -136,19 +161,18 @@ public class Enemy_Controller : MonoBehaviour
                     //MAYBE ENEMY HAS TO PATROL TO AT LEAST 1 or 2 DESTINATION POINTS BEFORE THEY HAVE A CHANCE TO SWAP STATES
                 
 
-                // if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
-                //     float temp = Random.Range(0.0f, 1.0f);
-                //     //if > 50% patroling increase chance to swap
-                //     if (temp < sc.checkPatrol(patrolToIdleChance) && timesPatroled > 2) //swap states
-                //     {
-                //         EnemyMotion = MotionState.Idling;
-                //         timesPatroled = 0;
-                //         Debug.Log("Now " + EnemyMotion);
-                //     } else {
-                //         ThisEnemy.SetDestination(findNextWaypoint());
-                //     }
-                //     timesPatroled++;
-                // }
+                if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
+                    float temp = Random.Range(0.0f, 1.0f);
+                    //if > 50% patroling increase chance to swap
+                    if (temp < sc.checkPatrol(patrolToIdleChance) && timesPatroled > 2) //swap states
+                    {
+                        EnemyMotion = MotionState.Idling;
+                        timesPatroled = 0;
+                    } else {
+                        ThisEnemy.SetDestination(findNextWaypoint());
+                    }
+                    timesPatroled++;
+                }
 
 
                 break;
@@ -158,10 +182,6 @@ public class Enemy_Controller : MonoBehaviour
                 //else
                     //move to idle range
                         //select a random distance within the idle range
-                float shrineDist = Vector3.Distance(shrine.position, transform.position);
-                if (shrineDist < shrineSpawnRange * 0.20 || shrineDist > shrineSpawnRange * 0.55 && !ThisEnemy.hasPath)
-                    ThisEnemy.SetDestination(findIdleSpot());
-
                 if (myTime > swapStateInterval) {
                     if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f)
                     {
@@ -170,15 +190,30 @@ public class Enemy_Controller : MonoBehaviour
                         if (temp < sc.checkIdle(idleToPatrolChance)) //swap states
                         {
                             EnemyMotion = MotionState.Patroling;
-                            Debug.Log("Now " + EnemyMotion);
                         }                    
                     }
                     myTime = 0.0f;
                 }
                 break;
+            case MotionState.Relocating:
+                if (Vector3.Distance(shrine.position, transform.position) > shrine.GetComponent<Shrine>().shrineSpawnRange * 0.55 && !ThisEnemy.hasPath)
+                {
+                    ThisEnemy.SetDestination(findRelocateSpot());
+                }
+                else if (ThisEnemy.hasPath && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
+                {
+                    ThisEnemy.ResetPath();
+                    EnemyMotion = MotionState.Idling;
+                }
+                break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                StartCoroutine(decideAlertedAction());
+                if (justAlerted)
+                {
+                    justAlerted = false;
+                    StartCoroutine(decideAlertedAction());
+                }
+
                 break;
             case MotionState.Seeking:
                 if (!ThisEnemy.hasPath) {
@@ -222,7 +257,7 @@ public class Enemy_Controller : MonoBehaviour
 ///////////////////////////////////////////////////STATES    
 
     //FIRST ENEMY SPAWNED TAKES AN INDIRECT PATH TO THEIR LOCATION
-    private Vector3 findIdleSpot()
+    private Vector3 findRelocateSpot()
     {   
         //if we need to relocate select new quadrant
         if (sc.checkIfNeedRelocate(quadrant)) 
@@ -258,47 +293,7 @@ public class Enemy_Controller : MonoBehaviour
             }
         } 
 
-        return es.chooseLocation(shrine).position;  
-
-        // while(true) {
-        //     float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
-        //     float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.25f;
-
-        //     float xpos = 0; 
-        //     float zpos = 0; 
-
-        //     if (quadrant == 1)
-        //     {
-        //         xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
-        //         zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
-        //     }
-        //     else if (quadrant == 2)
-        //     {
-        //         xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-        //         zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
-        //     }
-        //     else if (quadrant == 3)
-        //     {
-        //         xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
-        //         zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
-        //     }
-        //     else if (quadrant == 4)
-        //     {
-        //         xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-        //         zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
-        //     }
-            
-        //     //ADJUST Y POS TO ALIGN WITH BLOCKOUT
-        //     Vector3 point = new Vector3(xpos, shrine.position.y, zpos);
-        //     NavMeshHit hit;
-        //     NavMesh.SamplePosition(point, out hit, 200.0f, NavMesh.AllAreas);
-
-        //     ThisEnemy.CalculatePath(hit.position, path);
-        //     if (path.status == NavMeshPathStatus.PathComplete) { // Check if point is on navmesh
-        //         return hit.position;
-        //     }
-        // }
-            
+        return es.chooseLocation(shrine).position;        
     }
 
     //4 cases
@@ -317,48 +312,7 @@ public class Enemy_Controller : MonoBehaviour
     private Vector3 findNextWaypoint() 
     {
         return es.chooseLocation(shrine).position;
-        // if (true) //guaranteed to stay in current quadrant //TIMES PATROLED = 0
-        // {
-        //     while(true) {
-        //         float upperLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 1.5f;
-        //         float lowerLimitWaypoint = (float) shrine.GetComponent<Shrine>().shrineSpawnRange * 0.5f;
-
-        //         float xpos = 0; 
-        //         float zpos = 0; 
-
-        //         if (quadrant == 1)
-        //         {
-        //             xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
-        //             zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
-        //         }
-        //         else if (quadrant == 2)
-        //         {
-        //             xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-        //             zpos = Random.Range(shrine.position.z + lowerLimitWaypoint, shrine.position.z + upperLimitWaypoint);
-        //         }
-        //         else if (quadrant == 3)
-        //         {
-        //             xpos = Random.Range(shrine.position.x - lowerLimitWaypoint, shrine.position.x - upperLimitWaypoint);
-        //             zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
-        //         }
-        //         else if (quadrant == 4)
-        //         {
-        //             xpos = Random.Range(shrine.position.x + lowerLimitWaypoint, shrine.position.x + upperLimitWaypoint);
-        //             zpos = Random.Range(shrine.position.z - lowerLimitWaypoint, shrine.position.z - upperLimitWaypoint);
-        //         }
-                
-        //         //ADJUST Y POS TO ALIGN WITH BLOCKOUT
-        //         Vector3 point = new Vector3(xpos, shrine.position.y, zpos);
-        //         NavMeshHit hit;
-        //         NavMesh.SamplePosition(point, out hit, 200.0f, NavMesh.AllAreas);
-
-        //         ThisEnemy.CalculatePath(hit.position, path);
-        //         if (path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(transform.position, hit.position) > 40f) { // Check if point is on navmesh
-        //             return hit.position;
-        //         }
-        //     }
-        // }
-        
+       
     }
     
     private void determineQuadrant()
@@ -427,62 +381,36 @@ public class Enemy_Controller : MonoBehaviour
         firstDist = ThisEnemy.remainingDistance;
         for (int i = 0; i < numTimesCheckIfNeedChase; i++)
         {
-            int flowstate = 0;
-            switch(flowstate) {
-                case 0:
-                    ThisEnemy.CalculatePath(player.transform.position, path);
-                    if (path.status == NavMeshPathStatus.PathComplete) {
-                        beforeDist = ThisEnemy.remainingDistance;
-                    }
-                    else
-                    {
-                        goto case 1;
-                    }
+            ThisEnemy.CalculatePath(player.transform.position, path);
+            beforeDist = ThisEnemy.remainingDistance;
+            Debug.Log("Before Dist: " + beforeDist);
+            yield return new WaitForSeconds(0.5f);
+            ThisEnemy.CalculatePath(player.transform.position, path);
+            afterDist = ThisEnemy.remainingDistance;
+            Debug.Log("After Dist: " + afterDist);
 
-                    yield return new WaitForSeconds(0.5f);
-                    ThisEnemy.CalculatePath(player.transform.position, path);
-                    if (path.status == NavMeshPathStatus.PathComplete) {
-                        afterDist = ThisEnemy.remainingDistance;
-                    }
-                    else
-                    {
-                        goto case 1;
-                    }
+            //two cases
+            //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
+            //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
+            delta = beforeDist - afterDist;
 
-                    delta = beforeDist - afterDist;
-                    //two cases
-                    //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
-                    //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
-                    if (delta > chaseThreshold)
-                    {
-                        Debug.Log("CHASING PLAYER");
-                        EnemyMotion = MotionState.Chasing;
-                        yield return null;
-                    }
-                    else
-                    {
-                        Debug.Log("No need to chase player");
-                    }
-                    yield return new WaitForSeconds(0.5f);
-                    //don't need to chase
-                        //enter seek or idle based on final check
-                        //has the player signifcantly moved away from the enemy
-                    if (firstDist - afterDist < idleThreshold)
-                    {
-                        Debug.Log("Idle After Alerted");
-                        goto case 1;
-                    }
-                    else
-                    {
-                        EnemyMotion = MotionState.Seeking;
-                        Debug.Log("SEEKING THIS MF");
-                    }
-                    break;
-                case 1:
-                    EnemyMotion = MotionState.Idling;
-                    break;
+            if (delta > chaseThreshold)
+            {
+                Debug.Log("CHASING PLAYER");
+                EnemyMotion = MotionState.Chasing;
+                yield return null;
+            }
+            else
+            {
+                Debug.Log("No need to chase player");
             }
         }
+        yield return new WaitForSeconds(0.5f);
+        //don't need to chase
+            //enter seek or idle based on final check
+            //has the player signifcantly moved away from the enemy
+        EnemyMotion = MotionState.Seeking;
+        Debug.Log("SEEKING THIS MF");
     }
 
 /////////////////////////////////////////////////SPHERECASTING
@@ -497,10 +425,12 @@ public class Enemy_Controller : MonoBehaviour
                 Debug.Log("Player Detected!");
                 ThisEnemy.ResetPath();
                 EnemyMotion = MotionState.Alerted;
+                justAlerted = true;
             }
             else if (hitInfo.transform.CompareTag("Player") && EnemyMotion == MotionState.Seeking)
             {
                 Debug.Log("Player Detected & Chasing after Seeking!");
+                ThisEnemy.ResetPath();
                 EnemyMotion = MotionState.Chasing;
             }
             else if (!hitInfo.transform.CompareTag("Player"))

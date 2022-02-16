@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5466169016768112854}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.0705031, y: 1.417, z: 4.797014}
-  m_LocalScale: {x: 0.52431, y: 1.8923, z: 0.65366}
+  m_LocalScale: {x: 1, y: 2.5, z: 1}
   m_Children:
   - {fileID: 3973736293003285385}
   m_Father: {fileID: 0}
@@ -108,7 +108,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 8
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -143,14 +143,14 @@ MonoBehaviour:
   shrine: {fileID: 0}
   quadrant: 0
   sc: {fileID: 0}
-  numTimesCheckIfNeedChase: 0
-  chaseThreshold: 1
-  idleThreshold: 5
+  es: {fileID: 0}
+  numTimesCheckIfNeedChase: 4
+  chaseThreshold: 3
   ThisEnemy: {fileID: 4582267893233665632}
   player: {fileID: 0}
   alertBox: {fileID: 7326527266680008334}
   raycastRadius: 5
-  targetDetectionRange: 25
+  targetDetectionRange: 50
 --- !u!1 &7326527266680008334
 GameObject:
   m_ObjectHideFlags: 0

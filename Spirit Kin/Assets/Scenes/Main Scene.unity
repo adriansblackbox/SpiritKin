@@ -2109,7 +2109,7 @@ Transform:
   m_Children:
   - {fileID: 965823541}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &851875886
 GameObject:
@@ -2685,7 +2685,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1042463426
 GameObject:
@@ -3855,7 +3855,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1553621531
 GameObject:
@@ -4563,7 +4563,7 @@ Transform:
   - {fileID: 1984820683}
   - {fileID: 255756219}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1964309313
 MonoBehaviour:
@@ -4582,7 +4582,7 @@ MonoBehaviour:
   upperLimitEnemyCount: 4
   nonCursedContainer: {fileID: 1984820682}
   cursedContainer: {fileID: 255756218}
-  enemyPrefab: {fileID: 5466169016768112854, guid: c2e28454de3efef4291346698097f31c, type: 3}
+  enemyPrefab: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
   enemyNoSpawnRadius: 40
   spawnInterval: 3
   currentCursedShrines: 0
@@ -27801,7 +27801,7 @@ Transform:
   - {fileID: 4931512990925993237}
   - {fileID: 4931512991260226592}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4931512990943485763
 GameObject:
@@ -27940,7 +27940,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4931512991430563514
 GameObject:
@@ -41493,6 +41493,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f05326919a0b0164586388077fba1479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlaybuttonSFX: {fileID: 0}
+  OptionbuttonSFX: {fileID: 0}
+  MenuSounds: {fileID: 0}
 --- !u!4 &7451521927906078165
 Transform:
   m_ObjectHideFlags: 0
