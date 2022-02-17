@@ -72,8 +72,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3479692116232897869}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.951, z: -0.00000012301}
-  m_LocalScale: {x: 0.59936, y: 0.14984, z: 0.59936}
+  m_LocalPosition: {x: 0, y: 1.191, z: -0.00000012301}
+  m_LocalScale: {x: 1.391047, y: 0.34776175, z: 1.391047}
   m_Children: []
   m_Father: {fileID: 6192531991054698252}
   m_RootOrder: 2
@@ -105,7 +105,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e59cc011b66a0a3418d3e3d939277acd, type: 2}
+  - {fileID: 2100000, guid: f334dd398f7a6c04699e93fd64a7b1a3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
   currSouls: 10
   maxSouls: 0
   Coins: 0
-  maxHealth: 100
+  maxHealth: 25
   currentHealth: 0
   armor:
     baseValue: -10
@@ -271,23 +271,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyMotion: 1
   EnemyAttack: 2
-  patrolToIdleChance: 15
-  idleToPatrolChance: 40
-  swapStateInterval: 5
-  returnDist: 100
+  patrolToIdleChance: 0.5
+  idleToPatrolChance: 0.1
+  swapStateInterval: 15
+  returnDist: 75
   shrineSpawnRange: 200
   decisionTime: 1
   shrine: {fileID: 0}
   quadrant: 0
   sc: {fileID: 0}
   es: {fileID: 0}
-  numTimesCheckIfNeedChase: 4
-  chaseThreshold: 3
+  numTimesCheckIfNeedChase: 2
+  chaseThreshold: 1.5
   ThisEnemy: {fileID: 657498701014188137}
   player: {fileID: 0}
   alertBox: {fileID: 3479692116232897869}
   raycastRadius: 5
-  targetDetectionRange: 50
+  targetDetectionRange: 30
   alertedMat: {fileID: 2100000, guid: 353a2592ff3736b4dac2eb8104fbcc65, type: 2}
   seekingMat: {fileID: 2100000, guid: 6955535d418b16b4fa62cc25397824a8, type: 2}
   chasingMat: {fileID: 2100000, guid: 8a14e898cff323941a4cdf2ce999739c, type: 2}
@@ -307,7 +307,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5046564
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_LocalScale.y
@@ -315,7 +315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.2069062
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_LocalPosition.x

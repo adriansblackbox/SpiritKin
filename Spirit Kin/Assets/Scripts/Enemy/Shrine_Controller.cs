@@ -65,7 +65,7 @@ public class Shrine_Controller : MonoBehaviour
         {
             if (enemiesContainer.GetChild(i).GetComponent<Enemy_Controller>().EnemyMotion == Enemy_Controller.MotionState.Patroling) enemiesPatrolingCount += 1;
         }
-        if (enemiesPatrolingCount / (float) enemyCount < 0.4f)
+        if (enemiesPatrolingCount / (float) enemyCount < 0.25f)
             return baseChance * 1.5f;
         else
             return baseChance;
