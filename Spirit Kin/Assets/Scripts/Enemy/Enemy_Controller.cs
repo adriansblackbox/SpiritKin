@@ -187,7 +187,7 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                //transform.LookAt(player.transform);
+                transform.LookAt(player.transform);
                 if (justAlerted)
                 {
                     ThisEnemy.ResetPath();
@@ -405,7 +405,7 @@ public class Enemy_Controller : MonoBehaviour
 
         if (hasDetectedPlayer)
         {
-            if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
+            if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling || EnemyMotion == MotionState.Relocating))
             {
                 Debug.Log("Player Detected!");
                 ThisEnemy.ResetPath();
