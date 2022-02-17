@@ -8,7 +8,7 @@ public class PlayerStats : CharacterStats
     [SerializeField]
     public List<Buff> Buffs = new List<Buff>();
 
-    public GameObject[] BuffsUI;
+    public List<GameObject> BuffsUI = new List<GameObject>();
     public Sprite Notch, damageBuff, speedBuff, armorBuff, healthBuff;
 
     void Start()
@@ -29,16 +29,24 @@ public class PlayerStats : CharacterStats
         if (Buffs.Count != 0)
         {
             BuffHandler (Buffs);
+            for(int i = 0; i < Buffs.Count; i++){
+                if(Buffs[i].timeActive < Buffs[i].duration){
+                    Buffs[i].timeActive += Time.deltaTime;
+                    BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1 - Buffs[i].timeActive/Buffs[i].duration;
+                }else{
+                    BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().enabled = false;
+                    Buffs[i].removeFlag = true;
+                }
+            }
         }
     }
 
     public void BuffHandler(List<Buff> Buffs)
     {
-        int i = -1;
         Buffs
             .ForEach(x =>
             {
-                i = Buffs.FindIndex(y => y.teaName == x.teaName);
+                int i = Buffs.FindIndex(y => y.teaName == x.teaName);
                 if (!x.isApplied)
                 {
                     switch (x.stat)
@@ -117,31 +125,16 @@ public class PlayerStats : CharacterStats
                             }
                     }
                     BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = Notch;
-                    Buffs.Remove (x);
-                }
-                if(x.timeActive < x.duration){
-                    x.timeActive += Time.deltaTime;
-                    BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1 - x.timeActive/x.duration;
-                }else{
-                    BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().enabled = false;
-                    x.removeFlag = true;
                 }
             });
+            for(int i = 0; i < Buffs.Count; i ++){
+                if(Buffs[i].removeFlag){
+                    Buffs.RemoveAt(i);
+                    BuffsUI.Add(BuffsUI[0]);
+                    BuffsUI.RemoveAt(0);
+                }
+            }
     }
-    /*
-    public IEnumerator buffTimer(Buff x)
-    {
-        float timeRemaining = x.duration;
-        float timeStep = 0.2f * timeRemaining;
-        while (timeRemaining > 0)
-        {
-            // Demonstrate the change
-            // lerpingFunction(timeRemaining, timeRemaining - timeStep)
-            yield return new WaitForSeconds(timeStep);
-        }
-        x.removeFlag = true;
-    }
-    */
     public void addBuff(Buff x)
     {
         if(Buffs.Count < 3){
