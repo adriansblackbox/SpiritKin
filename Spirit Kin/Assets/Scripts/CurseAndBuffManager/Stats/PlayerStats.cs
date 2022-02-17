@@ -48,8 +48,6 @@ public class PlayerStats : CharacterStats
                                 this.maxHealth += x.basePower;
                                 this.currentHealth += x.basePower;
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = healthBuff;
-                   
-                                // Buffs.Remove(x);
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
                                 break;
@@ -58,8 +56,6 @@ public class PlayerStats : CharacterStats
                             {
                                 this.armor.AddBaseValue(x.basePower);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = armorBuff;
-
-                                // Buffs.Remove(x);
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
                                 break;
@@ -68,8 +64,6 @@ public class PlayerStats : CharacterStats
                             {
                                 this.damage.AddBaseValue(x.basePower);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = damageBuff;
-
-                                // Buffs.Remove(x);
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
                                 break;
@@ -78,13 +72,12 @@ public class PlayerStats : CharacterStats
                             {
                                 this.speed.AddBaseValue(x.basePower);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = speedBuff;
-
-                                // Buffs.Remove(x);
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
                                 break;
                             }
                     }
+                    BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().enabled = true;
                 }
                 if (x.removeFlag)
                 {
@@ -97,8 +90,6 @@ public class PlayerStats : CharacterStats
                                 {
                                     this.currentHealth = this.maxHealth;
                                 }
-
-                                // Buffs.Remove(x);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
@@ -106,8 +97,6 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.armor):
                             {
                                 this.armor.AddBaseValue(-x.basePower);
-
-                                // Buffs.Remove(x);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
@@ -115,8 +104,6 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.damage):
                             {
                                 this.damage.AddBaseValue(-x.basePower);
-
-                                // Buffs.Remove(x);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
@@ -124,8 +111,6 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.speed):
                             {
                                 this.speed.AddBaseValue(-x.basePower);
-
-                                // Buffs.Remove(x);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
@@ -134,9 +119,16 @@ public class PlayerStats : CharacterStats
                     BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = Notch;
                     Buffs.Remove (x);
                 }
+                if(x.timeActive < x.duration){
+                    x.timeActive += Time.deltaTime;
+                    BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1 - x.timeActive/x.duration;
+                }else{
+                    BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().enabled = false;
+                    x.removeFlag = true;
+                }
             });
     }
-
+    /*
     public IEnumerator buffTimer(Buff x)
     {
         float timeRemaining = x.duration;
@@ -149,11 +141,13 @@ public class PlayerStats : CharacterStats
         }
         x.removeFlag = true;
     }
-
+    */
     public void addBuff(Buff x)
     {
         if(Buffs.Count < 3){
+            x.timeActive = 0;
             x.isApplied = false;
+            x.removeFlag = false;
             Buffs.Add (x);
         }
     }
