@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStats : CharacterStats
 {
     [SerializeField]
     public List<Buff> Buffs = new List<Buff>();
+
+    public GameObject[] BuffsUI;
+    public Sprite Notch, damageBuff, speedBuff, armorBuff, healthBuff;
 
     void Start()
     {
@@ -30,9 +34,11 @@ public class PlayerStats : CharacterStats
 
     public void BuffHandler(List<Buff> Buffs)
     {
+        int i = -1;
         Buffs
             .ForEach(x =>
             {
+                i = Buffs.FindIndex(y => y.teaName == x.teaName);
                 if (!x.isApplied)
                 {
                     switch (x.stat)
@@ -41,7 +47,8 @@ public class PlayerStats : CharacterStats
                             {
                                 this.maxHealth += x.basePower;
                                 this.currentHealth += x.basePower;
-
+                                BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = healthBuff;
+                   
                                 // Buffs.Remove(x);
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
@@ -50,6 +57,7 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.armor):
                             {
                                 this.armor.AddBaseValue(x.basePower);
+                                BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = armorBuff;
 
                                 // Buffs.Remove(x);
                                 x.isApplied = true;
@@ -59,6 +67,7 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.damage):
                             {
                                 this.damage.AddBaseValue(x.basePower);
+                                BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = damageBuff;
 
                                 // Buffs.Remove(x);
                                 x.isApplied = true;
@@ -68,6 +77,7 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.speed):
                             {
                                 this.speed.AddBaseValue(x.basePower);
+                                BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = speedBuff;
 
                                 // Buffs.Remove(x);
                                 x.isApplied = true;
@@ -121,6 +131,7 @@ public class PlayerStats : CharacterStats
                                 break;
                             }
                     }
+                    BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = Notch;
                     Buffs.Remove (x);
                 }
             });

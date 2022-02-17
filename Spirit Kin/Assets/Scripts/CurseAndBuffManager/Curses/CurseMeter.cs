@@ -39,7 +39,8 @@ public class CurseMeter : MonoBehaviour
         curseArray.Add(slow);
         curseArray.Add(frail);
 
-        cursesUI[1].transform.Find("Bar").gameObject.active = cursesUI[2].transform.Find("Bar").gameObject.active = false;
+        cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
+        cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
     }
@@ -56,15 +57,7 @@ public class CurseMeter : MonoBehaviour
         {
             if(soulDelta < pStats.currSouls) 
             {
-                //if(soulDelta == 0) // Come up with some sort of ratio here.
-                //{
-                    curseMeter += (((float)pStats.currSouls - soulDelta)) / fillRate;
-               // }
-                //else
-                //{
-                //    curseMeter += ((float)pStats.currSouls - (float)soulDelta) / fillRate;
-                //}
-                
+                curseMeter += (((float)pStats.currSouls - soulDelta)) / fillRate;   
                 soulDelta = pStats.currSouls;
             }
             curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
@@ -102,27 +95,27 @@ public class CurseMeter : MonoBehaviour
     private void manageCurseUI(){
         switch(activeCurses.Count){
             case 3:
-                cursesUI[0].transform.Find("Bar").gameObject.active = false;
-                cursesUI[1].transform.Find("Bar").gameObject.active = false;
-                cursesUI[2].transform.Find("Bar").gameObject.active = false;
+                cursesUI[0].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
                 break; // All curses active. Flow for managing player max health.
             case 2:
                 cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
-                cursesUI[0].transform.Find("Bar").gameObject.active = false;
-                cursesUI[1].transform.Find("Bar").gameObject.active = false;
-                cursesUI[2].transform.Find("Bar").gameObject.active = true;
+                cursesUI[0].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[2].transform.Find("Bar").gameObject.SetActive(true);
                 break;
             case 1:
                 cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
-                cursesUI[0].transform.Find("Bar").gameObject.active = false;
-                cursesUI[1].transform.Find("Bar").gameObject.active = true;
-                cursesUI[2].transform.Find("Bar").gameObject.active = false;
+                cursesUI[0].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[1].transform.Find("Bar").gameObject.SetActive(true);
+                cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
                 break;
             case 0:
                 cursesUI[0].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
-                cursesUI[0].transform.Find("Bar").gameObject.active = true;
-                cursesUI[1].transform.Find("Bar").gameObject.active = false;
-                cursesUI[2].transform.Find("Bar").gameObject.active = false;
+                cursesUI[0].transform.Find("Bar").gameObject.SetActive(true);
+                cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
                 break;
         }
 
@@ -170,10 +163,10 @@ public class CurseMeter : MonoBehaviour
                 else if(x.active && !x.isApplied)
                 {
                     manageCurseUI();
-                    curCurseUI.transform.Find("Curse").gameObject.active = true;
+                    curCurseUI.transform.Find("Curse").gameObject.SetActive(true);
                     var a = x.image;
                     curCurseUI.transform.Find("Curse").gameObject.GetComponent<Image>().sprite = a;
-                    curCurseUI.transform.Find("Bar").gameObject.active = false;
+                    curCurseUI.transform.Find("Bar").gameObject.SetActive(false);
                     x.invokeCurse();
                     manageCurseUI();
                 }
