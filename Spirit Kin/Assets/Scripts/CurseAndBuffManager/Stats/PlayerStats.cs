@@ -41,12 +41,14 @@ public class PlayerStats : CharacterStats
                 i = Buffs.FindIndex(y => y.teaName == x.teaName);
                 if (!x.isApplied)
                 {
+                    Debug.Log("Should Display");
                     switch (x.stat)
                     {
                         case (Buff.statType.health):
                             {
                                 this.maxHealth += x.basePower;
                                 this.currentHealth += x.basePower;
+                                Debug.Log("Should Display");
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = healthBuff;
                    
                                 // Buffs.Remove(x);
@@ -57,6 +59,7 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.armor):
                             {
                                 this.armor.AddBaseValue(x.basePower);
+                                Debug.Log("Should Display");
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = armorBuff;
 
                                 // Buffs.Remove(x);
@@ -67,6 +70,7 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.damage):
                             {
                                 this.damage.AddBaseValue(x.basePower);
+                                Debug.Log("Should Display");
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = damageBuff;
 
                                 // Buffs.Remove(x);
@@ -77,6 +81,7 @@ public class PlayerStats : CharacterStats
                         case (Buff.statType.speed):
                             {
                                 this.speed.AddBaseValue(x.basePower);
+                                Debug.Log("Should Display");
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = speedBuff;
 
                                 // Buffs.Remove(x);
@@ -152,7 +157,8 @@ public class PlayerStats : CharacterStats
 
     public void addBuff(Buff x)
     {
-        Buffs.Add (x);
+        if(Buffs.Count < 3)
+            Buffs.Add (x);
     }
 
     public void removeBuff(Buff x)
