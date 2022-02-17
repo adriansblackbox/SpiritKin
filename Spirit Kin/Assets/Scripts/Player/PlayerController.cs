@@ -118,7 +118,9 @@ public class PlayerController : MonoBehaviour
             moveDirection = targetMoveDirection;
         }
         // TempSpeed is altered by the PlayerCombat script
-        TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * CombatSpeedDropoff);
+
+        //TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * CombatSpeedDropoff);
+        
         // move direction is normalized, and the caharacter controller applies contstant
         // downward force for easy slope traversal
         moveDirection.Normalize();

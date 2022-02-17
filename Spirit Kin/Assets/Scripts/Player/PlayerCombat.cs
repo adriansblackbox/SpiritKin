@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] private float DodgeTime = 0.5f;
+    [SerializeField] private float DodgeSpeed = 20f;
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isDodging = false;
     private float dodgeTimeItter = 0;
@@ -56,7 +57,7 @@ public class PlayerCombat : MonoBehaviour
             if(isAttacking){
                 isAttacking = false;
             }
-            controller.TempSpeed = 80f;
+            controller.TempSpeed = DodgeSpeed;
             isDodging = true;
             dodgeTimeItter = DodgeTime;
             dodgeCoolDown = 0.5f;
@@ -68,6 +69,7 @@ public class PlayerCombat : MonoBehaviour
             isAttacking = true;
             comboTimeDelay = 0f;
             numOfClicks++;
+            controller.TempSpeed =0;
             if(numOfClicks > 3){
                 numOfClicks = 1;
             }
@@ -76,14 +78,14 @@ public class PlayerCombat : MonoBehaviour
             if((Input.GetButton("A Button") || Input.GetKey(KeyCode.LeftShift)) && GetComponent<LockTarget>().Target == null
                 && controller.speed > controller.WalkSpeed){
                 // dash Attack
-                controller.TempSpeed = 90f;
+                //controller.TempSpeed = 90f;
             }else{
                 // normal Attack
-                controller.TempSpeed = 20f;
+                //controller.TempSpeed = 20f;
             }
             if( GetComponent<LockTarget>().Target != null && dodgeCoolDown > 0.0f && dodgeTimeItter <= 0.0f){
                 // critical Attack
-                controller.TempSpeed = 60f;
+                //controller.TempSpeed = 60f;
             }
         }
     }
