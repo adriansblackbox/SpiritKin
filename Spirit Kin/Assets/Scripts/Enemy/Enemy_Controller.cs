@@ -51,7 +51,6 @@ public class Enemy_Controller : MonoBehaviour
     public float patrolToIdleChance = 0.4f;
     public float idleToPatrolChance = 0.15f;
     public float swapStateInterval = 12f;
-    public float returnDist = 100f;
     public float shrineSpawnRange = 200f;
 
     //time for enemy to decide next action after reaching edge of chase distance
@@ -75,6 +74,12 @@ public class Enemy_Controller : MonoBehaviour
 
     //necessary for starting the coroutine
     private bool justAlerted;
+
+    //check if enemy has left arena
+    public bool exitedArena;
+
+    public float seekSpeed;
+    public float chaseSpeed;
 
 //////////////////////////////////////////////////NAVMESH
 
@@ -196,30 +201,44 @@ public class Enemy_Controller : MonoBehaviour
                 }
                 break;
             case MotionState.Seeking:
+                //set speed to normal
+                ThisEnemy.speed = seekSpeed;
                 StopCoroutine(decideAlertedAction());
-                if (!ThisEnemy.hasPath) {
-                    ThisEnemy.CalculatePath(player.transform.position, path);
-                    if (path.status == UnityEngine.AI.NavMeshPathStatus.PathComplete) {
-                        ThisEnemy.SetDestination(player.transform.position);
+                if (!ThisEnemy.hasPath)
+                    startOfPath = transform.position;
+                ThisEnemy.CalculatePath(player.transform.position, path);
+                if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
+                    if (exitedArena) { //if still in arena
+                        if (Vector3.Distance(transform.position, player.transform.position) < 8.0f)
+                        {
+                            ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
+                        } else {
+                            ThisEnemy.SetDestination(player.transform.position);
+                        }
+                    } else {
+                        EnemyMotion = MotionState.Relocating;
+                        ThisEnemy.ResetPath();
                     }
-                }
-                //reached end of path without entering chasing
-                else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance + 0.01f)
-                {
-                    ThisEnemy.ResetPath();
-                    EnemyMotion = MotionState.Relocating;
                 }
                 break;
             case MotionState.Chasing:
+                
+                //set speed to faster
+                ThisEnemy.speed = chaseSpeed;
                 StopCoroutine(decideAlertedAction());
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
                 ThisEnemy.CalculatePath(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))), path);
                 if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-                    if (Vector3.Distance(transform.position, startOfPath) < returnDist) {
-                        ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
+                    if (exitedArena) { //if still in arena
+                        if (Vector3.Distance(transform.position, player.transform.position) < 8.0f)
+                        {
+                            ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
+                        } else {
+                            ThisEnemy.SetDestination(player.transform.position);
+                        }
                     } else {
-                        EnemyMotion = MotionState.AfterChase;
+                        EnemyMotion = MotionState.Relocating;
                         ThisEnemy.ResetPath();
                     }
                 }
@@ -361,9 +380,8 @@ public class Enemy_Controller : MonoBehaviour
             {
                 ThisEnemy.SetDestination(player.transform.position);
                 beforeDist = ThisEnemy.remainingDistance;
-                ThisEnemy.ResetPath();
             }
-
+            //ThisEnemy.ResetPath();
             //wait half second
             yield return new WaitForSeconds(0.5f);
 
@@ -372,9 +390,8 @@ public class Enemy_Controller : MonoBehaviour
             {
                 ThisEnemy.SetDestination(player.transform.position);
                 afterDist = ThisEnemy.remainingDistance;
-                ThisEnemy.ResetPath();
             }
-
+            //ThisEnemy.ResetPath();
             //two cases
             //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
             //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
