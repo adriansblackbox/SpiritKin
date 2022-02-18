@@ -24,7 +24,7 @@ public class PlayerCombat : MonoBehaviour
     {
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
-        if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f && !isAttacking){
+        if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f ){
             Dodge();
         }
         if((comboTimeDelay >= totalAnimationTime - (totalAnimationTime/2)  || numOfClicks == 0) && dodgeTimeItter <= 0.0f){
@@ -43,7 +43,7 @@ public class PlayerCombat : MonoBehaviour
         }else{
             totalAnimationTime = animator.GetCurrentAnimatorStateInfo(1).length;
         }
-        if(comboTimeDelay < totalAnimationTime){
+        if(comboTimeDelay < totalAnimationTime - (totalAnimationTime/3)){
             comboTimeDelay += Time.deltaTime;
         }else{
             isAttacking = false;
@@ -64,7 +64,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
     private void Attack(){
-        if(Input.GetButton("X Button") || Input.GetKey(KeyCode.Mouse0)){
+        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
             isAttacking = true;
             comboTimeDelay = 0f;
@@ -74,18 +74,10 @@ public class PlayerCombat : MonoBehaviour
                 numOfClicks = 1;
             }
             animator.SetInteger("attackTicks", numOfClicks);
-            // lunge movement
-            if((Input.GetButton("A Button") || Input.GetKey(KeyCode.LeftShift)) && GetComponent<LockTarget>().Target == null
-                && controller.speed > controller.WalkSpeed){
-                // dash Attack
-                //controller.TempSpeed = 90f;
-            }else{
-                // normal Attack
-                //controller.TempSpeed = 20f;
-            }
-            if( GetComponent<LockTarget>().Target != null && dodgeCoolDown > 0.0f && dodgeTimeItter <= 0.0f){
-                // critical Attack
-                //controller.TempSpeed = 60f;
+            controller.TempSpeed = controller.speed;
+            if( GetComponent<LockTarget>().Target != null){
+                // lunge forward
+                controller.TempSpeed = 20f;
             }
         }
     }

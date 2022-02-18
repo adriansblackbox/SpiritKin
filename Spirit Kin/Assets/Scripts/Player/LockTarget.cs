@@ -47,8 +47,6 @@ public class LockTarget : MonoBehaviour
     private void LockOnTarget(){
         // switched animation sets to strafing
         animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * NormToCombatSpeed));
-        // we switch what the camera is looking at to the target
-        FollowCamera.LookAt = Target;
         // creates a seperate vector that holds the targets position, but
         // changes its y value to match the player. This prevents the
         // player from tilting upward when moving in closer to the target

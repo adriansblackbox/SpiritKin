@@ -109,6 +109,7 @@ public class PlayerController : MonoBehaviour
     }
      private void CombatMovement(){
         speed = 0.0f;
+        targetSpeed = 0.0f;
         // if the player is attacking, their move direction should always be their forward direction
         if(combatScript.isAttacking){
             // note: the player's body is a child of the player game object for camera locking
@@ -121,7 +122,7 @@ public class PlayerController : MonoBehaviour
         }
         // TempSpeed is altered by the PlayerCombat script
 
-        //TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * CombatSpeedDropoff);
+        TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * CombatSpeedDropoff);
         
         // move direction is normalized, and the caharacter controller applies contstant
         // downward force for easy slope traversal
