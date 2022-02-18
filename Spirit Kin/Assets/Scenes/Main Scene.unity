@@ -1517,6 +1517,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: nonCursedContainer
+      value: 
+      objectReference: {fileID: 1984820682}
+    - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: enemiesToSpawnWhenCursed
       value: 2
       objectReference: {fileID: 0}
@@ -3350,6 +3354,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: nonCursedContainer
+      value: 
+      objectReference: {fileID: 1984820682}
+    - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: enemiesToSpawnWhenCursed
       value: 2
       objectReference: {fileID: 0}
@@ -3756,6 +3764,10 @@ PrefabInstance:
       propertyPath: shrineSpawnRange
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: nonCursedContainer
+      value: 
+      objectReference: {fileID: 1984820682}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: enemiesToSpawnWhenCursed
       value: 2
@@ -4287,6 +4299,10 @@ PrefabInstance:
       propertyPath: shrineSpawnRange
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: nonCursedContainer
+      value: 
+      objectReference: {fileID: 1984820682}
     - target: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: enemiesToSpawnWhenCursed
       value: 2
@@ -4998,11 +5014,9 @@ MonoBehaviour:
   nonCursedContainer: {fileID: 1984820682}
   cursedContainer: {fileID: 255756218}
   enemyPrefab: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
-  enemyNoSpawnRadius: 40
-  spawnInterval: 3
+  spawnInterval: 1.5
   currentCursedShrines: 0
-  maxCursedShrines: 2
-  shrineInterval: 3
+  shrineInterval: 30
 --- !u!1 &1964701444
 GameObject:
   m_ObjectHideFlags: 0

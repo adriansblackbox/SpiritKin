@@ -13,33 +13,32 @@ public class Enemy_Spawner : MonoBehaviour
     public GameObject cursedContainer;
     public GameObject enemyPrefab;
 
-    public float enemyNoSpawnRadius; //ensure distance from current enemies to desired spawn point is > than enemyNoSpawnRadius
     public float spawnInterval; //enemies will spawn in at intervals at shrines to show that they are slowly drawing in ghosts & to make feel more natural
     public int currentCursedShrines; //how many shrines are currently cursed
-    public int maxCursedShrines; //how many shrines max do we want to allow to be cursed at one time
 
     private float myTime;
-    private int shrineCount;
     public float shrineInterval = 15f;
 
     public void Start()
     {
-        shrineCount = nonCursedContainer.transform.childCount;
         scaleDifficulty();
     }
 
     public void Update()
     {
         myTime += Time.deltaTime;
-        if (myTime > shrineInterval && nonCursedContainer.transform.childCount > 0) //every 15 seconds
-        {
-            int temp = Random.Range(0, nonCursedContainer.transform.childCount);
-            Transform shrine = nonCursedContainer.transform.GetChild(temp);
-            shrine.parent = cursedContainer.transform;
-            shrine.GetComponent<Shrine>().cursed = true;
-            currentCursedShrines++;
-            scaleDifficulty();
+        if (myTime > shrineInterval) {
             myTime = 0;
+            if (nonCursedContainer.transform.childCount > 0) //every 15 seconds
+            {
+                int temp = Random.Range(0, nonCursedContainer.transform.childCount);
+                Transform shrine = nonCursedContainer.transform.GetChild(temp);
+                shrine.parent = cursedContainer.transform;
+                shrine.GetComponent<Shrine>().cursed = true;
+                currentCursedShrines++;
+                scaleDifficulty();
+                myTime = 0;
+            }
         }
     }
 

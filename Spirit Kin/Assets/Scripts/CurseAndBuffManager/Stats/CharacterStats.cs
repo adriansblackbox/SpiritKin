@@ -30,23 +30,19 @@ public class CharacterStats : MonoBehaviour
     }
 
     void Update() {
-
-            
-        
-        
-        // if(!gameObject.CompareTag("Player")){
+        // if(!gameObject.CompareTag("Player")) {
         //     Debug.Log("isEnemy");
-        //     if(FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)){
+        //     if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
         //         Debug.Log("isBlue");
         //         GetComponent<MeshRenderer>().material = blue;
-        //     }else{
+        //     } else {
         //         Debug.Log("isRed");
         //         GetComponent<MeshRenderer>().material = red;
         //     }
         // }
     }
 
-    public void TakeDamage (int damage){
+    public void TakeDamage (int damage) {
         //armor system
         damage -= armor.GetValue();
         damage = Mathf.Clamp(damage, 0, int.MaxValue);
@@ -54,21 +50,25 @@ public class CharacterStats : MonoBehaviour
         currentHealth -= damage;
         //Debug.Log(transform.name + " takes " + damage + " damage.");
 
-        if (currentHealth <= 0){
+        if (gameObject.tag == "Enemy" && gameObject.GetComponent<Enemy_Controller>().EnemyMotion != Enemy_Controller.MotionState.Chasing) {
+            gameObject.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Chasing;
+        }
+
+        if (currentHealth <= 0) {
             Die();
         }
     }
 
-    public virtual void Die (){
+    public virtual void Die () {
         //Die in some way
-        if(gameObject.tag == "Enemy") {
+        if (gameObject.tag == "Enemy") {
             GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().currSouls += currSouls;
         }
-        if(FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)){
+        if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
             FindObjectOfType<LockableTargets>()._possibleTargets.Remove(this.gameObject);
         }
-        if( FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)){
-             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
+        if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
+            FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
         }
         Destroy(this.gameObject);
     }

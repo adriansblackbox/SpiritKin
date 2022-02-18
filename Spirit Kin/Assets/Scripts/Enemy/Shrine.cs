@@ -17,6 +17,7 @@ public class Shrine : MonoBehaviour
     public float TotalCurseTime = 3f;
     private float CurCurseTime = 0f;
     public GameObject Beacon;
+    public GameObject nonCursedContainer;
 
     public void Start()
     {
@@ -26,7 +27,17 @@ public class Shrine : MonoBehaviour
 
     public void Update()
     {
-        myTime += Time.deltaTime;    
+        myTime += Time.deltaTime;
+
+        if (amountAlreadySpawned >= enemiesToSpawnWhenCursed && transform.GetChild(0).childCount == 0 && cursed)
+        {   
+            cursed = false;
+            amountAlreadySpawned = 0;
+            transform.parent = nonCursedContainer.transform;
+            es.currentCursedShrines--;
+        }
+            
+
         if (CurCurseTime < TotalCurseTime && cursed) {
             CurCurseTime += Time.deltaTime;
         } else if(cursed) {

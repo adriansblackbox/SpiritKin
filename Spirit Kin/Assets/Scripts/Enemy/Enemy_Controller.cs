@@ -206,15 +206,10 @@ public class Enemy_Controller : MonoBehaviour
                 StopCoroutine(decideAlertedAction());
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
-                ThisEnemy.CalculatePath(player.transform.position, path);
+                ThisEnemy.CalculatePath(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))), path);
                 if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-                    if (exitedArena) { //if still in arena
-                        if (Vector3.Distance(transform.position, player.transform.position) < 8.0f)
-                        {
-                            ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
-                        } else {
-                            ThisEnemy.SetDestination(player.transform.position);
-                        }
+                    if (!exitedArena) { //if still in arena
+                        ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
                     } else {
                         EnemyMotion = MotionState.Relocating;
                         ThisEnemy.ResetPath();
@@ -222,7 +217,6 @@ public class Enemy_Controller : MonoBehaviour
                 }
                 break;
             case MotionState.Chasing:
-                
                 //set speed to faster
                 ThisEnemy.speed = chaseSpeed;
                 StopCoroutine(decideAlertedAction());
@@ -230,13 +224,8 @@ public class Enemy_Controller : MonoBehaviour
                     startOfPath = transform.position;
                 ThisEnemy.CalculatePath(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))), path);
                 if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-                    if (exitedArena) { //if still in arena
-                        if (Vector3.Distance(transform.position, player.transform.position) < 8.0f)
-                        {
-                            ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
-                        } else {
-                            ThisEnemy.SetDestination(player.transform.position);
-                        }
+                    if (!exitedArena) { //if still in arena
+                        ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
                     } else {
                         EnemyMotion = MotionState.Relocating;
                         ThisEnemy.ResetPath();
