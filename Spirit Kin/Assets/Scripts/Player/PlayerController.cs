@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        Animation();
         // if the player is initiating a mechanic besides basic movement,
         // their input is ignored until movement dependant mechanic is done
         if(!combatScript.isAttacking && !combatScript.isDodging){
@@ -60,6 +59,8 @@ public class PlayerController : MonoBehaviour
         }else{
             CombatMovement();
         }
+        Debug.Log(speed);
+        Animation();
         // so long as the player is not locked onto a target, they can rotate their
         // camera freely
         if(GetComponent<LockTarget>().Target == null){
@@ -72,8 +73,10 @@ public class PlayerController : MonoBehaviour
         inputDirection = new Vector2(input_x, input_y);
         if(Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")){
             targetSpeed = SprintSpeed * inputDirection.magnitude;
+            targetSpeed = Mathf.Clamp(targetSpeed, 0.0f, SprintSpeed);
         }else{                          
             targetSpeed = WalkSpeed * inputDirection.magnitude;
+            targetSpeed = Mathf.Clamp(targetSpeed, 0.0f, WalkSpeed);
         }if(inputDirection == Vector2.zero){
             targetSpeed = 0.0f;
         }
@@ -84,7 +87,6 @@ public class PlayerController : MonoBehaviour
         if(targetSpeed != 0.0f){
             speed = Mathf.Clamp(speed, MinimumSpeed, float.MaxValue);
         }
-        speed = Mathf.Clamp(speed, 0.0f, SprintSpeed);
         // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
         // if there is a move input rotate player when the player is moving
         inputDirection.Normalize();
