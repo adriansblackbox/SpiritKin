@@ -283,8 +283,8 @@ MonoBehaviour:
   numTimesCheckIfNeedChase: 4
   chaseThreshold: 0.5
   exitedArena: 0
-  seekSpeed: 4
-  chaseSpeed: 8
+  seekSpeed: 8
+  chaseSpeed: 16
   ThisEnemy: {fileID: 657498701014188137}
   player: {fileID: 0}
   alertBox: {fileID: 3479692116232897869}
@@ -359,9 +359,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7435345965953756210, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: -6469157033607403673, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: -1881994613470078543, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_Name
       value: enemyModel_prototype (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8581051193834815386, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d51faff9b4446440a73035330818298, type: 3}

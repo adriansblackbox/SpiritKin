@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
         }else{
             CombatMovement();
         }
-        Debug.Log(speed);
+        //Debug.Log(speed);
         Animation();
         // so long as the player is not locked onto a target, they can rotate their
         // camera freely

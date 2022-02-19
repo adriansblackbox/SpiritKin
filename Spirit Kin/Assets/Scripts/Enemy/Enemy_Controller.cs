@@ -34,8 +34,7 @@ public class Enemy_Controller : MonoBehaviour
         Patroling,
         Seeking,
         Relocating,
-        Chasing,
-        AfterChase
+        Chasing
     }
 
     //ADD HITSTUN STATE
@@ -149,7 +148,7 @@ public class Enemy_Controller : MonoBehaviour
         else if (EnemyMotion == MotionState.Patroling) 
         {
             alertBox.GetComponent<MeshRenderer>().material = patrolMat;
-        }
+        }   
 
         myTime += Time.deltaTime;
         switch (EnemyMotion)
@@ -168,7 +167,7 @@ public class Enemy_Controller : MonoBehaviour
                     timesPatroled++;
                 }
                 break;
-            case MotionState.Idling:
+            case MotionState.Idling: //update to make enemies rotate or move around slightly since having them be afk isn't interactive
                 if (myTime > swapStateInterval) {
                     float temp = Random.Range(0.0f, 1.0f);
                     //if < 25% patroling increase chance to swap
@@ -180,19 +179,21 @@ public class Enemy_Controller : MonoBehaviour
                 }
                 break;
             case MotionState.Relocating:
-                if (Vector3.Distance(shrine.position, transform.position) > shrine.GetComponent<Shrine>().shrineSpawnRange * 0.55 && !ThisEnemy.hasPath)
+                ThisEnemy.speed = chaseSpeed;
+                if (Vector3.Distance(shrine.position, transform.position) > shrine.GetComponent<Shrine>().shrineSpawnRange * 0.25 && !ThisEnemy.hasPath)
                 {
                     ThisEnemy.SetDestination(findRelocateSpot());
                 }
                 else if (ThisEnemy.hasPath && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                 {
                     ThisEnemy.ResetPath();
+                    exitedArena = false;
                     EnemyMotion = MotionState.Idling;
                 }
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                transform.LookAt(player.transform);
+                transform.LookAt(player.transform.position + new Vector3(0.0f, 2.5f, 0.0f));
                 if (justAlerted)
                 {
                     ThisEnemy.ResetPath();
@@ -231,10 +232,6 @@ public class Enemy_Controller : MonoBehaviour
                         ThisEnemy.ResetPath();
                     }
                 }
-                break;
-            case MotionState.AfterChase:
-                //should i keep chasing or should i return to my prior commitment
-                StartCoroutine(decideActionAfterChase());
                 break;
             default:
                 break;
@@ -280,7 +277,7 @@ public class Enemy_Controller : MonoBehaviour
             }
         } 
 
-        return es.chooseLocation(shrine).position;        
+        return es.chooseRelocation(shrine).position;        
     }
 
     //4 cases
@@ -332,24 +329,6 @@ public class Enemy_Controller : MonoBehaviour
         return quadrant;
     }
 
-    //AFTER ENEMY HAS REACHED ITS CHASE LIMIT
-    IEnumerator decideActionAfterChase() 
-    {
-        float distBeforeDecision = Vector3.Distance(transform.position, player.transform.position);
-        //track player's current distance from enemy
-        yield return new WaitForSeconds(decisionTime);
-        float distAfterDecision = Vector3.Distance(transform.position, player.transform.position);
-        //compare new distance to old & make decision
-        if (distAfterDecision > distBeforeDecision)
-        {
-            EnemyMotion = MotionState.Relocating;
-        }
-        else
-        {
-            EnemyMotion = MotionState.Chasing;
-        }
-    }
-
     //after 0.5 & 1.5 seconds
         //track a delta float of distance between player and enemy
         //significantly away from the enemy -> enemy returns to what it was doing
@@ -360,8 +339,6 @@ public class Enemy_Controller : MonoBehaviour
         float delta;
         float beforeDist = 0f;
         float afterDist = 0f;
-
-        transform.LookAt(player.transform);
         for (int i = 0; i < numTimesCheckIfNeedChase; i++)
         {
             //get distance before
@@ -411,7 +388,7 @@ public class Enemy_Controller : MonoBehaviour
 
         if (hasDetectedPlayer)
         {
-            if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling || EnemyMotion == MotionState.Relocating))
+            if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
             {
                 Debug.Log("Player Detected!");
                 ThisEnemy.ResetPath();
