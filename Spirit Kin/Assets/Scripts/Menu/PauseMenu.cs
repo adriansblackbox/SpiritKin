@@ -7,6 +7,7 @@ public class PauseMenu : MonoBehaviour
     // Start is called before the first frame update
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
+    public GameObject Player;
     void Start()
     {
         
@@ -17,8 +18,15 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape)){
             if(GameIsPaused){
+                Cursor.lockState = CursorLockMode.Locked;
+                // Player.GetComponent<PlayerController>().enabled = true;
+                // Player.GetComponent<PlayerCombat>().enabled = true;
+                
                 Resume();
             }else{
+                Cursor.lockState = CursorLockMode.None;
+                // Player.GetComponent<PlayerController>().enabled = false;
+                // Player.GetComponent<PlayerCombat>().enabled = false;
                 Pause();
             }
         }
@@ -36,7 +44,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void LoadMenu(){
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("MainMenu");
     }
     public void Quit(){
         Debug.Log("Game Quit");

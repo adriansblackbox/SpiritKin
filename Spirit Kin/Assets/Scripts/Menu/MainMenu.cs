@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
         faded = true;
 
         SceneManager.LoadScene("Main Scene");
+        Time.timeScale = 1f;
     }
 
     public void QuitGame (){

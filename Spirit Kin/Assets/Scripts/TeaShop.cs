@@ -51,7 +51,7 @@ public class TeaShop : MonoBehaviour
                 GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
                 Debug.Log(isOpen);
             }
-        else if(Input.GetKeyDown(KeyCode.F)&& isOpen){
+        else if(Input.GetKeyDown(KeyCode.F) && isOpen){
             Player.GetComponent<PlayerController>().enabled = true;
             Player.GetComponent<PlayerCombat>().enabled = true;
             GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
