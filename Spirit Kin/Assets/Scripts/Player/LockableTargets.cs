@@ -14,7 +14,7 @@ public class LockableTargets : MonoBehaviour
     }
     private void OnDrawGizmos() {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(this.transform.position, 10f);
+        Gizmos.DrawWireSphere(this.transform.position, 20f);
     }
 
     public Transform AssessTarget(){
@@ -22,7 +22,7 @@ public class LockableTargets : MonoBehaviour
         //append each enemy into a list
         float rayLength = 200f;
         RaycastHit[] hit;
-        hit = Physics.SphereCastAll(this.transform.position, 10f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, rayLength, EnemyLayer);
+        hit = Physics.SphereCastAll(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, rayLength, EnemyLayer);
         foreach(RaycastHit enemy in hit)
         {
             _possibleTargets.Add(enemy.transform.gameObject);
