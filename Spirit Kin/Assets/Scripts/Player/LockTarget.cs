@@ -33,7 +33,7 @@ public class LockTarget : MonoBehaviour
         if(Target != null){
             LockOnTarget();
         }else{
-            DelockTarget();
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
             FindTarget();
         }
         // updates the plaeyr's aniamtion according to input direction. Lerping is
@@ -45,6 +45,8 @@ public class LockTarget : MonoBehaviour
     }
     
     private void LockOnTarget(){
+        GetComponent<PlayerController>().RotateOnMoveDirection = false;
+        GetComponent<PlayerController>().SprintSpeed = GetComponent<PlayerController>().WalkSpeed;
         // switched animation sets to strafing
         animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * NormToCombatSpeed));
         // creates a seperate vector that holds the targets position, but
@@ -65,23 +67,22 @@ public class LockTarget : MonoBehaviour
         GetComponent<PlayerController>().CinemachineTargetYaw = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         // Cancel lock
         if((Input.GetAxisRaw("Left Trigger") <= 0 && !Input.GetKey(KeyCode.Mouse1)) || Input.GetKeyUp(KeyCode.Mouse1) || (this.transform.position - Target.transform.position).magnitude > LetGoDistance){
-            Target = null;
+            DelockTarget();
         }
     }
-    private void DelockTarget(){
+    public void DelockTarget(){
+        Target = null;
+        FindObjectOfType<LockableTargets>().ClearTargetList();
         transform.forward =  playerBody.forward;
         playerBody.forward = transform.forward;
         FollowCamera.LookAt = GetComponent<PlayerController>().CinemachineCameraTarget.transform;
         GetComponent<PlayerController>().RotateOnMoveDirection = true;
         GetComponent<PlayerController>().SprintSpeed = defaultSprintSpeed;
-        animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
     }
 
     private void FindTarget(){
         if(Input.GetAxisRaw("Left Trigger") > 0.5f || Input.GetKeyDown(KeyCode.Mouse1)){
             Target = FindObjectOfType<LockableTargets>().AssessTarget();
-            GetComponent<PlayerController>().RotateOnMoveDirection = false;
-            GetComponent<PlayerController>().SprintSpeed = GetComponent<PlayerController>().WalkSpeed;
 
         }
     }

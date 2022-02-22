@@ -8,32 +8,32 @@ public class LockableTargets : MonoBehaviour
     public List<GameObject> _possibleTargets = new List<GameObject>();
     private Vector3 _minDistance;
     private Transform _Target;
+    public LayerMask EnemyLayer;
     void Update()
     {
     }
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(this.transform.position, 10f);
+    }
 
     public Transform AssessTarget(){
+        //sphere cast and check enemies in cast
+        //append each enemy into a list
+        float rayLength = 200f;
+        RaycastHit[] hit;
+        hit = Physics.SphereCastAll(this.transform.position, 10f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, rayLength, EnemyLayer);
+        foreach(RaycastHit enemy in hit)
+        {
+            _possibleTargets.Add(enemy.transform.gameObject);
+        }
         if(_possibleTargets == null)
             return null;
         if(_possibleTargets.Count.Equals(0))
             return null;
-        _minDistance = new Vector3(10000f, 10000f, 10000f);
-        for(int i = 0; i < _possibleTargets.Count; i++){
-            if(( FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward.normalized - (_possibleTargets[i].transform.position - Player.transform.position).normalized).magnitude < _minDistance.magnitude){
-                _minDistance = _possibleTargets[i].transform.position - Player.transform.position;
-                _Target = _possibleTargets[i].transform;
-            }
-        }
-        return _Target;
+        return _possibleTargets[0].transform;
     }
-    private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.CompareTag("Enemy")){
-            _possibleTargets.Add(other.gameObject);
-        }
-    }
-    private void OnTriggerExit(Collider other) {
-        if(other.gameObject.CompareTag("Enemy")){
-           _possibleTargets.Remove(other.gameObject);
-        }
+    public void ClearTargetList(){
+        _possibleTargets.Clear();
     }
 }

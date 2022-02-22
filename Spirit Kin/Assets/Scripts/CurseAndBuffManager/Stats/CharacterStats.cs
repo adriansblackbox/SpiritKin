@@ -65,7 +65,7 @@ public class CharacterStats : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().currSouls += currSouls;
         }
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
-            FindObjectOfType<LockableTargets>()._possibleTargets.Remove(this.gameObject);
+            FindObjectOfType<LockTarget>().DelockTarget();
         }
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
