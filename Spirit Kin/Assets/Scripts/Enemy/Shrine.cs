@@ -19,6 +19,15 @@ public class Shrine : MonoBehaviour
     public GameObject Beacon;
     public GameObject nonCursedContainer;
 
+    //bounds for choosing spawning/patroling spots for the shrine
+    public float posUpperX; 
+    public float negUpperX; 
+    public float posUpperZ; 
+    public float negUpperZ;
+
+    public float posLower = 5f;
+    public float negLower = -5f; 
+
     public void Start()
     {
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();

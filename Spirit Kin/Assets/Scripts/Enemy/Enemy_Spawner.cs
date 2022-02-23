@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections; 
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -83,47 +83,40 @@ public class Enemy_Spawner : MonoBehaviour
 
         //increment enemies spawned at shrine
         shrineToSpawnAt.GetComponent<Shrine>().amountAlreadySpawned++;
-        // enemy.GetComponent<Enemy_Controller>().enabled = true;
     }
-
-    //Spawns all enemies for a round around each shrine
-    //(STATIC SPAWNING CAN BE DONE ELSEWHERE THIS IS TOTALLY PROCEDURAL)
-    // private void spawnEnemies() 
-    // {
-    //     //go through each shrine in cursed + each shrine in noncursed
-    //     for (int i = 0; i < shrineCount; i++)
-    //     {
-    //         //current shrine
-    //         Transform shrine = nonCursedContainer.transform.GetChild(i);
-    //         //number of enemies that should be at current shrine
-    //         int enemyCount = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
-    //         //Debug.Log("At least " + enemyCount + " enemies should be at shrine located at (" + shrine.position.x + ", " + shrine.position.z + ")");
-    //         //if not enough enemies at shrine spawn more
-    //         if (shrine.GetChild(0).childCount < enemyCount)
-    //         {
-    //             int numberOfEnemiesToBeSpawned = enemyCount - shrine.GetChild(0).childCount;
-    //             //spawn each enemy at a valid location
-    //             for (int j = 0; j < numberOfEnemiesToBeSpawned; j++)
-    //             {
-    //                 //choose a random location in the range around the shrine
-    //                 Vector3 enemyPosition = chooseLocation(shrine).position;
-    //                 //spawn in enemy
-    //                 GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
-    //                 //put in enemy container
-    //                 enemy.transform.parent = shrine.GetChild(0);
-    //             }
-    //         }
-    //     }       
-    // }
 
     public NavMeshHit chooseLocation(Transform shrine)
     {
         var shrineScript = shrine.GetComponent<Shrine>();
         NavMeshHit hit;
-        Vector3 rPoint = shrine.position + (Random.insideUnitSphere * shrineScript.shrineSpawnRange * 4);
-        rPoint.y = shrine.position.y;
+        //choose a quadrant to spawn into
+            //for now random
+                //maybe later work on balancing it so that there is enemies in each quadrant
+        float temp = Random.Range(0.0f, 1.0f);
 
-        NavMesh.SamplePosition(rPoint, out hit, 200.0f, NavMesh.AllAreas);
+        Vector3 spawnPoint = shrine.position;
+        if (temp > 0.75f) //quadrant 1 positive X + negative Z
+        {
+            spawnPoint.x += Random.Range(shrineScript.posLower, shrineScript.posUpperX);
+            spawnPoint.z += Random.Range(shrineScript.negLower, shrineScript.negUpperZ);
+        }
+        else if (temp > 0.5f) //quadrant 2 negative X + negative Z
+        {
+            spawnPoint.x += Random.Range(shrineScript.negLower, shrineScript.negUpperX);
+            spawnPoint.z += Random.Range(shrineScript.negLower, shrineScript.negUpperZ);
+        }
+        else if (temp > 0.25f) //quadrant 3 positive X + positive Z
+        {
+            spawnPoint.x += Random.Range(shrineScript.posLower, shrineScript.posUpperX);
+            spawnPoint.z += Random.Range(shrineScript.posLower, shrineScript.posUpperZ);
+        }
+        else //quadrant 4 negative X + positive Z
+        {
+            spawnPoint.x += Random.Range(shrineScript.negLower, shrineScript.negUpperX);
+            spawnPoint.z += Random.Range(shrineScript.posLower, shrineScript.posUpperZ);
+        }
+        //Navmesh.SamplePosition on the random position
+        NavMesh.SamplePosition(spawnPoint, out hit, 200.0f, NavMesh.AllAreas);
         return (hit);
     }
 
