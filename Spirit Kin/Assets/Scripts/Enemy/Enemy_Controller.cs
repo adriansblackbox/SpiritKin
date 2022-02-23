@@ -154,6 +154,7 @@ public class Enemy_Controller : MonoBehaviour
         switch (EnemyMotion)
         {
             case MotionState.Patroling:
+                ThisEnemy.speed = chaseSpeed;
                 if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
                     float temp = Random.Range(0.0f, 1.0f);
                     //if > 50% patroling increase chance to swap
@@ -207,10 +208,10 @@ public class Enemy_Controller : MonoBehaviour
                 StopCoroutine(decideAlertedAction());
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
-                ThisEnemy.CalculatePath(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))), path);
+                ThisEnemy.CalculatePath(player.transform.position, path);
                 if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                     if (!exitedArena) { //if still in arena
-                        ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
+                        ThisEnemy.SetDestination(player.transform.position);
                     } else {
                         EnemyMotion = MotionState.Relocating;
                         ThisEnemy.ResetPath();
@@ -223,10 +224,10 @@ public class Enemy_Controller : MonoBehaviour
                 StopCoroutine(decideAlertedAction());
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
-                ThisEnemy.CalculatePath(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))), path);
+                ThisEnemy.CalculatePath(player.transform.position, path);
                 if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                     if (!exitedArena) { //if still in arena
-                        ThisEnemy.SetDestination(player.transform.position - (Vector3.Scale(transform.forward, new Vector3(3,1,3))));
+                        ThisEnemy.SetDestination(player.transform.position);
                     } else {
                         EnemyMotion = MotionState.Relocating;
                         ThisEnemy.ResetPath();

@@ -27,6 +27,8 @@ public class TeaShop : MonoBehaviour
             isInteractable = true;
             if(!isOpen){
                 triggerText.SetActive(true);
+            } else {
+                triggerText.SetActive(false);
             }
         }
     }
