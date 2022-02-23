@@ -17,38 +17,23 @@ public class CharacterStats : MonoBehaviour
 
     public Text SoulsUI;
     public Text CoinsUI;
-    public Material blue;
-    public Material red;
+    public ParticleSystem hitVFX;
     
     void Awake ()
     {
         currentHealth = maxHealth;
-        //if(gameObject.tag != "Player")
-        //{
-        //    enabled = false; // Disables the update function for non-players. Collision still triggers.
-        //}
     }
 
     void Update() {
-        // if(!gameObject.CompareTag("Player")) {
-        //     Debug.Log("isEnemy");
-        //     if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
-        //         Debug.Log("isBlue");
-        //         GetComponent<MeshRenderer>().material = blue;
-        //     } else {
-        //         Debug.Log("isRed");
-        //         GetComponent<MeshRenderer>().material = red;
-        //     }
-        // }
     }
 
     public void TakeDamage (int damage) {
+        hitVFX.Play();
         //armor system
         damage -= armor.GetValue();
         damage = Mathf.Clamp(damage, 0, int.MaxValue);
 
         currentHealth -= damage;
-        //Debug.Log(transform.name + " takes " + damage + " damage.");
 
         if (gameObject.tag == "Enemy" && gameObject.GetComponent<Enemy_Controller>().EnemyMotion != Enemy_Controller.MotionState.Chasing) {
             gameObject.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Chasing;

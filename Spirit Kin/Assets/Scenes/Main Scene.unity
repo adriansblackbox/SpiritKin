@@ -3692,19 +3692,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac2c3bfc27a763b418fe4c8104d732cd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac2c3bfc27a763b418fe4c8104d732cd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac2c3bfc27a763b418fe4c8104d732cd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac2c3bfc27a763b418fe4c8104d732cd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac2c3bfc27a763b418fe4c8104d732cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3712,7 +3712,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac2c3bfc27a763b418fe4c8104d732cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ac2c3bfc27a763b418fe4c8104d732cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -13868,7 +13868,6 @@ GameObject:
   - component: {fileID: 2548945677835201328}
   - component: {fileID: 8063380907138396925}
   - component: {fileID: 8395763992223650010}
-  - component: {fileID: 1573941202957527051}
   m_Layer: 0
   m_Name: Cube.283
   m_TagString: Untagged
@@ -13876,20 +13875,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &1573941202957527051
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1573941202957527050}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6563851455764539472, guid: f9fd2786b8ed43e43b6beef10c5f7124, type: 3}
 --- !u!1 &1580240274873953395
 GameObject:
   m_ObjectHideFlags: 0
@@ -52842,6 +52827,10 @@ PrefabInstance:
     - target: {fileID: 8284434230988371004, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8601767310507569008, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: BladeLength
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
