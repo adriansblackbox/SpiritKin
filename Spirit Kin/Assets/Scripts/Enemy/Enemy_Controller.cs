@@ -181,15 +181,15 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Relocating:
                 ThisEnemy.speed = chaseSpeed;
-                if (Vector3.Distance(shrine.position, transform.position) > shrine.GetComponent<Shrine>().shrineSpawnRange * 0.25 && !ThisEnemy.hasPath)
-                {
-                    ThisEnemy.SetDestination(findRelocateSpot());
-                }
-                else if (ThisEnemy.hasPath && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
+                if (ThisEnemy.hasPath && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                 {
                     ThisEnemy.ResetPath();
                     exitedArena = false;
                     EnemyMotion = MotionState.Idling;
+                } 
+                else if (!ThisEnemy.hasPath)
+                {
+                    ThisEnemy.SetDestination(es.chooseRelocation(shrine).position);
                 }
                 break;
             case MotionState.Alerted:
