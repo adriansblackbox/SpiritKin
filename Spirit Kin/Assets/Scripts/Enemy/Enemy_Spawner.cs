@@ -13,6 +13,8 @@ public class Enemy_Spawner : MonoBehaviour
     public GameObject cursedContainer;
     public GameObject enemyPrefab;
 
+    public int totalShrines;
+
     public float spawnInterval; //enemies will spawn in at intervals at shrines to show that they are slowly drawing in ghosts & to make feel more natural
     public int currentCursedShrines; //how many shrines are currently cursed
 
@@ -55,7 +57,7 @@ public class Enemy_Spawner : MonoBehaviour
 
     private void selectShrineEnemyCount()
     {
-        for (int i = 0; i < 4 - currentCursedShrines; i++)
+        for (int i = 0; i < totalShrines - currentCursedShrines; i++)
         {
             Transform shrine = nonCursedContainer.transform.GetChild(i);
             shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
@@ -74,7 +76,7 @@ public class Enemy_Spawner : MonoBehaviour
         Vector3 enemyPosition = chooseLocation(shrineToSpawnAt.transform).position;
         //spawn in enemy
         GameObject enemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity);
-        enemy.GetComponent<Enemy_Controller>().sc = shrineToSpawnAt.GetComponent<Shrine_Controller>();
+        enemy.GetComponent<Enemy_Controller>().ai = shrineToSpawnAt.GetComponent<AI_Manager>();
         enemy.GetComponent<Enemy_Controller>().shrine = shrineToSpawnAt.transform;
         enemy.GetComponent<Enemy_Controller>().shrineSpawnRange = shrineToSpawnAt.GetComponent<Shrine>().shrineSpawnRange;
         

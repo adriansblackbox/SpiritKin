@@ -62,7 +62,7 @@ public class Enemy_Controller : MonoBehaviour
 
     [SerializeField] int quadrant;
     private int timesPatroled;
-    public Shrine_Controller sc;
+    public AI_Manager ai;
     public Enemy_Spawner es;
 
     public int numTimesCheckIfNeedChase = 4;
@@ -112,9 +112,7 @@ public class Enemy_Controller : MonoBehaviour
         EnemyAttack = AttackState.NotAttacking;
         player = GameObject.Find("Player");
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
-        //sc = transform.parent.parent.GetComponent<Shrine_Controller>();
-        //shrine = transform.parent.parent;
-        //shrineSpawnRange = shrine.GetComponent<Shrine>().shrineSpawnRange;
+        ai = shrine.GetComponent<AI_Manager>();
         determineQuadrant();
     }
 
@@ -158,7 +156,7 @@ public class Enemy_Controller : MonoBehaviour
                 if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
                     float temp = Random.Range(0.0f, 1.0f);
                     //if > 50% patroling increase chance to swap
-                    if (temp < sc.checkPatrol(patrolToIdleChance) && timesPatroled > 2) //swap states
+                    if (temp < ai.checkPatrol(patrolToIdleChance) && timesPatroled > 2) //swap states
                     {
                         EnemyMotion = MotionState.Idling;
                         timesPatroled = 0;
@@ -172,7 +170,7 @@ public class Enemy_Controller : MonoBehaviour
                 if (myTime > swapStateInterval) {
                     float temp = Random.Range(0.0f, 1.0f);
                     //if < 25% patroling increase chance to swap
-                    if (temp < sc.checkIdle(idleToPatrolChance)) //swap states
+                    if (temp < ai.checkIdle(idleToPatrolChance)) //swap states
                     {
                         EnemyMotion = MotionState.Patroling;
                     }                    
@@ -245,7 +243,7 @@ public class Enemy_Controller : MonoBehaviour
     private Vector3 findRelocateSpot()
     {   
         //if we need to relocate select new quadrant
-        if (sc.checkIfNeedRelocate(quadrant)) 
+        if (ai.checkIfNeedRelocate(quadrant)) 
         {
             float neighbor = Random.Range(0.0f, 1.0f);
 
@@ -362,8 +360,8 @@ public class Enemy_Controller : MonoBehaviour
             //two cases
             //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
             //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
-            Debug.Log("Before Dist: " + beforeDist);
-            Debug.Log("After Dist: " + afterDist);
+            // Debug.Log("Before Dist: " + beforeDist);
+            // Debug.Log("After Dist: " + afterDist);
 
             delta = beforeDist - afterDist;
             if (delta > chaseThreshold)

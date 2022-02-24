@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6738803524394422915}
   - component: {fileID: 6738803524394422914}
   - component: {fileID: 6799075702819248385}
-  - component: {fileID: 7476676180760937383}
+  - component: {fileID: 9136508747187929969}
   m_Layer: 0
   m_Name: Shrine
   m_TagString: Untagged
@@ -117,7 +117,14 @@ MonoBehaviour:
   amountAlreadySpawned: 0
   TotalCurseTime: 3
   Beacon: {fileID: 8556313218440299332}
---- !u!114 &7476676180760937383
+  nonCursedContainer: {fileID: 0}
+  posUpperX: 0
+  negUpperX: 0
+  posUpperZ: 0
+  negUpperZ: 0
+  posLower: 5
+  negLower: -5
+--- !u!114 &9136508747187929969
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,7 +133,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6738803524394422916}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43b2885b6def3f84f8e5333ff4e2d61b, type: 3}
+  m_Script: {fileID: 11500000, guid: 86b3daad9ef627645b983df8e5d28bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7742214188549605358

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Shrine : MonoBehaviour
 {
     private Enemy_Spawner es;
+    private AI_Manager ai;
 
     public bool cursed;
     public float shrineSpawnRange;
@@ -31,6 +32,7 @@ public class Shrine : MonoBehaviour
     public void Start()
     {
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
+        ai = GetComponent<AI_Manager>();
         Beacon.SetActive(false);
     }
 
@@ -68,6 +70,7 @@ public class Shrine : MonoBehaviour
         {
             myTime = 0;
             es.spawnEnemy(gameObject);
+            ai.generateSurroundLocations();
         }
     }
 }
