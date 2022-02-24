@@ -24,7 +24,7 @@ public class PlayerCombat : MonoBehaviour
     {
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
-        if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f ){
+        if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f && !isAttacking){
             Dodge();
         }
         if((comboTimeDelay >= totalAnimationTime - (totalAnimationTime/2)  || numOfClicks == 0) && dodgeTimeItter <= 0.0f){

@@ -8,7 +8,18 @@ public class SwordCollision : MonoBehaviour
     public float BladeLength = 10f;
     public LayerMask layerMask;
     public List<GameObject> immuneEnemies = new List<GameObject>();
+    public GameObject SwordTrail;
+    PlayerCombat combatScript;
+    private void Start() {
+       SwordTrail.SetActive(false);
+       combatScript = FindObjectOfType<PlayerCombat>();
+    }
     private void Update() {
+        if(combatScript.isAttacking){
+            SwordTrail.SetActive(true);
+        }else{
+            SwordTrail.SetActive(false);
+        }
         RaycastHit hit;
         //checking to see if we hit an enemy
         if (Physics.Raycast(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left), out hit, BladeLength, layerMask) && FindObjectOfType<PlayerCombat>().isAttacking)
