@@ -20,23 +20,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float StickLookSensitivity = 200f;
     [SerializeField] private float MoveToTargetSpeed = 10f;
     [SerializeField] private float CombatSpeedDropoff = 5f;
+     [SerializeField] private float AnimationBlendTime = 20f;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
 	[HideInInspector] public float CinemachineTargetPitch;
     [HideInInspector] public bool RotateOnMoveDirection = true;
     [HideInInspector] public GameObject CinemachineCameraTarget;
-
-    [HideInInspector] public float speed;    
-    private float targetSpeed;
+    [HideInInspector] public Vector2 inputDirection;
+    [HideInInspector] public Vector3 targetMoveDirection;
+    [HideInInspector] public float targetSpeed;
+    private float speed;    
     private float targetRotation = 0.0f;
     private float rotationVelocity;
     private float gravity = -30f;
     private float input_x;
     private float input_y;
     private float animationBlend;
-    private Vector3 targetMoveDirection;
     private Vector3 moveDirection;
-    private Vector2 inputDirection;
     private CharacterController controller;
     private PlayerCombat combatScript;
     private Animator animator;
@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
         controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
     }
     private void Animation(){
-        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 10f);
+        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * AnimationBlendTime);
         animator.SetFloat("Speed", animationBlend);
         // adjusting the motion speed variable with the input magnitude allows
         // the player to slowly creep up to a full speed on their controller

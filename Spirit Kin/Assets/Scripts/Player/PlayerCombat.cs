@@ -6,6 +6,7 @@ public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] private float DodgeTime = 0.5f;
     [SerializeField] private float DodgeSpeed = 20f;
+    [SerializeField] private float AnimationCancelFactor = 3f;
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isDodging = false;
     private float dodgeTimeItter = 0;
@@ -22,41 +23,39 @@ public class PlayerCombat : MonoBehaviour
     }
     void Update()
     {
+         float cancelAnimationTime = totalAnimationTime - (totalAnimationTime/AnimationCancelFactor);
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
         if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f && !isAttacking){
             Dodge();
         }
-        if((comboTimeDelay >= totalAnimationTime - (totalAnimationTime/2)  || numOfClicks == 0) && dodgeTimeItter <= 0.0f){
+        if((comboTimeDelay >= cancelAnimationTime || numOfClicks == 0) && !isDodging){
             Attack();
         }
-        //Dodge Timers
-        if(dodgeTimeItter > 0){
-            dodgeTimeItter -= Time.deltaTime;
-        }else if(dodgeCoolDown > 0){
-            dodgeCoolDown -= Time.deltaTime;
-            isDodging = false;
-        }
-        // Handels animating combos
+         // Handels animating combos
         if(FindObjectOfType<LockTarget>().Target == null){
             totalAnimationTime = animator.GetCurrentAnimatorStateInfo(0).length;
         }else{
             totalAnimationTime = animator.GetCurrentAnimatorStateInfo(1).length;
         }
-        if(comboTimeDelay < totalAnimationTime - (totalAnimationTime/3)){
-            comboTimeDelay += Time.deltaTime;
-        }else{
+        if((comboTimeDelay >= cancelAnimationTime && new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) != Vector2.zero && !isAttacking) || comboTimeDelay >= totalAnimationTime){
             isAttacking = false;
             numOfClicks = 0;
             comboTimeDelay = 0;
             animator.SetInteger("attackTicks", numOfClicks);
+        }else{
+            comboTimeDelay += Time.deltaTime;
+        }
+         //Dodge Timers
+        if(dodgeTimeItter > 0){
+            dodgeTimeItter -= Time.deltaTime;
+        }else if(dodgeCoolDown > 0){
+            isDodging = false;
+            dodgeCoolDown -= Time.deltaTime;
         }
     }
     private void Dodge(){
-        if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.LeftShift)){
-            if(isAttacking){
-                isAttacking = false;
-            }
+        if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
             controller.TempSpeed = DodgeSpeed;
             isDodging = true;
             dodgeTimeItter = DodgeTime;
@@ -74,7 +73,7 @@ public class PlayerCombat : MonoBehaviour
                 numOfClicks = 1;
             }
             animator.SetInteger("attackTicks", numOfClicks);
-            controller.TempSpeed = controller.speed;
+            controller.TempSpeed = controller.targetSpeed;
             if( GetComponent<LockTarget>().Target != null){
                 // lunge forward
                 controller.TempSpeed = 20f;
