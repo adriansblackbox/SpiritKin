@@ -15,6 +15,7 @@ public class AI_Manager : MonoBehaviour
     private Transform enemiesContainer;
     private List<Vector3> surroundSpots = new List<Vector3>();
     public Transform Player;
+    public float surroundRadius;
 
     private void Start() 
     {
@@ -46,6 +47,7 @@ public class AI_Manager : MonoBehaviour
             Debug.Log("Coordinate Pair: " + "( " + xVal + ", " + zVal + ")");
 
             Vector3 validSpot = new Vector3(xVal, 0, zVal);
+            validSpot *= surroundRadius;
             validSpot += Player.position;
 
             surroundSpots.Add(validSpot);
