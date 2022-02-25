@@ -15,15 +15,16 @@ public class LockTarget : MonoBehaviour
     [SerializeField] private float RotateToTargetSpeed = 10f;
     [SerializeField] private float CamRotateToTargetSpeed = 5f;
     [SerializeField] private Transform LookAtRoot;
+    [SerializeField] float LetGoDistance = 10f;
     [SerializeField] private CinemachineVirtualCamera FollowCamera;
     [HideInInspector] public Transform Target = null;
-    private float defaultSprintSpeed;
+    private PlayerController controller;
     private float inputX;
     private float inputY;
     private Transform playerBody;
     private Animator animator;
     private void Start() {
-        defaultSprintSpeed =  GetComponent<PlayerController>().SprintSpeed;
+        controller = GetComponent<PlayerController>();
         animator = GetComponent<Animator>();
         playerBody = transform.GetChild(0).gameObject.transform;
     }
@@ -32,7 +33,7 @@ public class LockTarget : MonoBehaviour
         if(Target != null){
             LockOnTarget();
         }else{
-            DelockTarget();
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
             FindTarget();
         }
         // updates the plaeyr's aniamtion according to input direction. Lerping is
@@ -44,45 +45,44 @@ public class LockTarget : MonoBehaviour
     }
     
     private void LockOnTarget(){
-        // switched animation sets to strafing
-        animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * NormToCombatSpeed));
-        // we switch what the camera is looking at to the target
-        FollowCamera.LookAt = Target;
-        // creates a seperate vector that holds the targets position, but
-        // changes its y value to match the player. This prevents the
-        // player from tilting upward when moving in closer to the target
         Vector3 aimTarget = Target.position;
         aimTarget.y = transform.position.y;
         Vector3 focusDirection = (aimTarget - transform.position).normalized;
+        controller.RotateOnMoveDirection = false;
         // rotates the player to the target at adjustable speeds
-        playerBody.forward = Vector3.Lerp(playerBody.forward, focusDirection, Time.deltaTime * RotateToTargetSpeed);
+        if(controller.targetSpeed <= controller.WalkSpeed){
+            playerBody.forward = Vector3.Lerp(playerBody.forward, focusDirection, Time.deltaTime * RotateToTargetSpeed);
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * NormToCombatSpeed));
+        }else{
+            playerBody.forward = Vector3.Lerp(playerBody.forward, controller.targetMoveDirection, Time.deltaTime * 20f);
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * NormToCombatSpeed));
+        }
         // posiotions the camera slightly above the player's body, and rotates to face the target at adjustable speeds
-        Vector3 focusTarget = (Target.position - GetComponent<PlayerController>().CinemachineCameraTarget.transform.position).normalized;
+        Vector3 focusTarget = (Target.position -controller.CinemachineCameraTarget.transform.position).normalized;
         focusTarget = new Vector3(focusTarget.x, focusTarget.y - 0.15f, focusTarget.z);
-        GetComponent<PlayerController>().CinemachineCameraTarget.transform.forward =
+       controller.CinemachineCameraTarget.transform.forward =
         Vector3.Lerp(GetComponent<PlayerController>().CinemachineCameraTarget.transform.forward, focusTarget, Time.deltaTime * CamRotateToTargetSpeed);
         // makes sure that the camera will be consistent with the locked rotation when delocked
-        GetComponent<PlayerController>().CinemachineTargetPitch = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.x;
-        GetComponent<PlayerController>().CinemachineTargetYaw = GetComponent<PlayerController>().CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+       controller.CinemachineTargetPitch =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.x;
+       controller.CinemachineTargetYaw =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         // Cancel lock
-        if((Input.GetAxisRaw("Left Trigger") <= 0 && !Input.GetKey(KeyCode.Mouse1)) || Input.GetKeyUp(KeyCode.Mouse1)){
-            Target = null;
+        if((Input.GetAxisRaw("Left Trigger") <= 0 && !Input.GetKey(KeyCode.Mouse1)) || Input.GetKeyUp(KeyCode.Mouse1) || (this.transform.position - Target.transform.position).magnitude > LetGoDistance){
+            DelockTarget();
         }
     }
-    private void DelockTarget(){
+    public void DelockTarget(){
+        Target = null;
+        FindObjectOfType<LockableTargets>().ClearTargetList();
         transform.forward =  playerBody.forward;
         playerBody.forward = transform.forward;
-        FollowCamera.LookAt = GetComponent<PlayerController>().CinemachineCameraTarget.transform;
-        GetComponent<PlayerController>().RotateOnMoveDirection = true;
-        GetComponent<PlayerController>().SprintSpeed = defaultSprintSpeed;
-        animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
+        FollowCamera.LookAt = controller.CinemachineCameraTarget.transform;
+        controller.RotateOnMoveDirection = true;
+        //controller.SprintSpeed = defaultSprintSpeed;
     }
 
     private void FindTarget(){
         if(Input.GetAxisRaw("Left Trigger") > 0.5f || Input.GetKeyDown(KeyCode.Mouse1)){
             Target = FindObjectOfType<LockableTargets>().AssessTarget();
-            GetComponent<PlayerController>().RotateOnMoveDirection = false;
-            GetComponent<PlayerController>().SprintSpeed = GetComponent<PlayerController>().WalkSpeed;
 
         }
     }

@@ -20,23 +20,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float StickLookSensitivity = 200f;
     [SerializeField] private float MoveToTargetSpeed = 10f;
     [SerializeField] private float CombatSpeedDropoff = 5f;
+     [SerializeField] private float AnimationBlendTime = 20f;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
 	[HideInInspector] public float CinemachineTargetPitch;
     [HideInInspector] public bool RotateOnMoveDirection = true;
     [HideInInspector] public GameObject CinemachineCameraTarget;
-
-    [HideInInspector] public float speed;    
-    private float targetSpeed;
+    [HideInInspector] public Vector2 inputDirection;
+    [HideInInspector] public Vector3 targetMoveDirection;
+    [HideInInspector] public float targetSpeed;
+    private float speed;    
     private float targetRotation = 0.0f;
     private float rotationVelocity;
     private float gravity = -30f;
     private float input_x;
     private float input_y;
     private float animationBlend;
-    private Vector3 targetMoveDirection;
     private Vector3 moveDirection;
-    private Vector2 inputDirection;
     private CharacterController controller;
     private PlayerCombat combatScript;
     private Animator animator;
@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        Animation();
         // if the player is initiating a mechanic besides basic movement,
         // their input is ignored until movement dependant mechanic is done
         if(!combatScript.isAttacking && !combatScript.isDodging){
@@ -60,6 +59,8 @@ public class PlayerController : MonoBehaviour
         }else{
             CombatMovement();
         }
+        //Debug.Log(speed);
+        Animation();
         // so long as the player is not locked onto a target, they can rotate their
         // camera freely
         if(GetComponent<LockTarget>().Target == null){
@@ -72,8 +73,10 @@ public class PlayerController : MonoBehaviour
         inputDirection = new Vector2(input_x, input_y);
         if(Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")){
             targetSpeed = SprintSpeed * inputDirection.magnitude;
+            targetSpeed = Mathf.Clamp(targetSpeed, 0.0f, SprintSpeed);
         }else{                          
             targetSpeed = WalkSpeed * inputDirection.magnitude;
+            targetSpeed = Mathf.Clamp(targetSpeed, 0.0f, WalkSpeed);
         }if(inputDirection == Vector2.zero){
             targetSpeed = 0.0f;
         }
@@ -84,7 +87,6 @@ public class PlayerController : MonoBehaviour
         if(targetSpeed != 0.0f){
             speed = Mathf.Clamp(speed, MinimumSpeed, float.MaxValue);
         }
-        speed = Mathf.Clamp(speed, 0.0f, SprintSpeed);
         // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
         // if there is a move input rotate player when the player is moving
         inputDirection.Normalize();
@@ -107,6 +109,7 @@ public class PlayerController : MonoBehaviour
     }
      private void CombatMovement(){
         speed = 0.0f;
+        targetSpeed = 0.0f;
         // if the player is attacking, their move direction should always be their forward direction
         if(combatScript.isAttacking){
             // note: the player's body is a child of the player game object for camera locking
@@ -118,14 +121,16 @@ public class PlayerController : MonoBehaviour
             moveDirection = targetMoveDirection;
         }
         // TempSpeed is altered by the PlayerCombat script
+
         TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * CombatSpeedDropoff);
+        
         // move direction is normalized, and the caharacter controller applies contstant
         // downward force for easy slope traversal
         moveDirection.Normalize();
         controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
     }
     private void Animation(){
-        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 10f);
+        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * AnimationBlendTime);
         animator.SetFloat("Speed", animationBlend);
         // adjusting the motion speed variable with the input magnitude allows
         // the player to slowly creep up to a full speed on their controller

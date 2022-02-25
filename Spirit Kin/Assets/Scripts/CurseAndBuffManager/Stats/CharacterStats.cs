@@ -17,53 +17,44 @@ public class CharacterStats : MonoBehaviour
 
     public Text SoulsUI;
     public Text CoinsUI;
+    public ParticleSystem hitVFX;
     
     void Awake ()
     {
         currentHealth = maxHealth;
-        if(gameObject.tag != "Player")
-        {
-            enabled = false; // Disables the update function for non-players. Collision still triggers.
-        }
     }
 
     void Update() {
-        SoulsUI.text = currSouls + "/" + maxSouls;
-        CoinsUI.text = "" + Coins;
-        if (currSouls > maxSouls)
-        {
-            currSouls = maxSouls;
-        }
     }
 
-    public void TakeDamage (int damage){
+    public void TakeDamage (int damage) {
+        hitVFX.Play();
         //armor system
         damage -= armor.GetValue();
         damage = Mathf.Clamp(damage, 0, int.MaxValue);
 
         currentHealth -= damage;
-        Debug.Log(transform.name + " takes " + damage + " damage.");
 
-        if (currentHealth <= 0){
+        if (gameObject.tag == "Enemy" && gameObject.GetComponent<Enemy_Controller>().EnemyMotion != Enemy_Controller.MotionState.Chasing) {
+            gameObject.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Chasing;
+        }
+
+        if (currentHealth <= 0) {
             Die();
         }
     }
 
-    public virtual void Die (){
+    public virtual void Die () {
         //Die in some way
-        Debug.Log("Dying!");
-        if(gameObject.tag == "Enemy") {
-            Debug.Log("Take me souls bro");
+        if (gameObject.tag == "Enemy") {
             GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().currSouls += currSouls;
         }
-
-        Debug.Log(transform.name + " died.");
-        Destroy(this.gameObject);
-    }
-    
-    private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.CompareTag("Player Sword")){
-            //TakeDamage(damage.GetValue());
+        if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
+            FindObjectOfType<LockTarget>().DelockTarget();
         }
+        if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
+            FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
+        }
+        Destroy(this.gameObject);
     }
 }

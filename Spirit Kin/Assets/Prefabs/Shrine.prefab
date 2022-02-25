@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6738803524394422915}
   - component: {fileID: 6738803524394422914}
   - component: {fileID: 6799075702819248385}
-  - component: {fileID: 7476676180760937383}
+  - component: {fileID: 9136508747187929969}
   m_Layer: 0
   m_Name: Shrine
   m_TagString: Untagged
@@ -33,6 +33,7 @@ Transform:
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 2670040156660248802}
+  - {fileID: 4037383272742298527}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6738803524394422916}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -111,10 +112,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursed: 0
-  shrineSpawnRange: 100
+  shrineSpawnRange: 200
   enemiesToSpawnWhenCursed: 0
   amountAlreadySpawned: 0
---- !u!114 &7476676180760937383
+  TotalCurseTime: 3
+  Beacon: {fileID: 8556313218440299332}
+  nonCursedContainer: {fileID: 0}
+  posUpperX: 0
+  negUpperX: 0
+  posUpperZ: 0
+  negUpperZ: 0
+  posLower: 5
+  negLower: -5
+--- !u!114 &9136508747187929969
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,7 +133,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6738803524394422916}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43b2885b6def3f84f8e5333ff4e2d61b, type: 3}
+  m_Script: {fileID: 11500000, guid: 86b3daad9ef627645b983df8e5d28bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7742214188549605358
@@ -156,3 +166,84 @@ Transform:
   m_Father: {fileID: 6738803524394422917}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8556313218440299332
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4037383272742298527}
+  - component: {fileID: 1647607464902151422}
+  - component: {fileID: 1121736257554189080}
+  m_Layer: 0
+  m_Name: Becon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4037383272742298527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8556313218440299332}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 31.1, z: 0.00000033475}
+  m_LocalScale: {x: 4.5101, y: 29.165012, z: 4.5101}
+  m_Children: []
+  m_Father: {fileID: 6738803524394422917}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1647607464902151422
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8556313218440299332}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1121736257554189080
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8556313218440299332}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 0b8332dcaffc8af44b17cea5add1f59c, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
