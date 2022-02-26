@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float targetSpeed;
     private float speed;    
     private float targetRotation = 0.0f;
-    private float rotationVelocity;
+    private float rotationVelocity = 10f;
     private float gravity = -30f;
     private float input_x;
     private float input_y;

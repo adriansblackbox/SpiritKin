@@ -83,7 +83,6 @@ public class LockTarget : MonoBehaviour
     private void FindTarget(){
         if(Input.GetAxisRaw("Left Trigger") > 0.5f || Input.GetKeyDown(KeyCode.Mouse1)){
             Target = FindObjectOfType<LockableTargets>().AssessTarget();
-
         }
     }
 }
