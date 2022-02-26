@@ -13,14 +13,13 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] public float WalkSpeed = 2.0f;
     [SerializeField] public float SprintSpeed = 5.0f;
-    [SerializeField] public float MinimumSpeed = 5f;
     [SerializeField] private float RotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
     [SerializeField] private float StickLookSensitivity = 200f;
     [SerializeField] private float MoveToTargetSpeed = 10f;
     [SerializeField] private float CombatSpeedDropoff = 5f;
-     [SerializeField] private float AnimationBlendTime = 20f;
+    [SerializeField] private float AnimationBlendTime = 20f;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
 	[HideInInspector] public float CinemachineTargetPitch;
@@ -80,13 +79,13 @@ public class PlayerController : MonoBehaviour
         }if(inputDirection == Vector2.zero){
             targetSpeed = 0.0f;
         }
+        if(targetSpeed != 0.0f){
+            speed = Mathf.Clamp(speed, 2f, float.MaxValue);
+        }
         // creates curved result rather than a linear one giving a more organic speed change
         // round speed to 3 decimal places
         speed = Mathf.Lerp(speed, targetSpeed, Time.deltaTime * SpeedChangeRate);
         speed = Mathf.Round(speed * 1000f) / 1000f;
-        if(targetSpeed != 0.0f){
-            speed = Mathf.Clamp(speed, MinimumSpeed, float.MaxValue);
-        }
         // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
         // if there is a move input rotate player when the player is moving
         inputDirection.Normalize();
@@ -130,7 +129,7 @@ public class PlayerController : MonoBehaviour
         controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
     }
     private void Animation(){
-        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * AnimationBlendTime);
+        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 100f);
         animator.SetFloat("Speed", animationBlend);
         // adjusting the motion speed variable with the input magnitude allows
         // the player to slowly creep up to a full speed on their controller
