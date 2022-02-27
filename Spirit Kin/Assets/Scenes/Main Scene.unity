@@ -517,7 +517,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 3b1abe1f4261d8e4d8e297f4b8f9c237, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1921,6 +1921,10 @@ PrefabInstance:
     - target: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6192531991054698252, guid: 0b818338e7b231644951c6508b80153d, type: 3}
       propertyPath: m_RootOrder
@@ -52752,7 +52756,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1074252397759185593, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: AnimationCancelFactor
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074252397759185593, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: CombatRunSpeedDropoff
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074252397759185593, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: CombatWalkSpeedDropoff
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 1190005850961515548, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_TagString

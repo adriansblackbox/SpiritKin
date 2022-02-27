@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MouseSensitivity = 200f;
     [SerializeField] private float StickLookSensitivity = 200f;
     [SerializeField] private float MoveToTargetSpeed = 10f;
-    [SerializeField] private float CombatSpeedDropoff = 5f;
     [SerializeField] private float AnimationBlendTime = 20f;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
@@ -28,7 +27,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Vector2 inputDirection;
     [HideInInspector] public Vector3 targetMoveDirection;
     [HideInInspector] public float targetSpeed;
-    private float speed;    
+    [HideInInspector] public float speed;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
     private float gravity = -30f;
@@ -107,8 +106,6 @@ public class PlayerController : MonoBehaviour
         controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * Time.deltaTime);
     }
      private void CombatMovement(){
-        speed = 0.0f;
-        targetSpeed = 0.0f;
         // if the player is attacking, their move direction should always be their forward direction
         if(combatScript.isAttacking){
             // note: the player's body is a child of the player game object for camera locking
@@ -121,7 +118,7 @@ public class PlayerController : MonoBehaviour
         }
         // TempSpeed is altered by the PlayerCombat script
 
-        TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * CombatSpeedDropoff);
+        TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * combatScript.CombatSpeedDropoff);
         
         // move direction is normalized, and the caharacter controller applies contstant
         // downward force for easy slope traversal
