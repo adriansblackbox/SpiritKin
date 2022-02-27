@@ -7,8 +7,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float DodgeTime = 0.5f;
     [SerializeField] private float DodgeSpeed = 20f;
     [SerializeField] private float AnimationCancelFactor = 3f;
-    [SerializeField] private float CombatWalkSpeedDropoff = 5f;
-    [SerializeField] private float CombatRunSpeedDropoff = 1f;
+    [SerializeField] public float CombatWalkSpeedDropoff = 5f;
+    [SerializeField] public float CombatRunSpeedDropoff = 1f;
     [SerializeField] private float DashAttackSpeed = 45f;
     [SerializeField] private float LungeSpeed = 20f;
     [HideInInspector] public bool isAttacking = false;
@@ -29,11 +29,13 @@ public class PlayerCombat : MonoBehaviour
     }
     void Update()
     {
+        // Gets he total animation time per animation and stores it
         if(FindObjectOfType<LockTarget>().Target == null){
             totalAnimationTime = animator.GetCurrentAnimatorStateInfo(0).length;
         }else{
             totalAnimationTime = animator.GetCurrentAnimatorStateInfo(1).length;
         }
+        // calculates the time that will allow animation cancel to happen
         cancelAnimationTime = totalAnimationTime - (totalAnimationTime/AnimationCancelFactor);
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
@@ -42,7 +44,7 @@ public class PlayerCombat : MonoBehaviour
         }
         if((comboTimeDelay >= cancelAnimationTime || numOfClicks == 0) && !isDodging){
             Attack();
-        }else if(comboTimeDelay < cancelAnimationTime){
+        }else if(comboTimeDelay < totalAnimationTime){
             comboTimeDelay += Time.deltaTime;
         }
          //Dodge Timers
@@ -95,6 +97,9 @@ public class PlayerCombat : MonoBehaviour
             numOfClicks = 0;
             comboTimeDelay = 0;
             animator.SetInteger("attackTicks", numOfClicks);
+            controller.speed = 0.0f;
+            controller.targetSpeed = 0.0f;
+             CombatSpeedDropoff = 0.0f;
         }
     }
 }
