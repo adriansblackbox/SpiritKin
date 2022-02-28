@@ -2872,12 +2872,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 793268376}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 132.52, y: 30.318594, z: -225.9}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.08731085, y: 1.0279458, z: -2.431147}
+  m_LocalScale: {x: 0.15053548, y: 0.15053548, z: 0.15053548}
   m_Children:
   - {fileID: 965823541}
-  m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_Father: {fileID: 7451521927432610887}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &837050558
 GameObject:
@@ -4234,7 +4234,7 @@ RectTransform:
   m_Children:
   - {fileID: 1566921127}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6738,7 +6738,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2035335890
 GameObject:
@@ -20122,7 +20122,7 @@ Transform:
   - {fileID: 3486113313334900950}
   - {fileID: 714115260}
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2746786115614025687
 MeshFilter:
@@ -41952,6 +41952,7 @@ MonoBehaviour:
   triggerText: {fileID: 7451521929097234852}
   Player: {fileID: 7969240397504004763}
   teaMenu: {fileID: 7451521927334108909}
+  teaCamera: {fileID: 793268376}
   theBuff: {fileID: 0}
 --- !u!4 &7451521927432610887
 Transform:
@@ -41965,6 +41966,7 @@ Transform:
   m_LocalScale: {x: 6.642952, y: 6.642952, z: 6.642952}
   m_Children:
   - {fileID: 1182147716}
+  - {fileID: 793268379}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
