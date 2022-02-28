@@ -49665,6 +49665,21 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1645886960751311305, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
   m_PrefabInstance: {fileID: 8669201217155251026}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7969240397504004771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7969240397504004763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e08c528f34546948aa1c7d71200a61c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: b4402e4adc2622848afd72698516ee3a, type: 3}
+  - {fileID: 8300000, guid: 5c5001c4bd9c26f418d2b9889dfc2f99, type: 3}
 --- !u!33 &7970675958962314873
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -52773,6 +52788,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4907299623633728659, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b4402e4adc2622848afd72698516ee3a, type: 3}
     - target: {fileID: 5344178195030925532, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_TagString
       value: Player
