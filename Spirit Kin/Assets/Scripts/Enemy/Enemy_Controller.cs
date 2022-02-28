@@ -34,14 +34,14 @@ public class Enemy_Controller : MonoBehaviour
         Patroling,
         Seeking,
         Relocating,
-        Chasing
+        Chasing,
+        Surrounding
     }
 
     //ADD HITSTUN STATE
     public enum AttackState {
         Attacking,
-        Surrounding,
-        NotAttacking,
+        NotAttacking
     }
 
     public MotionState EnemyMotion;
@@ -51,6 +51,11 @@ public class Enemy_Controller : MonoBehaviour
     public float idleToPatrolChance = 0.15f;
     public float swapStateInterval = 12f;
     public float shrineSpawnRange = 200f;
+
+    public Vector3 surroundTarget = Vector3.zero;
+    public Vector3 surroundSpot = Vector3.zero;
+
+    public List<Vector3> movementQueue;
 
     //time for enemy to decide next action after reaching edge of chase distance
     public float decisionTime = 1f; 
@@ -102,6 +107,7 @@ public class Enemy_Controller : MonoBehaviour
     public Material idleMat;
     public Material patrolMat;
     public Material relocateMat;
+    public Material surroundMat;
 
     // Start is called before the first frame update
     void Start()
@@ -146,6 +152,10 @@ public class Enemy_Controller : MonoBehaviour
         else if (EnemyMotion == MotionState.Patroling) 
         {
             alertBox.GetComponent<MeshRenderer>().material = patrolMat;
+        }
+        else if (EnemyMotion == MotionState.Surrounding)
+        {
+            alertBox.GetComponent<MeshRenderer>().material = surroundMat;
         }   
 
         myTime += Time.deltaTime;
@@ -153,6 +163,7 @@ public class Enemy_Controller : MonoBehaviour
         {
             case MotionState.Patroling:
                 ThisEnemy.speed = chaseSpeed;
+                ThisEnemy.stoppingDistance = 0;
                 if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
                     float temp = Random.Range(0.0f, 1.0f);
                     //if > 50% patroling increase chance to swap
@@ -179,6 +190,7 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Relocating:
                 ThisEnemy.speed = chaseSpeed;
+                ThisEnemy.stoppingDistance = 0;
                 if (ThisEnemy.hasPath && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                 {
                     ThisEnemy.ResetPath();
@@ -203,6 +215,7 @@ public class Enemy_Controller : MonoBehaviour
             case MotionState.Seeking:
                 //set speed to normal
                 ThisEnemy.speed = seekSpeed;
+                ThisEnemy.stoppingDistance = 10;
                 StopCoroutine(decideAlertedAction());
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
@@ -219,6 +232,7 @@ public class Enemy_Controller : MonoBehaviour
             case MotionState.Chasing:
                 //set speed to faster
                 ThisEnemy.speed = chaseSpeed;
+                ThisEnemy.stoppingDistance = 10;
                 StopCoroutine(decideAlertedAction());
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
@@ -226,6 +240,54 @@ public class Enemy_Controller : MonoBehaviour
                 if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                     if (!exitedArena) { //if still in arena
                         ThisEnemy.SetDestination(player.transform.position);
+                    } else {
+                        EnemyMotion = MotionState.Relocating;
+                        ThisEnemy.ResetPath();
+                    }
+                }
+
+                //check if enemy is in range to surround
+                    //-> go to surround
+
+                break;
+
+                //after the above is broken < 1.5 * surroundRadius
+                    //regenerate the spot so they go on the other side of the player
+                    //-> rather than running through the player
+                        //this causes issues because if the player is fully surrounded and finds a way out of that situation enemies will try to run through the player
+                        //-> the paths need to be generated around the player not through them
+                            //this is very difficult as we know  
+                            //we might be able to store 3 positions one before the player, one to the side of the player, one at the location to make enemies go around
+                                //before the player would need to be outside of surround radius so they dont run into each other
+                                    //^^ this one is already needed because enemies will run into each ohter when assuming surrounding positions
+
+            case MotionState.Surrounding:
+                ThisEnemy.speed = chaseSpeed;
+                ThisEnemy.stoppingDistance = 0;
+                //determine a way to track which enemy aligns with which spot in generated surround spots array (n)
+                //set destination to player position + surround spots array [n]
+                if (surroundSpot == Vector3.zero)
+                {
+                    surroundSpot = ai.determineSurroundSpotV3(transform);
+                }
+                // IMPLEMENT THIS TAKING INTO ACCOUNT NOT WANTING ENEMIES IN WALLS OR OFF MAP
+                // if (surroundSpot != Vector3.zero)
+                //     surroundTarget = ai.calculateSurroundSpotInWorld();
+
+                //move to tracking spot
+                    //move to surround spot
+
+                //mini A* around the tracking spots to get to their surround spots
+                    //still might ahve issues running into each other, but that can be figured out later
+                    
+                NavMeshHit hit;
+                NavMesh.SamplePosition(surroundSpot + player.transform.position, out hit, 200.0f, NavMesh.AllAreas);
+                Debug.Log("Player Position: " + player.transform.position);
+                Debug.Log("Surround Spot Position: " + player.transform.position + surroundSpot);
+                ThisEnemy.CalculatePath(hit.position, path); //might need to do the find spot Navmesh thing if doesnt work
+                if (path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(hit.position, transform.position) > ai.surroundRadius * 1.5) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
+                    if (!exitedArena) { //if still in arena
+                        ThisEnemy.SetDestination(hit.position);
                     } else {
                         EnemyMotion = MotionState.Relocating;
                         ThisEnemy.ResetPath();

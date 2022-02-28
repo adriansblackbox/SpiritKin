@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class AI_Manager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class AI_Manager : MonoBehaviour
 
     private Transform enemiesContainer;
     private List<Vector3> surroundSpots = new List<Vector3>();
+    private List<bool> surroundSpotAvailability = new List<bool>();
+    private List<Vector3> surroundTrackingSpots = new List<Vector3>();
     public Transform Player;
     public float surroundRadius;
 
@@ -33,9 +36,9 @@ public class AI_Manager : MonoBehaviour
         //on the perimeter of a cirle around the player
         //-> Generate the circle
             //select x locations where x is the number of enemies
-        float spacing = 360 / enemiesContainer.childCount;
+        float spacing = 360 / 8;
         Debug.Log("Amount of Enemies: " + enemiesContainer.childCount);
-        for (int i = 0; i < enemiesContainer.childCount; ++i)
+        for (int i = 0; i < 8; ++i) //8 is for testing and can be changed later
         {
             
             //should output z equivalent for our circle
@@ -47,12 +50,92 @@ public class AI_Manager : MonoBehaviour
             Debug.Log("Coordinate Pair: " + "( " + xVal + ", " + zVal + ")");
 
             Vector3 validSpot = new Vector3(xVal, 0, zVal);
-            validSpot *= surroundRadius;
-            validSpot += Player.position;
 
-            surroundSpots.Add(validSpot);
+            surroundSpots.Add(validSpot * surroundRadius);
+            surroundSpotAvailability.Add(true);
+            surroundTrackingSpots.Add(validSpot * surroundRadius * 1.5f);
         }
     }
+
+
+    //loop through all spots
+        //if spot isnt taken
+            //calculate distance
+                //store spot with least distance
+    //if found a spot            
+        //move to spot with least distance
+    //else
+        //go idle for now, but later will make new state
+
+
+    //need a way to chekc if a spot is already taken
+        //find the closest spot to the enemy
+            //set their surround target to be that spot
+    public List<Vector3> determineSurroundSpot(Transform enemy) 
+    {
+        float minDist = Mathf.Infinity;
+        int targetIndex = 100;
+        for (int i = 0; i < surroundSpots.Count; i++)
+        {
+            if (surroundSpotAvailability[i])
+            {
+                var distance = Vector3.Distance(enemy.position, Player.position + surroundSpots[i]);
+                if (distance < minDist)
+                {
+                    targetIndex = i;
+                    minDist = distance;
+                }
+            }
+        }
+
+        if (targetIndex != 100) //we have found a spot
+        {
+            Debug.Log("Found a spot");
+            surroundSpotAvailability[targetIndex] = false;
+            return new List<Vector3>{surroundTrackingSpots[targetIndex], surroundSpots[targetIndex]};
+        }
+        else //sadge no spot for me
+        {
+            Debug.Log("No spot for me");
+            return new List<Vector3>{};
+        }
+    }
+
+    public Vector3 determineSurroundSpotV3(Transform enemy) 
+    {
+        float minDist = Mathf.Infinity;
+        int targetIndex = 100;
+        for (int i = 0; i < surroundSpots.Count; i++)
+        {
+            if (surroundSpotAvailability[i])
+            {
+                var distance = Vector3.Distance(enemy.position, Player.position + surroundSpots[i]);
+                if (distance < minDist)
+                {
+                    targetIndex = i;
+                    minDist = distance;
+                }
+            }
+        }
+
+        if (targetIndex != 100) //we have found a spot
+        {
+            Debug.Log("Found a spot");
+            surroundSpotAvailability[targetIndex] = false;
+            return surroundSpots[targetIndex];
+        }
+        else //sadge no spot for me
+        {
+            Debug.Log("No spot for me");
+            return Vector3.zero;
+        }
+    }
+
+    // public Vector3 calculateSurroundSpotInWorld()
+    // {
+    //     //do a raycast to ensure not hitting a wall and adjust values
+    //         //output exact spot for enemy
+    // }
 
 
     public bool checkIfNeedRelocate(int quadrant)

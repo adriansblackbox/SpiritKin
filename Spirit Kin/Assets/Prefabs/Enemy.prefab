@@ -269,16 +269,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyMotion: 1
+  EnemyMotion: 6
   EnemyAttack: 2
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.1
   swapStateInterval: 15
   shrineSpawnRange: 200
+  surroundTarget: {x: 0, y: 0, z: 0}
+  surroundSpot: {x: 0, y: 0, z: 0}
   decisionTime: 1
   shrine: {fileID: 0}
   quadrant: 0
-  sc: {fileID: 0}
+  ai: {fileID: 0}
   es: {fileID: 0}
   numTimesCheckIfNeedChase: 4
   chaseThreshold: 0.5
@@ -296,6 +298,7 @@ MonoBehaviour:
   idleMat: {fileID: 2100000, guid: f334dd398f7a6c04699e93fd64a7b1a3, type: 2}
   patrolMat: {fileID: 2100000, guid: 7bd3dedd35a04954d9f52e80319ba0d1, type: 2}
   relocateMat: {fileID: 2100000, guid: 675a00490b51fc444b1ef4484fefc6fa, type: 2}
+  surroundMat: {fileID: 2100000, guid: 204045e4779574a4bbb89d75e026cec7, type: 2}
 --- !u!1 &7496681822278358616
 GameObject:
   m_ObjectHideFlags: 0
