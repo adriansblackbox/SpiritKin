@@ -30,11 +30,7 @@ public class PlayerCombat : MonoBehaviour
     void Update()
     {
         // Gets he total animation time per animation and stores it
-        if(FindObjectOfType<LockTarget>().Target == null){
-            totalAnimationTime = animator.GetCurrentAnimatorStateInfo(0).length;
-        }else{
-            totalAnimationTime = animator.GetCurrentAnimatorStateInfo(1).length;
-        }
+        totalAnimationTime = animator.GetCurrentAnimatorStateInfo(2).length;
         // calculates the time that will allow animation cancel to happen
         cancelAnimationTime = totalAnimationTime - (totalAnimationTime/AnimationCancelFactor);
         // If ther player is locked onto a target, they are allowed to dodge
@@ -44,8 +40,26 @@ public class PlayerCombat : MonoBehaviour
         }
         if((comboTimeDelay >= cancelAnimationTime || numOfClicks == 0) && !isDodging){
             Attack();
-        }else if(comboTimeDelay < totalAnimationTime){
+        }
+        if(comboTimeDelay < totalAnimationTime){
             comboTimeDelay += Time.deltaTime;
+        }
+         // Handels animating combos
+        if(((new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) != Vector2.zero && comboTimeDelay >= cancelAnimationTime) 
+            || comboTimeDelay >= totalAnimationTime) && isAttacking
+        ){
+            isAttacking = false;
+            numOfClicks = 0;
+            comboTimeDelay = 0;
+            animator.SetInteger("attackTicks", 0);
+            controller.speed = 0.0f;
+            controller.targetSpeed = 0.0f;
+            CombatSpeedDropoff = 0.0f;
+        }
+        if(isAttacking){
+            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 1, Time.deltaTime * 20f));
+        }else{
+            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 0f, Time.deltaTime * 20f));
         }
          //Dodge Timers
         if(dodgeTimeItter > 0){
@@ -64,7 +78,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
     private void Attack(){
-        if(Input.GetButton("X Button") || Input.GetKey(KeyCode.Mouse0)){
+        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
             isAttacking = true;
             comboTimeDelay = 0f;
@@ -79,27 +93,13 @@ public class PlayerCombat : MonoBehaviour
                 // lunge forward
                 controller.TempSpeed = LungeSpeed;
             }
-            if(controller.speed > controller.WalkSpeed){
+            if((Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")) && controller.speed > controller.WalkSpeed){
                 CombatSpeedDropoff = CombatRunSpeedDropoff;
                 controller.TempSpeed = DashAttackSpeed;
             }else{
+                controller.TempSpeed = 0;
                 CombatSpeedDropoff = CombatWalkSpeedDropoff;
             }
-            controller.speed = 0.0f;
-            controller.targetSpeed = 0.0f;
-        }
-        // Handels animating combos
-        else if(((new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) != Vector2.zero && comboTimeDelay >= cancelAnimationTime) 
-            || comboTimeDelay >= totalAnimationTime)
-            && isAttacking
-        ){
-            isAttacking = false;
-            numOfClicks = 0;
-            comboTimeDelay = 0;
-            animator.SetInteger("attackTicks", numOfClicks);
-            controller.speed = 0.0f;
-            controller.targetSpeed = 0.0f;
-             CombatSpeedDropoff = 0.0f;
         }
     }
 }

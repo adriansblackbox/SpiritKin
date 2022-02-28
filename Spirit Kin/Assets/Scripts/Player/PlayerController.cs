@@ -128,6 +128,8 @@ public class PlayerController : MonoBehaviour
     private void Animation(){
         animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 100f);
         animator.SetFloat("Speed", animationBlend);
+        if(combatScript.isAttacking)
+            speed = 0;
         // adjusting the motion speed variable with the input magnitude allows
         // the player to slowly creep up to a full speed on their controller
         if(inputDirection.magnitude > 0){
