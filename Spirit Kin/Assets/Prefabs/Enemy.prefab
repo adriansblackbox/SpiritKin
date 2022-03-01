@@ -270,13 +270,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyMotion: 6
-  EnemyAttack: 2
+  EnemyAttack: 1
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.1
   swapStateInterval: 15
   shrineSpawnRange: 200
   surroundTarget: {x: 0, y: 0, z: 0}
   surroundSpot: {x: 0, y: 0, z: 0}
+  nextSpot: {x: 0, y: 0, z: 0}
+  movementQueue: []
   decisionTime: 1
   shrine: {fileID: 0}
   quadrant: 0

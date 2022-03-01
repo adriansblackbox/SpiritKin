@@ -37,7 +37,7 @@ public class AI_Manager : MonoBehaviour
         //-> Generate the circle
             //select x locations where x is the number of enemies
         float spacing = 360 / 8;
-        Debug.Log("Amount of Enemies: " + enemiesContainer.childCount);
+        //Debug.Log("Amount of Enemies: " + enemiesContainer.childCount);
         for (int i = 0; i < 8; ++i) //8 is for testing and can be changed later
         {
             
@@ -47,7 +47,7 @@ public class AI_Manager : MonoBehaviour
             //should output x equivalent for our circle
             float xVal = Mathf.Cos(Mathf.Deg2Rad * (spacing * i));
 
-            Debug.Log("Coordinate Pair: " + "( " + xVal + ", " + zVal + ")");
+            //Debug.Log("Coordinate Pair: " + "( " + xVal + ", " + zVal + ")");
 
             Vector3 validSpot = new Vector3(xVal, 0, zVal);
 
@@ -73,26 +73,101 @@ public class AI_Manager : MonoBehaviour
             //set their surround target to be that spot
     public List<Vector3> determineSurroundSpot(Transform enemy) 
     {
-        float minDist = Mathf.Infinity;
+        float minDistA = Mathf.Infinity;
+        float minDistB = Mathf.Infinity;
         int targetIndex = 100;
         for (int i = 0; i < surroundSpots.Count; i++)
         {
             if (surroundSpotAvailability[i])
             {
                 var distance = Vector3.Distance(enemy.position, Player.position + surroundSpots[i]);
-                if (distance < minDist)
+                if (distance < minDistA)
                 {
                     targetIndex = i;
-                    minDist = distance;
+                    minDistA = distance;
                 }
             }
         }
-
+        
         if (targetIndex != 100) //we have found a spot
         {
-            Debug.Log("Found a spot");
+            Debug.Log("Found a spot: " + surroundSpots[targetIndex]);
+            Debug.Log("Surround Spot Availability: " + surroundSpotAvailability[targetIndex]);
+            Debug.Log("Surround Spot Count: " + surroundSpotAvailability.Count);
             surroundSpotAvailability[targetIndex] = false;
-            return new List<Vector3>{surroundTrackingSpots[targetIndex], surroundSpots[targetIndex]};
+            enemy.GetComponent<Enemy_Controller>().surroundSpot = surroundSpots[targetIndex];
+
+            minDistA = Mathf.Infinity;
+            minDistB = Mathf.Infinity;
+            int targetIndexA = -1;
+            int targetIndexB = -1;
+            Vector3 targSpot = Vector3.zero;
+            List<Vector3> Path = new List<Vector3>();
+            Vector3 end = surroundSpots[targetIndex];
+            Vector3 curr = Vector3.zero;
+            Vector3 next = Vector3.zero;
+
+            // Produce the first node on the surrounding areas that the enemy will visit to get them onto the ring
+            for (int i = 0; i < surroundTrackingSpots.Count; i++)
+            {
+                var distance = Vector3.Distance(enemy.position, Player.position + surroundTrackingSpots[i]);
+                if (distance < minDistA)
+                {
+                    minDistB = minDistA;
+                    targetIndexB = targetIndexA;
+                    minDistA = distance;
+                    targetIndexA = i;
+                }
+                else if (distance < minDistB)
+                {
+                    minDistB = distance;
+                    targetIndexB = i;
+                }
+            }
+            //we have our two closest points
+                //check which one is closer to the end spot
+                //add that spot to the path as the first move
+            if (Vector3.Distance(end, surroundTrackingSpots[targetIndexA]) < Vector3.Distance(end, surroundTrackingSpots[targetIndexB]))
+            {
+                curr = surroundTrackingSpots[targetIndexA];
+                targetIndexB = -1;
+            }
+            else
+            {
+                curr = surroundTrackingSpots[targetIndexB];
+                targetIndexA = -1;
+            }
+            Path.Add(curr);
+
+            while (curr != surroundTrackingSpots[targetIndex]) //we are the tracking spot that links to our end spot
+            {
+                if (targetIndexA != -1) //A was chosen
+                {
+                    if (Vector3.Distance(end, surroundTrackingSpots[targetIndexA + 1]) < Vector3.Distance(end, surroundTrackingSpots[targetIndexA - 1]))
+                        curr = surroundTrackingSpots[targetIndexA + 1];
+                    else
+                        curr = surroundTrackingSpots[targetIndexA - 1];             
+                }
+                else //B was chosen
+                {
+                    if (Vector3.Distance(end, surroundTrackingSpots[targetIndexB + 1]) < Vector3.Distance(end, surroundTrackingSpots[targetIndexB - 1]))
+                        curr = surroundTrackingSpots[targetIndexB + 1];
+                    else
+                        curr = surroundTrackingSpots[targetIndexB - 1];
+                }
+                Path.Add(curr);
+            }
+            Path.Add(end);
+            return Path;
+            //Path
+                //-> Front to back
+                //where we start the path at the front and remove values until we get to the destination at the back
+
+                //-> Back to front
+                //where we start the path at the back and remove values until we reach the destination at the front
+
+            //targSpot -> final tracking spot
+            //end -> surroundSpot Location
         }
         else //sadge no spot for me
         {

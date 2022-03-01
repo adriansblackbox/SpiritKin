@@ -54,6 +54,7 @@ public class Enemy_Controller : MonoBehaviour
 
     public Vector3 surroundTarget = Vector3.zero;
     public Vector3 surroundSpot = Vector3.zero;
+    public Vector3 nextSpot = Vector3.zero;
 
     public List<Vector3> movementQueue;
 
@@ -163,7 +164,7 @@ public class Enemy_Controller : MonoBehaviour
         {
             case MotionState.Patroling:
                 ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 0;
+                ThisEnemy.stoppingDistance = 0.05f;
                 if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
                     float temp = Random.Range(0.0f, 1.0f);
                     //if > 50% patroling increase chance to swap
@@ -190,7 +191,7 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Relocating:
                 ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 0;
+                ThisEnemy.stoppingDistance = 0.05f;
                 if (ThisEnemy.hasPath && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                 {
                     ThisEnemy.ResetPath();
@@ -263,13 +264,17 @@ public class Enemy_Controller : MonoBehaviour
 
             case MotionState.Surrounding:
                 ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 0;
+                ThisEnemy.stoppingDistance = 0.05f;
                 //determine a way to track which enemy aligns with which spot in generated surround spots array (n)
                 //set destination to player position + surround spots array [n]
-                if (surroundSpot == Vector3.zero)
-                {
-                    surroundSpot = ai.determineSurroundSpotV3(transform);
-                }
+
+
+                // working code, un-block to fix
+                // if (surroundSpot == Vector3.zero)
+                // {
+                //     surroundSpot = ai.determineSurroundSpotV3(transform);
+                // }
+
                 // IMPLEMENT THIS TAKING INTO ACCOUNT NOT WANTING ENEMIES IN WALLS OR OFF MAP
                 // if (surroundSpot != Vector3.zero)
                 //     surroundTarget = ai.calculateSurroundSpotInWorld();
@@ -278,12 +283,21 @@ public class Enemy_Controller : MonoBehaviour
                     //move to surround spot
 
                 //mini A* around the tracking spots to get to their surround spots
-                    //still might ahve issues running into each other, but that can be figured out later
-                    
+                    //still might have issues running into each other, but that can be figured out later
+
+                // if they dont have a path generate one
+                if (movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
+                    movementQueue = ai.determineSurroundSpot(transform);
+                }
+
+                // if they have reached their spot give them a new one
+                if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count > 0)
+                {
+                    nextSpot = movementQueue[0];
+                    movementQueue.RemoveAt(0);
+                }
                 NavMeshHit hit;
-                NavMesh.SamplePosition(surroundSpot + player.transform.position, out hit, 200.0f, NavMesh.AllAreas);
-                Debug.Log("Player Position: " + player.transform.position);
-                Debug.Log("Surround Spot Position: " + player.transform.position + surroundSpot);
+                NavMesh.SamplePosition(nextSpot + player.transform.position, out hit, 200.0f, NavMesh.AllAreas);
                 ThisEnemy.CalculatePath(hit.position, path); //might need to do the find spot Navmesh thing if doesnt work
                 if (path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(hit.position, transform.position) > ai.surroundRadius * 1.5) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                     if (!exitedArena) { //if still in arena
