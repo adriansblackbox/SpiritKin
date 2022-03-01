@@ -34,6 +34,7 @@ public class Shrine : MonoBehaviour
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
         ai = GetComponent<AI_Manager>();
         Beacon.SetActive(false);
+        ai.generateSurroundLocations();
     }
 
     public void Update()
@@ -70,7 +71,6 @@ public class Shrine : MonoBehaviour
         {
             myTime = 0;
             es.spawnEnemy(gameObject);
-            ai.generateSurroundLocations();
         }
     }
 }
