@@ -18,6 +18,7 @@ public class CurseMeter : MonoBehaviour
     public List<Curse> curseArray = new List<Curse>();
     public List<Curse> activeCurses = new List<Curse>();
     public GameObject[] cursesUI;
+    public GameObject Sword0, Sword1, Sword2, Sword3;
     private GameObject curCurseUI;
     public Sprite Notch, weakImage, slowImage, frailImage;
 
@@ -47,21 +48,21 @@ public class CurseMeter : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
-        if(pStats.currSouls < soulDelta)
+    {
+        if (pStats.currSouls < soulDelta)
         {
             soulDelta = pStats.currSouls;
         }
 
-        if(activeCurses.Count < 3)
+        if (activeCurses.Count < 3)
         {
-            if(soulDelta < pStats.currSouls) 
+            if (soulDelta < pStats.currSouls)
             {
-                curseMeter += (((float)pStats.currSouls - soulDelta)) / fillRate;   
+                curseMeter += (((float)pStats.currSouls - soulDelta)) / fillRate;
                 soulDelta = pStats.currSouls;
             }
             curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
-            if(curseMeter >= 1f)
+            if (curseMeter >= 1f)
             {
                 curseMeter = 0;
                 curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
@@ -69,31 +70,65 @@ public class CurseMeter : MonoBehaviour
             }
         }
 
-        if(debugbool){
+        if (debugbool)
+        {
             removeCurse();
             //debugbool = !debugbool;
         }
 
-        if(newCurse)
+        if (newCurse)
         {
             CurseHandler();
             newCurse = false;
         }
-        
+        HandleSword();
+
+    }
+    private void HandleSword()
+    {
+        switch (activeCurses.Count)
+        {
+            case 0:
+                Sword0.SetActive(true);
+                Sword1.SetActive(false);
+                Sword2.SetActive(false);
+                Sword3.SetActive(false);
+                break;
+            case 1:
+                Sword1.SetActive(true);
+                Sword0.SetActive(false);
+                Sword2.SetActive(false);
+                Sword3.SetActive(false);
+                break;
+            case 2:
+                Sword2.SetActive(true);
+                Sword1.SetActive(false);
+                Sword0.SetActive(false);
+                Sword3.SetActive(false);
+                break;
+            case 3:
+                Sword3.SetActive(true);
+                Sword1.SetActive(false);
+                Sword2.SetActive(false);
+                Sword0.SetActive(false);
+                break;
+        }
     }
 
     public void addCurse()
     {
         List<Curse> unactiveCurses = curseArray.Except(activeCurses).ToList();
-        if(unactiveCurses.Count > 0)
+        if (unactiveCurses.Count > 0)
         {
             unactiveCurses[Random.Range(0, unactiveCurses.Count - 1)].active = true;
         }
         newCurse = true;
     }
-    
-    private void manageCurseUI(){
-        switch(activeCurses.Count){
+
+    private void manageCurseUI()
+    {
+        switch (activeCurses.Count)
+        {
             case 3:
                 cursesUI[0].transform.Find("Bar").gameObject.SetActive(false);
                 cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
@@ -119,28 +154,30 @@ public class CurseMeter : MonoBehaviour
                 break;
         }
 
-        if(activeCurses.Count < 3){
+        if (activeCurses.Count < 3)
+        {
             curCurseUI = cursesUI[activeCurses.Count];
         }
     }
-   
 
-    public void removeCurse() 
+
+    public void removeCurse()
     {
-        if(activeCurses.Count == 0)
+        if (activeCurses.Count == 0)
         {
             Debug.Log("No curses to clear!");
             return;
         }
         int i = Random.Range(0, activeCurses.Count - 1);
-        
+
         activeCurses[i].active = true;
         activeCurses[i].isApplied = false;
         activeCurses[i].removeFlag = true;
         activeCurses.RemoveAt(i);
         cursesUI[i].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch; // Hide curse with an invisible circle
 
-        switch(i){
+        switch (i)
+        {
             case 0:
                 cursesUI[0].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite;
                 goto case 1;
@@ -148,19 +185,20 @@ public class CurseMeter : MonoBehaviour
                 cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite;
                 break;
         }
-        
+
         newCurse = true;
     }
 
-    public void CurseHandler () 
+    public void CurseHandler()
     {
         curseArray.ForEach(x =>
             {
-                if(x.removeFlag) {
+                if (x.removeFlag)
+                {
                     x.removeCurse();
                     manageCurseUI();
                 }
-                else if(x.active && !x.isApplied)
+                else if (x.active && !x.isApplied)
                 {
                     manageCurseUI();
                     curCurseUI.transform.Find("Curse").gameObject.SetActive(true);
@@ -170,8 +208,8 @@ public class CurseMeter : MonoBehaviour
                     x.invokeCurse();
                     manageCurseUI();
                 }
-                
-            } 
+
+            }
         );
     }
 }
