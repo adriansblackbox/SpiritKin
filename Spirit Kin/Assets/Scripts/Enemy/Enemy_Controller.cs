@@ -266,10 +266,14 @@ public class Enemy_Controller : MonoBehaviour
                 ThisEnemy.stoppingDistance = 0;
                 //determine a way to track which enemy aligns with which spot in generated surround spots array (n)
                 //set destination to player position + surround spots array [n]
+
+
+                // working code, un-block to fix
                 if (surroundSpot == Vector3.zero)
                 {
                     surroundSpot = ai.determineSurroundSpotV3(transform);
                 }
+
                 // IMPLEMENT THIS TAKING INTO ACCOUNT NOT WANTING ENEMIES IN WALLS OR OFF MAP
                 // if (surroundSpot != Vector3.zero)
                 //     surroundTarget = ai.calculateSurroundSpotInWorld();
@@ -278,8 +282,18 @@ public class Enemy_Controller : MonoBehaviour
                     //move to surround spot
 
                 //mini A* around the tracking spots to get to their surround spots
-                    //still might ahve issues running into each other, but that can be figured out later
-                    
+                    //still might have issues running into each other, but that can be figured out later
+
+                // Buggy effort
+                /* if(movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
+                    movementQueue = ai.determineSurroundSpot(transform);
+                }
+
+                if(movementQueue.Count > 0 && surroundSpot == Vector3.zero) {
+                    surroundSpot = movementQueue[movementQueue.Count - 1];
+                    movementQueue.RemoveAt(movementQueue.Count - 1);
+                }
+                */
                 NavMeshHit hit;
                 NavMesh.SamplePosition(surroundSpot + player.transform.position, out hit, 200.0f, NavMesh.AllAreas);
                 Debug.Log("Player Position: " + player.transform.position);
