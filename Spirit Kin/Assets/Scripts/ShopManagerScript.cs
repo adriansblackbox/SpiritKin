@@ -49,14 +49,16 @@ public class ShopManagerScript : MonoBehaviour
                 .currentSelectedGameObject;
         if (
             playStats.Coins >=
-            shopItems[2, ButtonRef.GetComponent<button_info>().ItemID]
+            shopItems[2, ButtonRef.GetComponent<button_info>().ItemID] &&
+            shopItems[3, ButtonRef.GetComponent<button_info>().ItemID] <= 0
         )
         {
             playStats.Coins -=
                 shopItems[2, ButtonRef.GetComponent<button_info>().ItemID];
             shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]++;
             CoinsTXT.text = "Coins:" + playStats.Coins.ToString();
-            ButtonRef.GetComponent<button_info>().QuantityTxt.text =
+            
+            ButtonRef.GetComponent<button_info>().BuyTxt.text = "Sold";
                 shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]
                     .ToString();
 
@@ -66,12 +68,14 @@ public class ShopManagerScript : MonoBehaviour
                 .GetComponent<PlayerStats>()
                 .addBuff(shopBuffList[ButtonRef
                     .GetComponent<button_info>()
-                    .ItemID-1]);
+                    .ItemID -
+                1]);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+
     }
 }

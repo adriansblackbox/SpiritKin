@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
     public AudioClip PlaybuttonSFX;
     public AudioClip OptionbuttonSFX;
     public AudioSource MenuSounds;
+
     private bool check = false;
     private bool faded = false;
     public void PlayGame (){
@@ -25,6 +26,12 @@ public class MainMenu : MonoBehaviour
     }
 
     public void Option()
+    {
+        if (faded) return;
+        MenuSounds.PlayOneShot(OptionbuttonSFX);
+    }
+
+    public void Credit()
     {
         if (faded) return;
         MenuSounds.PlayOneShot(OptionbuttonSFX);

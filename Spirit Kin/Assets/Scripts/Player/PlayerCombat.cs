@@ -35,7 +35,7 @@ public class PlayerCombat : MonoBehaviour
         cancelAnimationTime = totalAnimationTime - (totalAnimationTime/AnimationCancelFactor);
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
-        if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f && !isAttacking){
+        if(GetComponent<LockTarget>().Target != null && dodgeCoolDown <= 0.0f && !isAttacking && controller.speed <= controller.WalkSpeed){
             Dodge();
         }
         if((comboTimeDelay >= cancelAnimationTime || numOfClicks == 0) && !isDodging){
@@ -68,6 +68,7 @@ public class PlayerCombat : MonoBehaviour
             isDodging = false;
             dodgeCoolDown -= Time.deltaTime;
         }
+         animator.SetBool("isDodging", isDodging);
     }
     private void Dodge(){
         if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
@@ -92,13 +93,14 @@ public class PlayerCombat : MonoBehaviour
             if( GetComponent<LockTarget>().Target != null){
                 // lunge forward
                 controller.TempSpeed = LungeSpeed;
+                CombatSpeedDropoff = CombatWalkSpeedDropoff;
+            }else{
+                controller.TempSpeed = 0;
+                CombatSpeedDropoff = CombatWalkSpeedDropoff;
             }
             if((Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")) && controller.speed > controller.WalkSpeed){
                 CombatSpeedDropoff = CombatRunSpeedDropoff;
                 controller.TempSpeed = DashAttackSpeed;
-            }else{
-                controller.TempSpeed = 0;
-                CombatSpeedDropoff = CombatWalkSpeedDropoff;
             }
         }
     }

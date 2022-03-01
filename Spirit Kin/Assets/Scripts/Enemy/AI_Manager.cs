@@ -92,7 +92,45 @@ public class AI_Manager : MonoBehaviour
         {
             Debug.Log("Found a spot");
             surroundSpotAvailability[targetIndex] = false;
-            return new List<Vector3>{surroundTrackingSpots[targetIndex], surroundSpots[targetIndex]};
+
+            minDist = Mathf.Infinity;
+            Vector3 targSpot = Vector3.zero;
+            List<Vector3> Path = new List<Vector3>();
+            Vector3 curr = surroundSpots[targetIndex];
+            Vector3 next = Vector3.zero;
+
+            // Produce the first node on the surrounding areas that the enemy will visit to get them onto the ring
+            for (int i = 0; i < surroundTrackingSpots.Count; i++)
+            {
+                if (surroundSpotAvailability[i])
+                {
+                    var distance = Vector3.Distance(enemy.position, Player.position + surroundTrackingSpots[i]);
+                    if (distance < minDist)
+                    {
+                        targSpot = surroundTrackingSpots[i];
+                        minDist = distance;
+                    }
+                } 
+            }
+
+            while(curr != targSpot) {
+                Path.Add(curr);
+                for (int i = 0; i < surroundTrackingSpots.Count; i++)
+                {
+                    if (surroundSpotAvailability[i])
+                    {
+                        var distance = Vector3.Distance(curr, surroundTrackingSpots[i]);
+                        if (distance < minDist)
+                        {
+                            next = surroundTrackingSpots[i];
+                            minDist = distance;
+                        }
+                    } 
+                }
+                curr = next;
+            }
+            Path.Add(targSpot);
+            return Path;
         }
         else //sadge no spot for me
         {
