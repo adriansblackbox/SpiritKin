@@ -42,7 +42,19 @@ public class AI_Manager : MonoBehaviour
             //select enemy + set enemy values to be ready to attack
                 //EnemyMotion -> Waiting
                 //EnemyAttack -> Attacking
-            attackingEnemy = enemiesReadyToAttack[UnityEngine.Random.Range(0, enemiesReadyToAttack.Count)];
+            int ind = UnityEngine.Random.Range(0, enemiesReadyToAttack.Count - 1);
+            attackingEnemy = enemiesReadyToAttack[ind];
+
+            while(attackingEnemy == null){ // Tries to empty the list of invalid gameobjects, if we land on one.
+                if(enemiesReadyToAttack.Count <= 0){
+                    return;
+                }
+
+                enemiesReadyToAttack.RemoveAt(ind);
+                ind = UnityEngine.Random.Range(0, enemiesReadyToAttack.Count - 1);
+                attackingEnemy = enemiesReadyToAttack[ind];
+            }
+
             attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
             attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
             Debug.Log("Selected Enemy");
