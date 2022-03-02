@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class CharacterStats : MonoBehaviour
 {
     public int coins;
-    public int maxSouls;
-    public int Coins;
     public int maxHealth = 100;
     public int currentHealth;
 
