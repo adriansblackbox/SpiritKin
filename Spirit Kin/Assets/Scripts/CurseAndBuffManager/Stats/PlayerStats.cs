@@ -13,18 +13,17 @@ public class PlayerStats : CharacterStats
 
     void Start()
     {
-        Coins = 10000;
+        coins = 20;
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        SoulsUI.text = currSouls + "/" + maxSouls;
-        CoinsUI.text = "" + Coins;
-        if (currSouls > maxSouls)
+        SoulsUI.text = coins + "/" + maxSouls;
+        if (coins > maxSouls)
         {
-            currSouls = maxSouls;
+            coins = maxSouls;
         }
         if (Buffs.Count != 0)
         {
@@ -149,5 +148,7 @@ public class PlayerStats : CharacterStats
     {
         int i = Buffs.FindIndex(y => y.teaName == x.teaName);
         Buffs[i].removeFlag = true;
+        // make sure that shop buff is purchasable
+
     }
 }

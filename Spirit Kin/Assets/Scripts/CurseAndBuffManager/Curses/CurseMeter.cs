@@ -30,7 +30,7 @@ public class CurseMeter : MonoBehaviour
         newCurse = false;
         curseMeter = 0f;
         pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>();
-        soulDelta = pStats.currSouls;
+        soulDelta = pStats.coins;
 
         damageCurse weak = new damageCurse(weakImage, pStats);
         slowCurse slow = new slowCurse(slowImage, pStats);
@@ -49,17 +49,17 @@ public class CurseMeter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (pStats.currSouls < soulDelta)
+        if (pStats.coins < soulDelta)
         {
-            soulDelta = pStats.currSouls;
+            soulDelta = pStats.coins;
         }
 
         if (activeCurses.Count < 3)
         {
-            if (soulDelta < pStats.currSouls)
+            if (soulDelta < pStats.coins)
             {
-                curseMeter += (((float)pStats.currSouls - soulDelta)) / fillRate;
-                soulDelta = pStats.currSouls;
+                curseMeter += (((float)pStats.coins - soulDelta)) / fillRate;
+                soulDelta = pStats.coins;
             }
             curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
             if (curseMeter >= 1f)

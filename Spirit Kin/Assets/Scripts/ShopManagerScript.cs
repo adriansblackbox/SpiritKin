@@ -20,7 +20,7 @@ public class ShopManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CoinsTXT.text = "Coins:" + playStats.Coins.ToString();
+        CoinsTXT.text = "Coins:" + playStats.coins.ToString();
 
         shopItems[1, 1] = 1;
         shopItems[1, 2] = 2;
@@ -48,15 +48,15 @@ public class ShopManagerScript : MonoBehaviour
                 .GetComponent<EventSystem>()
                 .currentSelectedGameObject;
         if (
-            playStats.Coins >=
+            playStats.coins >=
             shopItems[2, ButtonRef.GetComponent<button_info>().ItemID] &&
             shopItems[3, ButtonRef.GetComponent<button_info>().ItemID] <= 0
         )
         {
-            playStats.Coins -=
+            playStats.coins -=
                 shopItems[2, ButtonRef.GetComponent<button_info>().ItemID];
             shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]++;
-            CoinsTXT.text = "Coins:" + playStats.Coins.ToString();
+            CoinsTXT.text = "Coins:" + playStats.coins.ToString();
             
             ButtonRef.GetComponent<button_info>().BuyTxt.text = "Sold";
                 shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterStats : MonoBehaviour
 {
-    public int currSouls;
+    public int coins;
     public int maxSouls;
     public int Coins;
     public int maxHealth = 100;
@@ -16,7 +16,6 @@ public class CharacterStats : MonoBehaviour
     public Stat speed;
 
     public Text SoulsUI;
-    public Text CoinsUI;
     public ParticleSystem hitVFX;
     
     void Awake ()
@@ -47,7 +46,7 @@ public class CharacterStats : MonoBehaviour
     public virtual void Die () {
         //Die in some way
         if (gameObject.tag == "Enemy") {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().currSouls += currSouls;
+            GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().coins += coins;
         }
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
             FindObjectOfType<LockTarget>().DelockTarget();
