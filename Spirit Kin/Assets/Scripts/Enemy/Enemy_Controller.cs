@@ -357,7 +357,7 @@ public class Enemy_Controller : MonoBehaviour
                 }
                 
                 NavMeshHit hit;
-                NavMesh.SamplePosition(nextSpot + player.transform.position, out hit, 200.0f, NavMesh.AllAreas);
+                NavMesh.SamplePosition(nextSpot + player.transform.position, out hit, 400.0f, NavMesh.AllAreas);
                 ThisEnemy.CalculatePath(hit.position, path); //might need to do the find spot Navmesh thing if doesnt work
                 if (path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(hit.position, transform.position) > ai.surroundRadius * 1.5) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                     if (!exitedArena) { //if still in arena
