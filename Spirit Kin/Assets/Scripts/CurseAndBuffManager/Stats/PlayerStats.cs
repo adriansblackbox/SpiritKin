@@ -14,17 +14,14 @@ public class PlayerStats : CharacterStats
     void Start()
     {
         coins = 20;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        SoulsUI.text = coins + "/" + maxSouls;
-        if (coins > maxSouls)
-        {
-            coins = maxSouls;
-        }
+        SoulsUI.text = "" + coins;
         if (Buffs.Count != 0)
         {
             BuffHandler (Buffs);
