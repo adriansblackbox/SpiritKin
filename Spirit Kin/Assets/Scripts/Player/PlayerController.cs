@@ -127,8 +127,8 @@ public class PlayerController : MonoBehaviour
     }
     private void Animation(){
         animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 100f);
-        if(inputDirection == Vector2.zero)
-            animationBlend = 0;
+        //if(inputDirection == Vector2.zero)
+            //animationBlend = 0;
         animator.SetFloat("Speed", animationBlend);
         if(combatScript.isAttacking)
             speed = 0;
