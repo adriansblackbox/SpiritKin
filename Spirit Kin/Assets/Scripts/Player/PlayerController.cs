@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float speed;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
-    private float gravity = -30f;
+    public float Gravity = -30f;
     private float input_x;
     private float input_y;
     private float animationBlend;
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
             moveDirection = targetMoveDirection;
         }
         moveDirection = moveDirection.normalized * speed;
-        controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * Time.deltaTime);
+        controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * Time.deltaTime);
     }
      private void CombatMovement(){
         // if the player is attacking, their move direction should always be their forward direction
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
         // move direction is normalized, and the caharacter controller applies contstant
         // downward force for easy slope traversal
         moveDirection.Normalize();
-        controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
+        controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
     }
     private void Animation(){
         animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 100f);
