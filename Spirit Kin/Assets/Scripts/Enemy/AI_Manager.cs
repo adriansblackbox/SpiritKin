@@ -14,16 +14,54 @@ public class AI_Manager : MonoBehaviour
                         //send them to a neighboring quadrant for ease of use    
 
     private Transform enemiesContainer;
-    private List<Vector3> surroundSpots = new List<Vector3>();
-    private List<bool> surroundSpotAvailability = new List<bool>();
+    public List<Vector3> surroundSpots = new List<Vector3>();
+    public List<bool> surroundSpotAvailability = new List<bool>();
     private List<Vector3> surroundTrackingSpots = new List<Vector3>();
     public Transform Player;
     public float surroundRadius;
+
+    public GameObject attackingEnemy;
+    public List<GameObject> enemiesReadyToAttack = new List<GameObject>();
 
     private void Start() 
     {
         enemiesContainer = transform.GetChild(0);
         Player = GameObject.Find("Player").transform;
+    }
+
+    private void Update()
+    {
+        //Goal:
+            //basic framework for selecting an enemy to attack
+                //-> random !!!
+                //-> queue system
+                //-> order they arrive in
+
+        if (attackingEnemy == null && enemiesReadyToAttack.Count > 0)
+        {
+            //select enemy + set enemy values to be ready to attack
+                //EnemyMotion -> Waiting
+                //EnemyAttack -> Attacking
+            attackingEnemy = enemiesReadyToAttack[UnityEngine.Random.Range(0, enemiesReadyToAttack.Count)];
+            attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
+            attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
+            Debug.Log("Selected Enemy");
+        }
+
+        //need to handle allocating an attacker -> ask adrian how he feels about this :D
+            //first pass/first draft -> 1 enemy to attack + return to its spot
+            //second pass -> 1 enemy to attack + stay engaged attacking player
+            //third pass -> 1 main enemy attacking + staying engaged with player + 1 or 2 other enemies poking to make combat more difficult
+    }
+
+    public void finishAttack() //first pass super simple + will be used later for poke attacks
+    {
+        //return to spot
+            //-> should be able to reset their state to surrounding
+        attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.NotAttacking;
+        attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Surrounding;
+        attackingEnemy = null;
+        Debug.Log("Poke attack finished");
     }
 
             
@@ -91,11 +129,12 @@ public class AI_Manager : MonoBehaviour
         
         if (targetIndex != 100) //we have found a spot
         {
-            Debug.Log("Found a spot: " + surroundSpots[targetIndex]);
-            Debug.Log("Surround Spot Availability: " + surroundSpotAvailability[targetIndex]);
-            Debug.Log("Surround Spot Count: " + surroundSpotAvailability.Count);
+            // Debug.Log("Found a spot: " + surroundSpots[targetIndex]);
+            // Debug.Log("Surround Spot Availability: " + surroundSpotAvailability[targetIndex]);
+            // Debug.Log("Surround Spot Count: " + surroundSpotAvailability.Count);
             surroundSpotAvailability[targetIndex] = false;
             enemy.GetComponent<Enemy_Controller>().surroundSpot = surroundSpots[targetIndex];
+            enemy.GetComponent<Enemy_Controller>().surroundIndex = targetIndex;
 
             minDistA = Mathf.Infinity;
             minDistB = Mathf.Infinity;

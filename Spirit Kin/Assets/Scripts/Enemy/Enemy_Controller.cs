@@ -35,13 +35,15 @@ public class Enemy_Controller : MonoBehaviour
         Seeking,
         Relocating,
         Chasing,
-        Surrounding
+        Surrounding,
+        Waiting
     }
 
     //ADD HITSTUN STATE
     public enum AttackState {
         Attacking,
-        NotAttacking
+        NotAttacking,
+        Waiting
     }
 
     public MotionState EnemyMotion;
@@ -55,6 +57,7 @@ public class Enemy_Controller : MonoBehaviour
     public Vector3 surroundTarget = Vector3.zero;
     public Vector3 surroundSpot = Vector3.zero;
     public Vector3 nextSpot = Vector3.zero;
+    public int surroundIndex = -1; //necessary for resetting surrounding spots after leaving surround state
 
     public List<Vector3> movementQueue;
 
@@ -85,6 +88,9 @@ public class Enemy_Controller : MonoBehaviour
 
     public float seekSpeed;
     public float chaseSpeed;
+
+    [Tooltip("Distance for enemy to break out of surrounding")]
+    public float breakDist;
 
 //////////////////////////////////////////////////NAVMESH
 
@@ -160,6 +166,32 @@ public class Enemy_Controller : MonoBehaviour
         }   
 
         myTime += Time.deltaTime;
+
+
+        //we will want a function to handle the one time reset of values when moved to notAttacking
+        switch (EnemyAttack)
+        {
+            case AttackState.Attacking:
+                //need to ask adrian about timeline for attack animations
+                    //scenario 1:
+                        //attacks ready by end of week and we get them implemented here
+                    //scenario 2:
+                        //attacks not ready by end of week and we implement placeholder attacks
+                //-> finish attack will only be called animation is finished
+                ai.finishAttack();
+                break;
+            case AttackState.NotAttacking:
+                //reset all values and get ready to be called upon again to attack
+                    //-> second pass figure out next attack
+                EnemyAttack = AttackState.Waiting;
+                break;
+            case AttackState.Waiting:
+                //Debug.Log("Waiting to attack");
+                break;
+            default:
+                break;
+        }
+
         switch (EnemyMotion)
         {
             case MotionState.Patroling:
@@ -235,6 +267,17 @@ public class Enemy_Controller : MonoBehaviour
                 ThisEnemy.speed = chaseSpeed;
                 ThisEnemy.stoppingDistance = 10;
                 StopCoroutine(decideAlertedAction());
+
+                //if the player is inside breakDist swap to surrounding
+                if (Vector3.Distance(player.transform.position, transform.position) < breakDist)
+                {
+                    EnemyMotion = MotionState.Surrounding;
+                    //-> going into surrounding what do we need to reset before then
+                        //reset path
+                    ThisEnemy.ResetPath();
+                    break;
+                }
+
                 if (!ThisEnemy.hasPath)
                     startOfPath = transform.position;
                 ThisEnemy.CalculatePath(player.transform.position, path);
@@ -265,25 +308,37 @@ public class Enemy_Controller : MonoBehaviour
             case MotionState.Surrounding:
                 ThisEnemy.speed = chaseSpeed;
                 ThisEnemy.stoppingDistance = 0.05f;
+
+                transform.LookAt(player.transform.position + new Vector3(0, 4, 0));
+                //^^ LOOK INTO DIFFERNET IMPLEMENTATIONS -> LERPING OR TRAILS BEHIND ENEMIES
+
                 //determine a way to track which enemy aligns with which spot in generated surround spots array (n)
                 //set destination to player position + surround spots array [n]
-
-
-                // working code, un-block to fix
-                // if (surroundSpot == Vector3.zero)
-                // {
-                //     surroundSpot = ai.determineSurroundSpotV3(transform);
-                // }
 
                 // IMPLEMENT THIS TAKING INTO ACCOUNT NOT WANTING ENEMIES IN WALLS OR OFF MAP
                 // if (surroundSpot != Vector3.zero)
                 //     surroundTarget = ai.calculateSurroundSpotInWorld();
 
-                //move to tracking spot
-                    //move to surround spot
-
                 //mini A* around the tracking spots to get to their surround spots
                     //still might have issues running into each other, but that can be figured out later
+
+                //if the player is outside breakDist swap to chasing
+                if (Vector3.Distance(player.transform.position, transform.position) > breakDist + 5)
+                {
+                    EnemyMotion = MotionState.Chasing;
+                    //-> going into chasing what do we need to reset before then
+                        //reset spot in surrounding to be true [not taken anymore]
+                        //empty movementQueue
+                    movementQueue.Clear();
+                    ai.surroundSpotAvailability[surroundIndex] = true;
+                    surroundSpot = Vector3.zero;
+                    nextSpot = Vector3.zero;
+                    surroundTarget = Vector3.zero;
+                    surroundIndex = -1;
+                    ThisEnemy.ResetPath();
+                    ai.enemiesReadyToAttack.Remove(gameObject);
+                    break;
+                }
 
                 // if they dont have a path generate one
                 if (movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
@@ -295,7 +350,12 @@ public class Enemy_Controller : MonoBehaviour
                 {
                     nextSpot = movementQueue[0];
                     movementQueue.RemoveAt(0);
+                } 
+                else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
+                {
+                    ai.enemiesReadyToAttack.Add(gameObject);
                 }
+                
                 NavMeshHit hit;
                 NavMesh.SamplePosition(nextSpot + player.transform.position, out hit, 200.0f, NavMesh.AllAreas);
                 ThisEnemy.CalculatePath(hit.position, path); //might need to do the find spot Navmesh thing if doesnt work
@@ -307,6 +367,11 @@ public class Enemy_Controller : MonoBehaviour
                         ThisEnemy.ResetPath();
                     }
                 }
+                break;
+            case MotionState.Waiting:
+                Debug.Log("Waiting for Next Movement Action");
+                ThisEnemy.ResetPath();
+                //need to look into what we need to track or change when entering/exiting waiting
                 break;
             default:
                 break;
