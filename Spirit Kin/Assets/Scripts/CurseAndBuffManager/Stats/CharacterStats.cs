@@ -21,6 +21,7 @@ public class CharacterStats : MonoBehaviour
     void Awake ()
     {
         currentHealth = maxHealth;
+        coins = 20;
     }
 
     void Update() {

@@ -13,7 +13,7 @@ public class PlayerStats : CharacterStats
 
     void Start()
     {
-        coins = 20;
+        coins = 10000;
 
     }
 
