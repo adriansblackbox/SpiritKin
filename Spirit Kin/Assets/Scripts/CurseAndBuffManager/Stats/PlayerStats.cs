@@ -149,6 +149,6 @@ public class PlayerStats : CharacterStats
         int i = Buffs.FindIndex(y => y.teaName == x.teaName);
         Buffs[i].removeFlag = true;
         // make sure that shop buff is purchasable
-
+        Buffs[i].isApplied = false;
     }
 }
