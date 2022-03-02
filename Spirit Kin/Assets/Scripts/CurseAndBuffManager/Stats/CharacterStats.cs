@@ -17,6 +17,8 @@ public class CharacterStats : MonoBehaviour
 
     public Text SoulsUI;
     public ParticleSystem hitVFX;
+
+    public GameObject deathScene;
     
     void Awake ()
     {
@@ -24,6 +26,7 @@ public class CharacterStats : MonoBehaviour
     }
 
     void Update() {
+        
     }
 
     public void TakeDamage (int damage) {
@@ -47,6 +50,7 @@ public class CharacterStats : MonoBehaviour
         //Die in some way
         if (gameObject.tag == "Enemy") {
             GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().coins += coins;
+            Destroy(this.gameObject);
         }
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
             FindObjectOfType<LockTarget>().DelockTarget();
@@ -54,6 +58,9 @@ public class CharacterStats : MonoBehaviour
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
         }
-        Destroy(this.gameObject);
+        if (gameObject.tag =="Player"){
+            deathScene.SetActive(true);
+        }
+        
     }
 }

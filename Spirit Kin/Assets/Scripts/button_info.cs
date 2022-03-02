@@ -10,9 +10,14 @@ public class button_info : MonoBehaviour
     public Text QuantityTxt;
     public GameObject ShopManager;
 
+    public bool isSold = false;
+
     // Update is called once per frame
     void Update()
     {
+        if(isSold){
+            BuyTxt.text = "Upgrade";
+        }
         PriceTxt.text = "Price: $" +ShopManager.GetComponent<ShopManagerScript>().shopItems[2,ItemID].ToString();
         QuantityTxt.text = ShopManager.GetComponent<ShopManagerScript>().shopItems[3,ItemID].ToString();
     }

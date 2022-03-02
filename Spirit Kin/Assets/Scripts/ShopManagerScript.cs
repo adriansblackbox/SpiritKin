@@ -17,7 +17,6 @@ public class ShopManagerScript : MonoBehaviour
 
     public Text CoinsUITXT;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +47,7 @@ public class ShopManagerScript : MonoBehaviour
                 .FindGameObjectWithTag("Event")
                 .GetComponent<EventSystem>()
                 .currentSelectedGameObject;
-        
+
         if (
             playStats.coins >=
             shopItems[2, ButtonRef.GetComponent<button_info>().ItemID] &&
@@ -56,10 +55,13 @@ public class ShopManagerScript : MonoBehaviour
                 .isApplied
         )
         {
+            //sold
+            ButtonRef.GetComponent<button_info>().isSold = true;
             playStats.coins -=
                 shopItems[2, ButtonRef.GetComponent<button_info>().ItemID];
             shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]++;
             CoinsTXT.text = "Coins:" + playStats.coins.ToString();
+
             // ButtonRef.GetComponent<button_info>().BuyTxt.text= "Sold";
             shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]
                 .ToString();
@@ -73,7 +75,10 @@ public class ShopManagerScript : MonoBehaviour
                     .ItemID -
                 1]);
         }
-        
+    }
+
+    public void ItemHandler()
+    {
     }
 
     // Update is called once per frame

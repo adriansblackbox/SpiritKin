@@ -19,6 +19,10 @@ public class PlayerStats : CharacterStats
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.T)){
+            Debug.Log("dead");
+            Die();
+        }
         
         SoulsUI.text = coins + "/" + maxSouls;
         if (coins > maxSouls)
