@@ -514,7 +514,7 @@ AudioSource:
   m_GameObject: {fileID: 64130510}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -993249252307003090, guid: 9d7b25dee60d8a945b73abf79af12a6e, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3b1abe1f4261d8e4d8e297f4b8f9c237, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.1
@@ -49674,12 +49674,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7969240397504004763}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e08c528f34546948aa1c7d71200a61c, type: 3}
+  m_Script: {fileID: 11500000, guid: c3570f5d2e7890c40b2608d293c65f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clips:
+  Stepclips:
   - {fileID: 8300000, guid: b4402e4adc2622848afd72698516ee3a, type: 3}
   - {fileID: 8300000, guid: 5c5001c4bd9c26f418d2b9889dfc2f99, type: 3}
+  slash1: {fileID: 8300000, guid: 090540c176747dd4a96df25db0761ce3, type: 3}
+  slash2: {fileID: 8300000, guid: 5367348fdb7807c4a83e4502b01f9a98, type: 3}
+  slash3: {fileID: 8300000, guid: 8903dff680935b64c8a4288f13b46e76, type: 3}
 --- !u!33 &7970675958962314873
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -52823,7 +52826,15 @@ PrefabInstance:
     - target: {fileID: 4907299623633728659, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: b4402e4adc2622848afd72698516ee3a, type: 3}
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907299623633728659, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907299623633728659, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -993249252307003090, guid: 9d7b25dee60d8a945b73abf79af12a6e, type: 2}
     - target: {fileID: 5344178195030925532, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_TagString
       value: Player
