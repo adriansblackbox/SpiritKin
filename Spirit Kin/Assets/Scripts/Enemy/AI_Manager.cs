@@ -188,6 +188,9 @@ public class AI_Manager : MonoBehaviour
                     break;
                 }
             }
+
+            //PATHING IS INCORRECT SO NEED TO FIX SMILE
+
             if (right) //add to path in postive direction until reach goal
             {
                 for (int i = chosenIndex + 1; i < surroundTrackingSpots.Count / 2 + chosenIndex && i%(surroundTrackingSpots.Count - 1) != targetIndex; i++)
