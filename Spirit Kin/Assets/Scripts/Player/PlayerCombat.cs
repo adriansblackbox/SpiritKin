@@ -73,7 +73,7 @@ public class PlayerCombat : MonoBehaviour
         animator.SetBool("isDodging", isDodging);
     }
     private void Dodge(){
-        if(bufferButton == "Dodge"){
+        if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
             bufferButton = "";
             controller.TempSpeed = DodgeSpeed;
             isDodging = true;
@@ -107,9 +107,9 @@ public class PlayerCombat : MonoBehaviour
             if(comboTimeDelay >= totalAnimationTime/4f)
                 bufferButton = "Attack";
         }
-        if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
-            bufferButton = "Dodge";
-        }
+        //if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
+        //    bufferButton = "Dodge";
+        //}
     }
     public void activateSword(){
         GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().activateSword();
