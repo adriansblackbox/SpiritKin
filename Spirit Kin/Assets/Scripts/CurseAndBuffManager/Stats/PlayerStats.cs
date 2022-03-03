@@ -13,7 +13,9 @@ public class PlayerStats : CharacterStats
 
     void Start()
     {
-        coins = 10000;
+        // coins = 10000;
+        //reset buffs
+        
 
     }
 
@@ -145,6 +147,7 @@ public class PlayerStats : CharacterStats
             Debug.Log(x.teaName);
         }
     }
+
 
     public void removeBuff(Buff x)
     {
