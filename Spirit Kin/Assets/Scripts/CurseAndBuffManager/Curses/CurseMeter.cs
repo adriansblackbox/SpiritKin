@@ -21,6 +21,7 @@ public class CurseMeter : MonoBehaviour
     public GameObject Sword0, Sword1, Sword2, Sword3;
     private GameObject curCurseUI;
     public Sprite Notch, weakImage, slowImage, frailImage;
+    public GameObject ActiveSword;
 
     public bool debugbool = false;
 
@@ -93,24 +94,28 @@ public class CurseMeter : MonoBehaviour
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
+                ActiveSword = Sword0;
                 break;
             case 1:
                 Sword1.SetActive(true);
                 Sword0.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
+                ActiveSword = Sword1;
                 break;
             case 2:
                 Sword2.SetActive(true);
                 Sword1.SetActive(false);
                 Sword0.SetActive(false);
                 Sword3.SetActive(false);
+                ActiveSword = Sword2;
                 break;
             case 3:
                 Sword3.SetActive(true);
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword0.SetActive(false);
+                ActiveSword = Sword3;
                 break;
         }
     }

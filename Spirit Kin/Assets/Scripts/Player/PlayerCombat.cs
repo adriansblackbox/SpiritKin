@@ -22,6 +22,7 @@ public class PlayerCombat : MonoBehaviour
     private int numOfClicks = 0;
     private Animator animator;
     private PlayerController controller;
+    public GameObject sword0, sword1, sword2, sword3;
 
     private void Start() {
         animator = GetComponent<Animator>();
@@ -101,5 +102,11 @@ public class PlayerCombat : MonoBehaviour
                 controller.TempSpeed = DashAttackSpeed;
             }
         }
+    }
+    public void activateSword(){
+        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().activateSword();
+    }
+    public void deactivateSword(){
+        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().deactivateSword();
     }
 }
