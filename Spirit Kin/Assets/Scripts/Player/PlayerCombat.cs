@@ -23,13 +23,16 @@ public class PlayerCombat : MonoBehaviour
     private Animator animator;
     private PlayerController controller;
     public GameObject sword0, sword1, sword2, sword3;
+    private string bufferButton;
 
     private void Start() {
         animator = GetComponent<Animator>();
         controller = GetComponent<PlayerController>();
+        bufferButton = "";
     }
     void Update()
     {
+        hadnleBuffer();
         // Gets he total animation time per animation and stores it
         totalAnimationTime = animator.GetCurrentAnimatorStateInfo(2).length;
         // calculates the time that will allow animation cancel to happen
@@ -67,10 +70,11 @@ public class PlayerCombat : MonoBehaviour
             isDodging = false;
             dodgeCoolDown -= Time.deltaTime;
         }
-         animator.SetBool("isDodging", isDodging);
+        animator.SetBool("isDodging", isDodging);
     }
     private void Dodge(){
-        if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
+        if(bufferButton == "Dodge"){
+            bufferButton = "";
             controller.TempSpeed = DodgeSpeed;
             isDodging = true;
             dodgeTimeItter = DodgeTime;
@@ -78,7 +82,8 @@ public class PlayerCombat : MonoBehaviour
         }
     }
     private void Attack(){
-        if(Input.GetButtonDown("X Button") || Input.GetKey(KeyCode.Mouse0)){
+        if(bufferButton == "Attack"){
+            bufferButton = "";
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
             isAttacking = true;
             comboTimeDelay = 0f;
@@ -89,18 +94,21 @@ public class PlayerCombat : MonoBehaviour
             }
             animator.SetInteger("attackTicks", numOfClicks);
             controller.TempSpeed = controller.targetSpeed;
-            //if( GetComponent<LockTarget>().Target != null){
-                // lunge forward
-                controller.TempSpeed = LungeSpeed;
-                CombatSpeedDropoff = CombatWalkSpeedDropoff;
-            //}else{
-             //   controller.TempSpeed = 0;
-            //    CombatSpeedDropoff = CombatWalkSpeedDropoff;
-            //}
+            controller.TempSpeed = LungeSpeed;
+            CombatSpeedDropoff = CombatWalkSpeedDropoff;
             if((Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")) && controller.speed > controller.WalkSpeed){
                 CombatSpeedDropoff = CombatRunSpeedDropoff;
                 controller.TempSpeed = DashAttackSpeed;
             }
+        }
+    }
+    private void hadnleBuffer(){
+        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
+            if(comboTimeDelay >= totalAnimationTime/4f)
+                bufferButton = "Attack";
+        }
+        if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
+            bufferButton = "Dodge";
         }
     }
     public void activateSword(){
