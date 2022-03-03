@@ -57,6 +57,8 @@ public class CharacterStats : MonoBehaviour
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
         }
+        if (gameObject.tag == "Enemy")
+            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
         if (gameObject.tag =="Player"){
             deathScene.SetActive(true);
         }
