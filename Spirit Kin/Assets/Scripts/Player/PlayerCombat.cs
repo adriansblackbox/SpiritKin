@@ -78,7 +78,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
     private void Attack(){
-        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
+        if(Input.GetButtonDown("X Button") || Input.GetKey(KeyCode.Mouse0)){
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
             isAttacking = true;
             comboTimeDelay = 0f;
