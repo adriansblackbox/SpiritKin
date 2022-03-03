@@ -142,6 +142,7 @@ public class PlayerStats : CharacterStats
             x.isApplied = false;
             x.removeFlag = false;
             Buffs.Add (x);
+            Debug.Log(x.teaName);
         }
     }
 

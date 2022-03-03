@@ -74,6 +74,7 @@ public class ShopManagerScript : MonoBehaviour
                     .GetComponent<button_info>()
                     .ItemID -
                 1]);
+            
         }
     }
 
