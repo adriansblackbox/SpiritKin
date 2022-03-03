@@ -76,7 +76,6 @@ public class AI_Manager : MonoBehaviour
         //-> Generate the circle
             //select x locations where x is the number of enemies
         float spacing = 360 / 8;
-        //Debug.Log("Amount of Enemies: " + enemiesContainer.childCount);
         for (int i = 0; i < 8; ++i) //8 is for testing and can be changed later
         {
             
@@ -86,10 +85,9 @@ public class AI_Manager : MonoBehaviour
             //should output x equivalent for our circle
             float xVal = Mathf.Cos(Mathf.Deg2Rad * (spacing * i));
 
-            //Debug.Log("Coordinate Pair: " + "( " + xVal + ", " + zVal + ")");
-
             Vector3 validSpot = new Vector3(xVal, 0, zVal);
 
+            //setup all 3 variables to the end of our 3 lists
             surroundSpots.Add(validSpot * surroundRadius);
             surroundSpotAvailability.Add(true);
             surroundTrackingSpots.Add(validSpot * surroundRadius * 1.5f);
@@ -110,7 +108,7 @@ public class AI_Manager : MonoBehaviour
     //need a way to chekc if a spot is already taken
         //find the closest spot to the enemy
             //set their surround target to be that spot
-    public List<Vector3> determineSurroundSpot(Transform enemy) 
+    public List<Vector3> determineSurroundSpot(Transform enemy)
     {
         float minDistA = Mathf.Infinity;
         float minDistB = Mathf.Infinity;
@@ -175,12 +173,19 @@ public class AI_Manager : MonoBehaviour
                 curr = surroundTrackingSpots[targetIndexB];
                 targetIndexA = -1;
             }
+            
+            //was A or B closer for the enemy + add to path
+            int chosenIndex = (targetIndexA != -1) ? targetIndexA : targetIndexB;
             Path.Add(curr);
 
-            int chosenIndex = (targetIndexA != -1) ? targetIndexA : targetIndexB;
             //generate whole path based off of starting position and end position
             bool right = false;
-            for (int i = chosenIndex; i < surroundTrackingSpots.Count / 2 + chosenIndex; i++)
+
+            //this currently runs only 4 times which 1 of is the already chosen spot
+            //-> should be chosenIndex + 1 to surroundTrackingSpots.Count / 2 + chosenIndex + 1
+                //now if start at 3
+                    //4, 5, 6, 7
+            for (int i = chosenIndex + 1; i < surroundTrackingSpots.Count / 2 + chosenIndex + 1; i++)
             {
                 if (i%(surroundTrackingSpots.Count - 1) == targetIndex) // we are done and can go in positive direction
                 {
@@ -193,17 +198,23 @@ public class AI_Manager : MonoBehaviour
 
             if (right) //add to path in postive direction until reach goal
             {
-                for (int i = chosenIndex + 1; i < surroundTrackingSpots.Count / 2 + chosenIndex && i%(surroundTrackingSpots.Count - 1) != targetIndex; i++)
-                    Path.Add(surroundTrackingSpots[i%(surroundTrackingSpots.Count - 1)]);        
+                for (int i = chosenIndex + 1; i < surroundTrackingSpots.Count / 2 + chosenIndex + 1 && i % surroundTrackingSpots.Count != (targetIndex + 1) % surroundTrackingSpots.Count; i++)
+                    Path.Add(surroundTrackingSpots[i % surroundTrackingSpots.Count]);        
             }
             else //add to path in negative direction until reach goal
             {
-                //CHOSEN INDEX + 3 IS INDEPENDENT AND WONT CHANGE IF WE ADD OR TAKE AWAY SPOTS
-                for (int i = chosenIndex + 6; i > surroundTrackingSpots.Count / 2 + chosenIndex - 1 && i%(surroundTrackingSpots.Count - 1) != targetIndex; i--)
-                    Path.Add(surroundTrackingSpots[i%(surroundTrackingSpots.Count - 1)]);
+                //chosenIndex + 6 because:
+                    //start at 4 dest at 2
+                        //intended function
+                            //add 3, 2
+                            //dont add 4 because its already there
+                    //4 + 6 = 10 % 7 -> 3 which is the first one to add
+                for (int i = chosenIndex + surroundTrackingSpots.Count - 1; i > surroundTrackingSpots.Count / 2 + chosenIndex - 1 && i % surroundTrackingSpots.Count != (targetIndex + surroundTrackingSpots.Count - 1) % surroundTrackingSpots.Count; i--)
+                    Path.Add(surroundTrackingSpots[i % surroundTrackingSpots.Count]);
             }
             //make the decision
             Path.Add(end);
+
             return Path;
         }
         else //sadge no spot for me
