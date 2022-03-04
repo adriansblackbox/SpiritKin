@@ -184,6 +184,8 @@ public class CurseMeter : MonoBehaviour
         }
         int i = Random.Range(0, activeCurses.Count - 1);
 
+        FindObjectOfType<StatVFX>().removeCurseStat(activeCurses[i].type);
+
         activeCurses[i].active = true;
         activeCurses[i].isApplied = false;
         activeCurses[i].removeFlag = true;
@@ -221,6 +223,7 @@ public class CurseMeter : MonoBehaviour
                     curCurseUI.transform.Find("Bar").gameObject.SetActive(false);
                     x.invokeCurse();
                     manageCurseUI();
+                    FindObjectOfType<StatVFX>().addCurseStat(x.type);
                 }
 
             }

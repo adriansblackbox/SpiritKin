@@ -22,7 +22,6 @@ public class PlayerCombat : MonoBehaviour
     private int numOfClicks = 0;
     private Animator animator;
     private PlayerController controller;
-    public GameObject sword0, sword1, sword2, sword3;
     private string bufferButton;
 
     private void Start() {
