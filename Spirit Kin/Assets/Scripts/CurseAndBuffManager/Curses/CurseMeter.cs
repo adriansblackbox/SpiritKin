@@ -45,6 +45,7 @@ public class CurseMeter : MonoBehaviour
         cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
+        ActiveSword = Sword0;
     }
 
     // Update is called once per frame
@@ -82,7 +83,8 @@ public class CurseMeter : MonoBehaviour
             CurseHandler();
             newCurse = false;
         }
-        HandleSword();
+        if(!FindObjectOfType<PlayerCombat>().isDodging)
+            HandleSword();
 
     }
     private void HandleSword()
@@ -94,9 +96,8 @@ public class CurseMeter : MonoBehaviour
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
-                if(ActiveSword != null)
-                    if(ActiveSword != Sword0)
-                        ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+                if(ActiveSword != Sword0)
+                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
                 ActiveSword = Sword0;
                 break;
             case 1:
