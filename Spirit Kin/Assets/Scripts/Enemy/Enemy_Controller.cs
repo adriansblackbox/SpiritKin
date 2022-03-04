@@ -237,7 +237,7 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                transform.LookAt(player.transform.position + new Vector3(0.0f, 2.5f, 0.0f));
+                transform.LookAt(player.transform.position + new Vector3(0, 4, 0));
                 if (justAlerted)
                 {
                     ThisEnemy.ResetPath();
@@ -343,6 +343,11 @@ public class Enemy_Controller : MonoBehaviour
                 // if they dont have a path generate one
                 if (movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
                     movementQueue = ai.determineSurroundSpot(transform);
+                    if (movementQueue.Count == 0) {
+                        EnemyMotion = MotionState.Relocating;
+                        break;
+                    }
+
                 }
 
                 // if they have reached their spot give them a new one

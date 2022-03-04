@@ -13,7 +13,9 @@ public class PlayerStats : CharacterStats
 
     void Start()
     {
-        coins = 10000;
+        // coins = 10000;
+        //reset buffs
+        
 
     }
 
@@ -129,6 +131,7 @@ public class PlayerStats : CharacterStats
             });
             for(int i = 0; i < Buffs.Count; i ++){
                 if(Buffs[i].removeFlag){
+                    FindObjectOfType<StatVFX>().removeBuffStat(Buffs[i].teaName);
                     Buffs.RemoveAt(i);
                     BuffsUI.Add(BuffsUI[0]);
                     BuffsUI.RemoveAt(0);
@@ -142,8 +145,11 @@ public class PlayerStats : CharacterStats
             x.isApplied = false;
             x.removeFlag = false;
             Buffs.Add (x);
+            Debug.Log(x.teaName);
+            FindObjectOfType<StatVFX>().addBuffStat(x.teaName);
         }
     }
+
 
     public void removeBuff(Buff x)
     {

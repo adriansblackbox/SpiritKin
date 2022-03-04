@@ -55,10 +55,6 @@ public class PlayerController : MonoBehaviour
         // their input is ignored until movement dependant mechanic is done
         //if(!combatScript.isDodging){
             InputMovement();
-        //}else{
-        //     CombatMovement();
-        //}
-        //Debug.Log(speed);
         Animation();
         // so long as the player is not locked onto a target, they can rotate their
         // camera freely

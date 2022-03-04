@@ -21,6 +21,7 @@ public class CurseMeter : MonoBehaviour
     public GameObject Sword0, Sword1, Sword2, Sword3;
     private GameObject curCurseUI;
     public Sprite Notch, weakImage, slowImage, frailImage;
+    public GameObject ActiveSword;
 
     public bool debugbool = false;
 
@@ -93,24 +94,37 @@ public class CurseMeter : MonoBehaviour
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
+                if(ActiveSword != null)
+                    if(ActiveSword != Sword0)
+                        ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+                ActiveSword = Sword0;
                 break;
             case 1:
                 Sword1.SetActive(true);
                 Sword0.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
+                if(ActiveSword != Sword1)
+                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+                ActiveSword = Sword1;
                 break;
             case 2:
                 Sword2.SetActive(true);
                 Sword1.SetActive(false);
                 Sword0.SetActive(false);
                 Sword3.SetActive(false);
+                if(ActiveSword != Sword2)
+                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+                ActiveSword = Sword2;
                 break;
             case 3:
                 Sword3.SetActive(true);
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword0.SetActive(false);
+                if(ActiveSword != Sword3)
+                    ActiveSword.GetComponent<SwordCollision>().SwordTrail.SetActive(false);
+                ActiveSword = Sword3;
                 break;
         }
     }
@@ -170,6 +184,8 @@ public class CurseMeter : MonoBehaviour
         }
         int i = Random.Range(0, activeCurses.Count - 1);
 
+        FindObjectOfType<StatVFX>().removeCurseStat(activeCurses[i].type);
+
         activeCurses[i].active = true;
         activeCurses[i].isApplied = false;
         activeCurses[i].removeFlag = true;
@@ -207,6 +223,7 @@ public class CurseMeter : MonoBehaviour
                     curCurseUI.transform.Find("Bar").gameObject.SetActive(false);
                     x.invokeCurse();
                     manageCurseUI();
+                    FindObjectOfType<StatVFX>().addCurseStat(x.type);
                 }
 
             }

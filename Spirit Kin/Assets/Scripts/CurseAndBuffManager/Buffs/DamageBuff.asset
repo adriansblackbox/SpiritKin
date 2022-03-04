@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73ef7d7fffdd1a44e8527ceceac6444a, type: 3}
   m_Name: DamageBuff
   m_EditorClassIdentifier: 
-  teaName: 2
+  teaName: Damage
+  description: +10 Attack Damage
+  Cost: 1
+  InvestCost: 5
+  buffSprite: {fileID: 21300000, guid: 1e6d49103649e954ca5f0f0c9f0bc28c, type: 3}
   stat: 3
   basePower: 10
   duration: 10
-  timeActive: 0
+  timeActive: 9.629272
   isApplied: 0
   removeFlag: 0

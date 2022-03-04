@@ -15,14 +15,9 @@ public class SwordCollision : MonoBehaviour
        combatScript = FindObjectOfType<PlayerCombat>();
     }
     private void Update() {
-        if(combatScript.isAttacking){
-            SwordTrail.SetActive(true);
-        }else{
-            SwordTrail.SetActive(false);
-        }
         RaycastHit hit;
         //checking to see if we hit an enemy
-        if (Physics.Raycast(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left), out hit, BladeLength, layerMask) && FindObjectOfType<PlayerCombat>().isAttacking)
+        if (Physics.Raycast(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left), out hit, BladeLength, layerMask) && SwordTrail.activeSelf)
         {
             Debug.DrawRay(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left) * BladeLength, Color.red);
             if(!immuneEnemies.Contains(hit.transform.gameObject)){
@@ -30,9 +25,15 @@ public class SwordCollision : MonoBehaviour
                 hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(1);
             }
         }
-        else
+        else if(SwordTrail.activeSelf)
         {
             Debug.DrawRay(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left) * BladeLength, Color.yellow);
         }
+    }
+    public void activateSword(){
+        SwordTrail.SetActive(true);
+    }
+    public void deactivateSword(){
+        SwordTrail.SetActive(false);
     }
 }

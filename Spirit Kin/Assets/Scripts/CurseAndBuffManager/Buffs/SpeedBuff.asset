@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73ef7d7fffdd1a44e8527ceceac6444a, type: 3}
   m_Name: SpeedBuff
   m_EditorClassIdentifier: 
-  teaName: 4
+  teaName: Speed
+  description: +10 Speed
+  Cost: 1
+  InvestCost: 5
+  buffSprite: {fileID: 21300000, guid: c644c444253a01e4f8e3f2fe0306e3f3, type: 3}
   stat: 4
   basePower: 10
   duration: 10
-  timeActive: 0
+  timeActive: 9.368083
   isApplied: 0
   removeFlag: 0
