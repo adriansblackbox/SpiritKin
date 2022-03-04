@@ -32,11 +32,11 @@ public class LockTarget : MonoBehaviour
     }
 
     private void Update(){
+        FindTarget();
         if(Target != null){
             LockOnTarget();
         }else{
             animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
-            FindTarget();
         }
         // updates the plaeyr's aniamtion according to input direction. Lerping is
         // used for smooth and organic transitioning between animations
@@ -52,10 +52,10 @@ public class LockTarget : MonoBehaviour
         Vector3 focusDirection = (aimTarget - transform.position).normalized;
         controller.RotateOnMoveDirection = false;
         // rotates the player to the target at adjustable speeds
-        if((Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")) && controller.inputDirection != Vector2.zero){
+        if((Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")) && controller.inputDirection != Vector2.zero && !combatScript.isAttacking){
             playerBody.forward = Vector3.Lerp(playerBody.forward, controller.targetMoveDirection, Time.deltaTime * 20f);
             animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * NormToCombatSpeed));
-        }else if(combatScript.CombatSpeedDropoff != combatScript.CombatRunSpeedDropoff){
+        }else {//if(combatScript.CombatSpeedDropoff != combatScript.CombatRunSpeedDropoff){
             playerBody.forward = Vector3.Lerp(playerBody.forward, focusDirection, Time.deltaTime * RotateToTargetSpeed);
             animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * NormToCombatSpeed));
         }
@@ -68,23 +68,24 @@ public class LockTarget : MonoBehaviour
         controller.CinemachineTargetPitch =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.x;
         controller.CinemachineTargetYaw =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         // Cancel lock
-        if((Input.GetAxisRaw("Left Trigger") <= 0 && !Input.GetKey(KeyCode.Mouse1)) || Input.GetKeyUp(KeyCode.Mouse1) || (this.transform.position - Target.transform.position).magnitude > LetGoDistance){
+        if((this.transform.position - Target.transform.position).magnitude > LetGoDistance){
             DelockTarget();
         }
     }
     public void DelockTarget(){
+        controller.RotateOnMoveDirection = true;
         Target = null;
         FindObjectOfType<LockableTargets>().ClearTargetList();
         transform.forward =  playerBody.forward;
         playerBody.forward = transform.forward;
-        FollowCamera.LookAt = controller.CinemachineCameraTarget.transform;
-        controller.RotateOnMoveDirection = true;
-        //controller.SprintSpeed = defaultSprintSpeed;
     }
 
     private void FindTarget(){
-        if(Input.GetAxisRaw("Left Trigger") > 0.5f || Input.GetKeyDown(KeyCode.Mouse1)){
-            Target = FindObjectOfType<LockableTargets>().AssessTarget();
+        if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
+            if(Target != null)
+                DelockTarget();
+            else
+                Target = FindObjectOfType<LockableTargets>().AssessTarget();
         }
     }
 }

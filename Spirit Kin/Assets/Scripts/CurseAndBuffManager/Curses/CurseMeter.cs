@@ -45,6 +45,7 @@ public class CurseMeter : MonoBehaviour
         cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
+        ActiveSword = Sword0;
     }
 
     // Update is called once per frame
@@ -82,7 +83,8 @@ public class CurseMeter : MonoBehaviour
             CurseHandler();
             newCurse = false;
         }
-        HandleSword();
+        if(!FindObjectOfType<PlayerCombat>().isDodging)
+            HandleSword();
 
     }
     private void HandleSword()
@@ -94,6 +96,8 @@ public class CurseMeter : MonoBehaviour
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
+                if(ActiveSword != Sword0)
+                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
                 ActiveSword = Sword0;
                 break;
             case 1:
@@ -101,6 +105,8 @@ public class CurseMeter : MonoBehaviour
                 Sword0.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
+                if(ActiveSword != Sword1)
+                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
                 ActiveSword = Sword1;
                 break;
             case 2:
@@ -108,6 +114,8 @@ public class CurseMeter : MonoBehaviour
                 Sword1.SetActive(false);
                 Sword0.SetActive(false);
                 Sword3.SetActive(false);
+                if(ActiveSword != Sword2)
+                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
                 ActiveSword = Sword2;
                 break;
             case 3:
@@ -115,6 +123,8 @@ public class CurseMeter : MonoBehaviour
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword0.SetActive(false);
+                if(ActiveSword != Sword3)
+                    ActiveSword.GetComponent<SwordCollision>().SwordTrail.SetActive(false);
                 ActiveSword = Sword3;
                 break;
         }
@@ -175,6 +185,8 @@ public class CurseMeter : MonoBehaviour
         }
         int i = Random.Range(0, activeCurses.Count - 1);
 
+        FindObjectOfType<StatVFX>().removeCurseStat(activeCurses[i].type);
+
         activeCurses[i].active = true;
         activeCurses[i].isApplied = false;
         activeCurses[i].removeFlag = true;
@@ -212,6 +224,7 @@ public class CurseMeter : MonoBehaviour
                     curCurseUI.transform.Find("Bar").gameObject.SetActive(false);
                     x.invokeCurse();
                     manageCurseUI();
+                    FindObjectOfType<StatVFX>().addCurseStat(x.type);
                 }
 
             }

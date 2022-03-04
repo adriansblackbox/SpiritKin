@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
+    public GameObject playerGeo;
+    public GameObject playerTrail;
     [SerializeField] private float DodgeTime = 0.5f;
     [SerializeField] private float DodgeSpeed = 20f;
     [SerializeField] private float AnimationCancelFactor = 3f;
@@ -22,7 +24,6 @@ public class PlayerCombat : MonoBehaviour
     private int numOfClicks = 0;
     private Animator animator;
     private PlayerController controller;
-    public GameObject sword0, sword1, sword2, sword3;
     private string bufferButton;
 
     private void Start() {
@@ -40,6 +41,7 @@ public class PlayerCombat : MonoBehaviour
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
         if(dodgeCoolDown <= 0.0f && !isAttacking){
+
             Dodge();
         }
         if((comboTimeDelay >= cancelAnimationTime || numOfClicks == 0) && !isDodging){
@@ -67,6 +69,11 @@ public class PlayerCombat : MonoBehaviour
         if(dodgeTimeItter > 0){
             dodgeTimeItter -= Time.deltaTime;
         }else if(dodgeCoolDown > 0){
+            // makes the player invisible
+            controller.RotateOnMoveDirection = true;
+            playerTrail.SetActive(false);
+            playerGeo.SetActive(true);
+            GetComponent<CurseMeter>().ActiveSword.SetActive(true);
             isDodging = false;
             dodgeCoolDown -= Time.deltaTime;
         }
@@ -74,6 +81,11 @@ public class PlayerCombat : MonoBehaviour
     }
     private void Dodge(){
         if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
+            controller.RotateOnMoveDirection = false;
+            // makes the player invisible
+            playerGeo.SetActive(false);
+            playerTrail.SetActive(true);
+            GetComponent<CurseMeter>().ActiveSword.SetActive(false);
             bufferButton = "";
             controller.TempSpeed = DodgeSpeed;
             isDodging = true;

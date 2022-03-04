@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class TeaShop : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class TeaShop : MonoBehaviour
     private bool isInteractable;
 
     private bool isOpen;
+      public GameObject ShopFirstButton;
 
     // Start is called before the first frame update
     void Start()
@@ -68,10 +70,17 @@ public class TeaShop : MonoBehaviour
 
     public void OpenMenu()
     {
+        
+
         Cursor.lockState = CursorLockMode.None;
         teaMenu.SetActive(true);
         teaCamera.SetActive(true);
         isOpen = true;
+
+        //clear selected button
+        EventSystem.current.SetSelectedGameObject(null);
+        //reassign
+        EventSystem.current.SetSelectedGameObject(ShopFirstButton);
 
         //disable player's script here
         Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
