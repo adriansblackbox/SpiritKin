@@ -20,7 +20,7 @@ public class ShopManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CoinsTXT.text = "Coins:" + playStats.Coins.ToString();
+        CoinsTXT.text = "Coins:" + playStats.coins.ToString();
 
         shopItems[1, 1] = 1;
         shopItems[1, 2] = 2;
@@ -47,18 +47,24 @@ public class ShopManagerScript : MonoBehaviour
                 .FindGameObjectWithTag("Event")
                 .GetComponent<EventSystem>()
                 .currentSelectedGameObject;
+
         if (
-            playStats.Coins >=
-            shopItems[2, ButtonRef.GetComponent<button_info>().ItemID]
+            playStats.coins >=
+            shopItems[2, ButtonRef.GetComponent<button_info>().ItemID] &&
+            !shopBuffList[ButtonRef.GetComponent<button_info>().ItemID - 1]
+                .isApplied
         )
         {
-            playStats.Coins -=
+            //sold
+            ButtonRef.GetComponent<button_info>().isSold = true;
+            playStats.coins -=
                 shopItems[2, ButtonRef.GetComponent<button_info>().ItemID];
             shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]++;
-            CoinsTXT.text = "Coins:" + playStats.Coins.ToString();
-            ButtonRef.GetComponent<button_info>().QuantityTxt.text =
-                shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]
-                    .ToString();
+            CoinsTXT.text = "Coins:" + playStats.coins.ToString();
+
+            // ButtonRef.GetComponent<button_info>().BuyTxt.text= "Sold";
+            shopItems[3, ButtonRef.GetComponent<button_info>().ItemID]
+                .ToString();
 
             //add buff to player
             GameObject
@@ -66,8 +72,13 @@ public class ShopManagerScript : MonoBehaviour
                 .GetComponent<PlayerStats>()
                 .addBuff(shopBuffList[ButtonRef
                     .GetComponent<button_info>()
-                    .ItemID-1]);
+                    .ItemID -
+                1]);
         }
+    }
+
+    public void ItemHandler()
+    {
     }
 
     // Update is called once per frame

@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float WalkSpeed = 2.0f;
     [SerializeField] public float SprintSpeed = 5.0f;
     [SerializeField] private float RotationSmoothTime = 1f;
+    [SerializeField] private float CombatRotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
     [SerializeField] private float StickLookSensitivity = 200f;
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float speed;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
-    private float gravity = -30f;
+    public float Gravity = -30f;
     private float input_x;
     private float input_y;
     private float animationBlend;
@@ -52,11 +53,11 @@ public class PlayerController : MonoBehaviour
     {
         // if the player is initiating a mechanic besides basic movement,
         // their input is ignored until movement dependant mechanic is done
-        if(!combatScript.isAttacking && !combatScript.isDodging){
+        //if(!combatScript.isDodging){
             InputMovement();
-        }else{
-            CombatMovement();
-        }
+        //}else{
+        //     CombatMovement();
+        //}
         //Debug.Log(speed);
         Animation();
         // so long as the player is not locked onto a target, they can rotate their
@@ -90,7 +91,10 @@ public class PlayerController : MonoBehaviour
         inputDirection.Normalize();
         if (inputDirection != Vector2.zero){
             targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, RotationSmoothTime);
+            float rotationSpeed = RotationSmoothTime;
+            if(combatScript.isAttacking)
+                rotationSpeed = CombatRotationSmoothTime;
+            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, rotationSpeed);
             // rotate to face input direction relative to camera position
             if(RotateOnMoveDirection)
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
@@ -102,33 +106,27 @@ public class PlayerController : MonoBehaviour
         if(GetComponent<LockTarget>().Target != null){
             moveDirection = targetMoveDirection;
         }
-        moveDirection = moveDirection.normalized * speed;
-        controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * Time.deltaTime);
+        float moveSpeed = speed;
+        if(combatScript.isAttacking || combatScript.isDodging){
+            moveSpeed = TempSpeed;
+            TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * combatScript.CombatSpeedDropoff);
+        }
+        moveDirection = moveDirection.normalized * moveSpeed;
+        controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * Time.deltaTime);
     }
      private void CombatMovement(){
-        // if the player is attacking, their move direction should always be their forward direction
-        if(combatScript.isAttacking){
-            // note: the player's body is a child of the player game object for camera locking
-            // reasons. When the player attacks, they should attack along the forward vector of
-            // the player's body
-            moveDirection = transform.GetChild(0).gameObject.transform.forward;
-        }
         if(combatScript.isDodging){
             moveDirection = targetMoveDirection;
         }
-        // TempSpeed is altered by the PlayerCombat script
-
-        TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * combatScript.CombatSpeedDropoff);
-        
         // move direction is normalized, and the caharacter controller applies contstant
         // downward force for easy slope traversal
         moveDirection.Normalize();
-        controller.Move(new Vector3(moveDirection.x, gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
+        controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
     }
     private void Animation(){
         animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 100f);
-        if(inputDirection == Vector2.zero)
-            animationBlend = 0;
+        //if(inputDirection == Vector2.zero)
+            //animationBlend = 0;
         animator.SetFloat("Speed", animationBlend);
         if(combatScript.isAttacking)
             speed = 0;

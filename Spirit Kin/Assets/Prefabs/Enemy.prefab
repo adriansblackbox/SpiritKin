@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 5646724117191107905}
   - component: {fileID: 1633082353333854918}
   - component: {fileID: 5808480101128969759}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 3395744986304884326}
   - component: {fileID: 657498701014188137}
   - component: {fileID: -3225969771426942249}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -269,22 +269,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyMotion: 1
-  EnemyAttack: 2
+  EnemyMotion: 6
+  EnemyAttack: 1
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.1
   swapStateInterval: 15
   shrineSpawnRange: 200
+  surroundTarget: {x: 0, y: 0, z: 0}
+  surroundSpot: {x: 0, y: 0, z: 0}
+  nextSpot: {x: 0, y: 0, z: 0}
+  surroundIndex: -1
+  movementQueue: []
   decisionTime: 1
   shrine: {fileID: 0}
   quadrant: 0
-  sc: {fileID: 0}
+  ai: {fileID: 0}
   es: {fileID: 0}
   numTimesCheckIfNeedChase: 4
   chaseThreshold: 0.5
   exitedArena: 0
   seekSpeed: 8
   chaseSpeed: 16
+  breakDist: 25
   ThisEnemy: {fileID: 657498701014188137}
   player: {fileID: 0}
   alertBox: {fileID: 3479692116232897869}
@@ -296,6 +302,7 @@ MonoBehaviour:
   idleMat: {fileID: 2100000, guid: f334dd398f7a6c04699e93fd64a7b1a3, type: 2}
   patrolMat: {fileID: 2100000, guid: 7bd3dedd35a04954d9f52e80319ba0d1, type: 2}
   relocateMat: {fileID: 2100000, guid: 675a00490b51fc444b1ef4484fefc6fa, type: 2}
+  surroundMat: {fileID: 2100000, guid: 204045e4779574a4bbb89d75e026cec7, type: 2}
 --- !u!1 &7496681822278358616
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +314,7 @@ GameObject:
   - component: {fileID: 4851255790902679745}
   - component: {fileID: 8602333188567293335}
   - component: {fileID: 7199124380680353879}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5164,12 +5171,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7435345965953756210, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -7435345965953756210, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: -6469157033607403673, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -6469157033607403673, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_TagString
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: -1881994613470078543, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: -1881994613470078543, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_TagString
@@ -5180,8 +5199,16 @@ PrefabInstance:
       value: enemyModel_prototype (1)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_TagString
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8581051193834815386, guid: 5d51faff9b4446440a73035330818298, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8581051193834815386, guid: 5d51faff9b4446440a73035330818298, type: 3}
       propertyPath: m_TagString

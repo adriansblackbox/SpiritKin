@@ -4423,7 +4423,7 @@ PrefabInstance:
       objectReference: {fileID: 949411012}
     - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: surroundRadius
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
@@ -5901,7 +5901,7 @@ MonoBehaviour:
   cursedContainer: {fileID: 255756218}
   enemyPrefab: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
   totalShrines: 1
-  spawnInterval: 1.5
+  spawnInterval: 3
   currentCursedShrines: 0
   shrineInterval: 0
 --- !u!1 &1964701444
@@ -17748,6 +17748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemID: 1
   PriceTxt: {fileID: 7451521927974453809}
+  BuyTxt: {fileID: 0}
   QuantityTxt: {fileID: 7451521928504039923}
   ShopManager: {fileID: 7451521928854104848}
 --- !u!224 &7451521927579505755
@@ -18989,6 +18990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemID: 2
   PriceTxt: {fileID: 7451521927606489788}
+  BuyTxt: {fileID: 0}
   QuantityTxt: {fileID: 7451521928955019507}
   ShopManager: {fileID: 7451521928854104848}
 --- !u!224 &7451521928238232284
@@ -21243,6 +21245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemID: 3
   PriceTxt: {fileID: 7451521927370417111}
+  BuyTxt: {fileID: 0}
   QuantityTxt: {fileID: 7451521928350479932}
   ShopManager: {fileID: 7451521928854104848}
 --- !u!224 &7451521928747786623
@@ -22506,6 +22509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemID: 4
   PriceTxt: {fileID: 7451521929297650350}
+  BuyTxt: {fileID: 0}
   QuantityTxt: {fileID: 7451521927174755127}
   ShopManager: {fileID: 7451521928854104848}
 --- !u!224 &7451521928963057517

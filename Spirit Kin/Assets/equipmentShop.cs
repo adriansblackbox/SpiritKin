@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class TeaShop : MonoBehaviour
+public class equipmentShop : MonoBehaviour
 {
     public GameObject triggerText;
     public GameObject Player;
-    public GameObject teaMenu;
-    public GameObject teaCamera;
+    public GameObject equipmentMenu;
+    public GameObject equipmentCamera;
     public Buff theBuff;
     private bool isInteractable;
     private bool isOpen;
@@ -17,7 +17,7 @@ public class TeaShop : MonoBehaviour
     {
         isInteractable = false;
         isOpen = false;
-        teaCamera.SetActive(false);
+        equipmentCamera.SetActive(false);
 
         //load buttons:
         //find position
@@ -46,8 +46,8 @@ public class TeaShop : MonoBehaviour
             // }
             
             Cursor.lockState = CursorLockMode.None;
-            teaMenu.SetActive(true);
-            teaCamera.SetActive(true);
+            equipmentMenu.SetActive(true);
+            equipmentCamera.SetActive(true);
             isOpen = true;
             //disable player's script here
             Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
@@ -62,8 +62,8 @@ public class TeaShop : MonoBehaviour
             Player.GetComponent<PlayerCombat>().enabled = true;
             GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
             Cursor.lockState = CursorLockMode.Locked;
-            teaMenu.SetActive(false);
-            teaCamera.SetActive(false);
+            equipmentMenu.SetActive(false);
+            equipmentCamera.SetActive(false);
             isOpen = false;
             Debug.Log(isOpen);
         }
