@@ -12,10 +12,39 @@ public class StatVFX : MonoBehaviour
     }
 
     public void removeBuffStat(string buff){
-
+        Debug.Log("Tea Name: " + buff);
+        switch (buff)
+        {
+            case "Armor":
+                armorUp.sprite = notch;
+                break;
+            case "Health":
+                healthUp.sprite = notch;
+            break;
+            case "Speed":
+                speedUp.sprite = notch;
+            break;
+            case "Damage":
+                damageUp.sprite = notch;
+            break;
+        }
     }
     public void addBuffStat(string buff){
-
+        switch (buff)
+        {
+            case "Armor":
+                armorUp.sprite = upArrow;
+                break;
+            case "Health":
+                healthUp.sprite = upArrow;
+            break;
+            case "Speed":
+                speedUp.sprite = upArrow;
+            break;
+            case "Damage":
+                damageUp.sprite = upArrow;
+            break;
+        }
     }
     public void removeCurseStat(string curse){
         switch (curse)
@@ -35,7 +64,6 @@ public class StatVFX : MonoBehaviour
         }
     }
     public void addCurseStat(string curse){
-        Debug.Log(curse);
         switch (curse)
         {
             case "Armor_Curse":
