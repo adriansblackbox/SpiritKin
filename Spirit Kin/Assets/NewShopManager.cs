@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class NewShopManager : MonoBehaviour
 {
     public List<Buff> shopBuffList = new List<Buff>();
@@ -21,6 +22,8 @@ public class NewShopManager : MonoBehaviour
 
     public GameObject displaySprite;
     // public SpriteRenderer currentSprite;
+
+  
 
     public int selectedOption = 0;
 
