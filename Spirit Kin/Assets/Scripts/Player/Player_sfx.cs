@@ -23,7 +23,7 @@ public class Player_sfx : MonoBehaviour
 
     private void Slash()
     {
-
+        audioSource.PlayOneShot(slash1);
         /*switch (order)
         {
             case 1:
