@@ -45,6 +45,7 @@ public class AI_Manager : MonoBehaviour
             int ind = UnityEngine.Random.Range(0, enemiesReadyToAttack.Count - 1);
             attackingEnemy = enemiesReadyToAttack[ind];
             attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
+            attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
             attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
             Debug.Log("Selected Enemy");
         }
@@ -187,7 +188,7 @@ public class AI_Manager : MonoBehaviour
                     //4, 5, 6, 7
             for (int i = chosenIndex + 1; i < surroundTrackingSpots.Count / 2 + chosenIndex + 1; i++)
             {
-                if (i%(surroundTrackingSpots.Count - 1) == targetIndex) // we are done and can go in positive direction
+                if (i%surroundTrackingSpots.Count == targetIndex) // we are done and can go in positive direction
                 {
                     right = true;
                     break;

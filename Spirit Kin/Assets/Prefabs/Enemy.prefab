@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 610837742939718136}
   m_Layer: 7
   m_Name: hurtBox
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 5808480101128969759}
   m_Layer: 7
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -205,9 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f625359af16efac4086ee4ab2e0105b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currSouls: 10
-  maxSouls: 0
-  Coins: 0
+  coins: 0
   maxHealth: 25
   currentHealth: 0
   armor:
@@ -217,8 +215,8 @@ MonoBehaviour:
   speed:
     baseValue: 0
   SoulsUI: {fileID: 0}
-  CoinsUI: {fileID: 0}
   hitVFX: {fileID: 8602333188567293335}
+  deathScene: {fileID: 0}
 --- !u!54 &3395744986304884326
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -243,9 +241,9 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6192531991054698248}
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 4
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.1
+  m_Speed: 10
   m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 720
@@ -269,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyMotion: 6
+  EnemyMotion: 1
   EnemyAttack: 1
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.1
@@ -288,14 +286,14 @@ MonoBehaviour:
   numTimesCheckIfNeedChase: 4
   chaseThreshold: 0.5
   exitedArena: 0
-  seekSpeed: 8
+  seekSpeed: 10
   chaseSpeed: 16
-  breakDist: 25
+  breakDist: 30
   ThisEnemy: {fileID: 657498701014188137}
   player: {fileID: 0}
   alertBox: {fileID: 3479692116232897869}
-  raycastRadius: 5
-  targetDetectionRange: 30
+  raycastRadius: 7
+  targetDetectionRange: 35
   alertedMat: {fileID: 2100000, guid: 353a2592ff3736b4dac2eb8104fbcc65, type: 2}
   seekingMat: {fileID: 2100000, guid: 6955535d418b16b4fa62cc25397824a8, type: 2}
   chasingMat: {fileID: 2100000, guid: 8a14e898cff323941a4cdf2ce999739c, type: 2}
@@ -316,7 +314,7 @@ GameObject:
   - component: {fileID: 7199124380680353879}
   m_Layer: 7
   m_Name: Particle System
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
