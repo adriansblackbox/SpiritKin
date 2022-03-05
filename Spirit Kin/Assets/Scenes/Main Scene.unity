@@ -51043,6 +51043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f05326919a0b0164586388077fba1479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mixer: {fileID: 0}
   PlaybuttonSFX: {fileID: 0}
   OptionbuttonSFX: {fileID: 0}
   MenuSounds: {fileID: 0}
@@ -57785,6 +57786,24 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1645886960751311305, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
   m_PrefabInstance: {fileID: 8669201217155251026}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7969240397504004765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7969240397504004763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3570f5d2e7890c40b2608d293c65f8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Stepclips:
+  - {fileID: 8300000, guid: b4402e4adc2622848afd72698516ee3a, type: 3}
+  - {fileID: 8300000, guid: 5c5001c4bd9c26f418d2b9889dfc2f99, type: 3}
+  slash1: {fileID: 0}
+  slash2: {fileID: 0}
+  slash3: {fileID: 0}
 --- !u!33 &7970675958962314873
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -60965,6 +60984,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 26.356995
       objectReference: {fileID: 0}
+    - target: {fileID: 4907299623633728659, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8155463324614820090, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: CoinsUI
       value: 
@@ -60989,7 +61012,8 @@ PrefabInstance:
       propertyPath: BuffsUI.Array.data[2]
       value: 
       objectReference: {fileID: 1299848957}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7969240397504004771, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
 --- !u!33 &8684455516152667069
 MeshFilter:

@@ -6,7 +6,10 @@ public class Player_sfx : MonoBehaviour
 {
     [SerializeField]
     private AudioClip[] Stepclips;
-    public AudioClip slash1, slash2, slash3;
+    [SerializeField]
+    private AudioClip[] Slashclips;
+    [SerializeField]
+    private AudioClip[] Dodgeclips;
     private AudioSource audioSource;
 
     private void Awake()
@@ -16,30 +19,27 @@ public class Player_sfx : MonoBehaviour
 
     private void Step()
     {
-        AudioClip clip = GetRandomClip();
+        AudioClip clip = GetRandomClip(Stepclips);
         audioSource.pitch = Random.Range(1f, 2f);
         audioSource.PlayOneShot(clip);
     }
 
     private void Slash()
     {
-        audioSource.PlayOneShot(slash1);
-        /*switch (order)
-        {
-            case 1:
-                audioSource.PlayOneShot(slash1);
-                break;
-            case 2:
-                audioSource.PlayOneShot(slash2);
-                break;
-            case 3:
-                audioSource.PlayOneShot(slash3);
-                break;
-        }*/
+        AudioClip clip = GetRandomClip(Slashclips);
+        audioSource.pitch = Random.Range(1f, 2f);
+        audioSource.PlayOneShot(clip);
     }
 
-    private AudioClip GetRandomClip()
+    private void Dodge()
     {
-        return Stepclips[Random.Range(0, Stepclips.Length)];
+        AudioClip clip = GetRandomClip(Dodgeclips);
+        audioSource.pitch = Random.Range(1f, 2f);
+        audioSource.PlayOneShot(clip);
+    }
+
+    private AudioClip GetRandomClip(AudioClip[] cliparray)
+    {
+        return cliparray[Random.Range(0, cliparray.Length)];
     }
 }
