@@ -80,7 +80,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &363605981
 Transform:
   m_ObjectHideFlags: 0
@@ -338,7 +338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1279103504
 Transform:
   m_ObjectHideFlags: 0
@@ -856,7 +856,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1948850339
 Transform:
   m_ObjectHideFlags: 0
@@ -1359,8 +1359,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerGeo: {fileID: 3505326736161178452}
   playerTrail: {fileID: 4644381476626910545}
-  DodgeTime: 0.4
-  DodgeSpeed: 55
+  DodgeTime: 0.1
+  DodgeSpeed: 150
   AnimationCancelFactor: 5
   CombatWalkSpeedDropoff: 3.5
   CombatRunSpeedDropoff: 4
@@ -1387,9 +1387,9 @@ MonoBehaviour:
   armor:
     baseValue: 0
   damage:
-    baseValue: 0
+    baseValue: 25
   speed:
-    baseValue: 0
+    baseValue: 1
   SoulsUI: {fileID: 0}
   hitVFX: {fileID: 0}
   deathScene: {fileID: 0}
@@ -1403,6 +1403,10 @@ MonoBehaviour:
   speedBuff: {fileID: 21300000, guid: c644c444253a01e4f8e3f2fe0306e3f3, type: 3}
   armorBuff: {fileID: 21300000, guid: d0b510638ad2ec841aa0999baa77fa46, type: 3}
   healthBuff: {fileID: 21300000, guid: 4c225ae334f0b604d89c7e4f205939f5, type: 3}
+  SpringTransforms:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &291306095946165995
 MonoBehaviour:
   m_ObjectHideFlags: 0

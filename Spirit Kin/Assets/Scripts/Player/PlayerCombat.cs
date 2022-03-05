@@ -13,8 +13,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] public float CombatRunSpeedDropoff = 1f;
     [SerializeField] private float DashAttackSpeed = 45f;
     [SerializeField] private float LungeSpeed = 20f;
-    [HideInInspector] public bool isAttacking = false;
-    [HideInInspector] public bool isDodging = false;
+    [HideInInspector] public bool isAttacking;
+    [HideInInspector] public bool isDodging;
     [HideInInspector] public float CombatSpeedDropoff;
     private float dodgeTimeItter = 0;
     private float dodgeCoolDown = 0f;
@@ -43,8 +43,7 @@ public class PlayerCombat : MonoBehaviour
         cancelAnimationTime = totalAnimationTime - (totalAnimationTime/AnimationCancelFactor);
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
-        if(dodgeCoolDown <= 0.0f && !isAttacking){
-
+        if(dodgeCoolDown <= 0.0f && !isAttacking && !isDodging){
             Dodge();
         }
         if((comboTimeDelay >= cancelAnimationTime || numOfClicks == 0) && !isDodging){
@@ -64,23 +63,26 @@ public class PlayerCombat : MonoBehaviour
             CombatSpeedDropoff = 0.0f;
         }
         if(isAttacking){
-            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 1, Time.deltaTime * 20f));
+            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 1, Time.deltaTime * 100f));
         }else{
-            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 0f, Time.deltaTime * 20f));
+            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 0f, Time.deltaTime * 100f));
         }
          //Dodge Timers
-        if(dodgeTimeItter > 0){
-            dodgeTimeItter -= Time.deltaTime;
-        }else if(dodgeCoolDown > 0){
-            // makes the player invisible
+        if(isDodging && dodgeTimeItter <= 0){
+            //makes the player invisible
             controller.RotateOnMoveDirection = true;
             playerTrail.SetActive(false);
             playerGeo.SetActive(true);
-            GetComponent<CurseMeter>().ActiveSword.SetActive(true);
+            //GetComponent<CurseMeter>().ActiveSword.SetActive(true);
+            dodgeCoolDown = 0.5f;
             isDodging = false;
+        }else{
+            dodgeTimeItter -= Time.deltaTime;
+        }
+        if(dodgeCoolDown > 0){
             dodgeCoolDown -= Time.deltaTime;
         }
-        animator.SetBool("isDodging", isDodging);
+        //animator.SetBool("isDodging", isDodging);
     }
     private void Dodge(){
         if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
@@ -88,12 +90,11 @@ public class PlayerCombat : MonoBehaviour
             // makes the player invisible
             playerGeo.SetActive(false);
             playerTrail.SetActive(true);
-            GetComponent<CurseMeter>().ActiveSword.SetActive(false);
+            //GetComponent<CurseMeter>().ActiveSword.SetActive(false);
             bufferButton = "";
-            controller.TempSpeed = DodgeSpeed;
             isDodging = true;
+            controller.TempSpeed = DodgeSpeed;
             dodgeTimeItter = DodgeTime;
-            dodgeCoolDown = 0.5f;
         }
     }
     private void Attack(){

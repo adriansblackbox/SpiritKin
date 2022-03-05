@@ -26,7 +26,7 @@ public class CurseMeter : MonoBehaviour
     public bool debugbool = false;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         newCurse = false;
         curseMeter = 0f;
@@ -46,6 +46,7 @@ public class CurseMeter : MonoBehaviour
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
         ActiveSword = Sword0;
+        Sword1.SetActive(false); Sword2.SetActive(false); Sword3.SetActive(false);
     }
 
     // Update is called once per frame
@@ -89,6 +90,7 @@ public class CurseMeter : MonoBehaviour
     }
     private void HandleSword()
     {
+        Debug.Log(ActiveSword);
         switch (activeCurses.Count)
         {
             case 0:

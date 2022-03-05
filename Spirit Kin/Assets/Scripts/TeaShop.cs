@@ -88,7 +88,7 @@ public class TeaShop : MonoBehaviour
         Player.GetComponent<PlayerCombat>().enabled = false;
 
         //disable UI
-        GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
+        //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
         Debug.Log (isOpen);
     }
 
@@ -96,7 +96,7 @@ public class TeaShop : MonoBehaviour
     {
         Player.GetComponent<PlayerController>().enabled = true;
         Player.GetComponent<PlayerCombat>().enabled = true;
-        GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
+        //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
         Cursor.lockState = CursorLockMode.Locked;
         teaMenu.SetActive(false);
         teaCamera.SetActive(false);

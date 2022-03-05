@@ -32,6 +32,6 @@ public class slowCurse : Curse
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.speed.AddBaseValue(0.25f);
+        pStats.speed.AddBaseValue(0.5f);
     } 
 }
