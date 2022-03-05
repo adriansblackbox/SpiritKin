@@ -14,7 +14,7 @@ public class Buff : ScriptableObject
     public statType stat;
 	public enum statType  { none, health, armor, damage, speed };
 	[Tooltip("How powerful the base effect will be")]
-	public int basePower;
+	public float basePower;
 
 	[Tooltip("How long the effect will linger. Use -1 for forever, use 0 for instant.")]
 	public float duration;

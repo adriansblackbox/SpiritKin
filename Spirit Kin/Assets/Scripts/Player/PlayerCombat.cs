@@ -25,11 +25,14 @@ public class PlayerCombat : MonoBehaviour
     private Animator animator;
     private PlayerController controller;
     private string bufferButton;
+    private bool isDead = false;
 
     private void Start() {
         animator = GetComponent<Animator>();
         controller = GetComponent<PlayerController>();
         bufferButton = "";
+        playerTrail.SetActive(false);
+        
     }
     void Update()
     {

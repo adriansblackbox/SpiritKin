@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class CharacterStats : MonoBehaviour
 {
     public int coins;
-    public int maxHealth = 100;
-    public int currentHealth;
+    public float maxHealth = 100;
+    public float currentHealth;
 
     public Stat armor;
     public Stat damage;
@@ -25,14 +25,13 @@ public class CharacterStats : MonoBehaviour
     }
 
     void Update() {
-        
     }
 
-    public void TakeDamage (int damage) {
+    public void TakeDamage (float damage) {
         hitVFX.Play();
         //armor system
         damage -= armor.GetValue();
-        damage = Mathf.Clamp(damage, 0, int.MaxValue);
+        damage = Mathf.Clamp(damage, 0, float.MaxValue);
 
         currentHealth -= damage;
 
@@ -60,8 +59,27 @@ public class CharacterStats : MonoBehaviour
         if (gameObject.tag == "Enemy")
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
         if (gameObject.tag =="Player"){
-            deathScene.SetActive(true);
+            StartCoroutine(PlayerDeath(gameObject.transform));
         }
         
+    }
+    public IEnumerator PlayerDeath(Transform playerTransform){
+        //deathScene.SetActive(true);
+        // disable player move script
+        // play death animation
+        //
+        Transform[] springTransforms = FindObjectOfType<PlayerStats>().SpringTransforms;
+        Vector3 respawnPosition = Vector3.zero;
+        float minMagnitude = float.MaxValue;
+        for(int i = 0; i < springTransforms.Length; i ++){
+            float mag = (playerTransform.position - springTransforms[i].transform.position).magnitude;
+            if(mag < minMagnitude){
+                minMagnitude = mag;
+                respawnPosition = springTransforms[i].position;
+            }
+        }
+        Debug.Log(respawnPosition);
+        playerTransform.position = respawnPosition;
+        yield return null;
     }
 }

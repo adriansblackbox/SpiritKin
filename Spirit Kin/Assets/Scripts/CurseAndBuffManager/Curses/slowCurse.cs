@@ -24,7 +24,7 @@ public class slowCurse : Curse
         isApplied = true;
         GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
 
-        pStats.speed.AddBaseValue(-10);
+        pStats.speed.AddBaseValue(-0.5f);
     } 
 
     override public void removeCurse () 
@@ -32,6 +32,6 @@ public class slowCurse : Curse
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.speed.AddBaseValue(10);
+        pStats.speed.AddBaseValue(0.25f);
     } 
 }

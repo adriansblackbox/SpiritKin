@@ -14,6 +14,7 @@ public class Purification : MonoBehaviour
     public bool isCursed;
     private bool isPurifying;
 
+    public Transform respawnPoint;
     public GameObject player;
     public Collider coll;
     public PState PurificationState;

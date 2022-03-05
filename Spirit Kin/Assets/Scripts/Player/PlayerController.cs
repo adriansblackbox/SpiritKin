@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
             moveSpeed = TempSpeed * inputDirection.magnitude;
             moveDirection = transform.GetChild(0).gameObject.transform.forward;
         }
-        moveDirection = moveDirection.normalized * moveSpeed;
+        moveDirection = moveDirection.normalized * (moveSpeed * GetComponent<PlayerStats>().speed.GetValue());
         controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * Time.deltaTime);
     }
     private void Animation(){
