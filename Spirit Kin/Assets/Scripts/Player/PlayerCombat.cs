@@ -26,6 +26,7 @@ public class PlayerCombat : MonoBehaviour
     private PlayerController controller;
     private string bufferButton;
     private bool isDead = false;
+    private bool animationCancel = false;
 
     private void Start() {
         animator = GetComponent<Animator>();
@@ -43,18 +44,19 @@ public class PlayerCombat : MonoBehaviour
         cancelAnimationTime = totalAnimationTime - (totalAnimationTime/AnimationCancelFactor);
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
-        if(dodgeCoolDown <= 0.0f && !isAttacking && !isDodging){
-            Dodge();
-        }
-        if((comboTimeDelay >= cancelAnimationTime || numOfClicks == 0) && !isDodging){
-            Attack();
-        }
         if(comboTimeDelay < totalAnimationTime){
             comboTimeDelay += Time.deltaTime;
         }
-         // Handels animating combos
+        if((animationCancel || numOfClicks == 0) && !isDodging){
+            Attack();
+        }
+       
+        if(animationCancel || (!isDodging && dodgeCoolDown <= 0 && !isAttacking)){
+            Dodge();
+        }
         if(comboTimeDelay >= totalAnimationTime && isAttacking){
             isAttacking = false;
+            animationCancel = false;
             numOfClicks = 0;
             comboTimeDelay = 0;
             animator.SetInteger("attackTicks", 0);
@@ -85,24 +87,26 @@ public class PlayerCombat : MonoBehaviour
         //animator.SetBool("isDodging", isDodging);
     }
     private void Dodge(){
-        if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
+        if(bufferButton == "Dodge"){
             controller.RotateOnMoveDirection = false;
             // makes the player invisible
             playerGeo.SetActive(false);
             playerTrail.SetActive(true);
             //GetComponent<CurseMeter>().ActiveSword.SetActive(false);
-            bufferButton = "";
+            animationCancel = false;
             isDodging = true;
+            bufferButton = "";
             controller.TempSpeed = DodgeSpeed;
             dodgeTimeItter = DodgeTime;
         }
     }
     private void Attack(){
         if(bufferButton == "Attack"){
+            animationCancel = false;
             bufferButton = "";
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
-            isAttacking = true;
             comboTimeDelay = 0f;
+            isAttacking = true;
             numOfClicks++;
             controller.TempSpeed =0;
             if(numOfClicks > 3){
@@ -123,14 +127,20 @@ public class PlayerCombat : MonoBehaviour
             if(comboTimeDelay >= totalAnimationTime/4f)
                 bufferButton = "Attack";
         }
-        //if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
-        //    bufferButton = "Dodge";
-        //}
+        if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
+            if(((isAttacking && comboTimeDelay > totalAnimationTime/4) || (!isAttacking && dodgeCoolDown <=0)) && !isDodging){
+                bufferButton = "Dodge";
+                Debug.Log("Dodged!");
+            }
+        }
     }
     public void activateSword(){
         GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().activateSword();
     }
     public void deactivateSword(){
         GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+    }
+    public void AnimationCancel(){
+        animationCancel = true;
     }
 }

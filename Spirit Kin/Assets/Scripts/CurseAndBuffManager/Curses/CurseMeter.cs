@@ -26,7 +26,7 @@ public class CurseMeter : MonoBehaviour
     public bool debugbool = false;
 
     // Start is called before the first frame update
-    public void Start()
+    private void Start()
     {
         newCurse = false;
         curseMeter = 0f;
@@ -50,7 +50,7 @@ public class CurseMeter : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (pStats.coins < soulDelta)
         {
@@ -90,7 +90,6 @@ public class CurseMeter : MonoBehaviour
     }
     private void HandleSword()
     {
-        Debug.Log(ActiveSword);
         switch (activeCurses.Count)
         {
             case 0:
