@@ -196,11 +196,11 @@ public class Enemy_Controller : MonoBehaviour
         {
             case MotionState.Patroling:
                 ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 0.05f;
-                if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance + 0.01f) {
+                ThisEnemy.stoppingDistance = 2.5f;
+                if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance) {
                     float temp = Random.Range(0.0f, 1.0f);
                     //if > 50% patroling increase chance to swap
-                    if (temp < ai.checkPatrol(patrolToIdleChance) && timesPatroled > 2) //swap states
+                    if (temp < ai.checkPatrol(patrolToIdleChance) && timesPatroled > 4) //swap states
                     {
                         EnemyMotion = MotionState.Idling;
                         timesPatroled = 0;
@@ -211,19 +211,25 @@ public class Enemy_Controller : MonoBehaviour
                 }
                 break;
             case MotionState.Idling: //update to make enemies rotate or move around slightly since having them be afk isn't interactive
-                if (myTime > swapStateInterval) {
-                    float temp = Random.Range(0.0f, 1.0f);
-                    //if < 25% patroling increase chance to swap
-                    if (temp < ai.checkIdle(idleToPatrolChance)) //swap states
-                    {
-                        EnemyMotion = MotionState.Patroling;
-                    }                    
-                    myTime = 0.0f;
+                ThisEnemy.speed = seekSpeed;
+                ThisEnemy.stoppingDistance = 2.5f;
+                if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance) {
+                    if (myTime > swapStateInterval) {
+                        float temp = Random.Range(0.0f, 1.0f);
+                        //if < 25% patroling increase chance to swap
+                        if (temp < ai.checkIdle(idleToPatrolChance)) //swap states
+                        {
+                            EnemyMotion = MotionState.Patroling;
+                        } else {
+                            ThisEnemy.SetDestination(findNextWaypoint());
+                        }                    
+                        myTime = 0.0f;
+                    }
                 }
                 break;
             case MotionState.Relocating:
                 ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 0.05f;
+                ThisEnemy.stoppingDistance = 2.5f;
                 if (ThisEnemy.hasPath && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                 {
                     ThisEnemy.ResetPath();
@@ -269,7 +275,7 @@ public class Enemy_Controller : MonoBehaviour
                 StopCoroutine(decideAlertedAction());
 
                 //if the player is inside breakDist swap to surrounding
-                if (Vector3.Distance(player.transform.position, transform.position) < breakDist)
+                if (Vector3.Distance(player.transform.position, transform.position) < breakDist - 1f)
                 {
                     EnemyMotion = MotionState.Surrounding;
                     //-> going into surrounding what do we need to reset before then
@@ -306,8 +312,7 @@ public class Enemy_Controller : MonoBehaviour
                                     //^^ this one is already needed because enemies will run into each ohter when assuming surrounding positions
 
             case MotionState.Surrounding:
-                ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 0.05f;
+                ThisEnemy.stoppingDistance = 0.5f;
 
                 transform.LookAt(player.transform.position + new Vector3(0, 4, 0));
                 //^^ LOOK INTO DIFFERNET IMPLEMENTATIONS -> LERPING OR TRAILS BEHIND ENEMIES
@@ -323,7 +328,7 @@ public class Enemy_Controller : MonoBehaviour
                     //still might have issues running into each other, but that can be figured out later
 
                 //if the player is outside breakDist swap to chasing
-                if (Vector3.Distance(player.transform.position, transform.position) > breakDist + 5)
+                if (Vector3.Distance(player.transform.position, transform.position) > breakDist + 1f)
                 {
                     EnemyMotion = MotionState.Chasing;
                     //-> going into chasing what do we need to reset before then
@@ -355,16 +360,18 @@ public class Enemy_Controller : MonoBehaviour
                 {
                     nextSpot = movementQueue[0];
                     movementQueue.RemoveAt(0);
+                    ThisEnemy.speed = chaseSpeed;
                 } 
                 else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
                 {
                     ai.enemiesReadyToAttack.Add(gameObject);
+                    ThisEnemy.speed = seekSpeed / 1.25f;
                 }
                 
                 NavMeshHit hit;
                 NavMesh.SamplePosition(nextSpot + player.transform.position, out hit, 400.0f, NavMesh.AllAreas);
                 ThisEnemy.CalculatePath(hit.position, path); //might need to do the find spot Navmesh thing if doesnt work
-                if (path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(hit.position, transform.position) > ai.surroundRadius * 1.5) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
+                if (path.status == NavMeshPathStatus.PathComplete && Vector3.Distance(hit.position, transform.position) > ThisEnemy.stoppingDistance + 0.5f) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                     if (!exitedArena) { //if still in arena
                         ThisEnemy.SetDestination(hit.position);
                     } else {
@@ -375,13 +382,30 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Waiting:
                 Debug.Log("Waiting for Next Movement Action");
-                ThisEnemy.ResetPath();
                 //need to look into what we need to track or change when entering/exiting waiting
                 break;
             default:
                 break;
         }
     }
+    
+///////////////////////////////////////////////////ATTACKS
+
+    private void chargeAttack() //-> might need to be an IEnumerator
+    {
+        
+        //necessary things before beginning the attack
+            //set navmesh agent to waiting (already done)
+                //
+
+
+        //4 steps
+            //enemy backs up + turns red
+            //enemy pauses for a moment + aims at player
+            //enemy charges the player (faster than chaseSpeed) [has a hurtBox collider attached]
+            //reposition enemy onto navmesh
+    }
+
 
 ///////////////////////////////////////////////////STATES    
 

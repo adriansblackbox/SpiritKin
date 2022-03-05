@@ -32,7 +32,6 @@ public class NewShopManager : MonoBehaviour
     {
         //refresh buffs
         foreach(Buff i in shopBuffList){
-            i.duration = 10;
             i.isApplied = false;
         }
         menuCoinTXT.text = "Coins:" + playStats.coins.ToString();

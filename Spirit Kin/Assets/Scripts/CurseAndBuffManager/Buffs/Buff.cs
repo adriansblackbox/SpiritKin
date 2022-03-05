@@ -5,7 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Buff", menuName = "Buff")]
 public class Buff : ScriptableObject
 {
-	[SerializeField]
+	[Tooltip("How long the effect will linger")]
+	[SerializeField] float baseDuration = 60f;
+	public float duration;
+	[SerializeField] float baseTimeActive = 0f;
+	public float timeActive;
+
 	public string teaName;
 	public string description;
 	public int Cost;
@@ -14,17 +19,16 @@ public class Buff : ScriptableObject
     public statType stat;
 	public enum statType  { none, health, armor, damage, speed };
 	[Tooltip("How powerful the base effect will be")]
+
 	public float basePower;
-
-	[Tooltip("How long the effect will linger. Use -1 for forever, use 0 for instant.")]
-	public float duration;
-	public float timeActive = 0;
-
     public bool isApplied = false;
 	public bool removeFlag = false;
 
-	public void Awake(){
+	private void OnEnable() 
+	{
 		isApplied = false;
 		removeFlag = false;
+		duration = baseDuration;
+		timeActive = baseTimeActive;		
 	}
 }
