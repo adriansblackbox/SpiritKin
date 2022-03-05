@@ -23228,21 +23228,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 267729776628270931}
   m_Mesh: {fileID: -6189620644323357723, guid: f9fd2786b8ed43e43b6beef10c5f7124, type: 3}
---- !u!114 &1645886960751311345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7969240397504004763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e08c528f34546948aa1c7d71200a61c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clips:
-  - {fileID: 8300000, guid: b4402e4adc2622848afd72698516ee3a, type: 3}
-  - {fileID: 8300000, guid: 5c5001c4bd9c26f418d2b9889dfc2f99, type: 3}
 --- !u!1 &1660377138458707906
 GameObject:
   m_ObjectHideFlags: 0
@@ -36955,9 +36940,9 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  DopplerLevel: 3.37
+  MinDistance: 12.5
+  MaxDistance: 1000
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -36992,7 +36977,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -37007,7 +36992,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -59965,7 +59950,7 @@ GameObject:
   - component: {fileID: 675881052296231848}
   - component: {fileID: 8954807296084071865}
   - component: {fileID: 4347393739739926465}
-  - component: {fileID: 1645886960751311345}
+  - component: {fileID: 7969240397504004764}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -59973,6 +59958,30 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7969240397504004764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7969240397504004763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a2742a5eb60d8a46a45f07bfb229300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Stepclips:
+  - {fileID: 8300000, guid: b4402e4adc2622848afd72698516ee3a, type: 3}
+  - {fileID: 8300000, guid: 5c5001c4bd9c26f418d2b9889dfc2f99, type: 3}
+  Slashclips:
+  - {fileID: 8300000, guid: 090540c176747dd4a96df25db0761ce3, type: 3}
+  - {fileID: 8300000, guid: 5367348fdb7807c4a83e4502b01f9a98, type: 3}
+  - {fileID: 8300000, guid: 8903dff680935b64c8a4288f13b46e76, type: 3}
+  Dodgeclips:
+  - {fileID: 8300000, guid: 6918befe02908234ab95f8f896ea0938, type: 3}
+  - {fileID: 8300000, guid: 6026ea44cdcf06745b8547b00058e39a, type: 3}
+  - {fileID: 8300000, guid: de8975651a34a5042aaf33f2264ae36e, type: 3}
+  - {fileID: 8300000, guid: d2d7b65e832d60642b948e5e34bfa6f3, type: 3}
 --- !u!33 &7970675958962314873
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -11,10 +11,18 @@ public class Player_sfx : MonoBehaviour
     [SerializeField]
     private AudioClip[] Dodgeclips;
     private AudioSource audioSource;
+    private bool dodgeSoundPlaying = false;
 
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+    }
+    private void Update() {
+        if(GetComponent<PlayerCombat>().isDodging &&  !dodgeSoundPlaying){
+            Dodge();
+        }else if(!GetComponent<PlayerCombat>().isDodging){
+            dodgeSoundPlaying = false;
+        }
     }
 
     private void Step()
@@ -33,6 +41,7 @@ public class Player_sfx : MonoBehaviour
 
     private void Dodge()
     {
+        dodgeSoundPlaying = true;
         AudioClip clip = GetRandomClip(Dodgeclips);
         audioSource.pitch = Random.Range(1f, 2f);
         audioSource.PlayOneShot(clip);
