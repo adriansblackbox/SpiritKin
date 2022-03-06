@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
         controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * Time.deltaTime);
     }
     private void Animation(){
-        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 100f);
+        animationBlend = Mathf.Lerp(animationBlend, speed * GetComponent<PlayerStats>().speed.GetValue(), Time.deltaTime * 100f);
         //if(inputDirection == Vector2.zero)
             //animationBlend = 0;
         animator.SetFloat("Speed", animationBlend);

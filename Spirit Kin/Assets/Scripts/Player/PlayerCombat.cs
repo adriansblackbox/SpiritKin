@@ -122,7 +122,7 @@ public class PlayerCombat : MonoBehaviour
                 bufferButton = "Attack";
         }
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space)){
-            if(((isAttacking && comboTimeDelay > totalAnimationTime/4) || (!isAttacking && dodgeCoolDown <=0)) && !isDodging){
+            if(!isDodging){
                 bufferButton = "Dodge";
                 Debug.Log("Dodged!");
             }
