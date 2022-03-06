@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
         float moveSpeed = speed;
         if(combatScript.isDodging)
             moveSpeed = TempSpeed;
-        if(combatScript.isAttacking){
+        else if(combatScript.isAttacking && !combatScript.isDodging){
             TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, combatScript.CombatRunSpeedDropoff * Time.deltaTime);
             moveSpeed = TempSpeed * inputDirection.magnitude;
             moveDirection = transform.GetChild(0).gameObject.transform.forward;

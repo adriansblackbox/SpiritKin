@@ -51,7 +51,7 @@ public class PlayerCombat : MonoBehaviour
             Attack();
         }
        
-        if(animationCancel || (!isDodging && dodgeCoolDown <= 0 && !isAttacking)){
+        if(animationCancel || (!isAttacking && !isDodging && dodgeCoolDown <= 0f)){
             Dodge();
         }
         if(comboTimeDelay >= totalAnimationTime && isAttacking){
@@ -71,8 +71,10 @@ public class PlayerCombat : MonoBehaviour
             //GetComponent<CurseMeter>().ActiveSword.SetActive(true);
             dodgeCoolDown = 0.5f;
             isDodging = false;
-        }else{
+        }else if(!isAttacking){
             dodgeTimeItter -= Time.deltaTime;
+            if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0))
+                bufferButton = "Attack";
         }
         if(dodgeCoolDown > 0){
             dodgeCoolDown -= Time.deltaTime;
@@ -102,23 +104,19 @@ public class PlayerCombat : MonoBehaviour
             comboTimeDelay = 0f;
             isAttacking = true;
             numOfClicks++;
-            controller.TempSpeed =0;
             if(numOfClicks > 3){
                 numOfClicks = 1;
             }
             animator.SetInteger("attackTicks", numOfClicks);
-            controller.TempSpeed = controller.targetSpeed;
-            controller.TempSpeed = LungeSpeed;
-            CombatSpeedDropoff = CombatWalkSpeedDropoff;
-            if((Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")) && controller.speed > controller.WalkSpeed){
-                CombatSpeedDropoff = CombatRunSpeedDropoff;
-                controller.TempSpeed = DashAttackSpeed;
+            if(!isDodging){
+                controller.TempSpeed = LungeSpeed;
+                CombatSpeedDropoff = CombatWalkSpeedDropoff;
             }
         }
     }
     private void hadnleBuffer(){
         if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
-            if(comboTimeDelay >= totalAnimationTime/4f || isDodging)
+            if(comboTimeDelay >= totalAnimationTime/3f || isDodging)
                 bufferButton = "Attack";
         }
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space)){
