@@ -54,7 +54,7 @@ public class TeaShop : MonoBehaviour
     {
         //need condition to check if interactable
         // if()isInteractable = false;
-        if (Input.GetKeyDown(KeyCode.F) && isInteractable && !isOpen)
+        if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("A Button"))&& isInteractable && !isOpen)
         {
             //do something;
             // if(!theBuff.isApplied){

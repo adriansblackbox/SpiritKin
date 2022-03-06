@@ -55,14 +55,7 @@ public class PlayerCombat : MonoBehaviour
             Dodge();
         }
         if(comboTimeDelay >= totalAnimationTime && isAttacking){
-            isAttacking = false;
-            animationCancel = false;
-            numOfClicks = 0;
-            comboTimeDelay = 0;
-            animator.SetInteger("attackTicks", 0);
-            controller.speed = 0.0f;
-            controller.targetSpeed = 0.0f;
-            CombatSpeedDropoff = 0.0f;
+            resetAttack();
         }
         if(isAttacking){
             animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 1, Time.deltaTime * 100f));
@@ -94,6 +87,7 @@ public class PlayerCombat : MonoBehaviour
             playerTrail.SetActive(true);
             //GetComponent<CurseMeter>().ActiveSword.SetActive(false);
             animationCancel = false;
+            resetAttack();
             isDodging = true;
             bufferButton = "";
             controller.TempSpeed = DodgeSpeed;
@@ -124,15 +118,25 @@ public class PlayerCombat : MonoBehaviour
     }
     private void hadnleBuffer(){
         if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
-            if(comboTimeDelay >= totalAnimationTime/4f)
+            if(comboTimeDelay >= totalAnimationTime/4f || isDodging)
                 bufferButton = "Attack";
         }
-        if(Input.GetButtonDown("B Button") || Input.GetKeyDown(KeyCode.Space)){
+        if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space)){
             if(((isAttacking && comboTimeDelay > totalAnimationTime/4) || (!isAttacking && dodgeCoolDown <=0)) && !isDodging){
                 bufferButton = "Dodge";
                 Debug.Log("Dodged!");
             }
         }
+    }
+    private void resetAttack(){
+        isAttacking = false;
+        animationCancel = false;
+        numOfClicks = 0;
+        comboTimeDelay = 0;
+        animator.SetInteger("attackTicks", 0);
+        controller.speed = 0.0f;
+        controller.targetSpeed = 0.0f;
+        CombatSpeedDropoff = 0.0f;
     }
     public void activateSword(){
         GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().activateSword();
