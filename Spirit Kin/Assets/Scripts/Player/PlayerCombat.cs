@@ -20,7 +20,6 @@ public class PlayerCombat : MonoBehaviour
     private float dodgeCoolDown = 0f;
     private float comboTimeDelay;
     private float totalAnimationTime;
-    private float cancelAnimationTime;
     private int numOfClicks = 0;
     private Animator animator;
     private PlayerController controller;
@@ -41,26 +40,24 @@ public class PlayerCombat : MonoBehaviour
         // Gets he total animation time per animation and stores it
         totalAnimationTime = animator.GetCurrentAnimatorStateInfo(2).length;
         // calculates the time that will allow animation cancel to happen
-        cancelAnimationTime = totalAnimationTime - (totalAnimationTime/AnimationCancelFactor);
         // If ther player is locked onto a target, they are allowed to dodge
         // After a cool down period
         if(comboTimeDelay < totalAnimationTime){
             comboTimeDelay += Time.deltaTime;
         }
-        if((animationCancel || numOfClicks == 0) && !isDodging){
-            Attack();
-        }
-       
         if(animationCancel || (!isAttacking && !isDodging && dodgeCoolDown <= 0f)){
             Dodge();
+        }
+        if((animationCancel || numOfClicks == 0) && !isDodging){
+            Attack();
         }
         if(comboTimeDelay >= totalAnimationTime && isAttacking){
             resetAttack();
         }
         if(isAttacking){
-            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 1, Time.deltaTime * 100f));
+            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 1, Time.deltaTime * 200f));
         }else{
-            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 0f, Time.deltaTime * 100f));
+            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 0f, Time.deltaTime * 200f));
         }
          //Dodge Timers
         if(isDodging && dodgeTimeItter <= 0){
@@ -68,28 +65,25 @@ public class PlayerCombat : MonoBehaviour
             controller.RotateOnMoveDirection = true;
             playerTrail.SetActive(false);
             playerGeo.SetActive(true);
-            //GetComponent<CurseMeter>().ActiveSword.SetActive(true);
+            GetComponent<CurseMeter>().ActiveSword.SetActive(true);
             dodgeCoolDown = 0.5f;
             isDodging = false;
-        }else if(!isAttacking){
+        }else{
             dodgeTimeItter -= Time.deltaTime;
-            if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0))
-                bufferButton = "Attack";
         }
         if(dodgeCoolDown > 0){
             dodgeCoolDown -= Time.deltaTime;
         }
-        //animator.SetBool("isDodging", isDodging);
     }
     private void Dodge(){
         if(bufferButton == "Dodge"){
             controller.RotateOnMoveDirection = false;
+            resetAttack();
             // makes the player invisible
             playerGeo.SetActive(false);
             playerTrail.SetActive(true);
-            //GetComponent<CurseMeter>().ActiveSword.SetActive(false);
+            GetComponent<CurseMeter>().ActiveSword.SetActive(false);
             animationCancel = false;
-            resetAttack();
             isDodging = true;
             bufferButton = "";
             controller.TempSpeed = DodgeSpeed;
@@ -102,12 +96,12 @@ public class PlayerCombat : MonoBehaviour
             bufferButton = "";
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
             comboTimeDelay = 0f;
-            isAttacking = true;
             numOfClicks++;
             if(numOfClicks > 3){
                 numOfClicks = 1;
             }
             animator.SetInteger("attackTicks", numOfClicks);
+            isAttacking = true;
             if(!isDodging){
                 controller.TempSpeed = LungeSpeed;
                 CombatSpeedDropoff = CombatWalkSpeedDropoff;
@@ -116,8 +110,14 @@ public class PlayerCombat : MonoBehaviour
     }
     private void hadnleBuffer(){
         if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0)){
-            if(comboTimeDelay >= totalAnimationTime/3f || isDodging)
+            if(comboTimeDelay >= totalAnimationTime/3f){
                 bufferButton = "Attack";
+            }
+            if(isDodging || (!isDodging && dodgeCoolDown >0)){
+                Debug.Log("LOL");
+                animator.SetBool("isDodging", true);
+                bufferButton = "Attack";
+            }
         }
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space)){
             if(!isDodging){
@@ -127,6 +127,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
     private void resetAttack(){
+        animator.SetBool("isDodging", false);
         isAttacking = false;
         animationCancel = false;
         numOfClicks = 0;
