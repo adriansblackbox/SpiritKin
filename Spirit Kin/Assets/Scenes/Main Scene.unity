@@ -36267,7 +36267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4823244959844589321, guid: 10fa1e85cdec3b645bbaa4798e33b815, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4823244960783291812, guid: 10fa1e85cdec3b645bbaa4798e33b815, type: 3}
       propertyPath: m_IsActive
@@ -40091,7 +40091,7 @@ MonoBehaviour:
   ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
   VerticalArmLength: 2.54
   CameraSide: 0.5
-  CameraDistance: 30
+  CameraDistance: 35
   CameraCollisionFilter:
     serializedVersion: 2
     m_Bits: 0
@@ -40157,7 +40157,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4931512990943485763}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 123.79, y: 30.70826, z: -264.16}
+  m_LocalPosition: {x: 123.79, y: 30.70826, z: -269.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4931512990925993237}
@@ -40221,7 +40221,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4931512991430563514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 123.79, y: 30.70826, z: -264.16}
+  m_LocalPosition: {x: 123.79, y: 30.70826, z: -269.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -50491,7 +50491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WalkSpeed: 35
-  SprintSpeed: 35
+  SprintSpeed: 50
   RotationSmoothTime: 0.01
   CombatRotationSmoothTime: 0.1
   SpeedChangeRate: 20
