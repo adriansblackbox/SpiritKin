@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Shrine : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class Shrine : MonoBehaviour
     //TRACK HOW MANY ENEMIES THE PLAYER HAS BEATEN
     
     private float myTime;
-    public float TotalCurseTime = 3f;
+    public float TotalCurseTime = 90f;
     private float CurCurseTime = 0f;
     public GameObject Beacon;
     public GameObject nonCursedContainer;
@@ -55,6 +56,8 @@ public class Shrine : MonoBehaviour
         } else if(cursed) {
             // For the laughs
             //Application.Quit();
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("MainMenu");
         }
 
         if (cursed) {

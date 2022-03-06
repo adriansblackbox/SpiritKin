@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class NewShopManager : MonoBehaviour
 {
     public List<Buff> shopBuffList = new List<Buff>();
@@ -22,6 +23,8 @@ public class NewShopManager : MonoBehaviour
     public GameObject displaySprite;
     // public SpriteRenderer currentSprite;
 
+  
+
     public int selectedOption = 0;
 
     // Start is called before the first frame update
@@ -29,7 +32,6 @@ public class NewShopManager : MonoBehaviour
     {
         //refresh buffs
         foreach(Buff i in shopBuffList){
-            i.duration = 10;
             i.isApplied = false;
         }
         menuCoinTXT.text = "Coins:" + playStats.coins.ToString();

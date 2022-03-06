@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class TeaShop : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class TeaShop : MonoBehaviour
     private bool isInteractable;
 
     private bool isOpen;
+      public GameObject ShopFirstButton;
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +54,7 @@ public class TeaShop : MonoBehaviour
     {
         //need condition to check if interactable
         // if()isInteractable = false;
-        if (Input.GetKeyDown(KeyCode.F) && isInteractable && !isOpen)
+        if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("A Button"))&& isInteractable && !isOpen)
         {
             //do something;
             // if(!theBuff.isApplied){
@@ -68,10 +70,17 @@ public class TeaShop : MonoBehaviour
 
     public void OpenMenu()
     {
+        
+
         Cursor.lockState = CursorLockMode.None;
         teaMenu.SetActive(true);
         teaCamera.SetActive(true);
         isOpen = true;
+
+        //clear selected button
+        EventSystem.current.SetSelectedGameObject(null);
+        //reassign
+        EventSystem.current.SetSelectedGameObject(ShopFirstButton);
 
         //disable player's script here
         Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
@@ -79,7 +88,7 @@ public class TeaShop : MonoBehaviour
         Player.GetComponent<PlayerCombat>().enabled = false;
 
         //disable UI
-        GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
+        //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
         Debug.Log (isOpen);
     }
 
@@ -87,7 +96,7 @@ public class TeaShop : MonoBehaviour
     {
         Player.GetComponent<PlayerController>().enabled = true;
         Player.GetComponent<PlayerCombat>().enabled = true;
-        GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
+        //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
         Cursor.lockState = CursorLockMode.Locked;
         teaMenu.SetActive(false);
         teaCamera.SetActive(false);

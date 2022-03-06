@@ -10,6 +10,8 @@ public class PlayerStats : CharacterStats
 
     public List<GameObject> BuffsUI = new List<GameObject>();
     public Sprite Notch, damageBuff, speedBuff, armorBuff, healthBuff;
+    private bool isDaed = false;
+    public Transform[] SpringTransforms;
 
     void Start()
     {
@@ -21,12 +23,10 @@ public class PlayerStats : CharacterStats
 
     // Update is called once per frame
     void Update()
-    {
+    {  
         if(Input.GetKeyDown(KeyCode.T)){
-            Debug.Log("dead");
             Die();
         }
-        
         SoulsUI.text = "" + coins;
         if (Buffs.Count != 0)
         {

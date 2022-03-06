@@ -53,8 +53,7 @@ public class PlayerController : MonoBehaviour
     {
         // if the player is initiating a mechanic besides basic movement,
         // their input is ignored until movement dependant mechanic is done
-        //if(!combatScript.isDodging){
-            InputMovement();
+        InputMovement();
         Animation();
         // so long as the player is not locked onto a target, they can rotate their
         // camera freely
@@ -103,24 +102,18 @@ public class PlayerController : MonoBehaviour
             moveDirection = targetMoveDirection;
         }
         float moveSpeed = speed;
-        if(combatScript.isAttacking || combatScript.isDodging){
+        if(combatScript.isDodging)
             moveSpeed = TempSpeed;
-            TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, Time.deltaTime * combatScript.CombatSpeedDropoff);
+        else if(combatScript.isAttacking && !combatScript.isDodging){
+            TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, combatScript.CombatRunSpeedDropoff * Time.deltaTime);
+            moveSpeed = TempSpeed * inputDirection.magnitude;
+            moveDirection = transform.GetChild(0).gameObject.transform.forward;
         }
-        moveDirection = moveDirection.normalized * moveSpeed;
+        moveDirection = moveDirection.normalized * (moveSpeed * GetComponent<PlayerStats>().speed.GetValue());
         controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * Time.deltaTime);
     }
-     private void CombatMovement(){
-        if(combatScript.isDodging){
-            moveDirection = targetMoveDirection;
-        }
-        // move direction is normalized, and the caharacter controller applies contstant
-        // downward force for easy slope traversal
-        moveDirection.Normalize();
-        controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * TempSpeed * Time.deltaTime);
-    }
     private void Animation(){
-        animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime * 100f);
+        animationBlend = Mathf.Lerp(animationBlend, speed * GetComponent<PlayerStats>().speed.GetValue(), Time.deltaTime * 100f);
         //if(inputDirection == Vector2.zero)
             //animationBlend = 0;
         animator.SetFloat("Speed", animationBlend);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
     public GameObject Player;
+
+    public GameObject PauseFirstButton;
     void Start()
     {
         
@@ -41,6 +44,10 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
+        //clear selected button
+        EventSystem.current.SetSelectedGameObject(null);
+        //reassign
+        EventSystem.current.SetSelectedGameObject(PauseFirstButton);
     }
 
     public void LoadMenu(){

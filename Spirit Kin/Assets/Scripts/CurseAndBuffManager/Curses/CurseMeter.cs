@@ -26,7 +26,7 @@ public class CurseMeter : MonoBehaviour
     public bool debugbool = false;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         newCurse = false;
         curseMeter = 0f;
@@ -45,10 +45,12 @@ public class CurseMeter : MonoBehaviour
         cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
+        ActiveSword = Sword0;
+        Sword1.SetActive(false); Sword2.SetActive(false); Sword3.SetActive(false);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (pStats.coins < soulDelta)
         {
@@ -82,7 +84,8 @@ public class CurseMeter : MonoBehaviour
             CurseHandler();
             newCurse = false;
         }
-        HandleSword();
+        if(!FindObjectOfType<PlayerCombat>().isDodging)
+            HandleSword();
 
     }
     private void HandleSword()
@@ -94,9 +97,8 @@ public class CurseMeter : MonoBehaviour
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
-                if(ActiveSword != null)
-                    if(ActiveSword != Sword0)
-                        ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+                if(ActiveSword != Sword0)
+                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
                 ActiveSword = Sword0;
                 break;
             case 1:
