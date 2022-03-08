@@ -30,7 +30,7 @@ public class CurseMeter : MonoBehaviour
     {
         newCurse = false;
         curseMeter = 0f;
-        pStats = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>();
+        pStats = gameObject.GetComponent<PlayerStats>();
         soulDelta = pStats.coins;
 
         damageCurse weak = new damageCurse(weakImage, pStats);

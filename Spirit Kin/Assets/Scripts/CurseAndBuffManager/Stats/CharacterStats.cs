@@ -17,9 +17,11 @@ public class CharacterStats : MonoBehaviour
     public ParticleSystem hitVFX;
 
     public GameObject deathScene;
+    public GameObject player;
     
-    void Awake ()
+    void Start ()
     {
+        player = GameObject.Find("Player");
         currentHealth = maxHealth;
         coins = 20;
     }
@@ -47,7 +49,8 @@ public class CharacterStats : MonoBehaviour
     public virtual void Die () {
         //Die in some way
         if (gameObject.tag == "Enemy") {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterStats>().coins += coins;
+            player.GetComponent<PlayerStats>().coins += coins;
+            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
             Destroy(this.gameObject);
         }
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
@@ -56,9 +59,7 @@ public class CharacterStats : MonoBehaviour
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
         }
-        if (gameObject.tag == "Enemy")
-            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
-        if (gameObject.tag =="Player"){
+        if (gameObject.tag == "Player"){
             StartCoroutine(PlayerDeath(gameObject.transform));
         }
         
