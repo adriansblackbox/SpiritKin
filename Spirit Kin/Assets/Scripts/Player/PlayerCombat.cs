@@ -65,7 +65,7 @@ public class PlayerCombat : MonoBehaviour
             controller.RotateOnMoveDirection = true;
             playerTrail.SetActive(false);
             playerGeo.SetActive(true);
-            GetComponent<CurseMeter>().ActiveSword.SetActive(true);
+            GetComponent<CurseMeter>().BaseSword.SetActive(true);
             dodgeCoolDown = 0.5f;
             isDodging = false;
         }else{
@@ -82,7 +82,7 @@ public class PlayerCombat : MonoBehaviour
             // makes the player invisible
             playerGeo.SetActive(false);
             playerTrail.SetActive(true);
-            GetComponent<CurseMeter>().ActiveSword.SetActive(false);
+            GetComponent<CurseMeter>().BaseSword.SetActive(false);
             animationCancel = false;
             isDodging = true;
             bufferButton = "";
@@ -103,8 +103,13 @@ public class PlayerCombat : MonoBehaviour
             animator.SetInteger("attackTicks", numOfClicks);
             isAttacking = true;
             if(!isDodging){
-                controller.TempSpeed = LungeSpeed;
-                CombatSpeedDropoff = CombatWalkSpeedDropoff;
+                if(animator.GetBool("isDodging")){
+                    controller.TempSpeed = controller.speed;
+                    CombatSpeedDropoff = CombatRunSpeedDropoff;
+                }else{
+                    controller.TempSpeed = LungeSpeed;
+                    CombatSpeedDropoff = CombatWalkSpeedDropoff;
+                }
             }
         }
     }
@@ -113,8 +118,7 @@ public class PlayerCombat : MonoBehaviour
             if(comboTimeDelay >= totalAnimationTime/3f){
                 bufferButton = "Attack";
             }
-            if(isDodging || (!isDodging && dodgeCoolDown >0)){
-                Debug.Log("LOL");
+            if(isDodging || (!isDodging && dodgeCoolDown >0) || Input.GetButton("A Button") || Input.GetKey(KeyCode.Space)){
                 animator.SetBool("isDodging", true);
                 bufferButton = "Attack";
             }

@@ -12895,6 +12895,11 @@ Transform:
   m_Father: {fileID: 1033234871}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 94.178, z: 0}
+--- !u!1 &1630436659 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4224564671500452751, guid: 10fa1e85cdec3b645bbaa4798e33b815, type: 3}
+  m_PrefabInstance: {fileID: 4224564671761349881}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1645430665
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62125,11 +62130,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerGeo: {fileID: 5254113669104351238}
   playerTrail: {fileID: 4051859553282455043}
-  DodgeTime: 0.15
-  DodgeSpeed: 100
+  DodgeTime: 0.16
+  DodgeSpeed: 160
   AnimationCancelFactor: 5
   CombatWalkSpeedDropoff: 3.5
-  CombatRunSpeedDropoff: 4
+  CombatRunSpeedDropoff: 3.5
   DashAttackSpeed: 100
   LungeSpeed: 30
   isAttacking: 0
@@ -64069,6 +64074,7 @@ MonoBehaviour:
   slowImage: {fileID: 21300000, guid: fe9be67bd76646f439bcb1bf280bc02f, type: 3}
   frailImage: {fileID: 21300000, guid: 4534ad1f9bd795c4ba118a28ae456e74, type: 3}
   ActiveSword: {fileID: 8028319209784255670}
+  BaseSword: {fileID: 1630436659}
   debugbool: 0
 --- !u!23 &8962033433654364974
 MeshRenderer:
