@@ -109,8 +109,9 @@ public class PlayerController : MonoBehaviour
             moveSpeed = TempSpeed * inputDirection.magnitude;
             moveDirection = transform.GetChild(0).gameObject.transform.forward;
         }
+        moveDirection.y = Gravity;
         moveDirection = moveDirection.normalized * (moveSpeed * GetComponent<PlayerStats>().speed.GetValue());
-        controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * Time.deltaTime);
+        controller.Move(moveDirection * Time.deltaTime);
     }
     private void Animation(){
         animationBlend = Mathf.Lerp(animationBlend, speed * GetComponent<PlayerStats>().speed.GetValue(), Time.deltaTime * 100f);
