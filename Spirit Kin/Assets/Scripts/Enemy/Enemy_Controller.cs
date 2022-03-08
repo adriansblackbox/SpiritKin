@@ -267,6 +267,10 @@ public class Enemy_Controller : MonoBehaviour
                         ThisEnemy.ResetPath();
                     }
                 }
+                else{
+                    EnemyMotion = MotionState.Relocating;
+                    ThisEnemy.ResetPath();
+                }
                 break;
             case MotionState.Chasing:
                 //set speed to faster
@@ -294,6 +298,10 @@ public class Enemy_Controller : MonoBehaviour
                         EnemyMotion = MotionState.Relocating;
                         ThisEnemy.ResetPath();
                     }
+                }
+                else{
+                    EnemyMotion = MotionState.Relocating;
+                    ThisEnemy.ResetPath();
                 }
 
                 //check if enemy is in range to surround
@@ -365,7 +373,7 @@ public class Enemy_Controller : MonoBehaviour
                 else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
                 {
                     ai.enemiesReadyToAttack.Add(gameObject);
-                    ThisEnemy.speed = seekSpeed / 1.25f;
+                    ThisEnemy.speed = seekSpeed / 1.4f;
                 }
                 
                 NavMeshHit hit;
@@ -378,6 +386,10 @@ public class Enemy_Controller : MonoBehaviour
                         EnemyMotion = MotionState.Relocating;
                         ThisEnemy.ResetPath();
                     }
+                }
+                else{
+                    EnemyMotion = MotionState.Relocating;
+                    ThisEnemy.ResetPath();
                 }
                 break;
             case MotionState.Waiting:
