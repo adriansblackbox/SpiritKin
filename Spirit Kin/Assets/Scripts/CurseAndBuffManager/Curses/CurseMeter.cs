@@ -22,7 +22,6 @@ public class CurseMeter : MonoBehaviour
     private GameObject curCurseUI;
     public Sprite Notch, weakImage, slowImage, frailImage;
     public GameObject ActiveSword;
-    public GameObject BaseSword;
 
     public bool debugbool = false;
 
