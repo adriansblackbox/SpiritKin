@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class MainMenu : MonoBehaviour
 {
+    public AudioMixer mixer;
     public AudioClip PlaybuttonSFX;
     public AudioClip OptionbuttonSFX;
     public AudioSource MenuSounds;
@@ -77,5 +79,14 @@ public class MainMenu : MonoBehaviour
 
     public IEnumerator playDelay() {
         yield return new WaitForSeconds(3.0f);
+    }
+
+    public void SetMasterVolume (float value){
+        mixer.SetFloat("MasterVolume", value);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        mixer.SetFloat("SFXVolume", value);
     }
 }
