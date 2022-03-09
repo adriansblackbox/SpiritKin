@@ -265,7 +265,7 @@ public class Enemy_Controller : MonoBehaviour
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
                 Quaternion.LookRotation(player.transform.position - transform.position);
-                transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+                // transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
                 if (justAlerted)
                 {
                     ThisEnemy.ResetPath();
