@@ -15,7 +15,7 @@ public class PlayerStats : CharacterStats
 
     void Start()
     {
-        // coins = 10000;
+        currentHealth = maxHealth;
         //reset buffs
         
 
@@ -24,7 +24,7 @@ public class PlayerStats : CharacterStats
     // Update is called once per frame
     void Update()
     {  
-        if(Input.GetKeyDown(KeyCode.T)){
+        if(Input.GetKeyDown(KeyCode.T)||currentHealth<=0){
             Die();
         }
         SoulsUI.text = "" + coins;
@@ -149,7 +149,6 @@ public class PlayerStats : CharacterStats
             FindObjectOfType<StatVFX>().addBuffStat(x.teaName);
         }
     }
-
 
     public void removeBuff(Buff x)
     {

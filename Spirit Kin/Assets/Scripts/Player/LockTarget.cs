@@ -52,7 +52,7 @@ public class LockTarget : MonoBehaviour
         Vector3 focusDirection = (aimTarget - transform.position).normalized;
         controller.RotateOnMoveDirection = false;
         // rotates the player to the target at adjustable speeds
-        if((Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")) && controller.inputDirection != Vector2.zero && !combatScript.isAttacking){
+        if((Input.GetKey(KeyCode.Space) || Input.GetButton("A Button")) && controller.inputDirection != Vector2.zero && !combatScript.isAttacking){
             playerBody.forward = Vector3.Lerp(playerBody.forward, controller.targetMoveDirection, Time.deltaTime * 20f);
             animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * NormToCombatSpeed));
         }else {//if(combatScript.CombatSpeedDropoff != combatScript.CombatRunSpeedDropoff){

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class DeathManager : MonoBehaviour
@@ -17,12 +18,10 @@ public class DeathManager : MonoBehaviour
         
     }
 
-    public void respawn(){
-        // this.enabled = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    public void openScene(){
+        gameObject.SetActive(true);
     }
-    public void MainMenu(){
-        // this.enabled = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    public void closeScene(){
+        gameObject.SetActive(false);
     }
 }

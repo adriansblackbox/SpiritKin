@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         input_x = Input.GetAxis("Horizontal");
         input_y = Input.GetAxis("Vertical");
         inputDirection = new Vector2(input_x, input_y);
-        if(Input.GetKey(KeyCode.LeftShift) || Input.GetButton("A Button")){
+        if(Input.GetKey(KeyCode.Space) || Input.GetButton("A Button")){
             targetSpeed = SprintSpeed * inputDirection.magnitude;
             targetSpeed = Mathf.Clamp(targetSpeed, 0.0f, SprintSpeed);
         }else{                          
@@ -109,8 +109,9 @@ public class PlayerController : MonoBehaviour
             moveSpeed = TempSpeed * inputDirection.magnitude;
             moveDirection = transform.GetChild(0).gameObject.transform.forward;
         }
+        moveDirection.y = Gravity;
         moveDirection = moveDirection.normalized * (moveSpeed * GetComponent<PlayerStats>().speed.GetValue());
-        controller.Move(new Vector3(moveDirection.x, Gravity, moveDirection.z) * Time.deltaTime);
+        controller.Move(moveDirection * Time.deltaTime);
     }
     private void Animation(){
         animationBlend = Mathf.Lerp(animationBlend, speed * GetComponent<PlayerStats>().speed.GetValue(), Time.deltaTime * 100f);
