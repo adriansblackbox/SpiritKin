@@ -8,21 +8,23 @@ using static Buff;
 public class slowCurse : Curse
 {
     private CharacterStats pStats;
+    private CurseMeter cMeter;
     
-    public slowCurse (Sprite _image, CharacterStats _pStats)
+    public slowCurse (Sprite _image, CharacterStats _pStats, CurseMeter _cMeter)
     {
         pStats = _pStats;
         type = "Slow_Curse";
         isApplied = false;
         removeFlag = false;
         image = _image;
+        cMeter = _cMeter;
     }
 
     override public void invokeCurse () 
     {
         Debug.Log(type + " Added!");
         isApplied = true;
-        GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
+        cMeter.activeCurses.Add(this);
 
         pStats.speed.AddBaseValue(-0.25f);
     } 
