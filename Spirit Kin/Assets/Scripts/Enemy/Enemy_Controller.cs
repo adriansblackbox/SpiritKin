@@ -25,8 +25,8 @@ public class Enemy_Controller : MonoBehaviour
     //Enemies will surround player
         //They will attack once at a time
 
-///////////////////////////////////////////////////STATES
-    
+    #region States
+
     //ADD HITSTUN STATE
     public enum MotionState {
         Alerted,
@@ -45,6 +45,10 @@ public class Enemy_Controller : MonoBehaviour
         NotAttacking,
         Waiting
     }
+    [Header("States")]
+    public Enemy_Attack currentAttack;
+    public Enemy_Attack[] enemyAttacks;
+    public float currentRecoveryTime = 0f;
 
     public MotionState EnemyMotion;
     public AttackState EnemyAttack;
@@ -54,6 +58,11 @@ public class Enemy_Controller : MonoBehaviour
     public float swapStateInterval = 12f;
     public float shrineSpawnRange = 200f;
 
+    #endregion
+    
+    #region Movement
+
+    [Header("Movement")]
     public Vector3 surroundTarget = Vector3.zero;
     public Vector3 surroundSpot = Vector3.zero;
     public Vector3 nextSpot = Vector3.zero;
@@ -92,6 +101,8 @@ public class Enemy_Controller : MonoBehaviour
     [Tooltip("Distance for enemy to break out of surrounding")]
     public float breakDist;
 
+    #endregion
+
 //////////////////////////////////////////////////NAVMESH
 
     public NavMeshAgent ThisEnemy;
@@ -100,6 +111,7 @@ public class Enemy_Controller : MonoBehaviour
     public GameObject alertBox;
 
 /////////////////////////////////////////////////SPHERECASTING
+    [Header("Spherecasting")]
     public float raycastRadius;
     public float targetDetectionRange;
 
@@ -107,6 +119,8 @@ public class Enemy_Controller : MonoBehaviour
     private bool hasDetectedPlayer = false;
 
 /////////////////////////////////////////////////STATE BOX FOR TESTING
+    [Header("Debugging")]
+    public bool showLogs = true;
 
     public Material alertedMat;
     public Material seekingMat;
@@ -115,6 +129,7 @@ public class Enemy_Controller : MonoBehaviour
     public Material patrolMat;
     public Material relocateMat;
     public Material surroundMat;
+    public Material attackMat;
 
     // Start is called before the first frame update
     void Start()
@@ -163,6 +178,10 @@ public class Enemy_Controller : MonoBehaviour
         else if (EnemyMotion == MotionState.Surrounding)
         {
             alertBox.GetComponent<MeshRenderer>().material = surroundMat;
+        }
+        else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.Attacking)
+        {
+            alertBox.GetComponent<MeshRenderer>().material = attackMat;
         }   
 
         myTime += Time.deltaTime;
@@ -172,13 +191,15 @@ public class Enemy_Controller : MonoBehaviour
         switch (EnemyAttack)
         {
             case AttackState.Attacking:
-                //need to ask adrian about timeline for attack animations
-                    //scenario 1:
-                        //attacks ready by end of week and we get them implemented here
-                    //scenario 2:
-                        //attacks not ready by end of week and we implement placeholder attacks
-                //-> finish attack will only be called animation is finished
-                ai.finishAttack();
+                if (currentRecoveryTime <= 0) //ready to attack
+                    attackTarget(); //attack target with current attack, if no current attack then select one
+                else //attack is finished and need to recover before next one
+                    handleRecovery();
+                //when target is finished attacking
+                    //-> start recovery timer
+
+
+                //ai.finishAttack();
                 break;
             case AttackState.NotAttacking:
                 //reset all values and get ready to be called upon again to attack
@@ -186,7 +207,7 @@ public class Enemy_Controller : MonoBehaviour
                 EnemyAttack = AttackState.Waiting;
                 break;
             case AttackState.Waiting:
-                //Debug.Log("Waiting to attack");
+                Log("Waiting to attack");
                 break;
             default:
                 break;
@@ -243,7 +264,8 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                transform.LookAt(player.transform.position + new Vector3(0, 4, 0));
+                Quaternion.LookRotation(player.transform.position - transform.position);
+                transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
                 if (justAlerted)
                 {
                     ThisEnemy.ResetPath();
@@ -322,8 +344,8 @@ public class Enemy_Controller : MonoBehaviour
             case MotionState.Surrounding:
                 ThisEnemy.stoppingDistance = 0.5f;
 
-                transform.LookAt(player.transform.position + new Vector3(0, 4, 0));
-                //^^ LOOK INTO DIFFERNET IMPLEMENTATIONS -> LERPING OR TRAILS BEHIND ENEMIES
+                Quaternion.LookRotation(player.transform.position - transform.position);
+                //transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 
                 //determine a way to track which enemy aligns with which spot in generated surround spots array (n)
                 //set destination to player position + surround spots array [n]
@@ -393,15 +415,51 @@ public class Enemy_Controller : MonoBehaviour
                 }
                 break;
             case MotionState.Waiting:
-                Debug.Log("Waiting for Next Movement Action");
+                Log("Waiting for Next Movement Action");
                 //need to look into what we need to track or change when entering/exiting waiting
                 break;
             default:
                 break;
         }
     }
-    
-///////////////////////////////////////////////////ATTACKS
+
+    private void handleRecovery()
+    {
+        if (currentRecoveryTime > 0) //recovering from attack
+            currentRecoveryTime -= Time.deltaTime;
+        else if (currentRecoveryTime <= 0) //ready to attack again
+            Log("Recovered and ready to attack again");
+    }
+
+    #region Attacks
+        
+    private void getAttack()
+    {
+        //starter implementation
+            //set charge attack to be the current attack
+        currentAttack = enemyAttacks[0];
+        Log(currentAttack);
+
+        //full implementation vvv
+            //get direction
+            //get viewing angle
+            //get distance
+
+            //loop through attacks and consider attacks which are within the distance + viewing angle
+                //select one randomly using attackPriority
+    }
+
+    private void attackTarget()
+    {
+        if (currentAttack == null) {
+            getAttack();
+        }
+        else
+        {
+            //this is where we would do the animation
+                //but instead have to handle it with code  
+        }        
+    }
 
     private void chargeAttack() //-> might need to be an IEnumerator
     {
@@ -418,6 +476,7 @@ public class Enemy_Controller : MonoBehaviour
             //reposition enemy onto navmesh
     }
 
+    #endregion
 
 ///////////////////////////////////////////////////STATES    
 
@@ -542,13 +601,13 @@ public class Enemy_Controller : MonoBehaviour
             //two cases
             //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
             //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
-            // Debug.Log("Before Dist: " + beforeDist);
-            // Debug.Log("After Dist: " + afterDist);
+            Log("Before Dist: " + beforeDist);
+            Log("After Dist: " + afterDist);
 
             delta = beforeDist - afterDist;
             if (delta > chaseThreshold)
             {
-                Debug.Log("Delta -> chaseThreshold -> NOW CHASING");
+                Log("Delta -> chaseThreshold -> NOW CHASING");
                 ThisEnemy.ResetPath();
                 EnemyMotion = MotionState.Chasing;
                 yield break;
@@ -558,7 +617,7 @@ public class Enemy_Controller : MonoBehaviour
         {
             ThisEnemy.ResetPath();
             EnemyMotion = MotionState.Seeking;
-            Debug.Log("Didn't need to chase player -> Seeking after alerted");
+            Log("Didn't need to chase player -> Seeking after alerted");
         }
     }
 
@@ -571,14 +630,14 @@ public class Enemy_Controller : MonoBehaviour
         {
             if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
             {
-                Debug.Log("Player Detected!");
+                Log("Player Detected!");
                 ThisEnemy.ResetPath();
                 EnemyMotion = MotionState.Alerted;
                 justAlerted = true;
             }
             else if (hitInfo.transform.CompareTag("Player") && EnemyMotion == MotionState.Seeking)
             {
-                Debug.Log("Player Detected & Chasing after Seeking!");
+                Log("Player Detected & Chasing after Seeking!");
                 ThisEnemy.ResetPath();
                 EnemyMotion = MotionState.Chasing;
             }
@@ -589,6 +648,7 @@ public class Enemy_Controller : MonoBehaviour
         }
     }
 
+    //NEED TO CHANGE TO BE MORE FLUENT AND DETECT BETTER (MAYBE NOT SPHERECAST AND RATHER JUST A SPHERE IN FRONT OF ENEMY AT ALL TIMES)
     void OnDrawGizmos()
     {
         if (hasDetectedPlayer)
@@ -602,5 +662,11 @@ public class Enemy_Controller : MonoBehaviour
         Gizmos.matrix = transform.localToWorldMatrix;
 
         Gizmos.DrawWireCube(new Vector3(0f, 0f, targetDetectionRange / 4f), new Vector3(raycastRadius, raycastRadius / 5, targetDetectionRange - 20));
+    }
+
+    private void Log(object message)
+    {
+        if (showLogs)
+            Debug.Log(message);
     }
 }
