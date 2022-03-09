@@ -31,7 +31,7 @@ public class Enemy_Spawner : MonoBehaviour
         myTime += Time.deltaTime;
         if (myTime > shrineInterval) {
             myTime = 0;
-            if (nonCursedContainer.transform.childCount > 0) //every 15 seconds
+            if (nonCursedContainer.transform.childCount > 0) //every 15 seconds -> actually 45 to 60 seconds is probably better
             {
                 int temp = Random.Range(0, nonCursedContainer.transform.childCount);
                 Transform shrine = nonCursedContainer.transform.GetChild(temp);
@@ -39,6 +39,7 @@ public class Enemy_Spawner : MonoBehaviour
                 shrine.GetComponent<Shrine>().cursed = true;
                 currentCursedShrines++;
                 scaleDifficulty();
+                shrine.GetComponent<Shrine>().setEnemiesToSpawn();
                 myTime = 0;
             }
         }
@@ -60,13 +61,13 @@ public class Enemy_Spawner : MonoBehaviour
         for (int i = 0; i < totalShrines - currentCursedShrines; i++)
         {
             Transform shrine = nonCursedContainer.transform.GetChild(i);
-            shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
+            shrine.GetComponent<Shrine>().setEnemiesToSpawnWhenCursed(Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1));
         }
 
         for (int i = 0; i < currentCursedShrines; i++)
         {
             Transform shrine = cursedContainer.transform.GetChild(i);
-            shrine.GetComponent<Shrine>().enemiesToSpawnWhenCursed = Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1);
+            shrine.GetComponent<Shrine>().setEnemiesToSpawnWhenCursed(Random.Range(lowerLimitEnemyCount, upperLimitEnemyCount + 1));
         }
     }
 

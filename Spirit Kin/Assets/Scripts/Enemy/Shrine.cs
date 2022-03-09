@@ -10,7 +10,10 @@ public class Shrine : MonoBehaviour
 
     public bool cursed;
     public float shrineSpawnRange;
-    public int enemiesToSpawnWhenCursed; //how many enemies will be spawned each time this shrine gets cursed
+
+    private int enemiesToSpawn; //actual value of enemies to spawn
+
+    public int enemiesToSpawnWhenCursed; //tracking the value to be used when the shrine gets crused
     public int amountAlreadySpawned; //how many enemies have been spawned on this current cursing
 
     //TRACK HOW MANY ENEMIES THE PLAYER HAS BEATEN
@@ -42,7 +45,7 @@ public class Shrine : MonoBehaviour
     {
         myTime += Time.deltaTime;
 
-        if (amountAlreadySpawned >= enemiesToSpawnWhenCursed && transform.GetChild(0).childCount == 0 && cursed)
+        if (amountAlreadySpawned >= enemiesToSpawn && transform.GetChild(0).childCount == 0 && cursed)
         {   
             cursed = false;
             amountAlreadySpawned = 0;
@@ -54,8 +57,6 @@ public class Shrine : MonoBehaviour
         if (CurCurseTime < TotalCurseTime && cursed) {
             CurCurseTime += Time.deltaTime;
         } else if(cursed) {
-            // For the laughs
-            //Application.Quit();
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("MainMenu");
         }
@@ -70,10 +71,18 @@ public class Shrine : MonoBehaviour
             //1: The shrine must be cursed
             //2: There must have been at least [spawnInterval] seconds that have passed
             //3: The current amount of enemies instanced [amountAlreadySpawned] must be less than the max amount to be instanced for the current cursing [enemiesToSpawnWhenCursed]
-        if (cursed && myTime > es.spawnInterval && amountAlreadySpawned < enemiesToSpawnWhenCursed)
+        if (cursed && myTime > es.spawnInterval && amountAlreadySpawned < enemiesToSpawn)
         {
             myTime = 0;
             es.spawnEnemy(gameObject);
-        }
+        } else if (myTime > es.spawnInterval) myTime = 0;
+    }
+
+    public void setEnemiesToSpawnWhenCursed(int enemies) {
+        enemiesToSpawnWhenCursed = enemies;
+    }
+
+    public void setEnemiesToSpawn() {
+        enemiesToSpawn = enemiesToSpawnWhenCursed;
     }
 }
