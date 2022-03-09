@@ -8,21 +8,23 @@ using static Buff;
 public class damageCurse : Curse
 {
     private CharacterStats pStats;
+    private CurseMeter cMeter;
     
-    public damageCurse (Sprite _image, CharacterStats _pStats)
+    public damageCurse (Sprite _image, CharacterStats _pStats, CurseMeter _cMeter)
     {
         pStats = _pStats;
         type = "Damage_Curse";
         isApplied = false;
         removeFlag = false;
         image = _image;
+        cMeter = _cMeter;
     }
 
     override public void invokeCurse () 
     {
         Debug.Log(type + " Added!");
         isApplied = true;
-        GameObject.FindGameObjectWithTag("Player").GetComponent<CurseMeter>().activeCurses.Add(this);
+        cMeter.activeCurses.Add(this);
 
         pStats.damage.AddBaseValue(-10);
     } 

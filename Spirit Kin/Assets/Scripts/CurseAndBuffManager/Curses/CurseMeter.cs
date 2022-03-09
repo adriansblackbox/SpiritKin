@@ -33,9 +33,9 @@ public class CurseMeter : MonoBehaviour
         pStats = gameObject.GetComponent<PlayerStats>();
         soulDelta = pStats.coins;
 
-        damageCurse weak = new damageCurse(weakImage, pStats);
-        slowCurse slow = new slowCurse(slowImage, pStats);
-        armorCurse frail = new armorCurse(frailImage, pStats);
+        damageCurse weak = new damageCurse(weakImage, gameObject.GetComponent<PlayerStats>(), this);
+        slowCurse slow = new slowCurse(slowImage, gameObject.GetComponent<PlayerStats>(), this);
+        armorCurse frail = new armorCurse(frailImage, gameObject.GetComponent<PlayerStats>(), this);
 
         curseArray.Add(weak);
         curseArray.Add(slow);
