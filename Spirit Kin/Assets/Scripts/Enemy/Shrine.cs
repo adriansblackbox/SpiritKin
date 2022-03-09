@@ -17,7 +17,7 @@ public class Shrine : MonoBehaviour
     
     private float myTime;
     public float TotalCurseTime = 90f;
-    private float CurCurseTime = 0f;
+    public float CurCurseTime = 0f;
     public GameObject Beacon;
     public GameObject nonCursedContainer;
 
