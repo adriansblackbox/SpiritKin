@@ -16,12 +16,14 @@ public class CharacterStats : MonoBehaviour
     public Text SoulsUI;
     public ParticleSystem hitVFX;
 
-    public GameObject deathScene;
+    public GameObject deathUI;
+
     public GameObject player;
     
     void Start ()
     {
-        player = GameObject.Find("Player");
+        
+        player = GameObject.FindGameObjectWithTag("Player");
         currentHealth = maxHealth;
         coins = 20;
     }
@@ -46,6 +48,7 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    
     public virtual void Die () {
         //Die in some way
         if (gameObject.tag == "Enemy") {
@@ -65,10 +68,10 @@ public class CharacterStats : MonoBehaviour
         
     }
     public IEnumerator PlayerDeath(Transform playerTransform){
-        //deathScene.SetActive(true);
+        
         // disable player move script
         // play death animation
-        //
+        deathUI.SetActive(true);
         Transform[] springTransforms = FindObjectOfType<PlayerStats>().SpringTransforms;
         Vector3 respawnPosition = Vector3.zero;
         float minMagnitude = float.MaxValue;
