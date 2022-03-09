@@ -37,7 +37,7 @@ public class Enemy_Spawner : MonoBehaviour
                 Transform shrine = nonCursedContainer.transform.GetChild(temp);
                 shrine.parent = cursedContainer.transform;
                 shrine.GetComponent<Shrine>().cursed = true;
-                 shrine.GetComponent<Shrine>().CurCurseTime = 0f;
+                shrine.GetComponent<Shrine>().CurCurseTime = 0f;
                 currentCursedShrines++;
                 scaleDifficulty();
                 shrine.GetComponent<Shrine>().setEnemiesToSpawn();

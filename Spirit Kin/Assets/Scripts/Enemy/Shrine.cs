@@ -71,11 +71,13 @@ public class Shrine : MonoBehaviour
             //1: The shrine must be cursed
             //2: There must have been at least [spawnInterval] seconds that have passed
             //3: The current amount of enemies instanced [amountAlreadySpawned] must be less than the max amount to be instanced for the current cursing [enemiesToSpawnWhenCursed]
-        if (cursed && myTime > es.spawnInterval && amountAlreadySpawned < enemiesToSpawn)
+        if (myTime > es.spawnInterval)
         {
             myTime = 0;
-            es.spawnEnemy(gameObject);
-        } else if (myTime > es.spawnInterval) myTime = 0;
+            if (amountAlreadySpawned < enemiesToSpawn && cursed)
+                es.spawnEnemy(gameObject);
+        }
+
     }
 
     public void setEnemiesToSpawnWhenCursed(int enemies) {
