@@ -31,7 +31,7 @@ public class CharacterStats : MonoBehaviour
     void Update() {
     }
 
-    public void TakeDamage (float damage) {
+    public async void TakeDamage (float damage) {
         hitVFX.Play();
         //armor system
         damage -= armor.GetValue();
@@ -39,7 +39,7 @@ public class CharacterStats : MonoBehaviour
 
         currentHealth -= damage;
 
-        if (gameObject.tag == "Enemy" && gameObject.GetComponent<Enemy_Controller>().EnemyMotion != Enemy_Controller.MotionState.Chasing) {
+        if (gameObject.tag == "Enemy" && gameObject.GetComponent<Enemy_Controller>().EnemyMotion != Enemy_Controller.MotionState.Chasing && gameObject.GetComponent<Enemy_Controller>().EnemyAttack != Enemy_Controller.AttackState.Attacking) {
             gameObject.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Chasing;
         }
 

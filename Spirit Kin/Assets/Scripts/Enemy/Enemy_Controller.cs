@@ -49,6 +49,10 @@ public class Enemy_Controller : MonoBehaviour
     public Enemy_Attack currentAttack;
     public Enemy_Attack[] enemyAttacks;
     public float currentRecoveryTime = 0f;
+    public Material enemyAttackingMat;
+    public Material enemyNotAttackingMat;
+    public float chargeSpeed;
+    private Vector3 dirVec;
 
     public MotionState EnemyMotion;
     public AttackState EnemyAttack;
@@ -197,13 +201,13 @@ public class Enemy_Controller : MonoBehaviour
                     handleRecovery();
                 //when target is finished attacking
                     //-> start recovery timer
-
-
                 //ai.finishAttack();
                 break;
             case AttackState.NotAttacking:
                 //reset all values and get ready to be called upon again to attack
                     //-> second pass figure out next attack
+                GetComponentInChildren<MeshRenderer>().material = enemyNotAttackingMat;
+                transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyNotAttackingMat;
                 EnemyAttack = AttackState.Waiting;
                 break;
             case AttackState.Waiting:
@@ -264,8 +268,9 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                Quaternion.LookRotation(player.transform.position - transform.position);
-                // transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+                //look in player's direction
+                transform.LookAt(player.transform.position);
+                transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
                 if (justAlerted)
                 {
                     ThisEnemy.ResetPath();
@@ -343,9 +348,9 @@ public class Enemy_Controller : MonoBehaviour
 
             case MotionState.Surrounding:
                 ThisEnemy.stoppingDistance = 0.5f;
-
-                Quaternion.LookRotation(player.transform.position - transform.position);
-                //transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+                //look in player's direction
+                transform.LookAt(player.transform.position);
+                transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 
                 //determine a way to track which enemy aligns with which spot in generated surround spots array (n)
                 //set destination to player position + surround spots array [n]
@@ -432,13 +437,31 @@ public class Enemy_Controller : MonoBehaviour
     }
 
     #region Attacks
+
+    Vector3 startPosition = Vector3.zero;
+    Vector3 endPosition = Vector3.zero;
+    float startOfCharge = 0;
+    float distanceOfCharge = 0;
         
     private void getAttack()
     {
         //starter implementation
             //set charge attack to be the current attack
         currentAttack = enemyAttacks[0];
-        Log(currentAttack);
+        Log(currentAttack.name);
+
+        if (currentAttack.name == "Charge")
+        {
+            //setup all of the values needed for the charge
+            dirVec = player.transform.position - transform.position;
+            startOfCharge = Time.time;
+            startPosition = transform.position;
+            endPosition = player.transform.position + dirVec;
+            endPosition.y = transform.position.y;
+            distanceOfCharge = Vector3.Distance(startPosition, endPosition);
+
+            //make the enemy and player colliders ignore each other
+        }
 
         //full implementation vvv
             //get direction
@@ -456,24 +479,58 @@ public class Enemy_Controller : MonoBehaviour
         }
         else
         {
+            if (currentAttack.name == "Charge")
+            {
+                chargeAttack();
+                Log("Charge Attack");
+            } 
+            else if (currentAttack.name == "Swipe")
+            {
+                swipeAttack();
+                Log("Swipe Attack");
+            }
             //this is where we would do the animation
-                //but instead have to handle it with code  
-        }        
+                //but instead have to handle it with code
+        }
     }
 
     private void chargeAttack() //-> might need to be an IEnumerator
     {
-        
-        //necessary things before beginning the attack
-            //set navmesh agent to waiting (already done)
-                //
+        //turn red
+        GetComponentInChildren<MeshRenderer>().material = enemyAttackingMat;
+        transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingMat;
 
+        //aim at player
+        transform.LookAt(player.transform.position);
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+
+        //backup
+            //might be handled by animation
+            //probably better to handle here for build for friday
+
+        //charge player
+            //get direction vector
+            //update lerp rate
+            //lerp to position behind the player
+        float distCovered = (Time.time - startOfCharge) * chargeSpeed;
+        Log(distCovered);
+        transform.position = Vector3.Lerp(startPosition, endPosition, distCovered/distanceOfCharge);
+
+        if (Vector3.Distance(transform.position, endPosition) < 0.1f) {
+            currentRecoveryTime = currentAttack.recoveryTime;
+            Log("Lerp Completed");
+        }
 
         //4 steps
             //enemy backs up + turns red
             //enemy pauses for a moment + aims at player
             //enemy charges the player (faster than chaseSpeed) [has a hurtBox collider attached]
             //reposition enemy onto navmesh
+    }
+
+    private void swipeAttack()
+    {
+
     }
 
     #endregion
