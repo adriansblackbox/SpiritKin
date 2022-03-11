@@ -45,14 +45,25 @@ public class Enemy_Controller : MonoBehaviour
         NotAttacking,
         Waiting
     }
-    [Header("States")]
+    [Header("Attacks")]
     public Enemy_Attack currentAttack;
     public Enemy_Attack[] enemyAttacks;
     public float currentRecoveryTime = 0f;
     public Material enemyAttackingMat;
+    public Material enemyAttackingTwoMat;    
     public Material enemyNotAttackingMat;
+    public float attackTimer = 0.0f;
+    [Tooltip("Determines Speed of Charge")]
+    public float durationOfCharge = 0.5f;
     public float chargeSpeed;
     private Vector3 dirVec;
+    Vector3 startPosition = Vector3.zero;
+    Vector3 endPosition = Vector3.zero;
+    float timeCharging = 0;
+    
+
+    [Header("States")]
+
 
     public MotionState EnemyMotion;
     public AttackState EnemyAttack;
@@ -134,6 +145,7 @@ public class Enemy_Controller : MonoBehaviour
     public Material relocateMat;
     public Material surroundMat;
     public Material attackMat;
+    public Material recoverMat;
 
     // Start is called before the first frame update
     void Start()
@@ -141,7 +153,6 @@ public class Enemy_Controller : MonoBehaviour
         path = new UnityEngine.AI.NavMeshPath();
         ThisEnemy = GetComponent<UnityEngine.AI.NavMeshAgent>();
         EnemyMotion = MotionState.Idling;
-        EnemyAttack = AttackState.NotAttacking;
         player = GameObject.Find("Player");
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
         ai = shrine.GetComponent<AI_Manager>();
@@ -186,7 +197,11 @@ public class Enemy_Controller : MonoBehaviour
         else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.Attacking)
         {
             alertBox.GetComponent<MeshRenderer>().material = attackMat;
-        }   
+        }
+        else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.NotAttacking)
+        {
+            alertBox.GetComponent<MeshRenderer>().material = recoverMat;
+        }
 
         myTime += Time.deltaTime;
 
@@ -195,20 +210,16 @@ public class Enemy_Controller : MonoBehaviour
         switch (EnemyAttack)
         {
             case AttackState.Attacking:
+                attackTimer += Time.deltaTime;
                 if (currentRecoveryTime <= 0) //ready to attack
                     attackTarget(); //attack target with current attack, if no current attack then select one
-                else //attack is finished and need to recover before next one
-                    handleRecovery();
-                //when target is finished attacking
-                    //-> start recovery timer
-                //ai.finishAttack();
                 break;
             case AttackState.NotAttacking:
                 //reset all values and get ready to be called upon again to attack
                     //-> second pass figure out next attack
+                handleRecovery();
                 GetComponentInChildren<MeshRenderer>().material = enemyNotAttackingMat;
                 transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyNotAttackingMat;
-                EnemyAttack = AttackState.Waiting;
                 break;
             case AttackState.Waiting:
                 Log("Waiting to attack");
@@ -433,15 +444,10 @@ public class Enemy_Controller : MonoBehaviour
         if (currentRecoveryTime > 0) //recovering from attack
             currentRecoveryTime -= Time.deltaTime;
         else if (currentRecoveryTime <= 0) //ready to attack again
-            Log("Recovered and ready to attack again");
+            finishAttack();
     }
 
     #region Attacks
-
-    Vector3 startPosition = Vector3.zero;
-    Vector3 endPosition = Vector3.zero;
-    float startOfCharge = 0;
-    float distanceOfCharge = 0;
         
     private void getAttack()
     {
@@ -454,13 +460,11 @@ public class Enemy_Controller : MonoBehaviour
         {
             //setup all of the values needed for the charge
             dirVec = player.transform.position - transform.position;
-            startOfCharge = Time.time;
+            timeCharging = 0;
             startPosition = transform.position;
             endPosition = player.transform.position + dirVec;
             endPosition.y = transform.position.y;
-            distanceOfCharge = Vector3.Distance(startPosition, endPosition);
-
-            //make the enemy and player colliders ignore each other
+            ai.enemiesReadyToAttack.Remove(gameObject);
         }
 
         //full implementation vvv
@@ -494,38 +498,65 @@ public class Enemy_Controller : MonoBehaviour
         }
     }
 
+    float yellowTime = 0.25f;
+    float orangeTime = 0.15f;
+
     private void chargeAttack() //-> might need to be an IEnumerator
     {
-        //turn red
-        GetComponentInChildren<MeshRenderer>().material = enemyAttackingMat;
-        transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingMat;
-
-        //aim at player
-        transform.LookAt(player.transform.position);
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-
-        //backup
-            //might be handled by animation
-            //probably better to handle here for build for friday
-
-        //charge player
-            //get direction vector
-            //update lerp rate
-            //lerp to position behind the player
-        float distCovered = (Time.time - startOfCharge) * chargeSpeed;
-        Log(distCovered);
-        transform.position = Vector3.Lerp(startPosition, endPosition, distCovered/distanceOfCharge);
-
-        if (Vector3.Distance(transform.position, endPosition) < 0.1f) {
-            currentRecoveryTime = currentAttack.recoveryTime;
-            Log("Lerp Completed");
+        if (attackTimer < yellowTime) 
+        {
+            //aim at player
+            transform.LookAt(player.transform.position);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+            //set mat to yellow
+            GetComponentInChildren<MeshRenderer>().material = alertedMat;
+            transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = alertedMat;
+        } 
+        else if (attackTimer < yellowTime + orangeTime)
+        {
+            //aim at player
+            transform.LookAt(player.transform.position);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+            //set mat to orange
+            GetComponentInChildren<MeshRenderer>().material = enemyAttackingTwoMat;
+            transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingTwoMat;
         }
+        else if (attackTimer > yellowTime + orangeTime + 0.05f)
+        {
+            //set mat to red and charge
+            GetComponentInChildren<MeshRenderer>().material = enemyAttackingMat;
+            transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingMat;
 
-        //4 steps
-            //enemy backs up + turns red
-            //enemy pauses for a moment + aims at player
-            //enemy charges the player (faster than chaseSpeed) [has a hurtBox collider attached]
-            //reposition enemy onto navmesh
+            //charge player
+                //get direction vector
+                //update lerp rate
+                //lerp to position behind the player
+            timeCharging += Time.deltaTime;
+            transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
+
+            if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) { //need to add second condition for if they get stuck or can't reach dest
+                EnemyAttack = AttackState.NotAttacking;
+                ai.attackingEnemy = null;
+                currentRecoveryTime = currentAttack.recoveryTime;
+                Log("Lerp Completed");
+            }
+        }
+    }
+
+    private void finishAttack()
+    {
+        Log("Recovered and ready to attack again");
+        EnemyMotion = MotionState.Surrounding;
+        EnemyAttack = AttackState.Waiting;
+        currentAttack = null;
+        attackTimer = 0.0f;
+
+        //consider resetting surroundspot
+        surroundTarget = Vector3.zero;
+        surroundSpot = Vector3.zero;
+        ai.surroundSpotAvailability[surroundIndex] = true;
+        surroundIndex = -1;
+        nextSpot = Vector3.zero;
     }
 
     private void swipeAttack()
@@ -658,8 +689,6 @@ public class Enemy_Controller : MonoBehaviour
             //two cases
             //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
             //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
-            Log("Before Dist: " + beforeDist);
-            Log("After Dist: " + afterDist);
 
             delta = beforeDist - afterDist;
             if (delta > chaseThreshold)

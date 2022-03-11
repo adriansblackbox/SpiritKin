@@ -19,6 +19,7 @@ public class AI_Manager : MonoBehaviour
     private List<Vector3> surroundTrackingSpots = new List<Vector3>();
     public Transform Player;
     public float surroundRadius;
+    public float selectAttackerTimer;
 
     public GameObject attackingEnemy;
     public List<GameObject> enemiesReadyToAttack = new List<GameObject>();
@@ -31,41 +32,38 @@ public class AI_Manager : MonoBehaviour
 
     private void Update()
     {
+        selectAttackerTimer += Time.deltaTime;
         //Goal:
             //basic framework for selecting an enemy to attack
                 //-> random !!!
                 //-> queue system
                 //-> order they arrive in
 
-        if (attackingEnemy == null && enemiesReadyToAttack.Count > 0)
+        if (selectAttackerTimer > 0.5f)
         {
-            //select enemy + set enemy values to be ready to attack
-                //EnemyMotion -> Waiting
-                //EnemyAttack -> Attacking
-            int ind = UnityEngine.Random.Range(0, enemiesReadyToAttack.Count - 1);
-            attackingEnemy = enemiesReadyToAttack[ind];
-            attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
-            attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
-            attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
-            Debug.Log("Selected Enemy");
+            selectAttackerTimer = 0;
+            if (attackingEnemy == null && enemiesReadyToAttack.Count > 0)
+            {
+                //select enemy + set enemy values to be ready to attack
+                    //EnemyMotion -> Waiting
+                    //EnemyAttack -> Attacking
+                int ind = UnityEngine.Random.Range(0, enemiesReadyToAttack.Count - 1);
+                attackingEnemy = enemiesReadyToAttack[ind];
+                attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
+                attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
+                attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
+                attackingEnemy.GetComponent<Enemy_Controller>().attackTimer = 0.0f;
+                Debug.Log("Selected Enemy");
+            }
         }
+
+        
 
         //need to handle allocating an attacker -> ask adrian how he feels about this :D
             //first pass/first draft -> 1 enemy to attack + return to its spot
             //second pass -> 1 enemy to attack + stay engaged attacking player
             //third pass -> 1 main enemy attacking + staying engaged with player + 1 or 2 other enemies poking to make combat more difficult
     }
-
-    public void finishAttack() //first pass super simple + will be used later for poke attacks
-    {
-        //return to spot
-            //-> should be able to reset their state to surrounding
-        attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.NotAttacking;
-        attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Surrounding;
-        attackingEnemy = null;
-        Debug.Log("Poke attack finished");
-    }
-
             
     //each location should be equally spaced around the leading enemy
         //the leading enemy is the first enemy in the chasing list
@@ -177,8 +175,16 @@ public class AI_Manager : MonoBehaviour
             
             //was A or B closer for the enemy + add to path
             int chosenIndex = (targetIndexA != -1) ? targetIndexA : targetIndexB;
-            Path.Add(curr);
-
+            if (Vector3.Distance(enemy.position, curr + Player.position) < Vector3.Distance(enemy.position, end + Player.position) - 1f)
+            {
+                Path.Add(curr);
+            }
+            else
+            {
+                Path.Add(end);
+                return Path;
+            }
+                
             //generate whole path based off of starting position and end position
             bool right = false;
 

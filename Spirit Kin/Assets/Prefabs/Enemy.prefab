@@ -39,7 +39,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2054603821603549304}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -219,10 +219,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8529a224114adab448bb599b35f0826c, type: 2}
   currentRecoveryTime: 0
   enemyAttackingMat: {fileID: 2100000, guid: 2ec4b578a34fb044a95787eae5d3dd10, type: 2}
+  enemyAttackingTwoMat: {fileID: 2100000, guid: c2d66f0ddcd87eb46a9119e9821dd2ea, type: 2}
   enemyNotAttackingMat: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  chargeSpeed: 50
+  attackTimer: 0
+  chargeSpeed: 30
   EnemyMotion: 1
-  EnemyAttack: 1
+  EnemyAttack: 2
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.1
   swapStateInterval: 15
@@ -257,6 +259,7 @@ MonoBehaviour:
   relocateMat: {fileID: 2100000, guid: 675a00490b51fc444b1ef4484fefc6fa, type: 2}
   surroundMat: {fileID: 2100000, guid: 204045e4779574a4bbb89d75e026cec7, type: 2}
   attackMat: {fileID: 2100000, guid: f17027f96abdc724c8feeb447ee3d0d7, type: 2}
+  recoverMat: {fileID: 2100000, guid: 518f7a53f518aff478bc6c0e910acd91, type: 2}
 --- !u!54 &3395744986304884326
 Rigidbody:
   m_ObjectHideFlags: 0
