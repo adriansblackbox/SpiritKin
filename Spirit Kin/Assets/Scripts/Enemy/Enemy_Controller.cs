@@ -81,6 +81,7 @@ public class Enemy_Controller : MonoBehaviour
     public Vector3 surroundTarget = Vector3.zero;
     public Vector3 surroundSpot = Vector3.zero;
     public Vector3 nextSpot = Vector3.zero;
+    public Vector3 unstuckingCheck = Vector3.zero; // Necessary for helping the AI get unstuck from where its at
     public int surroundIndex = -1; //necessary for resetting surrounding spots after leaving surround state
 
     public List<Vector3> movementQueue;
@@ -266,6 +267,10 @@ public class Enemy_Controller : MonoBehaviour
             case MotionState.Relocating:
                 ThisEnemy.speed = chaseSpeed;
                 ThisEnemy.stoppingDistance = 2.5f;
+
+                if (unstuckingCheck == Vector3.zero) {
+                    StartCoroutine(unstuckTimer());
+                }
                 if (ThisEnemy.hasPath && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                 {
                     ThisEnemy.ResetPath();
@@ -704,6 +709,22 @@ public class Enemy_Controller : MonoBehaviour
             ThisEnemy.ResetPath();
             EnemyMotion = MotionState.Seeking;
             Log("Didn't need to chase player -> Seeking after alerted");
+        }
+    }
+
+    IEnumerator unstuckTimer()
+    {
+        unstuckingCheck = transform.position;
+        yield return new WaitForSeconds(0.5f);
+        if(Vector3.Distance(unstuckingCheck, transform.position) < 1.0f)
+        {
+            // Move enemy towards the shrine in some way
+            Log("Help, I'm stuck!");
+            unstuckingCheck = Vector3.zero;
+        }
+        else
+        {
+            unstuckingCheck = Vector3.zero;
         }
     }
 
