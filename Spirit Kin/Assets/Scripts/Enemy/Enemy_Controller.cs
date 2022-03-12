@@ -220,7 +220,7 @@ public class Enemy_Controller : MonoBehaviour
                     //-> second pass figure out next attack
                 handleRecovery();
                 GetComponentInChildren<MeshRenderer>().material = enemyNotAttackingMat;
-                transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyNotAttackingMat;
+                //transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyNotAttackingMat;
                 break;
             case AttackState.Waiting:
                 Log("Waiting to attack");
@@ -515,7 +515,7 @@ public class Enemy_Controller : MonoBehaviour
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
             //set mat to yellow
             GetComponentInChildren<MeshRenderer>().material = alertedMat;
-            transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = alertedMat;
+            //transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = alertedMat;
         } 
         else if (attackTimer < yellowTime + orangeTime)
         {
@@ -524,13 +524,13 @@ public class Enemy_Controller : MonoBehaviour
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
             //set mat to orange
             GetComponentInChildren<MeshRenderer>().material = enemyAttackingTwoMat;
-            transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingTwoMat;
+            //transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingTwoMat;
         }
         else if (attackTimer > yellowTime + orangeTime + 0.05f)
         {
             //set mat to red and charge
             GetComponentInChildren<MeshRenderer>().material = enemyAttackingMat;
-            transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingMat;
+            //transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingMat;
 
             //charge player
                 //get direction vector
