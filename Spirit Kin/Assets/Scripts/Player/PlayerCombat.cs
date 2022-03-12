@@ -27,6 +27,7 @@ public class PlayerCombat : MonoBehaviour
     private bool isDead = false;
     private bool animationCancel = false;
     public GameObject BaseSword;
+    public Transform[] AttackOriginPoints;
 
     private void Start() {
         animator = GetComponent<Animator>();

@@ -85,6 +85,7 @@ public class CharacterStats : MonoBehaviour
             }
         }
         player.transform.position = respawnPosition;
+        player.GetComponent<PlayerStats>().currentHealth = player.GetComponent<PlayerStats>().maxHealth;
         player.GetComponent<CharacterController>().enabled = true;
         yield return null;
     }

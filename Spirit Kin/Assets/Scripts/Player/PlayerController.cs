@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     private PlayerCombat combatScript;
     private Animator animator;
 	private GameObject mainCamera;
+    
 
     void Start()
     {
@@ -65,7 +66,7 @@ public class PlayerController : MonoBehaviour
         input_x = Input.GetAxis("Horizontal");
         input_y = Input.GetAxis("Vertical");
         inputDirection = new Vector2(input_x, input_y);
-        if(Input.GetKey(KeyCode.Space) || Input.GetButton("A Button")){
+        if(Input.GetKey(KeyCode.LeftShift) || Input.GetAxisRaw("Right Trigger") > 0.1){
             targetSpeed = SprintSpeed * inputDirection.magnitude;
             targetSpeed = Mathf.Clamp(targetSpeed, 0.0f, SprintSpeed);
         }else{                          
