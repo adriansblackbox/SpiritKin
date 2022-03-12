@@ -50,17 +50,17 @@ public class CharacterStats : MonoBehaviour
 
     
     public virtual void Die () {
-        //Die in some way
-        if (gameObject.tag == "Enemy") {
-            player.GetComponent<PlayerStats>().coins += coins;
-            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
-            Destroy(this.gameObject, 0.05f);
-        }
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
             FindObjectOfType<LockTarget>().DelockTarget();
         }
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
+        }
+        //Die in some way
+        if (gameObject.tag == "Enemy") {
+            player.GetComponent<PlayerStats>().coins += coins;
+            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
+            Destroy(this.gameObject, 0.05f);
         }
         if (gameObject.tag == "Player"){
             StartCoroutine(PlayerDeath(gameObject.transform));

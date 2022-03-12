@@ -39,7 +39,7 @@ public class AI_Manager : MonoBehaviour
                 //-> queue system
                 //-> order they arrive in
 
-        if (selectAttackerTimer > 0.5f)
+        if (selectAttackerTimer > 0.75f)
         {
             selectAttackerTimer = 0;
             if (attackingEnemy == null && enemiesReadyToAttack.Count > 0)
@@ -48,12 +48,20 @@ public class AI_Manager : MonoBehaviour
                     //EnemyMotion -> Waiting
                     //EnemyAttack -> Attacking
                 int ind = UnityEngine.Random.Range(0, enemiesReadyToAttack.Count - 1);
-                attackingEnemy = enemiesReadyToAttack[ind];
-                attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
-                attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
-                attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
-                attackingEnemy.GetComponent<Enemy_Controller>().attackTimer = 0.0f;
-                Debug.Log("Selected Enemy");
+                if (enemiesReadyToAttack[ind] != null) 
+                {
+                    attackingEnemy = enemiesReadyToAttack[ind];
+                    attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
+                    attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
+                    attackingEnemy.GetComponent<Enemy_Controller>().movementQueue.Clear();
+                    attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
+                    attackingEnemy.GetComponent<Enemy_Controller>().attackTimer = 0.0f;
+                    Debug.Log("Selected Enemy");
+                }
+                else
+                {
+                  enemiesReadyToAttack.RemoveAt(ind);  
+                }
             }
         }
 

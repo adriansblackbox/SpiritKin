@@ -51,7 +51,6 @@ public class Enemy_Controller : MonoBehaviour
     public float currentRecoveryTime = 0f;
     public Material enemyAttackingMat;
     public Material enemyAttackingTwoMat;    
-    public Material enemyBodyMat;
     public BoxCollider enemyCollider;
     public float attackTimer = 0.0f;
     [Tooltip("Determines Speed of Charge")]
@@ -170,42 +169,42 @@ public class Enemy_Controller : MonoBehaviour
         //spherecast to check for player
         checkForPlayer();
 
-        if (EnemyMotion == MotionState.Alerted)
-        {
-            alertBox.GetComponent<MeshRenderer>().material = alertedMat;
-        } 
-        else if (EnemyMotion == MotionState.Seeking) 
-        {
-            alertBox.GetComponent<MeshRenderer>().material = seekingMat;
-        } 
-        else if (EnemyMotion == MotionState.Idling) 
-        {
-            alertBox.GetComponent<MeshRenderer>().material = idleMat;
-        } 
-        else if (EnemyMotion == MotionState.Chasing) 
-        {
-            alertBox.GetComponent<MeshRenderer>().material = chasingMat;
-        } 
-        else if (EnemyMotion == MotionState.Relocating) 
-        {
-            alertBox.GetComponent<MeshRenderer>().material = relocateMat;
-        } 
-        else if (EnemyMotion == MotionState.Patroling) 
-        {
-            alertBox.GetComponent<MeshRenderer>().material = patrolMat;
-        }
-        else if (EnemyMotion == MotionState.Surrounding)
-        {
-            alertBox.GetComponent<MeshRenderer>().material = surroundMat;
-        }
-        else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.Attacking)
-        {
-            alertBox.GetComponent<MeshRenderer>().material = attackMat;
-        }
-        else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.NotAttacking)
-        {
-            alertBox.GetComponent<MeshRenderer>().material = recoverMat;
-        }
+        // if (EnemyMotion == MotionState.Alerted)
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = alertedMat;
+        // } 
+        // else if (EnemyMotion == MotionState.Seeking) 
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = seekingMat;
+        // } 
+        // else if (EnemyMotion == MotionState.Idling) 
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = idleMat;
+        // } 
+        // else if (EnemyMotion == MotionState.Chasing) 
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = chasingMat;
+        // } 
+        // else if (EnemyMotion == MotionState.Relocating) 
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = relocateMat;
+        // } 
+        // else if (EnemyMotion == MotionState.Patroling) 
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = patrolMat;
+        // }
+        // else if (EnemyMotion == MotionState.Surrounding)
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = surroundMat;
+        // }
+        // else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.Attacking)
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = attackMat;
+        // }
+        // else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.NotAttacking)
+        // {
+        //     alertBox.GetComponent<MeshRenderer>().material = recoverMat;
+        // }
 
         myTime += Time.deltaTime;
 
@@ -222,7 +221,6 @@ public class Enemy_Controller : MonoBehaviour
                 //reset all values and get ready to be called upon again to attack
                     //-> second pass figure out next attack
                 handleRecovery();
-                GetComponentInChildren<MeshRenderer>().material = enemyBodyMat;
                 break;
             case AttackState.Waiting:
                 Log("Waiting to attack");
@@ -498,6 +496,7 @@ public class Enemy_Controller : MonoBehaviour
 
     private void chargeAttack() //-> might need to be an IEnumerator
     {
+        alertBox.SetActive(true);
         if (attackTimer < yellowTime) 
         {
             //aim at player
@@ -523,7 +522,7 @@ public class Enemy_Controller : MonoBehaviour
             transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
 
             RaycastHit hit;
-            if (!hasHitPlayer && Physics.Raycast(transform.position, dirVec, out hit, 2f))
+            if (!hasHitPlayer && Physics.Raycast(transform.position, dirVec, out hit, 1f))
             {
                 if (hit.collider.tag == "Player")
                 {
@@ -534,6 +533,7 @@ public class Enemy_Controller : MonoBehaviour
             }
 
             if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) {
+                alertBox.SetActive(false);
                 EnemyAttack = AttackState.NotAttacking;
                 ai.attackingEnemy = null;
                 timeCharging = 0;

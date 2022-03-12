@@ -19,7 +19,8 @@ public class Enemy_Spawner : MonoBehaviour
     public int currentCursedShrines; //how many shrines are currently cursed
 
     private float myTime;
-    public float shrineInterval = 15f;
+    public float shrineInterval = 45f;
+    private bool firstSpawn = true;
 
     public void Start()
     {
@@ -29,7 +30,27 @@ public class Enemy_Spawner : MonoBehaviour
     public void Update()
     {
         myTime += Time.deltaTime;
-        if (myTime > shrineInterval) {
+        if (firstSpawn)
+        {
+            if (myTime > 5f)
+            {
+                firstSpawn = false;
+                myTime = 0;
+                if (nonCursedContainer.transform.childCount > 0) //every 15 seconds -> actually 45 to 60 seconds is probably better
+                {
+                    int temp = Random.Range(0, nonCursedContainer.transform.childCount);
+                    Transform shrine = nonCursedContainer.transform.GetChild(temp);
+                    shrine.parent = cursedContainer.transform;
+                    shrine.GetComponent<Shrine>().cursed = true;
+                    shrine.GetComponent<Shrine>().CurCurseTime = 0f;
+                    currentCursedShrines++;
+                    scaleDifficulty();
+                    shrine.GetComponent<Shrine>().setEnemiesToSpawn();
+                }
+            }
+        }
+        else if (myTime > shrineInterval) 
+        {
             myTime = 0;
             if (nonCursedContainer.transform.childCount > 0) //every 15 seconds -> actually 45 to 60 seconds is probably better
             {
@@ -41,7 +62,6 @@ public class Enemy_Spawner : MonoBehaviour
                 currentCursedShrines++;
                 scaleDifficulty();
                 shrine.GetComponent<Shrine>().setEnemiesToSpawn();
-                myTime = 0;
             }
         }
     }
