@@ -274,7 +274,7 @@ public class Enemy_Controller : MonoBehaviour
                     StartCoroutine(unstuckTimer());
                 }
                 //reached destination
-                Log("Remaining: " + ThisEnemy.remainingDistance + " vs. Stopping: " + ThisEnemy.stoppingDistance);
+                //Log("Remaining: " + ThisEnemy.remainingDistance + " vs. Stopping: " + ThisEnemy.stoppingDistance);
                 if (ThisEnemy.hasPath && path.status == NavMeshPathStatus.PathComplete && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                 {
                     ThisEnemy.ResetPath();
@@ -521,6 +521,16 @@ public class Enemy_Controller : MonoBehaviour
             timeCharging += Time.deltaTime;
             transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
 
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, dirVec, out hit, 2f))
+            {
+                if (hit.collider.tag == "Player")
+                {
+                    Log("Hit Player, now deal damage");
+                    player.GetComponent<PlayerStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
+                }
+            }
+
             if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) {
                 EnemyAttack = AttackState.NotAttacking;
                 ai.attackingEnemy = null;
@@ -604,7 +614,7 @@ public class Enemy_Controller : MonoBehaviour
             }
         } 
 
-        return es.chooseRelocation(shrine).position;        
+        return es.chooseLocation(shrine).position;        
     }
 
     //4 cases

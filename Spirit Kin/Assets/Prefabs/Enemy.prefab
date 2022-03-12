@@ -228,7 +228,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1081803827011709086}
   - component: {fileID: 6213425905927084345}
-  - component: {fileID: 8306307604773105302}
   m_Layer: 7
   m_Name: hurtBox
   m_TagString: Enemy
@@ -263,18 +262,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8306307604773105302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054603821603549304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44ef2395aebaa984a976f32221801ef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2242667004622192637
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,7 +1206,7 @@ MonoBehaviour:
   armor:
     baseValue: 0
   damage:
-    baseValue: 0
+    baseValue: 30
   speed:
     baseValue: 0
   SoulsUI: {fileID: 0}
@@ -1255,6 +1242,7 @@ MonoBehaviour:
   idleToPatrolChance: 0.1
   swapStateInterval: 15
   shrineSpawnRange: 200
+  relocateSpot: {x: 0, y: 0, z: 0}
   surroundTarget: {x: 0, y: 0, z: 0}
   surroundSpot: {x: 0, y: 0, z: 0}
   nextSpot: {x: 0, y: 0, z: 0}
@@ -1277,7 +1265,7 @@ MonoBehaviour:
   alertBox: {fileID: 3479692116232897869}
   raycastRadius: 8
   targetDetectionRange: 45
-  showLogs: 1
+  showLogs: 0
   alertedMat: {fileID: 2100000, guid: 353a2592ff3736b4dac2eb8104fbcc65, type: 2}
   seekingMat: {fileID: 2100000, guid: 6955535d418b16b4fa62cc25397824a8, type: 2}
   chasingMat: {fileID: 2100000, guid: 8a14e898cff323941a4cdf2ce999739c, type: 2}
