@@ -494,6 +494,7 @@ public class Enemy_Controller : MonoBehaviour
 
     float yellowTime = 0.25f;
     float orangeTime = 0.15f;
+    bool hasHitPlayer = false;
 
     private void chargeAttack() //-> might need to be an IEnumerator
     {
@@ -522,12 +523,13 @@ public class Enemy_Controller : MonoBehaviour
             transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, dirVec, out hit, 2f))
+            if (!hasHitPlayer && Physics.Raycast(transform.position, dirVec, out hit, 2f))
             {
                 if (hit.collider.tag == "Player")
                 {
                     Log("Hit Player, now deal damage");
                     player.GetComponent<PlayerStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
+                    hasHitPlayer = true;
                 }
             }
 
@@ -559,6 +561,7 @@ public class Enemy_Controller : MonoBehaviour
         EnemyAttack = AttackState.Waiting;
         currentAttack = null;
         attackTimer = 0.0f;
+        hasHitPlayer = false;
 
         //consider resetting surroundspot
         surroundTarget = Vector3.zero;
