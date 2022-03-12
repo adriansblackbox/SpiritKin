@@ -464,7 +464,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3479692116232897869}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.191, z: -0.00000012301}
+  m_LocalPosition: {x: 0, y: 1.299, z: -0.00000012301}
   m_LocalScale: {x: 1.391047, y: 0.34776175, z: 1.391047}
   m_Children: []
   m_Father: {fileID: 6192531991054698252}
@@ -1206,7 +1206,7 @@ MonoBehaviour:
   armor:
     baseValue: 0
   damage:
-    baseValue: 0
+    baseValue: 30
   speed:
     baseValue: 0
   SoulsUI: {fileID: 0}
@@ -1231,17 +1231,18 @@ MonoBehaviour:
   currentRecoveryTime: 0
   enemyAttackingMat: {fileID: 2100000, guid: 2ec4b578a34fb044a95787eae5d3dd10, type: 2}
   enemyAttackingTwoMat: {fileID: 2100000, guid: c2d66f0ddcd87eb46a9119e9821dd2ea, type: 2}
-  enemyNotAttackingMat: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  enemyBodyMat: {fileID: -9103484930961366303, guid: 518ef7087711a244babb768f0402a588, type: 3}
   enemyCollider: {fileID: 6213425905927084345}
   attackTimer: 0
   durationOfCharge: 0.5
-  chargeSpeed: 30
+  chargeLength: 35
   EnemyMotion: 1
   EnemyAttack: 2
   patrolToIdleChance: 0.5
   idleToPatrolChance: 0.1
   swapStateInterval: 15
   shrineSpawnRange: 200
+  relocateSpot: {x: 0, y: 0, z: 0}
   surroundTarget: {x: 0, y: 0, z: 0}
   surroundSpot: {x: 0, y: 0, z: 0}
   nextSpot: {x: 0, y: 0, z: 0}
@@ -1264,7 +1265,7 @@ MonoBehaviour:
   alertBox: {fileID: 3479692116232897869}
   raycastRadius: 8
   targetDetectionRange: 45
-  showLogs: 1
+  showLogs: 0
   alertedMat: {fileID: 2100000, guid: 353a2592ff3736b4dac2eb8104fbcc65, type: 2}
   seekingMat: {fileID: 2100000, guid: 6955535d418b16b4fa62cc25397824a8, type: 2}
   chasingMat: {fileID: 2100000, guid: 8a14e898cff323941a4cdf2ce999739c, type: 2}

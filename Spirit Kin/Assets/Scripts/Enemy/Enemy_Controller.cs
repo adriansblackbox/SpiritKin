@@ -51,7 +51,7 @@ public class Enemy_Controller : MonoBehaviour
     public float currentRecoveryTime = 0f;
     public Material enemyAttackingMat;
     public Material enemyAttackingTwoMat;    
-    public Material enemyNotAttackingMat;
+    public Material enemyBodyMat;
     public BoxCollider enemyCollider;
     public float attackTimer = 0.0f;
     [Tooltip("Determines Speed of Charge")]
@@ -80,6 +80,7 @@ public class Enemy_Controller : MonoBehaviour
     #region Movement
 
     [Header("Movement")]
+    public Vector3 relocateSpot = Vector3.zero;
     public Vector3 surroundTarget = Vector3.zero;
     public Vector3 surroundSpot = Vector3.zero;
     public Vector3 nextSpot = Vector3.zero;
@@ -221,8 +222,7 @@ public class Enemy_Controller : MonoBehaviour
                 //reset all values and get ready to be called upon again to attack
                     //-> second pass figure out next attack
                 handleRecovery();
-                GetComponentInChildren<MeshRenderer>().material = enemyNotAttackingMat;
-                //transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyNotAttackingMat;
+                GetComponentInChildren<MeshRenderer>().material = enemyBodyMat;
                 break;
             case AttackState.Waiting:
                 Log("Waiting to attack");
@@ -273,18 +273,18 @@ public class Enemy_Controller : MonoBehaviour
                 if (unstuckingCheck == Vector3.zero) {
                     StartCoroutine(unstuckTimer());
                 }
-
+                //reached destination
+                //Log("Remaining: " + ThisEnemy.remainingDistance + " vs. Stopping: " + ThisEnemy.stoppingDistance);
                 if (ThisEnemy.hasPath && path.status == NavMeshPathStatus.PathComplete && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                 {
                     ThisEnemy.ResetPath();
-                    exitedArena = false;
                     EnemyMotion = MotionState.Idling;
                 }
-                else if (!ThisEnemy.hasPath)
-                {
-                    ThisEnemy.SetDestination(es.chooseRelocation(shrine).position);
-                }
-
+                if (relocateSpot == Vector3.zero)
+                    relocateSpot = es.chooseLocation(shrine).position;
+                ThisEnemy.CalculatePath(relocateSpot, path);
+                if (path.status == NavMeshPathStatus.PathComplete)
+                    ThisEnemy.SetDestination(relocateSpot);
                 break;
             case MotionState.Alerted:
                 // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
@@ -314,16 +314,7 @@ public class Enemy_Controller : MonoBehaviour
                     startOfPath = transform.position;
                 ThisEnemy.CalculatePath(player.transform.position, path);
                 if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-                    if (!exitedArena) { //if still in arena
-                        ThisEnemy.SetDestination(player.transform.position);
-                    } else {
-                        EnemyMotion = MotionState.Relocating;
-                        ThisEnemy.ResetPath();
-                    }
-                }
-                else{
-                    EnemyMotion = MotionState.Relocating;
-                    ThisEnemy.ResetPath();
+                    ThisEnemy.SetDestination(player.transform.position);
                 }
                 break;
             case MotionState.Chasing:
@@ -349,8 +340,8 @@ public class Enemy_Controller : MonoBehaviour
                     break;
                 }
 
-                if (!ThisEnemy.hasPath)
-                    startOfPath = transform.position;
+                // if (!ThisEnemy.hasPath)
+                //     startOfPath = transform.position;
                 ThisEnemy.CalculatePath(player.transform.position, path);
                 if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                     ThisEnemy.SetDestination(player.transform.position);
@@ -503,6 +494,7 @@ public class Enemy_Controller : MonoBehaviour
 
     float yellowTime = 0.25f;
     float orangeTime = 0.15f;
+    bool hasHitPlayer = false;
 
     private void chargeAttack() //-> might need to be an IEnumerator
     {
@@ -513,7 +505,6 @@ public class Enemy_Controller : MonoBehaviour
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
             //set mat to yellow
             GetComponentInChildren<MeshRenderer>().material = alertedMat;
-            //transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = alertedMat;
         } 
         else if (attackTimer < yellowTime + orangeTime)
         {
@@ -522,24 +513,27 @@ public class Enemy_Controller : MonoBehaviour
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
             //set mat to orange
             GetComponentInChildren<MeshRenderer>().material = enemyAttackingTwoMat;
-            //transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingTwoMat;
         }
         else if (attackTimer > yellowTime + orangeTime + 0.05f)
         {
             if (timeCharging == 0)
                 generateChargePath();
-            //set mat to red and charge
             GetComponentInChildren<MeshRenderer>().material = enemyAttackingMat;
-            //transform.GetChild(0).GetChild(1).GetComponent<MeshRenderer>().material = enemyAttackingMat;
-
-            //charge player
-                //get direction vector
-                //update lerp rate
-                //lerp to position behind the player
             timeCharging += Time.deltaTime;
             transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
 
-            if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) { //need to add second condition for if they get stuck or can't reach dest
+            RaycastHit hit;
+            if (!hasHitPlayer && Physics.Raycast(transform.position, dirVec, out hit, 2f))
+            {
+                if (hit.collider.tag == "Player")
+                {
+                    Log("Hit Player, now deal damage");
+                    player.GetComponent<PlayerStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
+                    hasHitPlayer = true;
+                }
+            }
+
+            if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) {
                 EnemyAttack = AttackState.NotAttacking;
                 ai.attackingEnemy = null;
                 timeCharging = 0;
@@ -567,6 +561,7 @@ public class Enemy_Controller : MonoBehaviour
         EnemyAttack = AttackState.Waiting;
         currentAttack = null;
         attackTimer = 0.0f;
+        hasHitPlayer = false;
 
         //consider resetting surroundspot
         surroundTarget = Vector3.zero;
@@ -622,7 +617,7 @@ public class Enemy_Controller : MonoBehaviour
             }
         } 
 
-        return es.chooseRelocation(shrine).position;        
+        return es.chooseLocation(shrine).position;        
     }
 
     //4 cases
@@ -638,7 +633,7 @@ public class Enemy_Controller : MonoBehaviour
         //Quadrant 4, or Lower Right
             //x is positive
             //z is negative
-    private Vector3 findNextWaypoint() 
+    private Vector3 findNextWaypoint()
     {
         return es.chooseLocation(shrine).position;
        
@@ -733,6 +728,7 @@ public class Enemy_Controller : MonoBehaviour
             // Move enemy towards the shrine in some way
             Log("Help, I'm stuck!");
             unstuckingCheck = Vector3.zero;
+            Log(path.status);
         }
         else
         {

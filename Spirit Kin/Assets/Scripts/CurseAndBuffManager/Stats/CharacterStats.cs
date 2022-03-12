@@ -31,7 +31,7 @@ public class CharacterStats : MonoBehaviour
     void Update() {
     }
 
-    public async void TakeDamage (float damage) {
+    public void TakeDamage (float damage) {
         hitVFX.Play();
         //armor system
         damage -= armor.GetValue();
@@ -54,7 +54,7 @@ public class CharacterStats : MonoBehaviour
         if (gameObject.tag == "Enemy") {
             player.GetComponent<PlayerStats>().coins += coins;
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
-            Destroy(this.gameObject);
+            Destroy(this.gameObject, 0.05f);
         }
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
             FindObjectOfType<LockTarget>().DelockTarget();

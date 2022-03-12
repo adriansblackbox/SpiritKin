@@ -120,18 +120,20 @@ public class Enemy_Spawner : MonoBehaviour
             spawnPoint.z += Random.Range(shrineScript.posLower, shrineScript.posUpperZ);
         }
         //Navmesh.SamplePosition on the random position
-        NavMesh.SamplePosition(spawnPoint, out hit, 500.0f, NavMesh.AllAreas);
+        NavMesh.SamplePosition(spawnPoint, out hit, 100.0f, NavMesh.AllAreas);
         return (hit);
     }
 
-    public NavMeshHit chooseRelocation(Transform shrine)
-    {
-        var shrineScript = shrine.GetComponent<Shrine>();
-        NavMeshHit hit;
-        Vector3 rPoint = shrine.position + (Random.insideUnitSphere * shrineScript.shrineSpawnRange * 2);
-        rPoint.y = shrine.position.y;
+    //THIS DOESN'T WORKvvvvvvvvvvvvvvvvv
+    //
+    // public NavMeshHit chooseRelocation(Transform shrine)
+    // {
+    //     var shrineScript = shrine.GetComponent<Shrine>();
+    //     NavMeshHit hit;
+    //     Vector3 rPoint = shrine.position + (Random.insideUnitSphere * shrineScript.shrineSpawnRange * 2);
+    //     rPoint.y = shrine.position.y;
 
-        NavMesh.SamplePosition(rPoint, out hit, 500.0f, NavMesh.AllAreas);
-        return (hit);
-    }
+    //     NavMesh.SamplePosition(rPoint, out hit, 40.0f, NavMesh.AllAreas);
+    //     return (hit);
+    // }
 }
