@@ -33,6 +33,8 @@ public class Shrine : MonoBehaviour
     public float posLower = 5f;
     public float negLower = -5f; 
 
+    //game over scene
+    public GameObject gameOverScreen;
     public void Start()
     {
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
@@ -52,13 +54,18 @@ public class Shrine : MonoBehaviour
             transform.parent = nonCursedContainer.transform;
             es.currentCursedShrines--;
         }
-            
+        //debug:
+        if(Input.GetKeyDown(KeyCode.Y)){
+            gameOverScreen.GetComponent<GameOver>().LoadGameOver();
+        }
 
         if (CurCurseTime < TotalCurseTime && cursed) {
             CurCurseTime += Time.deltaTime;
         } else if (cursed) {
             Cursor.lockState = CursorLockMode.None;
-            SceneManager.LoadScene("MainMenu");
+            // SceneManager.LoadScene("MainMenu");
+            //load game over screen
+            gameOverScreen.GetComponent<GameOver>().LoadGameOver();
         }
 
         if (cursed) {

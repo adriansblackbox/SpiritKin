@@ -50,6 +50,10 @@ public class PauseMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(PauseFirstButton);
     }
 
+    public void Restart(){
+        // Time.timeScale = 1f;
+        SceneManager.LoadScene("Main Scene");
+    }
     public void LoadMenu(){
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
