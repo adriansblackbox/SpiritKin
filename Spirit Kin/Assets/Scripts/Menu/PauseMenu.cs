@@ -11,6 +11,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject Player;
 
     public GameObject PauseFirstButton;
+    public GameObject MouseKeyboardControls;
+    public GameObject XboxControllerControls;
     void Start()
     {
         
@@ -61,5 +63,10 @@ public class PauseMenu : MonoBehaviour
     public void Quit(){
         Debug.Log("Game Quit");
         Application.Quit();
+    }
+    public void toggleControls()
+    {
+        MouseKeyboardControls.SetActive(!MouseKeyboardControls.activeSelf);
+        XboxControllerControls.SetActive(!XboxControllerControls.activeSelf);
     }
 }
