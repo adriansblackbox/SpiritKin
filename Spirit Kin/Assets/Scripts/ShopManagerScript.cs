@@ -11,6 +11,13 @@ public class ShopManagerScript : MonoBehaviour
 
     public List<Buff> shopBuffList = new List<Buff>();
 
+    [SerializeField]
+    private AudioClip[] Purchaseclips;
+
+    public AudioClip ButtonHoversfx;
+
+    private AudioSource audioSource;
+
     public PlayerStats playStats;
 
     public Text CoinsTXT;
@@ -18,6 +25,11 @@ public class ShopManagerScript : MonoBehaviour
     public Text CoinsUITXT;
 
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     void Start()
     {
         CoinsTXT.text = "Coins:" + playStats.coins.ToString();
@@ -76,6 +88,23 @@ public class ShopManagerScript : MonoBehaviour
                 1]);
             
         }
+    }
+
+    private void Purchase()
+    {
+        AudioClip clip = GetRandomClip(Purchaseclips);
+        audioSource.PlayOneShot(clip);
+    }
+
+    private void Hover()
+    {
+        audioSource.PlayOneShot(ButtonHoversfx);
+    }
+
+
+    private AudioClip GetRandomClip(AudioClip[] cliparray)
+    {
+        return cliparray[Random.Range(0, cliparray.Length)];
     }
 
     public void ItemHandler()
