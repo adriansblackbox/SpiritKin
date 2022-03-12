@@ -56,7 +56,7 @@ public class Shrine : MonoBehaviour
 
         if (CurCurseTime < TotalCurseTime && cursed) {
             CurCurseTime += Time.deltaTime;
-        } else if(cursed) {
+        } else if (cursed) {
             Cursor.lockState = CursorLockMode.None;
             SceneManager.LoadScene("MainMenu");
         }

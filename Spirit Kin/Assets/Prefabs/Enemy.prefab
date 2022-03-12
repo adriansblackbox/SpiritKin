@@ -228,6 +228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1081803827011709086}
   - component: {fileID: 6213425905927084345}
+  - component: {fileID: 8306307604773105302}
   m_Layer: 7
   m_Name: hurtBox
   m_TagString: Enemy
@@ -262,6 +263,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8306307604773105302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054603821603549304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44ef2395aebaa984a976f32221801ef3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2242667004622192637
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +477,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3479692116232897869}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.191, z: -0.00000012301}
+  m_LocalPosition: {x: 0, y: 1.299, z: -0.00000012301}
   m_LocalScale: {x: 1.391047, y: 0.34776175, z: 1.391047}
   m_Children: []
   m_Father: {fileID: 6192531991054698252}
@@ -1231,11 +1244,11 @@ MonoBehaviour:
   currentRecoveryTime: 0
   enemyAttackingMat: {fileID: 2100000, guid: 2ec4b578a34fb044a95787eae5d3dd10, type: 2}
   enemyAttackingTwoMat: {fileID: 2100000, guid: c2d66f0ddcd87eb46a9119e9821dd2ea, type: 2}
-  enemyNotAttackingMat: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  enemyBodyMat: {fileID: -9103484930961366303, guid: 518ef7087711a244babb768f0402a588, type: 3}
   enemyCollider: {fileID: 6213425905927084345}
   attackTimer: 0
   durationOfCharge: 0.5
-  chargeSpeed: 30
+  chargeLength: 35
   EnemyMotion: 1
   EnemyAttack: 2
   patrolToIdleChance: 0.5
