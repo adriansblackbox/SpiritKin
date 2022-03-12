@@ -17,7 +17,7 @@ public class SwordCollision : MonoBehaviour
     private void Update() {
         RaycastHit hit;
         //checking to see if we hit an enemy
-        if (Physics.Raycast(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left), out hit, BladeLength, layerMask) && SwordTrail.activeSelf)
+        if (Physics.SphereCast(BladeRayOrigin.position, 5f,  BladeRayOrigin.TransformDirection(Vector3.left), out hit, BladeLength, layerMask) && SwordTrail.activeSelf)
         {
             Debug.DrawRay(BladeRayOrigin.position, BladeRayOrigin.TransformDirection(Vector3.left) * BladeLength, Color.red);
             if(!immuneEnemies.Contains(hit.transform.gameObject)){
