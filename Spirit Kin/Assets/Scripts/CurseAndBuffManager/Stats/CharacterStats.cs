@@ -62,28 +62,29 @@ public class CharacterStats : MonoBehaviour
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
         }
-        if (gameObject.tag == "Player"){
-            StartCoroutine(PlayerDeath(gameObject.transform));
+        if (this.gameObject.tag == "Player"){
+            StartCoroutine(PlayerDeath(this.gameObject));
         }
         
     }
-    public IEnumerator PlayerDeath(Transform playerTransform){
+    public IEnumerator PlayerDeath(GameObject player){
         
         // disable player move script
         // play death animation
         deathUI.SetActive(true);
+        player.GetComponent<CharacterController>().enabled = false;
         Transform[] springTransforms = FindObjectOfType<PlayerStats>().SpringTransforms;
         Vector3 respawnPosition = Vector3.zero;
         float minMagnitude = float.MaxValue;
         for(int i = 0; i < springTransforms.Length; i ++){
-            float mag = (playerTransform.position - springTransforms[i].transform.position).magnitude;
+            float mag = (player.transform.position - springTransforms[i].transform.position).magnitude;
             if(mag < minMagnitude){
                 minMagnitude = mag;
                 respawnPosition = springTransforms[i].position;
             }
         }
-        Debug.Log(respawnPosition);
-        playerTransform.position = respawnPosition;
+        player.transform.position = respawnPosition;
+        player.GetComponent<CharacterController>().enabled = true;
         yield return null;
     }
 }

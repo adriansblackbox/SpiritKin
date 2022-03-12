@@ -59,6 +59,7 @@ Transform:
   m_LocalPosition: {x: -2.55, y: 1.85, z: 0.25}
   m_LocalScale: {x: 20.870388, y: 20.870388, z: 20.870388}
   m_Children:
+  - {fileID: 4823244961984207054}
   - {fileID: 8207867149346804237}
   - {fileID: 4823244960783291835}
   - {fileID: 4823244959844589320}
@@ -147,9 +148,8 @@ Transform:
   m_LocalScale: {x: 1.2655599, y: 1.2655599, z: 1.2655598}
   m_Children:
   - {fileID: 4823244960791637553}
-  - {fileID: 4823244960596655761}
   m_Father: {fileID: 4224564671500452750}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -155.787, y: -8.61499, z: 26.356995}
 --- !u!33 &4823244959844589324
 MeshFilter:
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc70b62f1920014c9ce5748e36c158e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BladeRayOrigin: {fileID: 4823244960596655761}
+  BladeRayOrigin: {fileID: 4823244961984207054}
   BladeLength: 15
   layerMask:
     serializedVersion: 2
@@ -373,36 +373,6 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!1 &4823244960596655762
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4823244960596655761}
-  m_Layer: 8
-  m_Name: SwordRayOrigin
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4823244960596655761
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4823244960596655762}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3077, y: -0.0099, z: 0.0049}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4823244959844589320}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4823244960637669087
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,9 +543,8 @@ Transform:
   m_LocalScale: {x: 1.1937984, y: 1.1937983, z: 1.1937983}
   m_Children:
   - {fileID: 4823244961869034089}
-  - {fileID: 4823244961984207054}
   m_Father: {fileID: 4224564671500452750}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -155.787, y: -8.61499, z: 26.356995}
 --- !u!33 &4823244960783291839
 MeshFilter:
@@ -722,36 +691,6 @@ Transform:
   - {fileID: 4823244960345482755}
   m_Father: {fileID: 4823244961480697974}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4823244960844400971
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4823244960844400970}
-  m_Layer: 8
-  m_Name: SwordRayOrigin
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4823244960844400970
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4823244960844400971}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4183, y: -0.0282, z: 0.0003}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4823244961480697974}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4823244961413342424
 GameObject:
@@ -910,7 +849,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4823244961480697974
 Transform:
   m_ObjectHideFlags: 0
@@ -923,9 +862,8 @@ Transform:
   m_LocalScale: {x: 1.0216521, y: 1.0216521, z: 1.0216519}
   m_Children:
   - {fileID: 4823244960822113701}
-  - {fileID: 4823244960844400970}
   m_Father: {fileID: 4224564671500452750}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -155.787, y: -8.61499, z: 26.356995}
 --- !u!33 &4823244961480697930
 MeshFilter:
@@ -1004,7 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc70b62f1920014c9ce5748e36c158e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BladeRayOrigin: {fileID: 4823244960844400970}
+  BladeRayOrigin: {fileID: 4823244961984207054}
   BladeLength: 17.5
   layerMask:
     serializedVersion: 2
@@ -1065,12 +1003,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4823244961984207055}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.224, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.000000029802326, y: 0.00000005587936, z: -0.00000005960465, w: 1}
+  m_LocalPosition: {x: 0.431, y: -0.0034000578, z: 0}
+  m_LocalScale: {x: 1.1937985, y: 1.1937983, z: 1.1937983}
   m_Children: []
-  m_Father: {fileID: 4823244960783291835}
-  m_RootOrder: 1
+  m_Father: {fileID: 4224564671500452750}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5445337120371208738
 GameObject:
@@ -1137,7 +1075,7 @@ Transform:
   - {fileID: 427380814167495016}
   - {fileID: 3812614005956032757}
   m_Father: {fileID: 4224564671500452750}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -155.787, y: -8.61499, z: 26.356995}
 --- !u!33 &7063266540433741103
 MeshFilter:
@@ -1216,7 +1154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc70b62f1920014c9ce5748e36c158e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BladeRayOrigin: {fileID: 3812614005956032757}
+  BladeRayOrigin: {fileID: 4823244961984207054}
   BladeLength: 10
   layerMask:
     serializedVersion: 2
