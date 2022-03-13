@@ -16,8 +16,6 @@ public class PauseMenu : MonoBehaviour
     public GameObject ControlOverlay;
     public GameObject ToggleIndicatorOn;
     public GameObject ToggleIndicatorOff;
-    public GameObject MouseKeyboardControls;
-    public GameObject XboxControllerControls;
     void Start()
     {
         teaShopMenu = GameObject.Find("TeaShop").GetComponent<TeaShop>();
