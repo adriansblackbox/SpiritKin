@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     // Start is called before the first frame update
-    public static bool GameIsPaused = false;
+    public bool GameIsPaused = false;
+    public TeaShop teaShopMenu;
     public GameObject pauseMenuUI;
     public GameObject Player;
 
@@ -15,7 +16,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject XboxControllerControls;
     void Start()
     {
-        
+        teaShopMenu = GameObject.Find("TeaShop").GetComponent<TeaShop>();
     }
 
     // Update is called once per frame
@@ -36,8 +37,10 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void Resume (){
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if(!teaShopMenu.isOpen){
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;

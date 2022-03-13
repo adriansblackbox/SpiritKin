@@ -7,19 +7,16 @@ using UnityEngine.EventSystems;
 public class TeaShop : MonoBehaviour
 {
     public GameObject triggerText;
-
     public GameObject Player;
-
     public GameObject teaMenu;
-
     public GameObject teaCamera;
-
+    public PauseMenu pauseMenu;
     public Buff theBuff;
 
     private bool isInteractable;
 
-    private bool isOpen;
-      public GameObject ShopFirstButton;
+    public bool isOpen;
+    public GameObject ShopFirstButton;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +24,7 @@ public class TeaShop : MonoBehaviour
         isInteractable = false;
         isOpen = false;
         teaCamera.SetActive(false);
+        pauseMenu = GameObject.Find("PauseCanvas").GetComponent<PauseMenu>();
 
         //load buttons:
         //find position
@@ -54,7 +52,7 @@ public class TeaShop : MonoBehaviour
     {
         //need condition to check if interactable
         // if()isInteractable = false;
-        if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("A Button"))&& isInteractable && !isOpen)
+        if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("A Button"))&& isInteractable && !isOpen && !pauseMenu.GameIsPaused)
         {
             //do something;
             // if(!theBuff.isApplied){
@@ -62,7 +60,7 @@ public class TeaShop : MonoBehaviour
             // }
             OpenMenu();
         }
-        else if (Input.GetKeyDown(KeyCode.F) && isOpen)
+        else if (Input.GetKeyDown(KeyCode.F) && isOpen && !pauseMenu.GameIsPaused)
         {
             CloseMenu();
         }
@@ -70,8 +68,6 @@ public class TeaShop : MonoBehaviour
 
     public void OpenMenu()
     {
-        
-
         Cursor.lockState = CursorLockMode.None;
         teaMenu.SetActive(true);
         teaCamera.SetActive(true);
