@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -11,12 +12,9 @@ public class PauseMenu : MonoBehaviour
     public GameObject Player;
 
     public GameObject PauseFirstButton;
-    public GameObject MouseKeyboardControls;
-    public GameObject XboxControllerControls;
-    void Start()
-    {
-        
-    }
+    public GameObject ControlOverlay;
+    public GameObject ToggleIndicatorOn;
+    public GameObject ToggleIndicatorOff;
 
     // Update is called once per frame
     void Update()
@@ -68,7 +66,8 @@ public class PauseMenu : MonoBehaviour
     }
     public void toggleControls()
     {
-        MouseKeyboardControls.SetActive(!MouseKeyboardControls.activeSelf);
-        XboxControllerControls.SetActive(!XboxControllerControls.activeSelf);
+        ToggleIndicatorOn.SetActive(!ToggleIndicatorOn.activeSelf);
+        ToggleIndicatorOff.SetActive(!ToggleIndicatorOff.activeSelf);
+        ControlOverlay.SetActive(!ControlOverlay.activeSelf);
     }
 }
