@@ -28,6 +28,7 @@ public class PlayerCombat : MonoBehaviour
     private bool animationCancel = false;
     public GameObject BaseSword;
     public Transform[] AttackOriginPoints;
+    public List<GameObject> immuneEnemies = new List<GameObject>();
 
     private void Start() {
         animator = GetComponent<Animator>();

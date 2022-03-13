@@ -7,7 +7,7 @@ public class SwordCollision : MonoBehaviour
     public Transform BladeRayOrigin;
     public float BladeLength = 10f;
     public LayerMask layerMask;
-    public List<GameObject> immuneEnemies = new List<GameObject>();
+    public List<GameObject> immuneEnemies;
     public GameObject SwordTrail;
     public Transform[] AttackOriginPoints;
     PlayerCombat combatScript;
@@ -15,6 +15,7 @@ public class SwordCollision : MonoBehaviour
        SwordTrail.SetActive(false);
        combatScript = FindObjectOfType<PlayerCombat>();
        AttackOriginPoints = FindObjectOfType<PlayerCombat>().AttackOriginPoints;
+       immuneEnemies = FindObjectOfType<PlayerCombat>().immuneEnemies;
     }
     private void Update() {
         RaycastHit hit;
