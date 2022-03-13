@@ -66,6 +66,7 @@ public class Shrine : MonoBehaviour
             // SceneManager.LoadScene("MainMenu");
             //load game over screen
             gameOverScreen.GetComponent<GameOver>().LoadGameOver();
+            cursed = false;
         }
 
         if (cursed) {

@@ -23,13 +23,11 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("Start Button")){
             if(GameIsPaused){
-                Cursor.lockState = CursorLockMode.Locked;
                 // Player.GetComponent<PlayerController>().enabled = true;
                 // Player.GetComponent<PlayerCombat>().enabled = true;
                 
                 Resume();
             }else{
-                Cursor.lockState = CursorLockMode.None;
                 // Player.GetComponent<PlayerController>().enabled = false;
                 // Player.GetComponent<PlayerCombat>().enabled = false;
                 Pause();
@@ -38,11 +36,15 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void Resume (){
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
     }
     public void Pause (){
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
