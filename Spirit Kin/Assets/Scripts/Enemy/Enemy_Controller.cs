@@ -371,7 +371,7 @@ public class Enemy_Controller : MonoBehaviour
                 }
 
                 // if they dont have a path generate one
-                if (movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
+                if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
                     movementQueue = ai.determineSurroundSpot(transform);
                     if (movementQueue.Count == 0) {
                         EnemyMotion = MotionState.Relocating;

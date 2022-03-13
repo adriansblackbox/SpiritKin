@@ -8,6 +8,7 @@ public class CharacterStats : MonoBehaviour
     public int coins;
     public float maxHealth = 100;
     public float currentHealth;
+    public bool isDying = false;
 
     public Stat armor;
     public Stat damage;
@@ -22,13 +23,21 @@ public class CharacterStats : MonoBehaviour
     
     void Start ()
     {
+        if(gameObject.tag == "Player"){
+            player = gameObject;
+        }
+        else{
+            player = GameObject.FindGameObjectWithTag("Player");
+            coins = Random.Range(5, 25);
+        }
         
-        player = GameObject.FindGameObjectWithTag("Player");
         currentHealth = maxHealth;
-        coins = 20;
     }
 
     void Update() {
+        if (!isDying && currentHealth <= 0) {
+            Die();
+        }
     }
 
     public void TakeDamage (float damage) {
@@ -43,13 +52,13 @@ public class CharacterStats : MonoBehaviour
             gameObject.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Chasing;
         }
 
-        if (currentHealth <= 0) {
-            Die();
-        }
+        
     }
 
     
     public virtual void Die () {
+        isDying = true;
+        Debug.Log("I died!");
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
             FindObjectOfType<LockTarget>().DelockTarget();
         }
@@ -59,12 +68,12 @@ public class CharacterStats : MonoBehaviour
         //Die in some way
         if (gameObject.tag == "Enemy") {
             player.GetComponent<PlayerStats>().coins += coins;
+            player.GetComponent<CurseMeter>().curseMeter += (float)coins / player.GetComponent<CurseMeter>().fillRate;
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
-            Destroy(this.gameObject, 0.05f);
+            Destroy(this.gameObject);
         }
         if (this.gameObject.tag == "Player"){
             StartCoroutine(PlayerDeath(this.gameObject));
-
         }
         
     }

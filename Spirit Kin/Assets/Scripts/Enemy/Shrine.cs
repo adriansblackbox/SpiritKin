@@ -59,9 +59,9 @@ public class Shrine : MonoBehaviour
             gameOverScreen.GetComponent<GameOver>().LoadGameOver();
         }
 
-        if (CurCurseTime < TotalCurseTime && cursed) {
+        if (CurCurseTime < TotalCurseTime && cursed && !FindObjectOfType<MainHub>().playerInHub) {
             CurCurseTime += Time.deltaTime;
-        } else if (cursed) {
+        } else if (cursed && CurCurseTime >= TotalCurseTime) {
             Cursor.lockState = CursorLockMode.None;
             // SceneManager.LoadScene("MainMenu");
             //load game over screen

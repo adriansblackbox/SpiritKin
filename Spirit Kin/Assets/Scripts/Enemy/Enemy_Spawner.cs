@@ -29,7 +29,9 @@ public class Enemy_Spawner : MonoBehaviour
 
     public void Update()
     {
-        myTime += Time.deltaTime;
+        if(!FindObjectOfType<MainHub>().playerInHub)
+            myTime += Time.deltaTime;
+
         if (firstSpawn)
         {
             if (myTime > 5f)
