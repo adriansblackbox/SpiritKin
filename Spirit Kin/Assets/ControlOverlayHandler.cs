@@ -26,7 +26,7 @@ public class ControlOverlayHandler : MonoBehaviour
         {
             keyboard = false;
         }
-        else if (Input.anyKey)
+        else if (Input.anyKey || Mathf.Abs(Input.GetAxis("Mouse X")) > 0.1f || Mathf.Abs(Input.GetAxis("Mouse Y")) > 0.1f)
         {
             keyboard = true;
         }
