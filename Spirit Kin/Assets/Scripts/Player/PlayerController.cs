@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
         else if(combatScript.isAttacking && !combatScript.isDodging){
             TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, combatScript.CombatRunSpeedDropoff * Time.deltaTime);
             moveSpeed = TempSpeed * inputDirection.magnitude;
-            moveDirection = transform.GetChild(0).gameObject.transform.forward;
+            moveDirection = combatScript.attackDirection;
         }
         moveDirection.y = Gravity;
         moveDirection = moveDirection.normalized * (moveSpeed * GetComponent<PlayerStats>().speed.GetValue());
