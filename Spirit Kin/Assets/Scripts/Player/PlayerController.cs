@@ -90,10 +90,10 @@ public class PlayerController : MonoBehaviour
             float rotationSpeed = RotationSmoothTime;
             if(combatScript.isAttacking)
                 rotationSpeed = CombatRotationSmoothTime;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, rotationSpeed);
+            float rotation = Mathf.SmoothDampAngle(transform.GetChild(0).transform.eulerAngles.y, targetRotation, ref rotationVelocity, rotationSpeed);
             // rotate to face input direction relative to camera position
             if(RotateOnMoveDirection)
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                transform.GetChild(0).transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
         }
         targetMoveDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
         moveDirection = transform.GetChild(0).gameObject.transform.forward;
@@ -108,7 +108,6 @@ public class PlayerController : MonoBehaviour
         else if(combatScript.isAttacking && !combatScript.isDodging){
             TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, combatScript.CombatRunSpeedDropoff * Time.deltaTime);
             moveSpeed = TempSpeed * inputDirection.magnitude;
-            moveDirection = combatScript.attackDirection;
         }
         moveDirection.y = Gravity;
         moveDirection = moveDirection.normalized * (moveSpeed * GetComponent<PlayerStats>().speed.GetValue());
@@ -116,8 +115,6 @@ public class PlayerController : MonoBehaviour
     }
     private void Animation(){
         animationBlend = Mathf.Lerp(animationBlend, speed * GetComponent<PlayerStats>().speed.GetValue(), Time.deltaTime * 100f);
-        //if(inputDirection == Vector2.zero)
-            //animationBlend = 0;
         animator.SetFloat("Speed", animationBlend);
         if(combatScript.isAttacking)
             speed = 0;

@@ -100,9 +100,7 @@ public class PlayerCombat : MonoBehaviour
     }
     private void Attack(){
         if(bufferButton == "Attack"){
-            attackDirection = controller.targetMoveDirection;
-            transform.forward = attackDirection;
-            transform.GetChild(0).gameObject.transform.forward = attackDirection;
+            transform.GetChild(0).gameObject.transform.forward = controller.targetMoveDirection;;
             animationCancel = false;
             bufferButton = "";
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
