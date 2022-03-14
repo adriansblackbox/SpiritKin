@@ -9,6 +9,7 @@ public class slowCurse : Curse
 {
     private CharacterStats pStats;
     private CurseMeter cMeter;
+    private float pSpeed;
     
     public slowCurse (Sprite _image, CharacterStats _pStats, CurseMeter _cMeter)
     {
@@ -25,8 +26,9 @@ public class slowCurse : Curse
         Debug.Log(type + " Added!");
         isApplied = true;
         cMeter.activeCurses.Add(this);
+        pSpeed = pStats.speed.GetValue();
 
-        pStats.speed.AddBaseValue(-0.25f);
+        pStats.speed.AddBaseValue(pSpeed * -0.8f);
     } 
 
     override public void removeCurse () 
@@ -34,6 +36,6 @@ public class slowCurse : Curse
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.speed.AddBaseValue(0.25f);
+        pStats.speed.AddBaseValue(pSpeed * 0.8f);
     } 
 }
