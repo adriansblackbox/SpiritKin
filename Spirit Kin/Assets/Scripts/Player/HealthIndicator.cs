@@ -13,8 +13,7 @@ public class HealthIndicator : MonoBehaviour
     //bottom end is 0.19 health circle = 0.00 mask
 
     public Image healthCircle;
-    public float health = 100;
-    public float maxHealth = 100;
+    public GameObject player;
 
     void Update()
     {
@@ -23,6 +22,6 @@ public class HealthIndicator : MonoBehaviour
 
     public void adjustHealth()
     {
-        healthCircle.fillAmount = health/maxHealth;
+        healthCircle.fillAmount = player.GetComponent<PlayerStats>().currentHealth/player.GetComponent<PlayerStats>().maxHealth;
     }
 }

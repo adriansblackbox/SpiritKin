@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6738803524394422915}
   - component: {fileID: 6738803524394422914}
   - component: {fileID: 6799075702819248385}
-  - component: {fileID: 7476676180760937383}
+  - component: {fileID: 9136508747187929969}
   m_Layer: 0
   m_Name: Shrine
   m_TagString: Untagged
@@ -52,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6738803524394422916}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -112,11 +112,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursed: 0
-  shrineSpawnRange: 100
+  shrineSpawnRange: 200
   enemiesToSpawnWhenCursed: 0
   amountAlreadySpawned: 0
+  TotalCurseTime: 3
   Beacon: {fileID: 8556313218440299332}
---- !u!114 &7476676180760937383
+  nonCursedContainer: {fileID: 0}
+  posUpperX: 0
+  negUpperX: 0
+  posUpperZ: 0
+  negUpperZ: 0
+  posLower: 5
+  negLower: -5
+--- !u!114 &9136508747187929969
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,7 +133,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6738803524394422916}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43b2885b6def3f84f8e5333ff4e2d61b, type: 3}
+  m_Script: {fileID: 11500000, guid: 86b3daad9ef627645b983df8e5d28bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7742214188549605358
@@ -184,7 +192,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8556313218440299332}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 28.15, z: 0.00000033475}
+  m_LocalPosition: {x: 0, y: 31.1, z: 0.00000033475}
   m_LocalScale: {x: 4.5101, y: 29.165012, z: 4.5101}
   m_Children: []
   m_Father: {fileID: 6738803524394422917}

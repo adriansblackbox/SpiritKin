@@ -22,7 +22,6 @@ public class Shrine_Controller : MonoBehaviour
 
     public bool checkIfNeedRelocate(int quadrant)
     {
-        
         //check if quadrant has > 50% of enemies if so return false
         if (enemiesContainer.childCount >= 4) {
             float numberOfEnemiesInSelectedQuadrant = 0;
@@ -31,10 +30,6 @@ public class Shrine_Controller : MonoBehaviour
                 if (enemiesContainer.GetChild(i).GetComponent<Enemy_Controller>().getQuadrant() == quadrant)
                     numberOfEnemiesInSelectedQuadrant+=1;
             }
-            //CHECK DIFFICULTY INDEX WHICH WE DETERMINE THROUGH PLAYTESTING & IF NUMBER OF ENEMIES IN QUADRANT BELOW THAT INDEX
-                //RETURN TRUE
-            //ELSE 
-                //RETURN FALSE
             if (numberOfEnemiesInSelectedQuadrant / (float) enemiesContainer.childCount > 0.5f)
                 return true;
             else  
@@ -70,7 +65,7 @@ public class Shrine_Controller : MonoBehaviour
         {
             if (enemiesContainer.GetChild(i).GetComponent<Enemy_Controller>().EnemyMotion == Enemy_Controller.MotionState.Patroling) enemiesPatrolingCount += 1;
         }
-        if (enemiesPatrolingCount / (float) enemyCount < 0.4f)
+        if (enemiesPatrolingCount / (float) enemyCount < 0.25f)
             return baseChance * 1.5f;
         else
             return baseChance;
