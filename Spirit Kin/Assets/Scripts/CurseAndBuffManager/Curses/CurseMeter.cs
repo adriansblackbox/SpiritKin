@@ -10,11 +10,10 @@ using static slowCurse;
 public class CurseMeter : MonoBehaviour
 {
     private CharacterStats pStats;
-    private int soulDelta;
 
     public bool newCurse;
     public float curseMeter;
-    public float fillRate = 10.0f;
+    public float fillRate; // Value is inverse to rate
     public List<Curse> curseArray = new List<Curse>();
     public List<Curse> activeCurses = new List<Curse>();
     public GameObject[] cursesUI;
@@ -31,7 +30,6 @@ public class CurseMeter : MonoBehaviour
         newCurse = false;
         curseMeter = 0f;
         pStats = gameObject.GetComponent<PlayerStats>();
-        soulDelta = pStats.coins;
 
         damageCurse weak = new damageCurse(weakImage, gameObject.GetComponent<PlayerStats>(), this);
         slowCurse slow = new slowCurse(slowImage, gameObject.GetComponent<PlayerStats>(), this);
@@ -52,18 +50,8 @@ public class CurseMeter : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (pStats.coins < soulDelta)
-        {
-            soulDelta = pStats.coins;
-        }
-
         if (activeCurses.Count < 3)
         {
-            if (soulDelta < pStats.coins)
-            {
-                curseMeter += (((float)pStats.coins - soulDelta)) / fillRate;
-                soulDelta = pStats.coins;
-            }
             curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
             if (curseMeter >= 1f)
             {

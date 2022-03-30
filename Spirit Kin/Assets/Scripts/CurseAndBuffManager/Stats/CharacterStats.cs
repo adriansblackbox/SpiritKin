@@ -8,6 +8,7 @@ public class CharacterStats : MonoBehaviour
     public int coins;
     public float maxHealth = 100;
     public float currentHealth;
+    public bool isDying = false;
 
     public Stat armor;
     public Stat damage;
@@ -22,16 +23,24 @@ public class CharacterStats : MonoBehaviour
     
     void Start ()
     {
+        if(gameObject.tag == "Player"){
+            player = gameObject;
+        }
+        else{
+            player = GameObject.FindGameObjectWithTag("Player");
+            coins = Random.Range(5, 25);
+        }
         
-        player = GameObject.FindGameObjectWithTag("Player");
         currentHealth = maxHealth;
-        coins = 20;
     }
 
     void Update() {
+        if (!isDying && currentHealth <= 0) {
+            Die();
+        }
     }
 
-    public async void TakeDamage (float damage) {
+    public void TakeDamage (float damage) {
         hitVFX.Play();
         //armor system
         damage -= armor.GetValue();
@@ -43,47 +52,51 @@ public class CharacterStats : MonoBehaviour
             gameObject.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Chasing;
         }
 
-        if (currentHealth <= 0) {
-            Die();
-        }
+        
     }
 
     
     public virtual void Die () {
-        //Die in some way
-        if (gameObject.tag == "Enemy") {
-            player.GetComponent<PlayerStats>().coins += coins;
-            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
-            Destroy(this.gameObject);
-        }
+        isDying = true;
+        Debug.Log("I died!");
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
             FindObjectOfType<LockTarget>().DelockTarget();
         }
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
         }
-        if (gameObject.tag == "Player"){
-            StartCoroutine(PlayerDeath(gameObject.transform));
+        //Die in some way
+        if (gameObject.tag == "Enemy") {
+            player.GetComponent<PlayerStats>().coins += coins;
+            player.GetComponent<CurseMeter>().curseMeter += (float)coins / player.GetComponent<CurseMeter>().fillRate;
+            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
+            Destroy(this.gameObject);
+        }
+        if (this.gameObject.tag == "Player"){
+            StartCoroutine(PlayerDeath(this.gameObject));
         }
         
     }
-    public IEnumerator PlayerDeath(Transform playerTransform){
+    public IEnumerator PlayerDeath(GameObject player){
         
         // disable player move script
         // play death animation
         deathUI.SetActive(true);
+        player.GetComponent<CharacterController>().enabled = false;
         Transform[] springTransforms = FindObjectOfType<PlayerStats>().SpringTransforms;
         Vector3 respawnPosition = Vector3.zero;
         float minMagnitude = float.MaxValue;
         for(int i = 0; i < springTransforms.Length; i ++){
-            float mag = (playerTransform.position - springTransforms[i].transform.position).magnitude;
+            float mag = (player.transform.position - springTransforms[i].transform.position).magnitude;
             if(mag < minMagnitude){
                 minMagnitude = mag;
                 respawnPosition = springTransforms[i].position;
             }
         }
-        Debug.Log(respawnPosition);
-        playerTransform.position = respawnPosition;
+        yield return new WaitForSeconds(3f);
+        player.transform.position = respawnPosition;
+        player.GetComponent<PlayerStats>().currentHealth = player.GetComponent<PlayerStats>().maxHealth;
+        player.GetComponent<CharacterController>().enabled = true;
         yield return null;
     }
 }

@@ -20,10 +20,12 @@ public class Purification : MonoBehaviour
     public PState PurificationState;
     public float PurificationTime = 5.0f;
     public Image PurificationMeter;
+    public GameObject VFX;
 
     // Start is called before the first frame update
     void Start()
     {
+        VFX.SetActive(false);
         PurificationState = PState.None;
         isCursed = false;
         isPurifying = false;
@@ -33,6 +35,16 @@ public class Purification : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Temp VFX
+        if(FindObjectOfType<CurseMeter>().activeCurses.Count > 0)
+        {
+            VFX.SetActive(true);
+        }
+        else
+        {
+            VFX.SetActive(false);
+        }
+
         if(isPurifying){
             player.GetComponent<CurseMeter>().curseMeter -= Time.deltaTime/2f;
             player.GetComponent<CurseMeter>().curseMeter = Mathf.Clamp(player.GetComponent<CurseMeter>().curseMeter, 0, 1);

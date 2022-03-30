@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    public GameObject playerGeo;
+    public GameObject[] playerGeo;
     public GameObject playerTrail;
     [SerializeField] private float DodgeTime = 0.5f;
     [SerializeField] private float DodgeSpeed = 20f;
@@ -27,6 +27,9 @@ public class PlayerCombat : MonoBehaviour
     private bool isDead = false;
     private bool animationCancel = false;
     public GameObject BaseSword;
+    public Transform[] AttackOriginPoints;
+    public List<GameObject> immuneEnemies = new List<GameObject>();
+    public Vector3 attackDirection;
 
     private void Start() {
         animator = GetComponent<Animator>();
@@ -65,7 +68,9 @@ public class PlayerCombat : MonoBehaviour
             //makes the player invisible
             controller.RotateOnMoveDirection = true;
             playerTrail.SetActive(false);
-            playerGeo.SetActive(true);
+            foreach(GameObject parts in playerGeo){
+                parts.SetActive(true);
+            }
             BaseSword.SetActive(true);
             dodgeCoolDown = 0.5f;
             isDodging = false;
@@ -81,7 +86,9 @@ public class PlayerCombat : MonoBehaviour
             controller.RotateOnMoveDirection = false;
             resetAttack();
             // makes the player invisible
-            playerGeo.SetActive(false);
+             foreach(GameObject parts in playerGeo){
+                parts.SetActive(false);
+            }
             playerTrail.SetActive(true);
             BaseSword.SetActive(false);
             animationCancel = false;
@@ -93,6 +100,7 @@ public class PlayerCombat : MonoBehaviour
     }
     private void Attack(){
         if(bufferButton == "Attack"){
+            transform.GetChild(0).gameObject.transform.forward = controller.targetMoveDirection;;
             animationCancel = false;
             bufferButton = "";
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
@@ -104,7 +112,7 @@ public class PlayerCombat : MonoBehaviour
             animator.SetInteger("attackTicks", numOfClicks);
             isAttacking = true;
             if(!isDodging){
-                if(animator.GetBool("isDodging")){
+                if(isDodging){
                     controller.TempSpeed = controller.speed;
                     CombatSpeedDropoff = CombatRunSpeedDropoff;
                 }else{

@@ -39,7 +39,7 @@ public class AI_Manager : MonoBehaviour
                 //-> queue system
                 //-> order they arrive in
 
-        if (selectAttackerTimer > 0.5f)
+        if (selectAttackerTimer > 0.75f)
         {
             selectAttackerTimer = 0;
             if (attackingEnemy == null && enemiesReadyToAttack.Count > 0)
@@ -48,12 +48,20 @@ public class AI_Manager : MonoBehaviour
                     //EnemyMotion -> Waiting
                     //EnemyAttack -> Attacking
                 int ind = UnityEngine.Random.Range(0, enemiesReadyToAttack.Count - 1);
-                attackingEnemy = enemiesReadyToAttack[ind];
-                attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
-                attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
-                attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
-                attackingEnemy.GetComponent<Enemy_Controller>().attackTimer = 0.0f;
-                Debug.Log("Selected Enemy");
+                if (enemiesReadyToAttack[ind] != null) 
+                {
+                    attackingEnemy = enemiesReadyToAttack[ind];
+                    attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
+                    attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
+                    attackingEnemy.GetComponent<Enemy_Controller>().movementQueue.Clear();
+                    attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
+                    attackingEnemy.GetComponent<Enemy_Controller>().attackTimer = 0.0f;
+                    Debug.Log("Selected Enemy");
+                }
+                else
+                {
+                  enemiesReadyToAttack.RemoveAt(ind);  
+                }
             }
         }
 
@@ -175,7 +183,9 @@ public class AI_Manager : MonoBehaviour
             
             //was A or B closer for the enemy + add to path
             int chosenIndex = (targetIndexA != -1) ? targetIndexA : targetIndexB;
-            if (Vector3.Distance(enemy.position, curr + Player.position) < Vector3.Distance(enemy.position, end + Player.position) - 1f)
+
+            //check if surroudn spot is closer than tracking spot
+            if (Vector3.Distance(enemy.position, curr + Player.position) < Vector3.Distance(enemy.position, end + Player.position) - 2f)
             {
                 Path.Add(curr);
             }
@@ -188,10 +198,6 @@ public class AI_Manager : MonoBehaviour
             //generate whole path based off of starting position and end position
             bool right = false;
 
-            //this currently runs only 4 times which 1 of is the already chosen spot
-            //-> should be chosenIndex + 1 to surroundTrackingSpots.Count / 2 + chosenIndex + 1
-                //now if start at 3
-                    //4, 5, 6, 7
             for (int i = chosenIndex + 1; i < surroundTrackingSpots.Count / 2 + chosenIndex + 1; i++)
             {
                 if (i%surroundTrackingSpots.Count == targetIndex) // we are done and can go in positive direction
@@ -210,12 +216,6 @@ public class AI_Manager : MonoBehaviour
             }
             else //add to path in negative direction until reach goal
             {
-                //chosenIndex + 6 because:
-                    //start at 4 dest at 2
-                        //intended function
-                            //add 3, 2
-                            //dont add 4 because its already there
-                    //4 + 6 = 10 % 7 -> 3 which is the first one to add
                 for (int i = chosenIndex + surroundTrackingSpots.Count - 1; i > surroundTrackingSpots.Count / 2 + chosenIndex - 1 && i % surroundTrackingSpots.Count != (targetIndex + surroundTrackingSpots.Count - 1) % surroundTrackingSpots.Count; i--)
                     Path.Add(surroundTrackingSpots[i % surroundTrackingSpots.Count]);
             }

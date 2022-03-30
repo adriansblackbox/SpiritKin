@@ -24,7 +24,7 @@ public class armorCurse : Curse
     {
         isApplied = true;
         cMeter.activeCurses.Add(this);
-        pStats.armor.AddBaseValue(-10);
+        pStats.armor.AddBaseValue(-40);
     } 
 
     override public void removeCurse () 
@@ -32,6 +32,6 @@ public class armorCurse : Curse
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.armor.AddBaseValue(10);
+        pStats.armor.AddBaseValue(40);
     } 
 }

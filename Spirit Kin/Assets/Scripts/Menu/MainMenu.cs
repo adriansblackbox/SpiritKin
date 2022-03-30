@@ -78,7 +78,7 @@ public class MainMenu : MonoBehaviour
     }
 
     public IEnumerator playDelay() {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.0f);
     }
 
     public void SetMasterVolume (float value){

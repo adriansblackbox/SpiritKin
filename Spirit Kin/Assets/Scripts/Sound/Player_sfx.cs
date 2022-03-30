@@ -27,9 +27,12 @@ public class Player_sfx : MonoBehaviour
 
     private void Step()
     {
-        AudioClip clip = GetRandomClip(Stepclips);
-        audioSource.pitch = Random.Range(1f, 2f);
-        audioSource.PlayOneShot(clip);
+        if(!GetComponent<PlayerCombat>().isDodging)
+        {
+            AudioClip clip = GetRandomClip(Stepclips);
+            audioSource.pitch = Random.Range(1f, 2f);
+            audioSource.PlayOneShot(clip);
+        }
     }
 
     private void Slash()

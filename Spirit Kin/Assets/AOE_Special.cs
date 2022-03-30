@@ -17,8 +17,8 @@ public class AOE_Special : MonoBehaviour
         }
     }
     private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.CompareTag("Enemy")){
-            other.gameObject.GetComponent<CharacterStats>().TakeDamage(50f);
-        }
+        //if(other.gameObject.CompareTag("Enemy")){
+        //    other.gameObject.GetComponent<CharacterStats>().TakeDamage(50f);
+        //}
     }
 }

@@ -23,20 +23,28 @@ public class NewShopManager : MonoBehaviour
     public GameObject displaySprite;
     // public SpriteRenderer currentSprite;
 
-  
+
 
     public int selectedOption = 0;
+
+    [SerializeField]
+    private AudioClip[] Purchaseclips;
+
+    public AudioClip ButtonHoversfx;
+
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
         //refresh buffs
-        foreach(Buff i in shopBuffList){
+        foreach (Buff i in shopBuffList)
+        {
             i.isApplied = false;
         }
         menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
         UICoinTXT.text = "Coins:" + playStats.coins.ToString();
-        UpdateDisplay (selectedOption);
+        UpdateDisplay(selectedOption);
     }
 
     public void NextOption()
@@ -47,7 +55,7 @@ public class NewShopManager : MonoBehaviour
             selectedOption = 0;
         }
 
-        UpdateDisplay (selectedOption);
+        UpdateDisplay(selectedOption);
     }
 
     public void BackOption()
@@ -58,11 +66,13 @@ public class NewShopManager : MonoBehaviour
             selectedOption = shopBuffList.Count - 1;
         }
 
-        UpdateDisplay (selectedOption);
+        UpdateDisplay(selectedOption);
     }
 
-    public void Buy(){
-        if(playStats.coins>= currentBuff.Cost && !currentBuff.isApplied &&playStats.Buffs.Count<3){
+    public void Buy()
+    {
+        if (playStats.coins >= currentBuff.Cost && !currentBuff.isApplied && playStats.Buffs.Count < 3)
+        {
             //update coins
             playStats.coins -= currentBuff.Cost;
             menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
@@ -72,8 +82,10 @@ public class NewShopManager : MonoBehaviour
 
         }
     }
-    public void Upgrade(){
-        if(playStats.coins>= currentBuff.InvestCost && currentBuff.duration<=400){
+    public void Upgrade()
+    {
+        if (playStats.coins >= currentBuff.InvestCost && currentBuff.duration <= 400)
+        {
             //update coins
             playStats.coins -= currentBuff.InvestCost;
             menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
@@ -82,7 +94,8 @@ public class NewShopManager : MonoBehaviour
             currentBuff.duration += 100;
         }
     }
-    public void Exit(){
+    public void Exit()
+    {
         GameObject.FindGameObjectWithTag("TeaShop").GetComponent<TeaShop>().CloseMenu();
     }
     public void UpdateDisplay(int selectedOption)
@@ -91,13 +104,25 @@ public class NewShopManager : MonoBehaviour
         displaySprite.GetComponent<Image>().sprite = currentBuff.buffSprite;
         buffName.text = currentBuff.name;
         description.text = currentBuff.description;
-        costTXT.text = "$: "+ currentBuff.Cost.ToString();
-        investCostTXT.text = "$: "+ currentBuff.InvestCost.ToString();
-        
+        costTXT.text = "$: " + currentBuff.Cost.ToString();
+        investCostTXT.text = "$: " + currentBuff.InvestCost.ToString();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
+
+    //Ethan's code:
+    private void Hover()
+    {
+        audioSource.PlayOneShot(ButtonHoversfx);
+    }
+
+
+    private AudioClip GetRandomClip(AudioClip[] cliparray)
+    {
+        return cliparray[Random.Range(0, cliparray.Length)];
     }
 }
