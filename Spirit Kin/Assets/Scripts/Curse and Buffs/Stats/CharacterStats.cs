@@ -48,11 +48,9 @@ public class CharacterStats : MonoBehaviour
 
         currentHealth -= damage;
 
-        if (gameObject.tag == "Enemy" && gameObject.GetComponent<Enemy_Controller>().EnemyMotion != Enemy_Controller.MotionState.Chasing && gameObject.GetComponent<Enemy_Controller>().EnemyAttack != Enemy_Controller.AttackState.Attacking) {
-            gameObject.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Chasing;
-        }
-
-        
+        if (gameObject.tag == "Enemy") {
+            StartCoroutine(stunEnemy());
+        }    
     }
 
     
@@ -77,6 +75,13 @@ public class CharacterStats : MonoBehaviour
         }
         
     }
+    public IEnumerator stunEnemy()
+    {
+        gameObject.transform.GetComponent<Enemy_Controller>().stunned = true;
+        yield return new WaitForSeconds(0.1f);
+        gameObject.transform.GetComponent<Enemy_Controller>().stunned = false;
+    }
+
     public IEnumerator PlayerDeath(GameObject player){
         
         // disable player move script
