@@ -16111,7 +16111,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1002554243}
   serializedVersion: 7
-  lengthInSec: 2
+  lengthInSec: 0.3
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -17326,21 +17326,21 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: -2
-          outSlope: -2
+          value: 0.4042554
+          inSlope: -0.72883666
+          outSlope: -0.72883666
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0
+          outWeight: 0.09730848
         - serializedVersion: 3
           time: 1
           value: 0
-          inSlope: 0
-          outSlope: 0
+          inSlope: 0.15808725
+          outSlope: 0.15808725
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.1345756
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -17448,7 +17448,7 @@ ParticleSystem:
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 0
+        atime0: 24094
         atime1: 65535
         atime2: 0
         atime3: 0
@@ -20372,7 +20372,7 @@ ParticleSystem:
     vector0_0:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 1
+      scalar: 1.1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -20380,20 +20380,20 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: -0.44939992
-          outSlope: -0.44939992
-          tangentMode: 34
+          inSlope: -2.0553188
+          outSlope: -2.0553188
+          tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.33333334
+          outWeight: 0.10351967
         - serializedVersion: 3
-          time: 0.9942322
-          value: 0.55319214
-          inSlope: -0.44939992
-          outSlope: -0.44939992
-          tangentMode: 34
+          time: 1
+          value: 0.0921936
+          inSlope: -0.66845506
+          outSlope: -0.66845506
+          tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.08488613
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -20426,7 +20426,7 @@ ParticleSystem:
     vector0_1:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.91
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -20708,7 +20708,7 @@ ParticleSystem:
     vector1_1:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
+      scalar: 0.5
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -20874,13 +20874,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1002554243}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -112.4, y: 6.38, z: -1.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1.49, z: 0}
+  m_LocalScale: {x: 1.7637768, y: 0.7516337, z: 1.7637768}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 15
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_Father: {fileID: 1465122933}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1003649835 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6487356692054705231, guid: 20c9ece6158e8554992a878cf6b539ac, type: 3}
@@ -28117,6 +28117,11 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2352272465676470988, guid: 9a51e86218e34564fa61034e766a0f19, type: 3}
+--- !u!4 &1465122933 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7586409591483280121, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+  m_PrefabInstance: {fileID: 8669201217155251026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1465788211
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40453,6 +40458,10 @@ PrefabInstance:
       propertyPath: cursesUI.Array.data[2]
       value: 
       objectReference: {fileID: 1163744195}
+    - target: {fileID: 4470897816815663011, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: Slash
+      value: 
+      objectReference: {fileID: 1002554245}
     - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: SoulsUI
       value: 
@@ -40464,6 +40473,10 @@ PrefabInstance:
     - target: {fileID: 4817104812891788093, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5236670065723339580, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_Name
+      value: Hurt VFX
       objectReference: {fileID: 0}
     - target: {fileID: 5344178195030925532, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_TagString
