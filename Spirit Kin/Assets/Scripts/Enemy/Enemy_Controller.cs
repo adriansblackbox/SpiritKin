@@ -171,44 +171,6 @@ public class Enemy_Controller : MonoBehaviour
 
         //spherecast to check for player
         checkForPlayer();
-
-        // if (EnemyMotion == MotionState.Alerted)
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = alertedMat;
-        // } 
-        // else if (EnemyMotion == MotionState.Seeking) 
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = seekingMat;
-        // } 
-        // else if (EnemyMotion == MotionState.Idling) 
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = idleMat;
-        // } 
-        // else if (EnemyMotion == MotionState.Chasing) 
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = chasingMat;
-        // } 
-        // else if (EnemyMotion == MotionState.Relocating) 
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = relocateMat;
-        // } 
-        // else if (EnemyMotion == MotionState.Patroling) 
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = patrolMat;
-        // }
-        // else if (EnemyMotion == MotionState.Surrounding)
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = surroundMat;
-        // }
-        // else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.Attacking)
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = attackMat;
-        // }
-        // else if (EnemyMotion == MotionState.Waiting && EnemyAttack == AttackState.NotAttacking)
-        // {
-        //     alertBox.GetComponent<MeshRenderer>().material = recoverMat;
-        // }
-
         myTime += Time.deltaTime;
 
         //we will want a function to handle the one time reset of values when moved to notAttacking
@@ -216,7 +178,7 @@ public class Enemy_Controller : MonoBehaviour
         {
             case AttackState.Attacking:
                 attackTimer += Time.deltaTime;
-                if (currentRecoveryTime <= 0) //ready to attack
+                if (currentRecoveryTime <= 0 && !stunned) //ready to attack
                     attackTarget(); //attack target with current attack, if no current attack then select one
                 break;
             case AttackState.NotAttacking:
@@ -236,7 +198,8 @@ public class Enemy_Controller : MonoBehaviour
             if (stunnedLastFrame)
             {
                 stunnedLastFrame = false;
-                if (EnemyAttack != AttackState.Attacking && currentRecoveryTime == 0) {
+                alertBox.SetActive(false);
+                if (EnemyAttack != AttackState.Attacking && attackTimer == 0) {
                     EnemyMotion = MotionState.Chasing;
                 } 
             }
@@ -426,6 +389,8 @@ public class Enemy_Controller : MonoBehaviour
         }
         else
         {
+            alertBox.SetActive(true);
+            alertBox.GetComponent<MeshRenderer>().material = patrolMat;
             Log("Stunned");
             stunnedLastFrame = true;
         }

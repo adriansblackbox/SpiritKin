@@ -48,9 +48,9 @@ public class CharacterStats : MonoBehaviour
 
         currentHealth -= damage;
 
-        if (gameObject.tag == "Enemy") {
+        if (gameObject.tag == "Enemy" && GetComponent<Enemy_Controller>().attackTimer == 0) {
             StartCoroutine(stunEnemy());
-        }    
+        }
     }
 
     
@@ -78,7 +78,7 @@ public class CharacterStats : MonoBehaviour
     public IEnumerator stunEnemy()
     {
         GetComponent<Enemy_Controller>().stunned = true;
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.35f);
         GetComponent<Enemy_Controller>().stunned = false;
     }
 
