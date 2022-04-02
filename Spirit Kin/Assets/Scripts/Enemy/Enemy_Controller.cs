@@ -211,34 +211,35 @@ public class Enemy_Controller : MonoBehaviour
 
         myTime += Time.deltaTime;
 
+        //we will want a function to handle the one time reset of values when moved to notAttacking
+        switch (EnemyAttack)
+        {
+            case AttackState.Attacking:
+                attackTimer += Time.deltaTime;
+                if (currentRecoveryTime <= 0) //ready to attack
+                    attackTarget(); //attack target with current attack, if no current attack then select one
+                break;
+            case AttackState.NotAttacking:
+                //reset all values and get ready to be called upon again to attack
+                    //-> second pass figure out next attack
+                handleRecovery();
+                break;
+            case AttackState.Waiting:
+                Log("Waiting to attack");
+                break;
+            default:
+                break;
+        }
+
         if (!stunned)
         {
             if (stunnedLastFrame)
             {
-                EnemyAttack = AttackState.Waiting;
-                EnemyMotion = MotionState.Chasing;
+                stunnedLastFrame = false;
+                if (EnemyAttack != AttackState.Attacking && currentRecoveryTime == 0) {
+                    EnemyMotion = MotionState.Chasing;
+                } 
             }
-
-            //we will want a function to handle the one time reset of values when moved to notAttacking
-            switch (EnemyAttack)
-            {
-                case AttackState.Attacking:
-                    attackTimer += Time.deltaTime;
-                    if (currentRecoveryTime <= 0) //ready to attack
-                        attackTarget(); //attack target with current attack, if no current attack then select one
-                    break;
-                case AttackState.NotAttacking:
-                    //reset all values and get ready to be called upon again to attack
-                        //-> second pass figure out next attack
-                    handleRecovery();
-                    break;
-                case AttackState.Waiting:
-                    Log("Waiting to attack");
-                    break;
-                default:
-                    break;
-            }
-
             switch (EnemyMotion)
             {
                 case MotionState.Patroling:

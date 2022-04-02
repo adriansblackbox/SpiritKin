@@ -77,9 +77,9 @@ public class CharacterStats : MonoBehaviour
     }
     public IEnumerator stunEnemy()
     {
-        gameObject.transform.GetComponent<Enemy_Controller>().stunned = true;
-        yield return new WaitForSeconds(0.1f);
-        gameObject.transform.GetComponent<Enemy_Controller>().stunned = false;
+        GetComponent<Enemy_Controller>().stunned = true;
+        yield return new WaitForSeconds(0.25f);
+        GetComponent<Enemy_Controller>().stunned = false;
     }
 
     public IEnumerator PlayerDeath(GameObject player){
