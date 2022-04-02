@@ -54,10 +54,6 @@ public class Shrine : MonoBehaviour
             transform.parent = nonCursedContainer.transform;
             es.currentCursedShrines--;
         }
-        //debug:
-        if(Input.GetKeyDown(KeyCode.Y)){
-            gameOverScreen.GetComponent<GameOver>().LoadGameOver();
-        }
 
         if (CurCurseTime < TotalCurseTime && cursed && !FindObjectOfType<MainHub>().playerInHub) {
             CurCurseTime += Time.deltaTime;
