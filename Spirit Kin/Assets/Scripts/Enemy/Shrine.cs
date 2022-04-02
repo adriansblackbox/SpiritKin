@@ -59,10 +59,11 @@ public class Shrine : MonoBehaviour
             CurCurseTime += Time.deltaTime;
         } else if (cursed && CurCurseTime >= TotalCurseTime) {
             Cursor.lockState = CursorLockMode.None;
-            // SceneManager.LoadScene("MainMenu");
+            /* Game Over Code is commented out right now for testing */
+            //SceneManager.LoadScene("MainMenu");
             //load game over screen
-            gameOverScreen.GetComponent<GameOver>().LoadGameOver();
-            cursed = false;
+            //gameOverScreen.GetComponent<GameOver>().LoadGameOver();
+            //cursed = false;
         }
 
         if (cursed) {
