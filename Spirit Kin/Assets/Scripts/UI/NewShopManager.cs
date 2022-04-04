@@ -19,8 +19,12 @@ public class NewShopManager : MonoBehaviour
     public Text description;
 
     public Buff currentBuff;
+    public Buff prevBuff;
+    public Buff nextBuff;
 
-    public GameObject displaySprite;
+    public GameObject displayPrev;
+    public GameObject display; 
+    public GameObject displayNext;
     // public SpriteRenderer currentSprite;
 
 
@@ -44,9 +48,15 @@ public class NewShopManager : MonoBehaviour
         }
         menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
         UICoinTXT.text = "Coins:" + playStats.coins.ToString();
-        UpdateDisplay(selectedOption);
+        UpdateDisplay(0);
     }
-
+    void Awake(){
+        UpdateDisplay(0);
+    }
+    
+    public void Initial(){
+        UpdateDisplay(0);
+    }
     public void NextOption()
     {
         selectedOption++;
@@ -101,7 +111,23 @@ public class NewShopManager : MonoBehaviour
     public void UpdateDisplay(int selectedOption)
     {
         currentBuff = shopBuffList[selectedOption];
-        displaySprite.GetComponent<Image>().sprite = currentBuff.buffSprite;
+
+        if(selectedOption==0){
+            prevBuff = shopBuffList[shopBuffList.Count-1];
+        }else{
+            prevBuff = shopBuffList[selectedOption-1];
+        }
+
+        if(selectedOption == shopBuffList.Count-1){
+            nextBuff = shopBuffList[0];
+        }else{
+            nextBuff = shopBuffList[selectedOption+1];
+        }
+        // nextBuff = shopBuffList[selectedOption+1];
+        // nextBuff = shopBuffList[selectedOption-1];
+        display.GetComponent<Image>().sprite = currentBuff.buffSprite;
+        displayPrev.GetComponent<Image>().sprite = prevBuff.buffSprite;
+        displayNext.GetComponent<Image>().sprite = nextBuff.buffSprite;
         buffName.text = currentBuff.name;
         description.text = currentBuff.description;
         costTXT.text = "$: " + currentBuff.Cost.ToString();
@@ -112,6 +138,20 @@ public class NewShopManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(GameObject.FindGameObjectWithTag("TeaShop").GetComponent<TeaShop>().isOpen){
+            if(Input.GetKeyDown(KeyCode.JoystickButton4)||Input.GetKeyDown(KeyCode.LeftArrow)){
+            BackOption();
+        }
+        if(Input.GetKeyDown(KeyCode.JoystickButton5)||Input.GetKeyDown(KeyCode.RightArrow)){
+            NextOption();
+        }
+        if(Input.GetKeyDown(KeyCode.JoystickButton1)){
+            Exit();
+        }
+
+
+        }
+        
     }
 
     //Ethan's code:

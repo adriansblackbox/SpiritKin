@@ -12,6 +12,7 @@ public class TeaShop : MonoBehaviour
     public GameObject teaCamera;
     public PauseMenu pauseMenu;
     public Buff theBuff;
+    
 
     private bool isInteractable;
 
@@ -70,6 +71,8 @@ public class TeaShop : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         teaMenu.SetActive(true);
+        //preload
+        // teaMenu.GetComponent<NewShopManager>().Initial();
         teaCamera.SetActive(true);
         isOpen = true;
 
