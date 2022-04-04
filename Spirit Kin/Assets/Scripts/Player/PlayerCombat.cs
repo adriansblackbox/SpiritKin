@@ -30,7 +30,7 @@ public class PlayerCombat : MonoBehaviour
     public Transform[] AttackOriginPoints;
     public List<GameObject> immuneEnemies = new List<GameObject>();
     public Vector3 attackDirection;
-
+    public ParticleSystem Slash;
     private void Start() {
         animator = GetComponent<Animator>();
         controller = GetComponent<PlayerController>();
@@ -100,6 +100,7 @@ public class PlayerCombat : MonoBehaviour
     }
     private void Attack(){
         if(bufferButton == "Attack"){
+            Slash.Play();
             transform.GetChild(0).gameObject.transform.forward = controller.targetMoveDirection;;
             animationCancel = false;
             bufferButton = "";
