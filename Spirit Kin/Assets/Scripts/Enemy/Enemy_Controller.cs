@@ -45,6 +45,11 @@ public class Enemy_Controller : MonoBehaviour
         NotAttacking,
         Waiting
     }
+    [Header("Animation")]
+    public Animator enemyAnimator;
+    public bool right;
+    public bool left;
+
     [Header("Attacks")]
     public Enemy_Attack currentAttack;
     public Enemy_Attack[] enemyAttacks;
@@ -125,7 +130,7 @@ public class Enemy_Controller : MonoBehaviour
     #endregion
 
 //////////////////////////////////////////////////NAVMESH
-
+    [Header("Navmesh")]
     public NavMeshAgent ThisEnemy;
     public NavMeshPath path;
     public GameObject player;
@@ -168,6 +173,9 @@ public class Enemy_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        enemyAnimator.SetBool("Right", right);
+        enemyAnimator.SetBool("Left", left);
 
         //spherecast to check for player
         checkForPlayer();
@@ -427,27 +435,50 @@ public class Enemy_Controller : MonoBehaviour
     {
         //starter implementation
             //set charge attack to be the current attack
-        currentAttack = enemyAttacks[0];
-        Log(currentAttack.name);
+        // currentAttack = enemyAttacks[0];
         ai.enemiesReadyToAttack.Remove(gameObject);
 
-        // if (currentAttack.name == "Charge")
-        // {
-        //     //setup all of the values needed for the charge
-        //     dirVec = player.transform.position - transform.position;
-        //     timeCharging = 0;
-        //     startPosition = transform.position;
-        //     endPosition = player.transform.position + dirVec;
-        //     endPosition.y = transform.position.y;
-        // }
+        Vector3 dirToPlayer = player.transform.position - transform.position;
+        float viewingAngleToPlayer = Vector3.Angle(dirToPlayer, transform.forward);
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        //full implementation vvv
-            //get direction
-            //get viewing angle
-            //get distance
+        int maxPriority = 0; //the total value of all priorities from attacks that can be used
 
-            //loop through attacks and consider attacks which are within the distance + viewing angle
-                //select one randomly using attackPriority
+        //loop through attacks and consider attacks which are within the distance + viewing angle
+            //select one randomly using attackPriority
+        for (int i = 0; i < enemyAttacks.Length; i++)
+        {
+            if (distanceToPlayer > enemyAttacks[i].minimumAttackRange && distanceToPlayer < enemyAttacks[i].maximumAttackRange)
+            {
+                if (viewingAngleToPlayer > enemyAttacks[i].minimumAttackAngle && viewingAngleToPlayer < enemyAttacks[i].maximumAttackAngle)
+                {
+                    maxPriority += enemyAttacks[i].attackPriority;
+                }
+            }
+        }
+
+        int rand = Random.Range(0, maxPriority);
+        int tempPriority = 0;
+
+        for (int i = 0; i < enemyAttacks.Length; i++)
+        {
+            if (distanceToPlayer > enemyAttacks[i].minimumAttackRange && distanceToPlayer < enemyAttacks[i].maximumAttackRange)
+            {
+                if (viewingAngleToPlayer > enemyAttacks[i].minimumAttackAngle && viewingAngleToPlayer < enemyAttacks[i].maximumAttackAngle)
+                {
+                    if (currentAttack != null)
+                        return;
+                    
+                    tempPriority += enemyAttacks[i].attackPriority;
+
+                    if (tempPriority > rand)
+                    {
+                        currentAttack = enemyAttacks[i];
+                    }
+                }
+            }
+        }
+        Log(currentAttack.name);
     }
 
     private void attackTarget()
@@ -464,6 +495,8 @@ public class Enemy_Controller : MonoBehaviour
             } 
             else if (currentAttack.name == "Swipe")
             {
+                //play the animation
+                    //while animation is going move enemy forward + activate raycast for hitting player
                 swipeAttack();
                 Log("Swipe Attack");
             }
@@ -536,6 +569,19 @@ public class Enemy_Controller : MonoBehaviour
         endPosition.y = transform.position.y;
     }
 
+    //Wide swiping arc to punish player for trying to kite enemies
+        //compared to the direct and straight pathing of the charge
+    
+    //play animation
+        //activate a raycast out of the enemies hand/arm to detect for the player
+        //nudge enemy forward so they lunge at the player
+    //once animation is finished set recoveryTime to the current attacks recovery time
+        //when the recovery time is reached it auto calls finishAttack();
+    private void swipeAttack()
+    {
+
+    }
+
     private void finishAttack()
     {
         Log("Recovered and ready to attack again");
@@ -551,11 +597,6 @@ public class Enemy_Controller : MonoBehaviour
         ai.surroundSpotAvailability[surroundIndex] = true;
         surroundIndex = -1;
         nextSpot = Vector3.zero;
-    }
-
-    private void swipeAttack()
-    {
-
     }
 
     #endregion

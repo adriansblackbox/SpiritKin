@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 2639909886467055296}
   - component: {fileID: 3127600987241691444}
   m_Layer: 0
-  m_Name: enemyModel_Idle_Baked_03 (1)
+  m_Name: Animator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1226,9 +1226,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyAnimator: {fileID: 3127600987241691444}
+  right: 0
+  left: 0
   currentAttack: {fileID: 0}
   enemyAttacks:
   - {fileID: 11400000, guid: 8529a224114adab448bb599b35f0826c, type: 2}
+  - {fileID: 11400000, guid: 286ed1c416d37eb43b202820411ea162, type: 2}
   currentRecoveryTime: 0
   enemyAttackingMat: {fileID: 2100000, guid: 2ec4b578a34fb044a95787eae5d3dd10, type: 2}
   enemyAttackingTwoMat: {fileID: 2100000, guid: c2d66f0ddcd87eb46a9119e9821dd2ea, type: 2}
