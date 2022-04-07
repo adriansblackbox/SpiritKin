@@ -59,9 +59,9 @@ public class PlayerCombat : MonoBehaviour
             resetAttack();
         }
         if(isAttacking){
-            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 1, Time.deltaTime * 200f));
+            animator.SetLayerWeight(2,1);
         }else{
-            animator.SetLayerWeight(2, Mathf.Lerp(animator.GetLayerWeight(2), 0f, Time.deltaTime * 200f));
+            animator.SetLayerWeight(2,0);
         }
          //Dodge Timers
         if(isDodging && dodgeTimeItter <= 0){

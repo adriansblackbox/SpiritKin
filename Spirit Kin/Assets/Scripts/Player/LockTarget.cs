@@ -35,8 +35,6 @@ public class LockTarget : MonoBehaviour
         FindTarget();
         if(Target != null){
             LockOnTarget();
-        }else{
-            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
         }
         // updates the plaeyr's aniamtion according to input direction. Lerping is
         // used for smooth and organic transitioning between animations
@@ -50,15 +48,6 @@ public class LockTarget : MonoBehaviour
         Vector3 aimTarget = Target.position;
         aimTarget.y = transform.position.y;
         Vector3 focusDirection = (aimTarget - transform.position).normalized;
-        controller.RotateOnMoveDirection = false;
-        // rotates the player to the target at adjustable speeds
-        if((Input.GetKey(KeyCode.Space) || Input.GetButton("A Button")) && controller.inputDirection != Vector2.zero && !combatScript.isAttacking){
-            playerBody.forward = Vector3.Lerp(playerBody.forward, controller.targetMoveDirection, Time.deltaTime * 20f);
-            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * NormToCombatSpeed));
-        }else {//if(combatScript.CombatSpeedDropoff != combatScript.CombatRunSpeedDropoff){
-            playerBody.forward = Vector3.Lerp(playerBody.forward, focusDirection, Time.deltaTime * RotateToTargetSpeed);
-            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * NormToCombatSpeed));
-        }
         // posiotions the camera slightly above the player's body, and rotates to face the target at adjustable speeds
         Vector3 focusTarget = (Target.position -controller.CinemachineCameraTarget.transform.position).normalized;
         focusTarget = new Vector3(focusTarget.x, focusTarget.y - 0.15f, focusTarget.z);
@@ -73,7 +62,6 @@ public class LockTarget : MonoBehaviour
         }
     }
     public void DelockTarget(){
-        controller.RotateOnMoveDirection = true;
         Target = null;
         FindObjectOfType<LockableTargets>().ClearTargetList();
         transform.forward =  playerBody.forward;
