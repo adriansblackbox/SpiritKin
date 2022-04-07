@@ -174,6 +174,7 @@ public class Enemy_Controller : MonoBehaviour
     void Update()
     {
 
+        //This is done in the functions, but might be better to do it here
         enemyAnimator.SetBool("Right", right);
         enemyAnimator.SetBool("Left", left);
 
@@ -547,6 +548,7 @@ public class Enemy_Controller : MonoBehaviour
                 }
             }
 
+            //exit case
             if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) {
                 alertBox.SetActive(false);
                 EnemyAttack = AttackState.NotAttacking;
@@ -580,6 +582,40 @@ public class Enemy_Controller : MonoBehaviour
     private void swipeAttack()
     {
 
+
+        //Current Implementation is lacking:
+            //a lunge with each swipe
+            //a raycast to see if the player has been hit (use hasHitPlayer bool to check if the player has been hit so it doesnt register 100 times)
+            //facing the player when swiping (sometimes it faces, but other times its off to the side or something)
+
+        //Next steps:
+            //adjust the distance the attack can be activated from
+            //adjust the amount of damage the swipes deal compared to the charge
+            //adjust the recovery time to ensure enemies dont barrage the player
+            //change implementation to swap based off of the animations finishing rather than the attackTimer
+
+        //ITS ALSO POSSIBLE THAT THE ANIMATION NEEDS TO BE TOUCHED UP TO BE A BIT QUICKER BUT FOR NOW I SET THE SPEED TO 4
+
+        //BAD IMPLEMENTATION -> GOT TO DO IT BASED OFF OF WHEN THE ANIMATIONS END
+        //GOOD ENOUGH FOR NOW
+        //right swipe then left swipe
+        if (attackTimer < 1.5f)
+        {
+            right = true;
+            left = false;
+        }
+        else if (attackTimer < 3.0f)
+        {
+            left = true;
+            right = false;
+        }
+        else if (attackTimer > 3.0f)
+        {
+            left = false;
+            EnemyAttack = AttackState.NotAttacking;
+            ai.attackingEnemy = null;
+            currentRecoveryTime = currentAttack.recoveryTime;
+        }
     }
 
     private void finishAttack()
@@ -591,7 +627,7 @@ public class Enemy_Controller : MonoBehaviour
         attackTimer = 0.0f;
         hasHitPlayer = false;
 
-        //consider resetting surroundspot
+        //reset surround spot so they dont try to run back through player
         surroundTarget = Vector3.zero;
         surroundSpot = Vector3.zero;
         ai.surroundSpotAvailability[surroundIndex] = true;
