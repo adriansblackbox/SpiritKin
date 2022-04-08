@@ -8,11 +8,10 @@ public class SwordCollision : MonoBehaviour
     public float BladeLength = 10f;
     public LayerMask layerMask;
     public List<GameObject> immuneEnemies;
-    public GameObject SwordTrail;
+    public bool RaycastOn;
     public Transform[] AttackOriginPoints;
     PlayerCombat combatScript;
     private void Start() {
-       SwordTrail.SetActive(false);
        combatScript = FindObjectOfType<PlayerCombat>();
        AttackOriginPoints = FindObjectOfType<PlayerCombat>().AttackOriginPoints;
        immuneEnemies = FindObjectOfType<PlayerCombat>().immuneEnemies;
@@ -22,7 +21,7 @@ public class SwordCollision : MonoBehaviour
         //checking to see if we hit an enemy
         foreach(Transform originPoint in AttackOriginPoints){
 
-            if (Physics.SphereCast(originPoint.position, 1f,  originPoint.TransformDirection(Vector3.forward), out hit, BladeLength, layerMask) && SwordTrail.activeSelf)
+            if (Physics.SphereCast(originPoint.position, 1f,  originPoint.TransformDirection(Vector3.forward), out hit, BladeLength, layerMask) && RaycastOn)
             {
                 Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * BladeLength, Color.red);
                 if(!immuneEnemies.Contains(hit.transform.gameObject)){
@@ -30,16 +29,16 @@ public class SwordCollision : MonoBehaviour
                     hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<PlayerStats>().damage.GetValue());
                 }
             }
-            else if(SwordTrail.activeSelf)
+            else if(RaycastOn)
             {
                 Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * BladeLength, Color.yellow);
             }
         }
     }
-    public void activateSword(){
-        SwordTrail.SetActive(true);
+    public void EnableHitRay(){
+        RaycastOn = true;
     }
-    public void deactivateSword(){
-        SwordTrail.SetActive(false);
+    public void DisableHitRay(){
+        RaycastOn = false;
     }
 }

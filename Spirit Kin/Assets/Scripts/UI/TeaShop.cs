@@ -84,7 +84,7 @@ public class TeaShop : MonoBehaviour
         //disable player's script here
         Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
         Player.GetComponent<PlayerController>().enabled = false;
-        Player.GetComponent<PlayerCombat>().enabled = false;
+        //Player.GetComponent<PlayerCombat>().enabled = false;
 
         //disable UI
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
@@ -94,7 +94,7 @@ public class TeaShop : MonoBehaviour
     public void CloseMenu()
     {
         Player.GetComponent<PlayerController>().enabled = true;
-        Player.GetComponent<PlayerCombat>().enabled = true;
+        //Player.GetComponent<PlayerCombat>().enabled = true;
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
         Cursor.lockState = CursorLockMode.Locked;
         teaMenu.SetActive(false);

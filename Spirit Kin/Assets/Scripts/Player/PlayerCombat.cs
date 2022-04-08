@@ -101,7 +101,7 @@ public class PlayerCombat : MonoBehaviour
     private void Attack(){
         if(bufferButton == "Attack"){
             Slash.Play();
-            transform.GetChild(0).gameObject.transform.forward = controller.targetMoveDirection;;
+            transform.GetChild(0).gameObject.transform.forward = controller.targetMoveDirection;
             animationCancel = false;
             bufferButton = "";
             FindObjectOfType<SwordCollision>().immuneEnemies.Clear();
@@ -149,12 +149,6 @@ public class PlayerCombat : MonoBehaviour
         controller.speed = 0.0f;
         controller.targetSpeed = 0.0f;
         CombatSpeedDropoff = 0.0f;
-    }
-    public void activateSword(){
-        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().activateSword();
-    }
-    public void deactivateSword(){
-        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().deactivateSword();
     }
     public void AnimationCancel(){
         animationCancel = true;

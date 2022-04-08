@@ -86,7 +86,7 @@ public class CurseMeter : MonoBehaviour
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
                 if(ActiveSword != Sword0)
-                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+                    ActiveSword.GetComponent<SwordCollision>().DisableHitRay();
                 ActiveSword = Sword0;
                 break;
             case 1:
@@ -95,7 +95,7 @@ public class CurseMeter : MonoBehaviour
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
                 if(ActiveSword != Sword1)
-                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+                    ActiveSword.GetComponent<SwordCollision>().DisableHitRay();
                 ActiveSword = Sword1;
                 break;
             case 2:
@@ -104,7 +104,7 @@ public class CurseMeter : MonoBehaviour
                 Sword0.SetActive(false);
                 Sword3.SetActive(false);
                 if(ActiveSword != Sword2)
-                    ActiveSword.GetComponent<SwordCollision>().deactivateSword();
+                    ActiveSword.GetComponent<SwordCollision>().DisableHitRay();
                 ActiveSword = Sword2;
                 break;
             case 3:
@@ -113,7 +113,7 @@ public class CurseMeter : MonoBehaviour
                 Sword2.SetActive(false);
                 Sword0.SetActive(false);
                 if(ActiveSword != Sword3)
-                    ActiveSword.GetComponent<SwordCollision>().SwordTrail.SetActive(false);
+                    ActiveSword.GetComponent<SwordCollision>().DisableHitRay();
                 ActiveSword = Sword3;
                 break;
         }
