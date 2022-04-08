@@ -66,7 +66,8 @@ public class Enemy_Controller : MonoBehaviour
     Vector3 startPosition = Vector3.zero;
     Vector3 endPosition = Vector3.zero;
     float timeCharging = 0;
-    
+    public GameObject leftSwipeTrail;
+    public GameObject rightSwipeTrail;    
 
     [Header("States")]
 
@@ -129,14 +130,14 @@ public class Enemy_Controller : MonoBehaviour
 
     #endregion
 
-//////////////////////////////////////////////////NAVMESH
+////////////////////////////////////////////////// NAVMESH
     [Header("Navmesh")]
     public NavMeshAgent ThisEnemy;
     public NavMeshPath path;
     public GameObject player;
     public GameObject alertBox;
 
-/////////////////////////////////////////////////SPHERECASTING
+///////////////////////////////////////////////// SPHERECASTING
     [Header("Spherecasting")]
     public float raycastRadius;
     public float targetDetectionRange;
@@ -144,7 +145,7 @@ public class Enemy_Controller : MonoBehaviour
     private RaycastHit hitInfo;
     private bool hasDetectedPlayer = false;
 
-/////////////////////////////////////////////////STATE BOX FOR TESTING
+///////////////////////////////////////////////// STATE BOX FOR TESTING
     [Header("Debugging")]
     public bool showLogs = true;
 
@@ -599,19 +600,47 @@ public class Enemy_Controller : MonoBehaviour
         //BAD IMPLEMENTATION -> GOT TO DO IT BASED OFF OF WHEN THE ANIMATIONS END
         //GOOD ENOUGH FOR NOW
         //right swipe then left swipe
+        RaycastHit hit;
+        bool hitcheck = false;
         if (attackTimer < 1.5f)
         {
             right = true;
+            rightSwipeTrail.SetActive(true);
+            leftSwipeTrail.SetActive(false);
+
+            if(Physics.Raycast(rightSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
+                if(!hitcheck){
+                    player.GetComponent<CharacterStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
+                    hitcheck = true;
+                    Log("Left swipe damaged player!");
+                }
+                Log("Left swipe hit player!");
+            }
             left = false;
         }
         else if (attackTimer < 3.0f)
         {
+            if(!left && hitcheck) hitcheck = false; // Reset hitcheck in case the prior swipe hit
             left = true;
+            rightSwipeTrail.SetActive(false);
+            leftSwipeTrail.SetActive(true);
+            if(Physics.Raycast(leftSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
+                if(!hitcheck){
+                    player.GetComponent<CharacterStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
+                    hitcheck = true;
+                    Log("Right swipe damaged player!");
+                }
+                Log("Right swipe hit player!");
+            }
             right = false;
         }
         else if (attackTimer > 3.0f)
         {
+            
+            rightSwipeTrail.SetActive(false);
+            leftSwipeTrail.SetActive(false);
             left = false;
+            hitcheck = false;
             EnemyAttack = AttackState.NotAttacking;
             ai.attackingEnemy = null;
             currentRecoveryTime = currentAttack.recoveryTime;
