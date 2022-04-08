@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SwordCollision : MonoBehaviour
 {
-    public Transform BladeRayOrigin;
     public float BladeLength = 10f;
     public LayerMask layerMask;
     public List<GameObject> immuneEnemies;
