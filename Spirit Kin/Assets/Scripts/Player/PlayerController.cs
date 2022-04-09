@@ -53,8 +53,11 @@ public class PlayerController : MonoBehaviour
         PlayerInput();
         AnimatorParameters();
         RotateCamera();
+        if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash)
+            Movement();
+        /*
         switch (State){
-            case "Idle":
+           case "Idle":
                 Movement();
                 break;
             case "Attack":
@@ -68,6 +71,7 @@ public class PlayerController : MonoBehaviour
             case "Death":
                 break;
         }
+        */
     }
     private void PlayerInput(){
         input_x = Input.GetAxis("Horizontal");
@@ -89,6 +93,7 @@ public class PlayerController : MonoBehaviour
     // Parameter changing functions that Kin's state machine uses
     //===========================================================
     private void AttackStart(){
+        // Set Animator Param
         X_Pressed = false;
         //Y_Pressed = false;
         A_Pressed = false;
@@ -96,7 +101,12 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Move Cancel", false);
         animator.SetBool("Combo Reset", false);
         animator.SetBool("Attack End", false);
-
+        // Movement Prep
+        if(Mathf.Abs(input_x) > 0 || Mathf.Abs(input_y) > 0){
+            targetRotation = Mathf.Atan2(input_x, input_y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+            targetMoveDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
+            transform.GetChild(0).gameObject.transform.forward = targetMoveDirection;
+        }
     }
     private void SetAttackCancelTrue(){
         animator.SetBool("Attack Cancel", true);
@@ -114,10 +124,27 @@ public class PlayerController : MonoBehaviour
         GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().DisableHitRay();
     }
     private void AttackEnd(){
+        speed = 0.0f;
         animator.SetBool("Attack End", true);
     }
     private void SetDashAttackTrue(){
         
+    }
+    private void StartAttackMovement(){
+        StartCoroutine(AttackOneMovement());
+    }
+    private IEnumerator AttackOneMovement(){
+        float attackOneSpeed = 20f;
+        float attackOneTime = 0.5f;
+        for(float t = 0.0f; t < attackOneTime; t += Time.deltaTime){
+            //attackOneSpeed = Mathf.Lerp(attackOneSpeed, 0.0f, Time.deltaTime*10f);
+            Vector2 inputVector = new Vector2(input_x, input_y);
+            controller.Move(transform.GetChild(0).gameObject.transform.forward * (inputVector.normalized.magnitude * attackOneSpeed) * Time.deltaTime);
+            if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash)
+                break;
+            yield return null;
+        }
+        yield return null;
     }
     //===========================================================
     /*
