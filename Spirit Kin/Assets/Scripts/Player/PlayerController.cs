@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] public float WalkSpeed = 2.0f;
     [SerializeField] public float SprintSpeed = 5.0f;
+    [SerializeField] public float DashSpeed = 20f;
     [SerializeField] private float RotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float targetSpeed;
     [HideInInspector] public float speed;
     [HideInInspector] public string State;
+    public GameObject[] DashInvisibleObjects;
     private float input_x, input_y;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 	private GameObject mainCamera;
     
+    public Transform[] A1RayCast, A2RayCast, A3RayCast, A4RayCast, A5RayCast;
 
     void Start()
     {
@@ -56,6 +59,8 @@ public class PlayerController : MonoBehaviour
             Movement();
         else if(animator.GetBool("Attack Movement"))
             AttackMovement();
+        else if(animator.GetBool("Dash Movement"))
+            DashMovement();
     }
     //===========================================================
     // Input getter
@@ -77,20 +82,27 @@ public class PlayerController : MonoBehaviour
     //===========================================================
     private void AttackStart(){
         // Set Animator Param
+        animator.SetBool("Dash End", false);
+        animator.SetBool("A Pressed", false);
         animator.SetBool("X Pressed", false);
-        //Y_Pressed = false;
         animator.SetBool("A Pressed", false);
         animator.SetBool("Attack Movement", false);
         animator.SetBool("Attack Cancel", false);
         animator.SetBool("Move Cancel", false);
         animator.SetBool("Combo Reset", false);
         animator.SetBool("Attack End", false);
-        // Movement Prep
-        //if(Mathf.Abs(input_x) > 0 || Mathf.Abs(input_y) > 0){
-        //    targetRotation = Mathf.Atan2(input_x, input_y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-        //    targetMoveDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
-        //    transform.GetChild(0).gameObject.transform.forward = targetMoveDirection;
-        //}
+    }
+    private void DashStart(){
+        // Set Animator Param
+        animator.SetBool("Dash End", false);
+        animator.SetBool("A Pressed", false);
+        animator.SetBool("X Pressed", false);
+        animator.SetBool("A Pressed", false);
+        animator.SetBool("Attack Movement", false);
+        animator.SetBool("Attack Cancel", false);
+        animator.SetBool("Move Cancel", false);
+        animator.SetBool("Combo Reset", false);
+        animator.SetBool("Attack End", false);
     }
     private void SetAttackCancelTrue(){
         animator.SetBool("Attack Cancel", true);
@@ -102,24 +114,71 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Combo Reset", true);   
     }
     public void EnableHitRay(){
-        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().EnableHitRay();
+        string attackName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+        SwordCollision swordScript = FindObjectOfType<SwordCollision>();
+        switch(attackName){
+            case "Attack 1":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+            case "Attack 2":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+            case "Attack 3":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+            case "Attack 4":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+            case "Attack 5":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+        }
+        swordScript.immuneEnemies.Clear();
+        swordScript.RaycastOn = true;
+
     }
     public void DisableHitRay(){
-        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().DisableHitRay();
+        SwordCollision swordScript = FindObjectOfType<SwordCollision>();
+        swordScript.RaycastOn = false;
     }
     private void AttackEnd(){
         speed = 0.0f;
         animator.SetBool("Attack End", true);
     }
-    private void SetDashAttackTrue(){
-        
-    }
     private void StartAttackMovement(){
         animator.SetBool("Attack Movement", true);
     }
-    //===========================================================
-    // Attack movment logic, and execution
-    //===========================================================
+    private void SetDashAttackTrue(){
+        animator.SetBool("Dash Attack", true);
+    }
+    private void StartDashMovement(){
+        animator.SetBool("Dash Movement", true);
+    }
+    private void DashEnd(){
+        animator.SetBool("Dash End", true);
+        animator.SetBool("Dash Movement", false);
+        speed = 0.0f;
+    }
+    //====================================================
+    // Attack/Dash movment logic, effects, sounds, and execution
+    //====================================================
+    private void DashMovement(){
+        moveDirection = transform.GetChild(0).transform.forward.normalized;
+        speed = DashSpeed;
+        controller.Move(moveDirection * speed * Time.deltaTime);
+    }
+
+    private void DashInvisiblityOn(){
+        for(int i = 0; i < DashInvisibleObjects.Length; i++){
+            DashInvisibleObjects[i].SetActive(false);
+        }
+    }
+    private void DashInvisiblityOff(){
+        for(int i = 0; i < DashInvisibleObjects.Length; i++){
+            DashInvisibleObjects[i].SetActive(true);
+        }
+    }
+    
     private void AttackMovement(){
         //Debug.Log(animator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
         string attackName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;

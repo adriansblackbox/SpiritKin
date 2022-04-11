@@ -18,21 +18,14 @@ public class Player_sfx : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
     private void Update() {
-        if(GetComponent<PlayerCombat>().isDodging &&  !dodgeSoundPlaying){
-            Dodge();
-        }else if(!GetComponent<PlayerCombat>().isDodging){
-            dodgeSoundPlaying = false;
-        }
+
     }
 
     private void Step()
     {
-        if(!GetComponent<PlayerCombat>().isDodging)
-        {
-            AudioClip clip = GetRandomClip(Stepclips);
-            audioSource.pitch = Random.Range(1f, 2f);
-            audioSource.PlayOneShot(clip);
-        }
+        AudioClip clip = GetRandomClip(Stepclips);
+        audioSource.pitch = Random.Range(1f, 2f);
+        audioSource.PlayOneShot(clip);
     }
 
     private void Slash()

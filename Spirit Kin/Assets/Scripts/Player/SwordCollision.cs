@@ -10,11 +10,7 @@ public class SwordCollision : MonoBehaviour
     public List<GameObject> immuneEnemies;
     public bool RaycastOn;
     public Transform[] AttackOriginPoints;
-    PlayerCombat combatScript;
     private void Start() {
-       combatScript = FindObjectOfType<PlayerCombat>();
-       AttackOriginPoints = FindObjectOfType<PlayerCombat>().AttackOriginPoints;
-       immuneEnemies = FindObjectOfType<PlayerCombat>().immuneEnemies;
     }
     private void Update() {
         RaycastHit hit;
@@ -34,11 +30,5 @@ public class SwordCollision : MonoBehaviour
                 Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * BladeLength, Color.yellow);
             }
         }
-    }
-    public void EnableHitRay(){
-        RaycastOn = true;
-    }
-    public void DisableHitRay(){
-        RaycastOn = false;
     }
 }
