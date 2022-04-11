@@ -14,12 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float WalkSpeed = 2.0f;
     [SerializeField] public float SprintSpeed = 5.0f;
     [SerializeField] private float RotationSmoothTime = 1f;
-    [SerializeField] private float CombatRotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
     [SerializeField] private float StickLookSensitivity = 200f;
-    [SerializeField] private float MoveToTargetSpeed = 10f;
-    [SerializeField] private float AnimationBlendTime = 20f;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
 	[HideInInspector] public float CinemachineTargetPitch;
@@ -29,15 +26,16 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Vector3 targetMoveDirection;
     [HideInInspector] public float targetSpeed;
     [HideInInspector] public float speed;
+    [HideInInspector] public string State;
+    private int attackNum;
+    private float input_x, input_y;
+    private bool X_Pressed, Y_Pressed, A_Pressed;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
     public float Gravity = -30f;
-    private float input_x;
-    private float input_y;
     private float animationBlend;
     private Vector3 moveDirection;
     private CharacterController controller;
-    private PlayerCombat combatScript;
     private Animator animator;
 	private GameObject mainCamera;
     
@@ -45,26 +43,124 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        combatScript = GetComponent<PlayerCombat>();
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
+        State = "Idle";
     }
     void Update()
     {
-        // if the player is initiating a mechanic besides basic movement,
-        // their input is ignored until movement dependant mechanic is done
-        InputMovement();
-        Animation();
-        // so long as the player is not locked onto a target, they can rotate their
-        // camera freely
-        if(GetComponent<LockTarget>().Target == null){
-            RotateCamera();
+        PlayerInput();
+        AnimatorParameters();
+        RotateCamera();
+        if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash)
+            Movement();
+        /*
+        switch (State){
+           case "Idle":
+                Movement();
+                break;
+            case "Attack":
+                break;
+            case "Dash Attack":
+                break;
+            case "Dodge":
+                break;
+            case "Special Attack":
+                break;
+            case "Death":
+                break;
         }
+        */
     }
-    private void InputMovement(){
+    private void PlayerInput(){
         input_x = Input.GetAxis("Horizontal");
         input_y = Input.GetAxis("Vertical");
+        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0))
+            X_Pressed = true;
+        //if(Input.GetButtonDown("Y Button"))
+        //    Y_Pressed = true;
+        if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space))
+            A_Pressed = true;
+    }
+    private void AnimatorParameters(){
+        animator.SetFloat("X Direction Input", Mathf.Abs(input_x));
+        animator.SetFloat("Z Direction Input", Mathf.Abs(input_y));
+        animator.SetBool("X Pressed", X_Pressed);
+        //animator.SetBool("Y Pressed", Y_Pressed);
+        animator.SetBool("A Pressed", A_Pressed);
+    }
+    // Parameter changing functions that Kin's state machine uses
+    //===========================================================
+    private void AttackStart(){
+        // Set Animator Param
+        X_Pressed = false;
+        //Y_Pressed = false;
+        A_Pressed = false;
+        animator.SetBool("Attack Cancel", false);
+        animator.SetBool("Move Cancel", false);
+        animator.SetBool("Combo Reset", false);
+        animator.SetBool("Attack End", false);
+        // Movement Prep
+        if(Mathf.Abs(input_x) > 0 || Mathf.Abs(input_y) > 0){
+            targetRotation = Mathf.Atan2(input_x, input_y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+            targetMoveDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
+            transform.GetChild(0).gameObject.transform.forward = targetMoveDirection;
+        }
+    }
+    private void SetAttackCancelTrue(){
+        animator.SetBool("Attack Cancel", true);
+    }
+    private void SetMoveCancelTrue(){
+        animator.SetBool("Move Cancel", true);
+    }
+    private void SetComboResetTrue(){
+        animator.SetBool("Combo Reset", true);   
+    }
+    public void EnableHitRay(){
+        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().EnableHitRay();
+    }
+    public void DisableHitRay(){
+        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().DisableHitRay();
+    }
+    private void AttackEnd(){
+        speed = 0.0f;
+        animator.SetBool("Attack End", true);
+    }
+    private void SetDashAttackTrue(){
+        
+    }
+    private void StartAttackMovement(){
+        StartCoroutine(AttackOneMovement());
+    }
+    private IEnumerator AttackOneMovement(){
+        float attackOneSpeed = 20f;
+        float attackOneTime = 0.5f;
+        for(float t = 0.0f; t < attackOneTime; t += Time.deltaTime){
+            //attackOneSpeed = Mathf.Lerp(attackOneSpeed, 0.0f, Time.deltaTime*10f);
+            Vector2 inputVector = new Vector2(input_x, input_y);
+            controller.Move(transform.GetChild(0).gameObject.transform.forward * (inputVector.normalized.magnitude * attackOneSpeed) * Time.deltaTime);
+            if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash)
+                break;
+            yield return null;
+        }
+        yield return null;
+    }
+    //===========================================================
+    /*
+    private void Attack(){
+        moveDirection =  transform.GetChild(0).gameObject.transform.forward;
+        moveDirection.y = Gravity;
+        moveDirection = moveDirection.normalized * (10f * GetComponent<PlayerStats>().speed.GetValue());
+        controller.Move(moveDirection * Time.deltaTime);
+    }
+    */
+    private void Movement(){
+        // Clears any state changes
+        //=============================
+        attackNum = 0;
+        animator.SetInteger("attackTicks", attackNum);
+        //==============================
         inputDirection = new Vector2(input_x, input_y);
         if(Input.GetKey(KeyCode.LeftShift) || Input.GetAxisRaw("Right Trigger") > 0.1){
             targetSpeed = SprintSpeed * inputDirection.magnitude;
@@ -88,8 +184,6 @@ public class PlayerController : MonoBehaviour
         if (inputDirection != Vector2.zero){
             targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
             float rotationSpeed = RotationSmoothTime;
-            if(combatScript.isAttacking)
-                rotationSpeed = CombatRotationSmoothTime;
             float rotation = Mathf.SmoothDampAngle(transform.GetChild(0).transform.eulerAngles.y, targetRotation, ref rotationVelocity, rotationSpeed);
             // rotate to face input direction relative to camera position
             if(RotateOnMoveDirection)
@@ -102,22 +196,12 @@ public class PlayerController : MonoBehaviour
         if(GetComponent<LockTarget>().Target != null){
             moveDirection = targetMoveDirection;
         }
-        float moveSpeed = speed;
-        if(combatScript.isDodging)
-            moveSpeed = TempSpeed;
-        else if(combatScript.isAttacking && !combatScript.isDodging){
-            TempSpeed = Mathf.Lerp(TempSpeed, 0.0f, combatScript.CombatRunSpeedDropoff * Time.deltaTime);
-            moveSpeed = TempSpeed * inputDirection.magnitude;
-        }
         moveDirection.y = Gravity;
-        moveDirection = moveDirection.normalized * (moveSpeed * GetComponent<PlayerStats>().speed.GetValue());
+        moveDirection = moveDirection.normalized * (speed * GetComponent<PlayerStats>().speed.GetValue());
         controller.Move(moveDirection * Time.deltaTime);
-    }
-    private void Animation(){
+        //Animation
         animationBlend = Mathf.Lerp(animationBlend, speed * GetComponent<PlayerStats>().speed.GetValue(), Time.deltaTime * 100f);
         animator.SetFloat("Speed", animationBlend);
-        if(combatScript.isAttacking)
-            speed = 0;
         // adjusting the motion speed variable with the input magnitude allows
         // the player to slowly creep up to a full speed on their controller
         if(inputDirection.magnitude > 0){
@@ -126,19 +210,20 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("MotionSpeed", 1f);
         }
     }
-
     private void RotateCamera(){
-        // both controller and keyboard/mouse inputs are taken into account. The one
-        // that the player uses should be the only one that will effect camera rotation
-        CinemachineTargetYaw += Input.GetAxis("RightStick X") * Time.deltaTime * StickLookSensitivity;
-		CinemachineTargetPitch += -1 * Input.GetAxis("RightStick Y") * Time.deltaTime * StickLookSensitivity;
-        CinemachineTargetYaw += Input.GetAxis("Mouse X") * Time.deltaTime * MouseSensitivity;
-		CinemachineTargetPitch += -1 * Input.GetAxis("Mouse Y") * Time.deltaTime * MouseSensitivity;
-        // with a helper fucntion, the player's camera rotation is clmaped with the given angles
-        CinemachineTargetYaw = ClampAngle(CinemachineTargetYaw, float.MinValue, float.MaxValue);
-		CinemachineTargetPitch = ClampAngle(CinemachineTargetPitch, -30.0f, 70.0f);
-        // rotates the camera
-        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(CinemachineTargetPitch, CinemachineTargetYaw, 0.0f);
+        if(GetComponent<LockTarget>().Target == null){
+            // both controller and keyboard/mouse inputs are taken into account. The one
+            // that the player uses should be the only one that will effect camera rotation
+            CinemachineTargetYaw += Input.GetAxis("RightStick X") * Time.deltaTime * StickLookSensitivity;
+            CinemachineTargetPitch += -1 * Input.GetAxis("RightStick Y") * Time.deltaTime * StickLookSensitivity;
+            CinemachineTargetYaw += Input.GetAxis("Mouse X") * Time.deltaTime * MouseSensitivity;
+            CinemachineTargetPitch += -1 * Input.GetAxis("Mouse Y") * Time.deltaTime * MouseSensitivity;
+            // with a helper fucntion, the player's camera rotation is clmaped with the given angles
+            CinemachineTargetYaw = ClampAngle(CinemachineTargetYaw, float.MinValue, float.MaxValue);
+            CinemachineTargetPitch = ClampAngle(CinemachineTargetPitch, -30.0f, 70.0f);
+            // rotates the camera
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(CinemachineTargetPitch, CinemachineTargetYaw, 0.0f);
+        }
     }
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {

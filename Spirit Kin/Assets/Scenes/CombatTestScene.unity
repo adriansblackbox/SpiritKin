@@ -40625,7 +40625,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4931512991430563514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -112.4, y: 10.82826, z: -32.46}
+  m_LocalPosition: {x: 0, y: 6.6282597, z: -31.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4931512990943485762}
@@ -40890,6 +40890,14 @@ PrefabInstance:
       value: -1.3
       objectReference: {fileID: 0}
     - target: {fileID: 2933407411238113563, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2933407411238113563, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2933407411238113563, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
@@ -40913,6 +40921,10 @@ PrefabInstance:
       propertyPath: Slash
       value: 
       objectReference: {fileID: 1002554245}
+    - target: {fileID: 4470897816815663011, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: SoulsUI
       value: 
