@@ -66,6 +66,11 @@ public class Enemy_Controller : MonoBehaviour
     Vector3 startPosition = Vector3.zero;
     Vector3 endPosition = Vector3.zero;
     float timeCharging = 0;
+
+    public Transform[] rightSwipeOriginPoints;
+    public Transform[] leftSwipeOriginPoints;
+    public LayerMask swipeLayerMask;
+
     public GameObject leftSwipeTrail;
     public GameObject rightSwipeTrail;    
 
@@ -355,7 +360,7 @@ public class Enemy_Controller : MonoBehaviour
                     }
 
                     // if they dont have a path generate one
-                    if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
+                    if (!(GetComponent<CharacterStats>().isDying) && movementQueue != null && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
                         movementQueue = ai.determineSurroundSpot(transform);
                         if (movementQueue.Count == 0) {
                             EnemyMotion = MotionState.Relocating;
@@ -582,8 +587,7 @@ public class Enemy_Controller : MonoBehaviour
         //when the recovery time is reached it auto calls finishAttack();
     private void swipeAttack()
     {
-
-
+        /*
         //Current Implementation is lacking:
             //a lunge with each swipe
             //a raycast to see if the player has been hit (use hasHitPlayer bool to check if the player has been hit so it doesnt register 100 times)
@@ -600,39 +604,76 @@ public class Enemy_Controller : MonoBehaviour
         //BAD IMPLEMENTATION -> GOT TO DO IT BASED OFF OF WHEN THE ANIMATIONS END
         //GOOD ENOUGH FOR NOW
         //right swipe then left swipe
+        */
         RaycastHit hit;
-        bool hitcheck = false;
         if (attackTimer < 1.5f)
         {
             right = true;
+            left = false;
             rightSwipeTrail.SetActive(true);
             leftSwipeTrail.SetActive(false);
 
-            if(Physics.Raycast(rightSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
-                if(!hitcheck){
-                    player.GetComponent<CharacterStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
-                    hitcheck = true;
-                    Log("Left swipe damaged player!");
+            // if(Physics.Raycast(rightSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
+            //     if(!hitcheck){
+            //         player.GetComponent<CharacterStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
+            //         hitcheck = true;
+            //         Log("Left swipe damaged player!");
+            //     }
+            //     Log("Left swipe hit player!");
+            // }
+
+            // - - - > Below uses multiple spherecasts rather than just a raycast to give the enemy's attack a hit area to make it resemble a swipe over a jab
+            // Attack detection starts after windup
+            if (attackTimer > 0.75f)
+            {
+                foreach (Transform originPoint in rightSwipeOriginPoints) {
+                    Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
+                    if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
+                    {
+                        if (!hasHitPlayer) {
+                            hasHitPlayer = true;
+                            Log("Hit the Player with Right Swipe Attack");
+                            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue());
+                        }
+                    }
                 }
-                Log("Left swipe hit player!");
             }
-            left = false;
         }
         else if (attackTimer < 3.0f)
         {
-            if(!left && hitcheck) hitcheck = false; // Reset hitcheck in case the prior swipe hit
+            if (!left && hasHitPlayer) hasHitPlayer = false; // Reset hitcheck in case the prior swipe hit
             left = true;
+            right = false;
             rightSwipeTrail.SetActive(false);
             leftSwipeTrail.SetActive(true);
-            if(Physics.Raycast(leftSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
-                if(!hitcheck){
-                    player.GetComponent<CharacterStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
-                    hitcheck = true;
-                    Log("Right swipe damaged player!");
+            
+            // if(Physics.Raycast(leftSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
+            //     if(!hitcheck){
+            //         player.GetComponent<CharacterStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
+            //         hitcheck = true;
+            //         Log("Right swipe damaged player!");
+            //     }
+            //     Log("Right swipe hit player!");
+            // }
+
+            // - - - > Below uses multiple spherecasts rather than just a raycast to give the enemy's attack a hit area to make it resemble a swipe over a jab
+            // Attack detection starts after windup
+            if (attackTimer > 2.25f)
+            {
+                foreach (Transform originPoint in leftSwipeOriginPoints) {
+                    Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
+                    if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
+                    {
+                        if(!hasHitPlayer) {
+                            hasHitPlayer = true;
+                            Log("Hit the Player with Left Swipe Attack");
+                            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue());
+                        }
+                    }
                 }
-                Log("Right swipe hit player!");
             }
-            right = false;
+
+            
         }
         else if (attackTimer > 3.0f)
         {
@@ -640,7 +681,7 @@ public class Enemy_Controller : MonoBehaviour
             rightSwipeTrail.SetActive(false);
             leftSwipeTrail.SetActive(false);
             left = false;
-            hitcheck = false;
+            hasHitPlayer = false;
             EnemyAttack = AttackState.NotAttacking;
             ai.attackingEnemy = null;
             currentRecoveryTime = currentAttack.recoveryTime;

@@ -1708,6 +1708,7 @@ MonoBehaviour:
   - {fileID: 2096251999527078971}
   immuneEnemies: []
   attackDirection: {x: 0, y: 0, z: 0}
+  Slash: {fileID: 0}
 --- !u!114 &4741540070320059872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10231,6 +10232,10 @@ PrefabInstance:
     - target: {fileID: 4823244961480697975, guid: 10fa1e85cdec3b645bbaa4798e33b815, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5819140652809310854, guid: 10fa1e85cdec3b645bbaa4798e33b815, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6182029307429083215, guid: 10fa1e85cdec3b645bbaa4798e33b815, type: 3}
       propertyPath: m_IsActive
