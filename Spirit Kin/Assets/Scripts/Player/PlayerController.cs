@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
 	private GameObject mainCamera;
     
     public Transform[] A1RayCast, A2RayCast, A3RayCast, A4RayCast, A5RayCast;
+    public ParticleSystem[] AttackVFX;
 
     void Start()
     {
@@ -119,18 +120,23 @@ public class PlayerController : MonoBehaviour
         switch(attackName){
             case "Attack 1":
                 swordScript.AttackOriginPoints = A1RayCast;
+                AttackVFX[0].Play();
             break;
             case "Attack 2":
                 swordScript.AttackOriginPoints = A1RayCast;
+                AttackVFX[1].Play();
             break;
             case "Attack 3":
                 swordScript.AttackOriginPoints = A1RayCast;
+                AttackVFX[2].Play();
             break;
             case "Attack 4":
                 swordScript.AttackOriginPoints = A1RayCast;
+                AttackVFX[3].Play();
             break;
             case "Attack 5":
                 swordScript.AttackOriginPoints = A1RayCast;
+                AttackVFX[4].Play();
             break;
         }
         swordScript.immuneEnemies.Clear();
