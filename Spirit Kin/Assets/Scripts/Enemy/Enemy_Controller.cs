@@ -100,7 +100,7 @@ public class Enemy_Controller : MonoBehaviour
     public Vector3 unstuckingCheck = Vector3.zero; // Necessary for helping the AI get unstuck from where its at
     public int surroundIndex = -1; //necessary for resetting surrounding spots after leaving surround state
 
-    public List<Vector3> movementQueue;
+    public List<Vector3> movementQueue = new List<Vector3>();
 
     //time for enemy to decide next action after reaching edge of chase distance
     public float decisionTime = 1f; 
@@ -360,7 +360,7 @@ public class Enemy_Controller : MonoBehaviour
                     }
 
                     // if they dont have a path generate one
-                    if (!(GetComponent<CharacterStats>().isDying) && movementQueue != null && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
+                    if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
                         movementQueue = ai.determineSurroundSpot(transform);
                         if (movementQueue.Count == 0) {
                             EnemyMotion = MotionState.Relocating;
@@ -485,7 +485,14 @@ public class Enemy_Controller : MonoBehaviour
                 }
             }
         }
-        Log(currentAttack.name);
+        if (currentAttack == null)
+        {
+            ai.attackingEnemy = null;
+            EnemyAttack = AttackState.NotAttacking;
+        } else {
+            Log(currentAttack.name);
+        }
+        
     }
 
     private void attackTarget()
@@ -624,7 +631,7 @@ public class Enemy_Controller : MonoBehaviour
 
             // - - - > Below uses multiple spherecasts rather than just a raycast to give the enemy's attack a hit area to make it resemble a swipe over a jab
             // Attack detection starts after windup
-            if (attackTimer > 0.75f)
+            if (attackTimer > 0.75f && attackTimer < 1f)
             {
                 foreach (Transform originPoint in rightSwipeOriginPoints) {
                     Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
@@ -658,7 +665,7 @@ public class Enemy_Controller : MonoBehaviour
 
             // - - - > Below uses multiple spherecasts rather than just a raycast to give the enemy's attack a hit area to make it resemble a swipe over a jab
             // Attack detection starts after windup
-            if (attackTimer > 2.25f)
+            if (attackTimer > 2.25f && attackTimer < 2.5f)
             {
                 foreach (Transform originPoint in leftSwipeOriginPoints) {
                     Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
