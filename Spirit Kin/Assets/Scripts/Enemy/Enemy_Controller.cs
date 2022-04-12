@@ -633,6 +633,7 @@ public class Enemy_Controller : MonoBehaviour
             // Attack detection starts after windup
             if (attackTimer > 0.75f && attackTimer < 1f)
             {
+                rightSwipeTrail.SetActive(true);
                 foreach (Transform originPoint in rightSwipeOriginPoints) {
                     Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
                     if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
@@ -648,6 +649,8 @@ public class Enemy_Controller : MonoBehaviour
         }
         else if (attackTimer < 3.0f)
         {
+            rightSwipeTrail.SetActive(false);
+            leftSwipeTrail.SetActive(true);
             if (!left && hasHitPlayer) hasHitPlayer = false; // Reset hitcheck in case the prior swipe hit
             left = true;
             right = false;
@@ -682,7 +685,7 @@ public class Enemy_Controller : MonoBehaviour
 
             
         }
-        else if (attackTimer > 3.0f)
+        else if (attackTimer >= 3.0f)
         {
             
             rightSwipeTrail.SetActive(false);
