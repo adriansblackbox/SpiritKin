@@ -62,11 +62,13 @@ public class Enemy_Controller : MonoBehaviour
     public float durationOfCharge = 0.5f;
     [Tooltip("Determines Length of Charge")]
     public float chargeLength = 20f;
+    public float durationOfLunge = 0.25f;
     public float lungeLength = 7.5f;
     private Vector3 dirVec;
     Vector3 startPosition = Vector3.zero;
     Vector3 endPosition = Vector3.zero;
     float timeCharging = 0;
+    float timeLunging = 0;
 
     public Transform[] rightSwipeOriginPoints;
     public Transform[] leftSwipeOriginPoints;
@@ -591,6 +593,8 @@ public class Enemy_Controller : MonoBehaviour
         startPosition = transform.position;
         endPosition = transform.position + (dirVec.normalized * lungeLength);
         endPosition.y = transform.position.y;
+        timeLunging = 0;
+        transform.LookAt(player.transform.position); //this should LERP not happen instantly
     }
 
     //Wide swiping arc to punish player for trying to kite enemies
@@ -629,21 +633,12 @@ public class Enemy_Controller : MonoBehaviour
             left = false;
             leftSwipeTrail.SetActive(false);
 
-            // if(Physics.Raycast(rightSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
-            //     if(!hitcheck){
-            //         player.GetComponent<CharacterStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
-            //         hitcheck = true;
-            //         Log("Left swipe damaged player!");
-            //     }
-            //     Log("Left swipe hit player!");
-            // }
-
-            // - - - > Below uses multiple spherecasts rather than just a raycast to give the enemy's attack a hit area to make it resemble a swipe over a jab
             // Attack detection starts after windup
             if (attackTimer > 0.75f && attackTimer < 1f)
             {
                 //lunge motion
-                
+                timeLunging += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);
 
                 //hit detection of swipe
                 rightSwipeTrail.SetActive(true);
@@ -667,22 +662,13 @@ public class Enemy_Controller : MonoBehaviour
             left = true;
             right = false;
             rightSwipeTrail.SetActive(false);
-            
-            // if(Physics.Raycast(leftSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
-            //     if(!hitcheck){
-            //         player.GetComponent<CharacterStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
-            //         hitcheck = true;
-            //         Log("Right swipe damaged player!");
-            //     }
-            //     Log("Right swipe hit player!");
-            // }
 
-            // - - - > Below uses multiple spherecasts rather than just a raycast to give the enemy's attack a hit area to make it resemble a swipe over a jab
             // Attack detection starts after windup
             if (attackTimer > 2.25f && attackTimer < 2.5f)
             {
                 //lunge motion
-                
+                timeLunging += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);                
 
                 //hit detection of swipe
                 leftSwipeTrail.SetActive(true);
