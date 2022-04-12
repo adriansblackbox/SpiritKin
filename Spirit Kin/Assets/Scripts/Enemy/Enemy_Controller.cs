@@ -627,7 +627,6 @@ public class Enemy_Controller : MonoBehaviour
             if (!right) generateLungePath();
             right = true;
             left = false;
-            rightSwipeTrail.SetActive(true);
             leftSwipeTrail.SetActive(false);
 
             // if(Physics.Raycast(rightSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
@@ -647,6 +646,7 @@ public class Enemy_Controller : MonoBehaviour
                 
 
                 //hit detection of swipe
+                rightSwipeTrail.SetActive(true);
                 foreach (Transform originPoint in rightSwipeOriginPoints) {
                     Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
                     if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
@@ -667,7 +667,6 @@ public class Enemy_Controller : MonoBehaviour
             left = true;
             right = false;
             rightSwipeTrail.SetActive(false);
-            leftSwipeTrail.SetActive(true);
             
             // if(Physics.Raycast(leftSwipeTrail.transform.position, player.transform.position, out hit, 40.0f) && hit.collider.gameObject.tag == "Player") {
             //     if(!hitcheck){
@@ -686,6 +685,7 @@ public class Enemy_Controller : MonoBehaviour
                 
 
                 //hit detection of swipe
+                leftSwipeTrail.SetActive(true);
                 foreach (Transform originPoint in leftSwipeOriginPoints) {
                     Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
                     if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
@@ -701,7 +701,7 @@ public class Enemy_Controller : MonoBehaviour
 
             
         }
-        else if (attackTimer > 3.0f)
+        else if (attackTimer >= 3.0f)
         {
             
             rightSwipeTrail.SetActive(false);
