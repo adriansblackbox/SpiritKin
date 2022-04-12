@@ -47,8 +47,8 @@ public class Enemy_Controller : MonoBehaviour
     }
     [Header("Animation")]
     public Animator enemyAnimator;
-    public bool right;
-    public bool left;
+    public bool right = false;
+    public bool left = false;
 
     [Header("Attacks")]
     public Enemy_Attack currentAttack;
@@ -62,6 +62,7 @@ public class Enemy_Controller : MonoBehaviour
     public float durationOfCharge = 0.5f;
     [Tooltip("Determines Length of Charge")]
     public float chargeLength = 20f;
+    public float lungeLength = 7.5f;
     private Vector3 dirVec;
     Vector3 startPosition = Vector3.zero;
     Vector3 endPosition = Vector3.zero;
@@ -584,6 +585,14 @@ public class Enemy_Controller : MonoBehaviour
         endPosition.y = transform.position.y;
     }
 
+    private void generateLungePath()
+    {
+        dirVec = player.transform.position - transform.position;
+        startPosition = transform.position;
+        endPosition = transform.position + (dirVec.normalized * lungeLength);
+        endPosition.y = transform.position.y;
+    }
+
     //Wide swiping arc to punish player for trying to kite enemies
         //compared to the direct and straight pathing of the charge
     
@@ -615,6 +624,7 @@ public class Enemy_Controller : MonoBehaviour
         RaycastHit hit;
         if (attackTimer < 1.5f)
         {
+            if (!right) generateLungePath();
             right = true;
             left = false;
             rightSwipeTrail.SetActive(true);
@@ -633,6 +643,10 @@ public class Enemy_Controller : MonoBehaviour
             // Attack detection starts after windup
             if (attackTimer > 0.75f && attackTimer < 1f)
             {
+                //lunge motion
+                
+
+                //hit detection of swipe
                 foreach (Transform originPoint in rightSwipeOriginPoints) {
                     Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
                     if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
@@ -649,6 +663,7 @@ public class Enemy_Controller : MonoBehaviour
         else if (attackTimer < 3.0f)
         {
             if (!left && hasHitPlayer) hasHitPlayer = false; // Reset hitcheck in case the prior swipe hit
+            if (!left) generateLungePath();
             left = true;
             right = false;
             rightSwipeTrail.SetActive(false);
@@ -667,6 +682,10 @@ public class Enemy_Controller : MonoBehaviour
             // Attack detection starts after windup
             if (attackTimer > 2.25f && attackTimer < 2.5f)
             {
+                //lunge motion
+                
+
+                //hit detection of swipe
                 foreach (Transform originPoint in leftSwipeOriginPoints) {
                     Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
                     if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
