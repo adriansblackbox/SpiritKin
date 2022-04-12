@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] public float WalkSpeed = 2.0f;
     [SerializeField] public float SprintSpeed = 5.0f;
+    [SerializeField] public float DashSpeed = 20f;
     [SerializeField] private float RotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
@@ -27,9 +28,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float targetSpeed;
     [HideInInspector] public float speed;
     [HideInInspector] public string State;
-    private int attackNum;
+    public GameObject[] DashInvisibleObjects;
     private float input_x, input_y;
-    private bool X_Pressed, Y_Pressed, A_Pressed;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
     public float Gravity = -30f;
@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 	private GameObject mainCamera;
     
+    public Transform[] A1RayCast, A2RayCast, A3RayCast, A4RayCast, A5RayCast;
 
     void Start()
     {
@@ -51,62 +52,57 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         PlayerInput();
-        AnimatorParameters();
         RotateCamera();
+        // If the player is in the move tree state machine, allow ilde movement.
+        // else, base movement off of attack when attack allows movement
         if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash)
             Movement();
-        /*
-        switch (State){
-           case "Idle":
-                Movement();
-                break;
-            case "Attack":
-                break;
-            case "Dash Attack":
-                break;
-            case "Dodge":
-                break;
-            case "Special Attack":
-                break;
-            case "Death":
-                break;
-        }
-        */
+        else if(animator.GetBool("Attack Movement"))
+            AttackMovement();
+        else if(animator.GetBool("Dash Movement"))
+            DashMovement();
     }
+    //===========================================================
+    // Input getter
+    //===========================================================
     private void PlayerInput(){
         input_x = Input.GetAxis("Horizontal");
         input_y = Input.GetAxis("Vertical");
-        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0))
-            X_Pressed = true;
-        //if(Input.GetButtonDown("Y Button"))
-        //    Y_Pressed = true;
-        if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space))
-            A_Pressed = true;
-    }
-    private void AnimatorParameters(){
         animator.SetFloat("X Direction Input", Mathf.Abs(input_x));
         animator.SetFloat("Z Direction Input", Mathf.Abs(input_y));
-        animator.SetBool("X Pressed", X_Pressed);
-        //animator.SetBool("Y Pressed", Y_Pressed);
-        animator.SetBool("A Pressed", A_Pressed);
+        if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0))
+            animator.SetBool("X Pressed", true);
+        //if(Input.GetButtonDown("Y Button"))
+        //   animator.SetBool("Y Pressed", true);
+        if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space))
+            animator.SetBool("A Pressed", true);
     }
-    // Parameter changing functions that Kin's state machine uses
+    //===========================================================
+    // Animation events and triggers
     //===========================================================
     private void AttackStart(){
         // Set Animator Param
-        X_Pressed = false;
-        //Y_Pressed = false;
-        A_Pressed = false;
+        animator.SetBool("Dash End", false);
+        animator.SetBool("A Pressed", false);
+        animator.SetBool("X Pressed", false);
+        animator.SetBool("A Pressed", false);
+        animator.SetBool("Attack Movement", false);
         animator.SetBool("Attack Cancel", false);
         animator.SetBool("Move Cancel", false);
         animator.SetBool("Combo Reset", false);
         animator.SetBool("Attack End", false);
-        // Movement Prep
-        if(Mathf.Abs(input_x) > 0 || Mathf.Abs(input_y) > 0){
-            targetRotation = Mathf.Atan2(input_x, input_y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-            targetMoveDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
-            transform.GetChild(0).gameObject.transform.forward = targetMoveDirection;
-        }
+    }
+    private void DashStart(){
+        // Set Animator Param
+        animator.SetBool("Dash End", false);
+        animator.SetBool("A Pressed", false);
+        animator.SetBool("X Pressed", false);
+        animator.SetBool("A Pressed", false);
+        animator.SetBool("Attack Movement", false);
+        animator.SetBool("Attack Cancel", false);
+        animator.SetBool("Move Cancel", false);
+        animator.SetBool("Combo Reset", false);
+        animator.SetBool("Attack End", false);
     }
     private void SetAttackCancelTrue(){
         animator.SetBool("Attack Cancel", true);
@@ -118,49 +114,124 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Combo Reset", true);   
     }
     public void EnableHitRay(){
-        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().EnableHitRay();
+        string attackName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+        SwordCollision swordScript = FindObjectOfType<SwordCollision>();
+        switch(attackName){
+            case "Attack 1":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+            case "Attack 2":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+            case "Attack 3":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+            case "Attack 4":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+            case "Attack 5":
+                swordScript.AttackOriginPoints = A1RayCast;
+            break;
+        }
+        swordScript.immuneEnemies.Clear();
+        swordScript.RaycastOn = true;
+
     }
     public void DisableHitRay(){
-        GetComponent<CurseMeter>().ActiveSword.GetComponent<SwordCollision>().DisableHitRay();
+        SwordCollision swordScript = FindObjectOfType<SwordCollision>();
+        swordScript.RaycastOn = false;
     }
     private void AttackEnd(){
         speed = 0.0f;
         animator.SetBool("Attack End", true);
     }
-    private void SetDashAttackTrue(){
-        
-    }
     private void StartAttackMovement(){
-        StartCoroutine(AttackOneMovement());
+        animator.SetBool("Attack Movement", true);
     }
-    private IEnumerator AttackOneMovement(){
-        float attackOneSpeed = 20f;
-        float attackOneTime = 0.5f;
-        for(float t = 0.0f; t < attackOneTime; t += Time.deltaTime){
-            //attackOneSpeed = Mathf.Lerp(attackOneSpeed, 0.0f, Time.deltaTime*10f);
-            Vector2 inputVector = new Vector2(input_x, input_y);
-            controller.Move(transform.GetChild(0).gameObject.transform.forward * (inputVector.normalized.magnitude * attackOneSpeed) * Time.deltaTime);
-            if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash)
-                break;
-            yield return null;
+    private void SetDashAttackTrue(){
+        animator.SetBool("Dash Attack", true);
+    }
+    private void StartDashMovement(){
+        animator.SetBool("Dash Movement", true);
+    }
+    private void DashEnd(){
+        animator.SetBool("Dash End", true);
+        animator.SetBool("Dash Movement", false);
+        speed = 0.0f;
+    }
+    //====================================================
+    // Attack/Dash movment logic, effects, sounds, and execution
+    //====================================================
+    private void DashMovement(){
+        moveDirection = transform.GetChild(0).transform.forward.normalized;
+        speed = DashSpeed;
+        controller.Move(moveDirection * speed * Time.deltaTime);
+    }
+
+    private void DashInvisiblityOn(){
+        for(int i = 0; i < DashInvisibleObjects.Length; i++){
+            DashInvisibleObjects[i].SetActive(false);
         }
-        yield return null;
     }
-    //===========================================================
-    /*
-    private void Attack(){
-        moveDirection =  transform.GetChild(0).gameObject.transform.forward;
+    private void DashInvisiblityOff(){
+        for(int i = 0; i < DashInvisibleObjects.Length; i++){
+            DashInvisibleObjects[i].SetActive(true);
+        }
+    }
+    
+    private void AttackMovement(){
+        //Debug.Log(animator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
+        string attackName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+        switch(attackName){
+            case "Attack 1":
+                AttackOneMovement();
+            break;
+            case "Attack 2":
+            break;
+            case "Attack 3":
+            break;
+            case "Attack 4":
+            break;
+            case "Attack 5":
+            break;
+        }
+    }
+    private void AttackOneMovement(){
+        inputDirection = new Vector2(input_x, input_y);
+        if(inputDirection != Vector2.zero)
+            speed = Mathf.Clamp(speed, 2f, float.MaxValue);
+        else
+            speed = 0f;
+        speed = Mathf.Lerp(speed, WalkSpeed/2f, Time.deltaTime * 20f);
+        inputDirection.Normalize();
+        if (inputDirection != Vector2.zero){
+            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+            float rotationSpeed = RotationSmoothTime * 100f;
+            float rotation = Mathf.SmoothDampAngle(transform.GetChild(0).transform.eulerAngles.y, targetRotation, ref rotationVelocity, rotationSpeed);
+            // rotate to face input direction relative to camera position
+            transform.GetChild(0).transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+        }
+        moveDirection = transform.GetChild(0).gameObject.transform.forward;
         moveDirection.y = Gravity;
-        moveDirection = moveDirection.normalized * (10f * GetComponent<PlayerStats>().speed.GetValue());
+        moveDirection = moveDirection.normalized * (speed * GetComponent<PlayerStats>().speed.GetValue());
         controller.Move(moveDirection * Time.deltaTime);
     }
-    */
+    private void AttackTwoMovement(){
+        
+    }
+    private void AttackThreeMovement(){
+        
+    }
+    private void AttackFourMovement(){
+        
+    }
+    private void AttackFiveMovement(){
+        
+    }
+    //===========================================================
+    // Idle movement, and camera rotation
+    //===========================================================
     private void Movement(){
-        // Clears any state changes
-        //=============================
-        attackNum = 0;
-        animator.SetInteger("attackTicks", attackNum);
-        //==============================
         inputDirection = new Vector2(input_x, input_y);
         if(Input.GetKey(KeyCode.LeftShift) || Input.GetAxisRaw("Right Trigger") > 0.1){
             targetSpeed = SprintSpeed * inputDirection.magnitude;
@@ -231,4 +302,5 @@ public class PlayerController : MonoBehaviour
         if (lfAngle > 360f) lfAngle -= 360f;
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
+    //===========================================================
 }
