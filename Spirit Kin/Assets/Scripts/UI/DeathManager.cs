@@ -29,4 +29,7 @@ public class DeathManager : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+    
+
+
 }
