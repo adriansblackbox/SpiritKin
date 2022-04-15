@@ -147,6 +147,7 @@ public class Enemy_Controller : MonoBehaviour
 
 ///////////////////////////////////////////////// SPHERECASTING
     [Header("Spherecasting")]
+    public Transform[] visionFanOrigins;
     public float raycastRadius;
     public float targetDetectionRange;
 
@@ -594,7 +595,8 @@ public class Enemy_Controller : MonoBehaviour
         endPosition = transform.position + (dirVec.normalized * lungeLength);
         endPosition.y = transform.position.y;
         timeLunging = 0;
-        transform.LookAt(player.transform.position); //this should LERP not happen instantly
+        // Note - to lerp, we need a bit more time than in a function
+        //transform.LookAt(player.transform.position); //this should LERP not happen instantly
     }
 
     //Wide swiping arc to punish player for trying to kite enemies
@@ -654,6 +656,10 @@ public class Enemy_Controller : MonoBehaviour
                     }
                 }
             }
+            else 
+            {
+                // Look lerp logic here
+            }
         }
         else if (attackTimer < 3.0f)
         {
@@ -684,8 +690,11 @@ public class Enemy_Controller : MonoBehaviour
                     }
                 }
             }
-
-            
+            else 
+            {
+                // Look lerp logic here
+                // Note: LookAt(player) logic doesnt quite work here.
+            }
         }
         else if (attackTimer >= 3.0f)
         {
@@ -880,26 +889,28 @@ public class Enemy_Controller : MonoBehaviour
 /////////////////////////////////////////////////SPHERECASTING
     private void checkForPlayer()
     {
-        hasDetectedPlayer = Physics.SphereCast(transform.position, raycastRadius, transform.forward, out hitInfo, targetDetectionRange);
-
-        if (hasDetectedPlayer)
+        foreach (Transform originPoint in rightSwipeOriginPoints) 
         {
-            if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
+            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange, Color.red);
+            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hitInfo, targetDetectionRange, swipeLayerMask))
             {
-                Log("Player Detected!");
-                ThisEnemy.ResetPath();
-                EnemyMotion = MotionState.Alerted;
-                justAlerted = true;
-            }
-            else if (hitInfo.transform.CompareTag("Player") && EnemyMotion == MotionState.Seeking)
-            {
-                Log("Player Detected & Chasing after Seeking!");
-                ThisEnemy.ResetPath();
-                EnemyMotion = MotionState.Chasing;
-            }
-            else if (!hitInfo.transform.CompareTag("Player"))
-            {
-                hasDetectedPlayer = false;
+                if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
+                {
+                    Log("Player Detected!");
+                    ThisEnemy.ResetPath();
+                    EnemyMotion = MotionState.Alerted;
+                    justAlerted = true;
+                }
+                else if (hitInfo.transform.CompareTag("Player") && EnemyMotion == MotionState.Seeking)
+                {
+                    Log("Player Detected & Chasing after Seeking!");
+                    ThisEnemy.ResetPath();
+                    EnemyMotion = MotionState.Chasing;
+                }
+                else if (!hitInfo.transform.CompareTag("Player"))
+                {
+                    hasDetectedPlayer = false;
+                }
             }
         }
     }
