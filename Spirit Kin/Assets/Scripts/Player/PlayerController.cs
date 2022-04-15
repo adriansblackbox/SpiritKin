@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float WalkSpeed = 2.0f;
     [SerializeField] public float SprintSpeed = 5.0f;
     [SerializeField] public float DashSpeed = 20f;
+    [SerializeField] public float AttackDelay = 0.5f;
     [SerializeField] private float RotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         State = "Idle";
+        animator.SetFloat("Attack Number", 1);
     }
     void Update()
     {
@@ -75,7 +77,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("X Pressed", true);
         //if(Input.GetButtonDown("Y Button"))
         //   animator.SetBool("Y Pressed", true);
-        if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space) && !animator.GetBool("Dash Movement"))
             animator.SetBool("A Pressed", true);
     }
     //===========================================================
@@ -110,6 +112,7 @@ public class PlayerController : MonoBehaviour
     }
     private void SetMoveCancelTrue(){
         animator.SetBool("Move Cancel", true);
+        animator.SetFloat("Attack Delay", AttackDelay);
     }
     private void SetComboResetTrue(){
         animator.SetBool("Combo Reset", true);   
@@ -119,24 +122,38 @@ public class PlayerController : MonoBehaviour
         SwordCollision swordScript = FindObjectOfType<SwordCollision>();
         switch(attackName){
             case "Attack 1":
+                // sets attack num to the next attack for delay 
+                animator.SetInteger("Attack Number", 2);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[0].Play();
+                //sound play
             break;
             case "Attack 2":
+                animator.SetInteger("Attack Number", 3);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[1].Play();
+                //sound play
             break;
             case "Attack 3":
+                animator.SetInteger("Attack Number", 4);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[2].Play();
+                //sound play
             break;
             case "Attack 4":
+                animator.SetInteger("Attack Number", 5);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[3].Play();
+                //sound play
             break;
             case "Attack 5":
+                animator.SetInteger("Attack Number", 1);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[4].Play();
+                //sound play
+            break;
+             case "Dash Attack":
+                animator.SetFloat("Attack Number", 1);
             break;
         }
         swordScript.immuneEnemies.Clear();
@@ -159,10 +176,14 @@ public class PlayerController : MonoBehaviour
     }
     private void StartDashMovement(){
         animator.SetBool("Dash Movement", true);
+        // resets attack delay in the case that the player dashes before the delay window closes
+        animator.SetFloat("Attack Delay", 0);
+        animator.SetInteger("Attack Number", 1);
     }
     private void DashEnd(){
         animator.SetBool("Dash End", true);
         animator.SetBool("Dash Movement", false);
+        animator.SetFloat("Dash Cooldown", 0.2f);
         speed = 0.0f;
     }
     //====================================================
@@ -238,6 +259,7 @@ public class PlayerController : MonoBehaviour
     // Idle movement, and camera rotation
     //===========================================================
     private void Movement(){
+        animatorParamReset();
         inputDirection = new Vector2(input_x, input_y);
         if(Input.GetKey(KeyCode.LeftShift) || Input.GetAxisRaw("Right Trigger") > 0.1){
             targetSpeed = SprintSpeed * inputDirection.magnitude;
@@ -285,6 +307,21 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("MotionSpeed", inputDirection.magnitude);
         }else{
             animator.SetFloat("MotionSpeed", 1f);
+        }
+    }
+    private void animatorParamReset() {
+        // Prevents any movement from attacks from happening
+        if(animator.GetBool("Attack Movement")) {
+            animator.SetBool("Attack Movement", false);
+        }
+        // Delays attack sequence
+        if(animator.GetFloat("Attack Delay") > 0) {
+            animator.SetFloat("Attack Delay", animator.GetFloat("Attack Delay") - Time.deltaTime);
+        } else if (animator.GetInteger("Attack Number") != 1) {
+            animator.SetInteger("Attack Number", 1);
+        }
+        if (animator.GetFloat("Dash Cooldown") >= 0) {
+            animator.SetFloat("Dash Cooldown", animator.GetFloat("Dash Cooldown") - Time.deltaTime);
         }
     }
     private void RotateCamera(){
