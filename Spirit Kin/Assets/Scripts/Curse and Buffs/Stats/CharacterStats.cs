@@ -71,7 +71,7 @@ public class CharacterStats : MonoBehaviour
             player.GetComponent<PlayerStats>().coins += coins;
             player.GetComponent<CurseMeter>().curseMeter += (float)coins / player.GetComponent<CurseMeter>().fillRate;
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
-            Destroy(this.gameObject);
+            Destroy(this.gameObject, 0.025f);
         }
         if (this.gameObject.tag == "Player"){
             StartCoroutine(PlayerDeath(this.gameObject));

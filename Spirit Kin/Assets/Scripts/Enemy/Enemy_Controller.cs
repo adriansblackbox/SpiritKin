@@ -45,6 +45,11 @@ public class Enemy_Controller : MonoBehaviour
         NotAttacking,
         Waiting
     }
+    [Header("Animation")]
+    public Animator enemyAnimator;
+    public bool right = false;
+    public bool left = false;
+
     [Header("Attacks")]
     public Enemy_Attack currentAttack;
     public Enemy_Attack[] enemyAttacks;
@@ -57,11 +62,20 @@ public class Enemy_Controller : MonoBehaviour
     public float durationOfCharge = 0.5f;
     [Tooltip("Determines Length of Charge")]
     public float chargeLength = 20f;
+    public float durationOfLunge = 0.25f;
+    public float lungeLength = 7.5f;
     private Vector3 dirVec;
     Vector3 startPosition = Vector3.zero;
     Vector3 endPosition = Vector3.zero;
     float timeCharging = 0;
-    
+    float timeLunging = 0;
+
+    public Transform[] rightSwipeOriginPoints;
+    public Transform[] leftSwipeOriginPoints;
+    public LayerMask swipeLayerMask;
+
+    public GameObject leftSwipeTrail;
+    public GameObject rightSwipeTrail;    
 
     [Header("States")]
 
@@ -89,7 +103,7 @@ public class Enemy_Controller : MonoBehaviour
     public Vector3 unstuckingCheck = Vector3.zero; // Necessary for helping the AI get unstuck from where its at
     public int surroundIndex = -1; //necessary for resetting surrounding spots after leaving surround state
 
-    public List<Vector3> movementQueue;
+    public List<Vector3> movementQueue = new List<Vector3>();
 
     //time for enemy to decide next action after reaching edge of chase distance
     public float decisionTime = 1f; 
@@ -124,22 +138,23 @@ public class Enemy_Controller : MonoBehaviour
 
     #endregion
 
-//////////////////////////////////////////////////NAVMESH
-
+////////////////////////////////////////////////// NAVMESH
+    [Header("Navmesh")]
     public NavMeshAgent ThisEnemy;
     public NavMeshPath path;
     public GameObject player;
     public GameObject alertBox;
 
-/////////////////////////////////////////////////SPHERECASTING
+///////////////////////////////////////////////// SPHERECASTING
     [Header("Spherecasting")]
+    public Transform[] visionFanOrigins;
     public float raycastRadius;
     public float targetDetectionRange;
 
     private RaycastHit hitInfo;
     private bool hasDetectedPlayer = false;
 
-/////////////////////////////////////////////////STATE BOX FOR TESTING
+///////////////////////////////////////////////// STATE BOX FOR TESTING
     [Header("Debugging")]
     public bool showLogs = true;
 
@@ -171,6 +186,10 @@ public class Enemy_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //This is done in the functions, but might be better to do it here
+        enemyAnimator.SetBool("Right", right);
+        enemyAnimator.SetBool("Left", left);
 
         //spherecast to check for player
         checkForPlayer();
@@ -270,10 +289,10 @@ public class Enemy_Controller : MonoBehaviour
                     {
                         ThisEnemy.ResetPath();
                         justAlerted = false;
-                        StartCoroutine(decideAlertedAction());
+                        // StartCoroutine(decideAlertedAction());
                     }
                     break;
-                case MotionState.Seeking:
+                /* case MotionState.Seeking:
                     if (exitedArena)
                     {
                         ThisEnemy.ResetPath();
@@ -291,7 +310,7 @@ public class Enemy_Controller : MonoBehaviour
                     if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                         ThisEnemy.SetDestination(player.transform.position);
                     }
-                    break;
+                    break; */
                 case MotionState.Chasing:
                     if (exitedArena)
                     {
@@ -303,7 +322,7 @@ public class Enemy_Controller : MonoBehaviour
                     //set speed to faster
                     ThisEnemy.speed = chaseSpeed;
                     ThisEnemy.stoppingDistance = 10;
-                    StopCoroutine(decideAlertedAction());
+                    //StopCoroutine(decideAlertedAction());
 
                     //if the player is inside breakDist swap to surrounding
                     if (Vector3.Distance(player.transform.position, transform.position) < breakDist - 1f)
@@ -430,27 +449,57 @@ public class Enemy_Controller : MonoBehaviour
     {
         //starter implementation
             //set charge attack to be the current attack
-        currentAttack = enemyAttacks[0];
-        Log(currentAttack.name);
+        // currentAttack = enemyAttacks[0];
         ai.enemiesReadyToAttack.Remove(gameObject);
 
-        // if (currentAttack.name == "Charge")
-        // {
-        //     //setup all of the values needed for the charge
-        //     dirVec = player.transform.position - transform.position;
-        //     timeCharging = 0;
-        //     startPosition = transform.position;
-        //     endPosition = player.transform.position + dirVec;
-        //     endPosition.y = transform.position.y;
-        // }
+        Vector3 dirToPlayer = player.transform.position - transform.position;
+        float viewingAngleToPlayer = Vector3.Angle(dirToPlayer, transform.forward);
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        //full implementation vvv
-            //get direction
-            //get viewing angle
-            //get distance
+        int maxPriority = 0; //the total value of all priorities from attacks that can be used
 
-            //loop through attacks and consider attacks which are within the distance + viewing angle
-                //select one randomly using attackPriority
+        //loop through attacks and consider attacks which are within the distance + viewing angle
+            //select one randomly using attackPriority
+        for (int i = 0; i < enemyAttacks.Length; i++)
+        {
+            if (distanceToPlayer > enemyAttacks[i].minimumAttackRange && distanceToPlayer < enemyAttacks[i].maximumAttackRange)
+            {
+                if (viewingAngleToPlayer > enemyAttacks[i].minimumAttackAngle && viewingAngleToPlayer < enemyAttacks[i].maximumAttackAngle)
+                {
+                    maxPriority += enemyAttacks[i].attackPriority;
+                }
+            }
+        }
+
+        int rand = Random.Range(0, maxPriority);
+        int tempPriority = 0;
+
+        for (int i = 0; i < enemyAttacks.Length; i++)
+        {
+            if (distanceToPlayer > enemyAttacks[i].minimumAttackRange && distanceToPlayer < enemyAttacks[i].maximumAttackRange)
+            {
+                if (viewingAngleToPlayer > enemyAttacks[i].minimumAttackAngle && viewingAngleToPlayer < enemyAttacks[i].maximumAttackAngle)
+                {
+                    if (currentAttack != null)
+                        return;
+                    
+                    tempPriority += enemyAttacks[i].attackPriority;
+
+                    if (tempPriority > rand)
+                    {
+                        currentAttack = enemyAttacks[i];
+                    }
+                }
+            }
+        }
+        if (currentAttack == null)
+        {
+            ai.attackingEnemy = null;
+            EnemyAttack = AttackState.NotAttacking;
+        } else {
+            Log(currentAttack.name);
+        }
+        
     }
 
     private void attackTarget()
@@ -468,6 +517,8 @@ public class Enemy_Controller : MonoBehaviour
             } 
             else if (currentAttack.name == "Swipe")
             {
+                //play the animation
+                    //while animation is going move enemy forward + activate raycast for hitting player
                 swipeAttack();
                 Log("Swipe Attack");
             }
@@ -518,6 +569,7 @@ public class Enemy_Controller : MonoBehaviour
                 }
             }
 
+            //exit case
             if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) {
                 alertBox.SetActive(false);
                 EnemyAttack = AttackState.NotAttacking;
@@ -540,6 +592,127 @@ public class Enemy_Controller : MonoBehaviour
         endPosition.y = transform.position.y;
     }
 
+    private void generateLungePath()
+    {
+        dirVec = player.transform.position - transform.position;
+        startPosition = transform.position;
+        endPosition = transform.position + (dirVec.normalized * lungeLength);
+        endPosition.y = transform.position.y;
+        timeLunging = 0;
+        // Note - to lerp, we need a bit more time than in a function
+        //transform.LookAt(player.transform.position); //this should LERP not happen instantly
+    }
+
+    //Wide swiping arc to punish player for trying to kite enemies
+        //compared to the direct and straight pathing of the charge
+    
+    //play animation
+        //activate a raycast out of the enemies hand/arm to detect for the player
+        //nudge enemy forward so they lunge at the player
+    //once animation is finished set recoveryTime to the current attacks recovery time
+        //when the recovery time is reached it auto calls finishAttack();
+    private void swipeAttack()
+    {
+        /*
+        //Current Implementation is lacking:
+            //a lunge with each swipe
+            //a raycast to see if the player has been hit (use hasHitPlayer bool to check if the player has been hit so it doesnt register 100 times)
+            //facing the player when swiping (sometimes it faces, but other times its off to the side or something)
+
+        //Next steps:
+            //adjust the distance the attack can be activated from
+            //adjust the amount of damage the swipes deal compared to the charge
+            //adjust the recovery time to ensure enemies dont barrage the player
+            //change implementation to swap based off of the animations finishing rather than the attackTimer
+
+        //ITS ALSO POSSIBLE THAT THE ANIMATION NEEDS TO BE TOUCHED UP TO BE A BIT QUICKER BUT FOR NOW I SET THE SPEED TO 4
+
+        //BAD IMPLEMENTATION -> GOT TO DO IT BASED OFF OF WHEN THE ANIMATIONS END
+        //GOOD ENOUGH FOR NOW
+        //right swipe then left swipe
+        */
+        RaycastHit hit;
+        if (attackTimer < 1.5f)
+        {
+            if (!right) generateLungePath();
+            right = true;
+            left = false;
+            leftSwipeTrail.SetActive(false);
+
+            // Attack detection starts after windup
+            if (attackTimer > 0.75f && attackTimer < 1f)
+            {
+                //lunge motion
+                timeLunging += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);
+
+                //hit detection of swipe
+                rightSwipeTrail.SetActive(true);
+                foreach (Transform originPoint in rightSwipeOriginPoints) {
+                    Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
+                    if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
+                    {
+                        if (!hasHitPlayer) {
+                            hasHitPlayer = true;
+                            Log("Hit the Player with Right Swipe Attack");
+                            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue());
+                        }
+                    }
+                }
+            }
+            else 
+            {
+                // Look lerp logic here
+            }
+        }
+        else if (attackTimer < 3.0f)
+        {
+            if (!left && hasHitPlayer) hasHitPlayer = false; // Reset hitcheck in case the prior swipe hit
+            if (!left) generateLungePath();
+            left = true;
+            right = false;
+            rightSwipeTrail.SetActive(false);
+
+            // Attack detection starts after windup
+            if (attackTimer > 2.25f && attackTimer < 2.5f)
+            {
+                //lunge motion
+                timeLunging += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);                
+
+                //hit detection of swipe
+                leftSwipeTrail.SetActive(true);
+                foreach (Transform originPoint in leftSwipeOriginPoints) {
+                    Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
+                    if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
+                    {
+                        if(!hasHitPlayer) {
+                            hasHitPlayer = true;
+                            Log("Hit the Player with Left Swipe Attack");
+                            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue());
+                        }
+                    }
+                }
+            }
+            else 
+            {
+                // Look lerp logic here
+                // Note: LookAt(player) logic doesnt quite work here.
+            }
+        }
+        else if (attackTimer >= 3.0f)
+        {
+            
+            rightSwipeTrail.SetActive(false);
+            leftSwipeTrail.SetActive(false);
+            left = false;
+            hasHitPlayer = false;
+            EnemyAttack = AttackState.NotAttacking;
+            ai.attackingEnemy = null;
+            currentRecoveryTime = currentAttack.recoveryTime;
+        }
+    }
+
     private void finishAttack()
     {
         Log("Recovered and ready to attack again");
@@ -549,17 +722,12 @@ public class Enemy_Controller : MonoBehaviour
         attackTimer = 0.0f;
         hasHitPlayer = false;
 
-        //consider resetting surroundspot
+        //reset surround spot so they dont try to run back through player
         surroundTarget = Vector3.zero;
         surroundSpot = Vector3.zero;
         ai.surroundSpotAvailability[surroundIndex] = true;
         surroundIndex = -1;
         nextSpot = Vector3.zero;
-    }
-
-    private void swipeAttack()
-    {
-        
     }
 
     #endregion
@@ -660,7 +828,7 @@ public class Enemy_Controller : MonoBehaviour
         //significantly away from the enemy -> enemy returns to what it was doing
         //significatnly towards the enemy -> enemy chases player
         //if neither threshold is reached -> seek the player      
-    IEnumerator decideAlertedAction()
+    /* IEnumerator decideAlertedAction()
     {
         float delta;
         float beforeDist = 0f;
@@ -703,7 +871,7 @@ public class Enemy_Controller : MonoBehaviour
             EnemyMotion = MotionState.Seeking;
             Log("Didn't need to chase player -> Seeking after alerted");
         }
-    }
+    } */
 
     IEnumerator unstuckTimer()
     {
@@ -725,26 +893,21 @@ public class Enemy_Controller : MonoBehaviour
 /////////////////////////////////////////////////SPHERECASTING
     private void checkForPlayer()
     {
-        hasDetectedPlayer = Physics.SphereCast(transform.position, raycastRadius, transform.forward, out hitInfo, targetDetectionRange);
-
-        if (hasDetectedPlayer)
+        foreach (Transform originPoint in rightSwipeOriginPoints) 
         {
-            if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
+            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange, Color.red);
+            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hitInfo, targetDetectionRange, swipeLayerMask))
             {
-                Log("Player Detected!");
-                ThisEnemy.ResetPath();
-                EnemyMotion = MotionState.Alerted;
-                justAlerted = true;
-            }
-            else if (hitInfo.transform.CompareTag("Player") && EnemyMotion == MotionState.Seeking)
-            {
-                Log("Player Detected & Chasing after Seeking!");
-                ThisEnemy.ResetPath();
-                EnemyMotion = MotionState.Chasing;
-            }
-            else if (!hitInfo.transform.CompareTag("Player"))
-            {
-                hasDetectedPlayer = false;
+                if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
+                {
+                    Log("Player Detected!");
+                    ThisEnemy.ResetPath();
+                    EnemyMotion = MotionState.Chasing;
+                }
+                else if (!hitInfo.transform.CompareTag("Player"))
+                {
+                    hasDetectedPlayer = false;
+                }
             }
         }
     }
