@@ -286,10 +286,10 @@ public class Enemy_Controller : MonoBehaviour
                     {
                         ThisEnemy.ResetPath();
                         justAlerted = false;
-                        StartCoroutine(decideAlertedAction());
+                        // StartCoroutine(decideAlertedAction());
                     }
                     break;
-                case MotionState.Seeking:
+                /* case MotionState.Seeking:
                     if (exitedArena)
                     {
                         ThisEnemy.ResetPath();
@@ -307,7 +307,7 @@ public class Enemy_Controller : MonoBehaviour
                     if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
                         ThisEnemy.SetDestination(player.transform.position);
                     }
-                    break;
+                    break; */
                 case MotionState.Chasing:
                     if (exitedArena)
                     {
@@ -319,7 +319,7 @@ public class Enemy_Controller : MonoBehaviour
                     //set speed to faster
                     ThisEnemy.speed = chaseSpeed;
                     ThisEnemy.stoppingDistance = 10;
-                    StopCoroutine(decideAlertedAction());
+                    //StopCoroutine(decideAlertedAction());
 
                     //if the player is inside breakDist swap to surrounding
                     if (Vector3.Distance(player.transform.position, transform.position) < breakDist - 1f)
@@ -824,7 +824,7 @@ public class Enemy_Controller : MonoBehaviour
         //significantly away from the enemy -> enemy returns to what it was doing
         //significatnly towards the enemy -> enemy chases player
         //if neither threshold is reached -> seek the player      
-    IEnumerator decideAlertedAction()
+    /* IEnumerator decideAlertedAction()
     {
         float delta;
         float beforeDist = 0f;
@@ -867,7 +867,7 @@ public class Enemy_Controller : MonoBehaviour
             EnemyMotion = MotionState.Seeking;
             Log("Didn't need to chase player -> Seeking after alerted");
         }
-    }
+    } */
 
     IEnumerator unstuckTimer()
     {
@@ -897,13 +897,6 @@ public class Enemy_Controller : MonoBehaviour
                 if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
                 {
                     Log("Player Detected!");
-                    ThisEnemy.ResetPath();
-                    EnemyMotion = MotionState.Alerted;
-                    justAlerted = true;
-                }
-                else if (hitInfo.transform.CompareTag("Player") && EnemyMotion == MotionState.Seeking)
-                {
-                    Log("Player Detected & Chasing after Seeking!");
                     ThisEnemy.ResetPath();
                     EnemyMotion = MotionState.Chasing;
                 }
