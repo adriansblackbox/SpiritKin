@@ -51,6 +51,9 @@ public class CharacterStats : MonoBehaviour
         if (gameObject.tag == "Enemy" && GetComponent<Enemy_Controller>().attackTimer == 0) {
             StartCoroutine(stunEnemy());
         }
+        if(gameObject.tag == "Player") {
+            gameObject.GetComponent<PlayerController>().Stun();
+        }
     }
 
     

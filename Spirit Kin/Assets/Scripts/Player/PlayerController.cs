@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
         RotateCamera();
         // If the player is in the move tree state machine, allow ilde movement.
         // else, base movement off of attack when attack allows movement
-        if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash)
+        if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash && animator.GetLayerWeight(1) != 1)
             Movement();
         else if(animator.GetBool("Attack Movement"))
             AttackMovement();
@@ -346,4 +346,26 @@ public class PlayerController : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
     //===========================================================
+    public void Stun() {
+        animator.SetBool("Dash End", false);
+        animator.SetBool("A Pressed", false);
+        animator.SetBool("X Pressed", false);
+        animator.SetBool("A Pressed", false);
+        animator.SetBool("Attack Movement", false);
+        animator.SetBool("Attack Cancel", false);
+        animator.SetBool("Move Cancel", false);
+        animator.SetBool("Combo Reset", false);
+        animator.SetBool("Attack End", false);
+
+
+        animator.SetBool("Stunned", true);
+        animator.SetLayerWeight(1, 1);
+        animator.SetLayerWeight(0, 0);
+        AttackEnd();
+    }
+    private void StunEnd() {
+        animator.SetLayerWeight(1, 0);
+        animator.SetLayerWeight(0, 1);
+        animator.SetBool("Stunned", false);
+    }
 }

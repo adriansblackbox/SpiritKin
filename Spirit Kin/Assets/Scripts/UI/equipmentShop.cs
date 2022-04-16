@@ -52,14 +52,12 @@ public class equipmentShop : MonoBehaviour
             //disable player's script here
             Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
             Player.GetComponent<PlayerController>().enabled = false;
-            Player.GetComponent<PlayerCombat>().enabled = false;
             //disable UI
             GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
             Debug.Log(isOpen);
         }
         else if(Input.GetKeyDown(KeyCode.F) && isOpen){
             Player.GetComponent<PlayerController>().enabled = true;
-            Player.GetComponent<PlayerCombat>().enabled = true;
             GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
             Cursor.lockState = CursorLockMode.Locked;
             equipmentMenu.SetActive(false);

@@ -19,14 +19,12 @@ public class LockTarget : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera FollowCamera;
     [HideInInspector] public Transform Target = null;
     private PlayerController controller;
-    private PlayerCombat combatScript;
     private float inputX;
     private float inputY;
     private Transform playerBody;
     private Animator animator;
     private void Start() {
         controller = GetComponent<PlayerController>();
-        combatScript = GetComponent<PlayerCombat>();
         animator = GetComponent<Animator>();
         playerBody = transform.GetChild(0).gameObject.transform;
     }
