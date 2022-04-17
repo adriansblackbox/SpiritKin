@@ -61,12 +61,12 @@ public class AI_Manager : MonoBehaviour
 
     public List<GameObject> getNearbyEnemies(GameObject enemy)
     {
-        List<GameObject> enemiestoAlert = new List<GameObject>();
+        List<GameObject> enemiesToAlert = new List<GameObject>();
         for (int i = 0; i < enemiesIdling.Count; i++)
         {
-            if (Vector3.Distance(enemiesIdling[i].transform.position, enemy.position) < 60f)
+            if (Vector3.Distance(enemiesIdling[i].transform.position, enemy.transform.position) < 60f)
             {
-                enemiestoAlert.Add(enemiesIdling[i].gameObject);
+                enemiesToAlert.Add(enemiesIdling[i].gameObject);
             }
         }
         return enemiesToAlert; 
