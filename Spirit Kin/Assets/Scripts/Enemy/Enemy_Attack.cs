@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/Enemy_Action/Enemy_Attack")]
 public class Enemy_Attack : Enemy_Action
 {
+    public int attackNumber;
     public int attackPriority = 3; //higher the priority the more the attack will happen
     public float recoveryTime = 2f; //time it takes enemy to recover after an attack
 

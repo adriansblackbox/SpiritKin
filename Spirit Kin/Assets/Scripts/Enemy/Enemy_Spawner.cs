@@ -103,6 +103,7 @@ public class Enemy_Spawner : MonoBehaviour
         enemy.GetComponent<Enemy_Controller>().ai = shrineToSpawnAt.GetComponent<AI_Manager>();
         enemy.GetComponent<Enemy_Controller>().shrine = shrineToSpawnAt.transform;
         enemy.GetComponent<Enemy_Controller>().shrineSpawnRange = shrineToSpawnAt.GetComponent<Shrine>().shrineSpawnRange;
+        shrineToSpawnAt.GetComponent<AI_Manager>().enemiesIdling.Add(enemy);
         
         //put in enemy container
         enemy.transform.parent = shrineToSpawnAt.transform.GetChild(0);

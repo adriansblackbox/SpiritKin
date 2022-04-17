@@ -48,7 +48,7 @@ public class CharacterStats : MonoBehaviour
 
         currentHealth -= damage;
 
-        if (gameObject.tag == "Enemy" && GetComponent<Enemy_Controller>().attackTimer == 0) {
+        if (gameObject.tag == "Enemy") {
             StartCoroutine(stunEnemy());
         }
         if(gameObject.tag == "Player") {

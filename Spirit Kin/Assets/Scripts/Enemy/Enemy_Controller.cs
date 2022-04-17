@@ -8,10 +8,7 @@ public class Enemy_Controller : MonoBehaviour
     #region States
 
     public enum MotionState {
-        // Alerted,
         Idling,
-        // Patroling,
-        // Seeking,
         Relocating,
         Chasing,
         Surrounding,
@@ -20,22 +17,18 @@ public class Enemy_Controller : MonoBehaviour
 
     public enum AttackState {
         Attacking,
-        NotAttacking,
         Waiting
     }
     [Header("Animation")]
     public Animator enemyAnimator;
-    public bool right = false;
-    public bool left = false;
 
     [Header("Attacks")]
     public Enemy_Attack currentAttack;
     public Enemy_Attack[] enemyAttacks;
-    public float currentRecoveryTime = 0f;
     public Material enemyAttackingMat;
     public Material enemyAttackingTwoMat;    
     public BoxCollider enemyCollider;
-    public float attackTimer = 0.0f;
+    public bool hitEnabled;
     [Tooltip("Determines Speed of Charge")]
     public float durationOfCharge = 0.5f;
     [Tooltip("Determines Length of Charge")]
@@ -56,17 +49,11 @@ public class Enemy_Controller : MonoBehaviour
     public GameObject rightSwipeTrail;    
 
     [Header("States")]
-
-
     public MotionState EnemyMotion;
     public AttackState EnemyAttack;
 
     public bool stunned = false;
     private bool stunnedLastFrame = false;
-
-    public float patrolToIdleChance = 0.4f;
-    public float idleToPatrolChance = 0.15f;
-    public float swapStateInterval = 12f;
     public float shrineSpawnRange = 200f;
 
     #endregion
@@ -83,8 +70,6 @@ public class Enemy_Controller : MonoBehaviour
 
     public List<Vector3> movementQueue = new List<Vector3>();
 
-    //time for enemy to decide next action after reaching edge of chase distance
-    public float decisionTime = 1f; 
 
     private float myTime = 0.0f;
     private Vector3 startOfPath;
@@ -92,16 +77,13 @@ public class Enemy_Controller : MonoBehaviour
     public Transform shrine;
 
     [SerializeField] int quadrant;
-    private int timesPatroled;
     public AI_Manager ai;
     public Enemy_Spawner es;
-
-    public int numTimesCheckIfNeedChase = 4;
 
     //check if enemy has left arena
     public bool exitedArena;
 
-    public float seekSpeed;
+    public float surroundSpeed;
     public float chaseSpeed;
 
     [Tooltip("Distance for enemy to break out of surrounding")]
@@ -154,10 +136,6 @@ public class Enemy_Controller : MonoBehaviour
     void Update()
     {
 
-        //This is done in the functions, but might be better to do it here
-        // enemyAnimator.SetBool("Right", right);
-        // enemyAnimator.SetBool("Left", left);
-
         //spherecast to check for player
         checkForPlayer();
         myTime += Time.deltaTime;
@@ -166,17 +144,10 @@ public class Enemy_Controller : MonoBehaviour
         switch (EnemyAttack)
         {
             case AttackState.Attacking:
-                attackTimer += Time.deltaTime;
-                if (currentRecoveryTime <= 0 && !stunned) //ready to attack
-                    attackTarget();
-                break;
-            case AttackState.NotAttacking:
-                handleRecovery();
+                attackPlayer();
                 break;
             case AttackState.Waiting:
                 Log("Waiting to attack");
-                break;
-            default:
                 break;
         }
 
@@ -186,13 +157,14 @@ public class Enemy_Controller : MonoBehaviour
             {
                 stunnedLastFrame = false;
                 alertBox.SetActive(false);
-                if (EnemyAttack != AttackState.Attacking && attackTimer == 0) {
-                    EnemyMotion = MotionState.Chasing;
+                if (EnemyAttack != AttackState.Attacking) {
+                    changeState(MotionState.Chasing);
                 } 
             }
             switch (EnemyMotion)
             {
                 case MotionState.Idling:
+
                     ThisEnemy.speed = chaseSpeed;
                     ThisEnemy.stoppingDistance = 2.5f;
                     //If enemy has reached destination find next waypoint
@@ -214,7 +186,7 @@ public class Enemy_Controller : MonoBehaviour
                     if (path.status == NavMeshPathStatus.PathComplete && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
                     {
                         ThisEnemy.ResetPath();
-                        EnemyMotion = MotionState.Idling;
+                        changeState(MotionState.Idling);
                         break;
                     }
 
@@ -231,19 +203,25 @@ public class Enemy_Controller : MonoBehaviour
                     ThisEnemy.speed = chaseSpeed;
                     ThisEnemy.stoppingDistance = 10;
 
+                    List<GameObject> nearbyEnemies = ai.getNearbyEnemies(gameObject);
+                    foreach (GameObject gameObj in nearbyEnemies)
+                    {
+                        gameObj.SendMessage("changeState", MotionState.Chasing);
+                    }
+
                     //If enemy has left the arena set EnemyMotion -> MotionState.Relocating
                     if (exitedArena)
                     {
                         ThisEnemy.ResetPath();
                         exitedArena = false;
-                        EnemyMotion = MotionState.Relocating;
+                        changeState(MotionState.Relocating);
                         break;
                     }
 
                     //If the enemy's distance to the player is less than breakDist EnemyMotion -> MotionState.Surrounding
                     if (Vector3.Distance(player.transform.position, transform.position) < breakDist - 1f)
                     {
-                        EnemyMotion = MotionState.Surrounding;
+                        changeState(MotionState.Relocating);
                         ThisEnemy.ResetPath();
                         break;
                     }
@@ -265,14 +243,14 @@ public class Enemy_Controller : MonoBehaviour
                     {
                         resetSurround();
                         exitedArena = false;
-                        EnemyMotion = MotionState.Relocating;
+                        changeState(MotionState.Relocating);
                         break;
                     }
 
                     //If the enemy's distance to the player is greater than breakDist EnemyMotion -> MotionState.Chasing
                     if (Vector3.Distance(player.transform.position, transform.position) > breakDist + 1f)
                     {
-                        EnemyMotion = MotionState.Chasing;
+                        changeState(MotionState.Chasing);
                         resetSurround();
                         break;
                     }
@@ -281,7 +259,7 @@ public class Enemy_Controller : MonoBehaviour
                     if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
                         movementQueue = ai.determineSurroundSpot(transform);
                         if (movementQueue.Count == 0) {
-                            EnemyMotion = MotionState.Relocating;
+                            changeState(MotionState.Relocating);
                             break;
                         }
                     }
@@ -296,7 +274,7 @@ public class Enemy_Controller : MonoBehaviour
                     else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
                     {
                         ai.enemiesReadyToAttack.Add(gameObject);
-                        ThisEnemy.speed = seekSpeed / 1.4f;
+                        ThisEnemy.speed = surroundSpeed / 1.4f;
                     }
 
                     //Ensure that the enemy stays on the navmesh
@@ -310,12 +288,11 @@ public class Enemy_Controller : MonoBehaviour
                 case MotionState.Waiting:
                     Log(EnemyMotion);
                     break;
-                default:
-                    break;
             }
         }
         else
         {
+            ai.enemiesReadyToAttack.Remove(gameObject);
             alertBox.SetActive(true);
             alertBox.GetComponent<MeshRenderer>().material = patrolMat;
             Log("Stunned");
@@ -508,6 +485,18 @@ public class Enemy_Controller : MonoBehaviour
         #endregion
     }
 
+    private void changeState(MotionState targetState)
+    {
+        if (EnemyMotion == targetState) return;
+
+        if (targetState == MotionState.Idling)
+            ai.enemiesIdling.Add(gameObject);
+        else
+            ai.enemiesIdling.Remove(gameObject);
+
+        EnemyMotion = targetState;
+    }
+
     public void resetSurround()
     {
         if (surroundIndex != -1)
@@ -522,18 +511,81 @@ public class Enemy_Controller : MonoBehaviour
         ThisEnemy.ResetPath();
         ai.enemiesReadyToAttack.Remove(gameObject);
         EnemyAttack = AttackState.Waiting;
-        currentRecoveryTime = 0;
-    }
-
-    private void handleRecovery()
-    {
-        if (currentRecoveryTime > 0) //recovering from attack
-            currentRecoveryTime -= Time.deltaTime;
-        else if (currentRecoveryTime <= 0) //ready to attack again
-            finishAttack();
     }
 
     #region Attacks
+
+    // Animation State Machine Events//////////////////////////////////////////////////
+
+    //0 = charge
+    //1 = left swipe
+    //2 = right swipe
+
+    private void AttackStart()
+    {
+        enemyAnimator.SetBool("Attack", true);
+        if (currentAttack == null)
+            getAttack();
+    }
+
+    private void AttackEnd()
+    {
+        enemyAnimator.SetBool("Attack", false);
+        finishAttack();
+    }
+
+    private void finishAttack()
+    {
+        if (exitedArena)
+        {
+            ThisEnemy.ResetPath();
+            exitedArena = false;
+            EnemyMotion = MotionState.Relocating;
+        }
+        else
+        {
+            EnemyMotion = MotionState.Surrounding;
+        }
+        EnemyAttack = AttackState.Waiting;
+        currentAttack = null;
+        hasHitPlayer = false;
+
+        //reset surround spot so they dont try to run back through player
+        surroundTarget = Vector3.zero;
+        surroundSpot = Vector3.zero;
+        ai.surroundSpotAvailability[surroundIndex] = true;
+        surroundIndex = -1;
+        nextSpot = Vector3.zero;
+    }
+
+    private void EnableHit()
+    {
+        hitEnabled = true;
+    }
+
+    private void DisableHit()
+    {
+        hitEnabled = false;
+    }
+
+    private void attackPlayer() 
+    {
+        if (hitEnabled)
+        {
+            switch (currentAttack.attackNumber)
+            {
+                case 0:
+                    //chargeAttack();
+                    break;
+                case 1:
+                    leftSwipeAttack();
+                    break;
+                case 2:
+                    rightSwipeAttack();
+                    break;
+            }
+        }
+    }
         
     private void getAttack()
     {
@@ -582,95 +634,72 @@ public class Enemy_Controller : MonoBehaviour
                 }
             }
         }
+
+        //THIS NEEDS TO BE FACTORED INTO THE ANIMATION STATE MACHINE
         if (currentAttack == null)
         {
+            Log("Unable to Find an Attack");
             ai.attackingEnemy = null;
-            EnemyAttack = AttackState.NotAttacking;
+            EnemyAttack = AttackState.Waiting;
         } else {
-            Log(currentAttack.name);
-        }
-        
-    }
-
-    private void attackTarget()
-    {
-        enemyAnimator.SetBool("Attack", true);
-        if (currentAttack == null) {
-            getAttack();
-        }
-        else
-        {
-            if (currentAttack.name == "Charge")
-            {
-                chargeAttack();
-                Log("Charge Attack");
-            } 
-            else if (currentAttack.name == "Swipe")
-            {
-                //play the animation
-                    //while animation is going move enemy forward + activate raycast for hitting player
-                swipeAttack();
-                Log("Swipe Attack");
-            }
-            //this is where we would do the animation
-                //but instead have to handle it with code
+            enemyAnimator.SetInteger("Attack Number", currentAttack.attackNumber);
         }
     }
-
-    float yellowTime = 0.25f;
-    float orangeTime = 0.15f;
+    
     bool hasHitPlayer = false;
 
-    private void chargeAttack() //-> might need to be an IEnumerator
-    {
-        alertBox.SetActive(true);
-        if (attackTimer < yellowTime) 
-        {
-            //aim at player
-            transform.LookAt(player.transform.position);
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-            //set mat to yellow
-            GetComponentInChildren<MeshRenderer>().material = alertedMat;
-        } 
-        else if (attackTimer < yellowTime + orangeTime)
-        {
-            //aim at player
-            transform.LookAt(player.transform.position);
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-            //set mat to orange
-            GetComponentInChildren<MeshRenderer>().material = enemyAttackingTwoMat;
-        }
-        else if (attackTimer > yellowTime + orangeTime + 0.05f)
-        {
-            if (timeCharging == 0)
-                generateChargePath();
-            GetComponentInChildren<MeshRenderer>().material = enemyAttackingMat;
-            timeCharging += Time.deltaTime;
-            transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
+    //NEED ANIMATION TO REIMPLEMENT CHARGE ATTACK
 
-            RaycastHit hit;
-            if (!hasHitPlayer && Physics.Raycast(transform.position, dirVec, out hit, 1f))
-            {
-                if (hit.collider.tag == "Player")
-                {
-                    Log("Hit Player, now deal damage");
-                    player.GetComponent<PlayerStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
-                    hasHitPlayer = true;
-                }
-            }
+    // private void chargeAttack() //-> might need to be an IEnumerator
+    // {
+    //     alertBox.SetActive(true);
+    //     if (attackTimer < yellowTime) 
+    //     {
+    //         //aim at player
+    //         transform.LookAt(player.transform.position);
+    //         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+    //         //set mat to yellow
+    //         GetComponentInChildren<MeshRenderer>().material = alertedMat;
+    //     } 
+    //     else if (attackTimer < yellowTime + orangeTime)
+    //     {
+    //         //aim at player
+    //         transform.LookAt(player.transform.position);
+    //         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+    //         //set mat to orange
+    //         GetComponentInChildren<MeshRenderer>().material = enemyAttackingTwoMat;
+    //     }
+    //     else if (attackTimer > yellowTime + orangeTime + 0.05f)
+    //     {
+    //         if (timeCharging == 0)
+    //             generateChargePath();
+    //         GetComponentInChildren<MeshRenderer>().material = enemyAttackingMat;
+    //         timeCharging += Time.deltaTime;
+    //         transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
 
-            //exit case
-            if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) {
-                alertBox.SetActive(false);
-                EnemyAttack = AttackState.NotAttacking;
-                ai.attackingEnemy = null;
-                timeCharging = 0;
-                currentRecoveryTime = currentAttack.recoveryTime;
-                enemyCollider.isTrigger = false;
-                Log("Lerp Completed");
-            }
-        }
-    }
+    //         RaycastHit hit;
+    //         if (!hasHitPlayer && Physics.Raycast(transform.position, dirVec, out hit, 1f))
+    //         {
+    //             if (hit.collider.tag == "Player")
+    //             {
+    //                 Log("Hit Player, now deal damage");
+    //                 player.GetComponent<PlayerStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue());
+    //                 hasHitPlayer = true;
+    //             }
+    //         }
+
+    //         //exit case
+    //         if (Vector3.Distance(transform.position, endPosition) < 0.1f || attackTimer > yellowTime + orangeTime + 1.5f) {
+    //             alertBox.SetActive(false);
+    //             EnemyAttack = AttackState.NotAttacking;
+    //             ai.attackingEnemy = null;
+    //             timeCharging = 0;
+    //             currentRecoveryTime = currentAttack.recoveryTime;
+    //             enemyCollider.isTrigger = false;
+    //             Log("Lerp Completed");
+    //         }
+    //     }
+    // }
 
     private void generateChargePath()
     {
@@ -693,139 +722,62 @@ public class Enemy_Controller : MonoBehaviour
         //transform.LookAt(player.transform.position); //this should LERP not happen instantly
     }
 
-    //Wide swiping arc to punish player for trying to kite enemies
-        //compared to the direct and straight pathing of the charge
-    
-    //play animation
-        //activate a raycast out of the enemies hand/arm to detect for the player
-        //nudge enemy forward so they lunge at the player
-    //once animation is finished set recoveryTime to the current attacks recovery time
-        //when the recovery time is reached it auto calls finishAttack();
-    private void swipeAttack()
+    private void rightSwipeAttack()
     {
-        /*
-        //Current Implementation is lacking:
-            //a lunge with each swipe
-            //a raycast to see if the player has been hit (use hasHitPlayer bool to check if the player has been hit so it doesnt register 100 times)
-            //facing the player when swiping (sometimes it faces, but other times its off to the side or something)
-
-        //Next steps:
-            //adjust the distance the attack can be activated from
-            //adjust the amount of damage the swipes deal compared to the charge
-            //adjust the recovery time to ensure enemies dont barrage the player
-            //change implementation to swap based off of the animations finishing rather than the attackTimer
-
-        //ITS ALSO POSSIBLE THAT THE ANIMATION NEEDS TO BE TOUCHED UP TO BE A BIT QUICKER BUT FOR NOW I SET THE SPEED TO 4
-
-        //BAD IMPLEMENTATION -> GOT TO DO IT BASED OFF OF WHEN THE ANIMATIONS END
-        //GOOD ENOUGH FOR NOW
-        //right swipe then left swipe
-        */
+        rightSwipeTrail.SetActive(true);
+        generateLungePath();
         RaycastHit hit;
-        if (attackTimer < 1.5f)
-        {
-            // if (!right) generateLungePath();
-            // right = true;
-            // left = false;
-            leftSwipeTrail.SetActive(false);
+        
+        //Lunge motion
+        timeLunging += Time.deltaTime;
+        transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);
 
-            // Attack detection starts after windup
-            if (attackTimer > 0.75f && attackTimer < 1f)
+        //Hit detection of swipe
+        rightSwipeTrail.SetActive(true);
+        foreach (Transform originPoint in rightSwipeOriginPoints) {
+            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
+            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
             {
-                //lunge motion
-                timeLunging += Time.deltaTime;
-                transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);
-
-                //hit detection of swipe
-                rightSwipeTrail.SetActive(true);
-                foreach (Transform originPoint in rightSwipeOriginPoints) {
-                    Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
-                    if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
-                    {
-                        if (!hasHitPlayer) {
-                            hasHitPlayer = true;
-                            Log("Hit the Player with Right Swipe Attack");
-                            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue());
-                        }
-                    }
+                if (!hasHitPlayer) {
+                    hasHitPlayer = true;
+                    Log("Hit the Player with Right Swipe Attack");
+                    hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue());
                 }
             }
-            else 
-            {
-                // Look lerp logic here
-            }
-        }
-        else if (attackTimer < 3.0f)
-        {
-            // if (!left && hasHitPlayer) hasHitPlayer = false; // Reset hitcheck in case the prior swipe hit
-            // if (!left) generateLungePath();
-            // left = true;
-            // right = false;
-            rightSwipeTrail.SetActive(false);
-
-            // Attack detection starts after windup
-            if (attackTimer > 2.25f && attackTimer < 2.5f)
-            {
-                //lunge motion
-                timeLunging += Time.deltaTime;
-                transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);                
-
-                //hit detection of swipe
-                leftSwipeTrail.SetActive(true);
-                foreach (Transform originPoint in leftSwipeOriginPoints) {
-                    Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
-                    if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
-                    {
-                        if(!hasHitPlayer) {
-                            hasHitPlayer = true;
-                            Log("Hit the Player with Left Swipe Attack");
-                            hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue());
-                        }
-                    }
-                }
-            }
-            else 
-            {
-                // Look lerp logic here
-                // Note: LookAt(player) logic doesnt quite work here.
-            }
-        }
-        else if (attackTimer >= 3.0f)
-        {
-            
-            rightSwipeTrail.SetActive(false);
-            leftSwipeTrail.SetActive(false);
-            // left = false;
-            hasHitPlayer = false;
-            EnemyAttack = AttackState.NotAttacking;
-            ai.attackingEnemy = null;
-            currentRecoveryTime = currentAttack.recoveryTime;
         }
     }
 
-    private void finishAttack()
+    private void leftSwipeAttack()
     {
-        if (exitedArena)
-        {
-            ThisEnemy.ResetPath();
-            exitedArena = false;
-            EnemyMotion = MotionState.Relocating;
-        }
-        else
-        {
-            EnemyMotion = MotionState.Surrounding;
-        }
-        EnemyAttack = AttackState.Waiting;
-        currentAttack = null;
-        attackTimer = 0.0f;
-        hasHitPlayer = false;
+        leftSwipeTrail.SetActive(true);
+        generateLungePath();
+        RaycastHit hit;
 
-        //reset surround spot so they dont try to run back through player
-        surroundTarget = Vector3.zero;
-        surroundSpot = Vector3.zero;
-        ai.surroundSpotAvailability[surroundIndex] = true;
-        surroundIndex = -1;
-        nextSpot = Vector3.zero;
+        //Lunge motion
+        timeLunging += Time.deltaTime;
+        transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);                
+
+        //Hit detection of swipe
+        leftSwipeTrail.SetActive(true);
+        foreach (Transform originPoint in leftSwipeOriginPoints) {
+            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
+            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
+            {
+                if(!hasHitPlayer) {
+                    hasHitPlayer = true;
+                    Log("Hit the Player with Left Swipe Attack");
+                    hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue());
+                }
+            }
+        }
+    }
+
+    private void checkForSecondSwipe()
+    {
+        if (Vector3.Distance(player.transform.position, transform.position) < 12.5f)
+            enemyAnimator.SetBool("PlayerInRange", true);
+        else
+            enemyAnimator.SetBool("PlayerInRange", false);
     }
 
     #endregion
@@ -946,7 +898,7 @@ public class Enemy_Controller : MonoBehaviour
             Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange, Color.red);
             if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hitInfo, targetDetectionRange, swipeLayerMask))
             {
-                if (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling)
+                if (EnemyMotion == MotionState.Idling)
                 {
                     Log("Player Detected!");
                     ThisEnemy.ResetPath();
@@ -958,12 +910,6 @@ public class Enemy_Controller : MonoBehaviour
                 }
             }
         }
-    }
-
-    // Animation State Machine Events//////////////////////////////////////////////////
-
-    private void AttackEnd() {
-        enemyAnimator.SetBool("Attack", false);
     }
 
     private void Log(object message)

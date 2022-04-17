@@ -6,13 +6,6 @@ using System;
 public class AI_Manager : MonoBehaviour
 {
 
-    //SEPARATE SCRIPT (SHRINE CONTROLLER)
-        //Split shrines into 4 quadrants
-            //Each quadrant can hold at most 1/2 of total enemies
-                //if a quadrant has more than 1/2 of total enemies select enough enemies at random to where its below 1/2
-                    //if enemy is not current chasing player change the randomly selected enemies to relocating state
-                        //send them to a neighboring quadrant for ease of use    
-
     private Transform enemiesContainer;
     public List<Vector3> surroundSpots = new List<Vector3>();
     public List<bool> surroundSpotAvailability = new List<bool>();
@@ -23,6 +16,7 @@ public class AI_Manager : MonoBehaviour
 
     public GameObject attackingEnemy;
     public List<GameObject> enemiesReadyToAttack = new List<GameObject>();
+    public List<GameObject> enemiesIdling = new List<GameObject>();
 
     private void Start() 
     {
@@ -55,7 +49,6 @@ public class AI_Manager : MonoBehaviour
                     attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
                     attackingEnemy.GetComponent<Enemy_Controller>().movementQueue.Clear();
                     attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
-                    attackingEnemy.GetComponent<Enemy_Controller>().attackTimer = 0.0f;
                     Debug.Log("Selected Enemy");
                 }
                 else
@@ -64,19 +57,21 @@ public class AI_Manager : MonoBehaviour
                 }
             }
         }
-
-        
-
-        //need to handle allocating an attacker -> ask adrian how he feels about this :D
-            //first pass/first draft -> 1 enemy to attack + return to its spot
-            //second pass -> 1 enemy to attack + stay engaged attacking player
-            //third pass -> 1 main enemy attacking + staying engaged with player + 1 or 2 other enemies poking to make combat more difficult
     }
-            
-    //each location should be equally spaced around the leading enemy
-        //the leading enemy is the first enemy in the chasing list
-            //every other enemy will not run directly at the player and will rather attempt to flank or surround player
-                //need to account for the leading enemy when generating locations
+
+    public List<GameObject> getNearbyEnemies(GameObject enemy)
+    {
+        List<GameObject> enemiestoAlert = new List<GameObject>();
+        for (int i = 0; i < enemiesIdling.Count; i++)
+        {
+            if (Vector3.Distance(enemiesIdling[i].transform.position, enemy.position) < 60f)
+            {
+                enemiestoAlert.Add(enemiesIdling[i].gameObject);
+            }
+        }
+        return enemiesToAlert; 
+    }
+
     public void generateSurroundLocations()
     {
         //on the perimeter of a cirle around the player
@@ -101,20 +96,6 @@ public class AI_Manager : MonoBehaviour
         }
     }
 
-
-    //loop through all spots
-        //if spot isnt taken
-            //calculate distance
-                //store spot with least distance
-    //if found a spot            
-        //move to spot with least distance
-    //else
-        //go idle for now, but later will make new state
-
-
-    //need a way to chekc if a spot is already taken
-        //find the closest spot to the enemy
-            //set their surround target to be that spot
     public List<Vector3> determineSurroundSpot(Transform enemy)
     {
         float minDistA = Mathf.Infinity;
@@ -207,8 +188,6 @@ public class AI_Manager : MonoBehaviour
                 }
             }
 
-            //PATHING IS INCORRECT SO NEED TO FIX SMILE
-
             if (right) //add to path in postive direction until reach goal
             {
                 for (int i = chosenIndex + 1; i < surroundTrackingSpots.Count / 2 + chosenIndex + 1 && i % surroundTrackingSpots.Count != (targetIndex + 1) % surroundTrackingSpots.Count; i++)
@@ -231,13 +210,6 @@ public class AI_Manager : MonoBehaviour
         }
     }
 
-    // public Vector3 calculateSurroundSpotInWorld()
-    // {
-    //     //do a raycast to ensure not hitting a wall and adjust values
-    //         //output exact spot for enemy
-    // }
-
-
     public bool checkIfNeedRelocate(int quadrant)
     {
         //check if quadrant has > 50% of enemies if so return false
@@ -256,6 +228,9 @@ public class AI_Manager : MonoBehaviour
         return false;
     }
 
+    //No longer needed, was too complex for our needs
+
+    /*
     public float checkPatrol(float baseChance)
     {
         //go through enemies
@@ -288,4 +263,5 @@ public class AI_Manager : MonoBehaviour
         else
             return baseChance;
     }
+    */
 }

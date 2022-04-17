@@ -2132,11 +2132,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyAnimator: {fileID: 3127600987241691444}
-  right: 0
-  left: 0
   currentAttack: {fileID: 0}
   enemyAttacks:
   - {fileID: 11400000, guid: 8529a224114adab448bb599b35f0826c, type: 2}
+  - {fileID: 11400000, guid: 9cc04f76a7df0fe46821fac8ca695cd5, type: 2}
   - {fileID: 11400000, guid: 286ed1c416d37eb43b202820411ea162, type: 2}
   currentRecoveryTime: 0
   enemyAttackingMat: {fileID: 2100000, guid: 2ec4b578a34fb044a95787eae5d3dd10, type: 2}
@@ -2183,9 +2182,6 @@ MonoBehaviour:
   EnemyMotion: 1
   EnemyAttack: 2
   stunned: 0
-  patrolToIdleChance: 0.5
-  idleToPatrolChance: 0.1
-  swapStateInterval: 15
   shrineSpawnRange: 200
   relocateSpot: {x: 0, y: 0, z: 0}
   surroundTarget: {x: 0, y: 0, z: 0}
@@ -2194,14 +2190,12 @@ MonoBehaviour:
   unstuckingCheck: {x: 0, y: 0, z: 0}
   surroundIndex: -1
   movementQueue: []
-  decisionTime: 1
   shrine: {fileID: 0}
   quadrant: 0
   ai: {fileID: 0}
   es: {fileID: 0}
-  numTimesCheckIfNeedChase: 4
   exitedArena: 0
-  seekSpeed: 10
+  surroundSpeed: 10
   chaseSpeed: 16
   breakDist: 30
   ThisEnemy: {fileID: 657498701014188137}
