@@ -312,10 +312,11 @@ public class Enemy_Controller : MonoBehaviour
                     transform.LookAt(player.transform.position);
                     transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 
-                    if(Vector3.Distance(player.transform.position, transform.position) < 4f) {
+                    /* if(Vector3.Distance(player.transform.position, transform.position) < 10f) {
+                        EnemyMotion = MotionState.Waiting;
                         EnemyAttack = AttackState.Attacking;
                         swipeAttack();
-                    }
+                    } */
 
                     //if the player is outside breakDist swap to chasing
                     if (Vector3.Distance(player.transform.position, transform.position) > breakDist + 1f)
