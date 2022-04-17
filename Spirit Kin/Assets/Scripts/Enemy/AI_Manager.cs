@@ -60,7 +60,7 @@ public class AI_Manager : MonoBehaviour
                 }
                 else
                 {
-                  enemiesReadyToAttack.RemoveAt(ind);  
+                  enemiesReadyToAttack.RemoveAt(ind);
                 }
             }
         }
