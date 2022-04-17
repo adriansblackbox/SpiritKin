@@ -168,8 +168,6 @@ public class Enemy_Controller : MonoBehaviour
     public Material attackMat;
     public Material recoverMat;
 
-    private Animator animator;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -180,7 +178,6 @@ public class Enemy_Controller : MonoBehaviour
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
         ai = shrine.GetComponent<AI_Manager>();
         determineQuadrant();
-        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -504,7 +501,7 @@ public class Enemy_Controller : MonoBehaviour
 
     private void attackTarget()
     {
-        animator.SetBool("Attack", true);
+        enemyAnimator.SetBool("Attack", true);
         if (currentAttack == null) {
             getAttack();
         }
@@ -915,7 +912,7 @@ public class Enemy_Controller : MonoBehaviour
     // Animation State Machine Events//////////////////////////////////////////////////
 
     private void AttackEnd() {
-        animator.SetBool("Attack", false);
+        enemyAnimator.SetBool("Attack", false);
     }
 
     //NEED TO CHANGE TO BE MORE FLUENT AND DETECT BETTER (MAYBE NOT SPHERECAST AND RATHER JUST A SPHERE IN FRONT OF ENEMY AT ALL TIMES)
