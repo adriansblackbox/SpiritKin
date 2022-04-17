@@ -98,13 +98,6 @@ public class Enemy_Controller : MonoBehaviour
 
     public int numTimesCheckIfNeedChase = 4;
 
-    //threshold for the enemy to go from alerted into chase
-        //represents 1/2 second of movement
-    public float chaseThreshold;
-
-    //necessary for starting the coroutine
-    private bool justAlerted;
-
     //check if enemy has left arena
     public bool exitedArena;
 
@@ -137,7 +130,6 @@ public class Enemy_Controller : MonoBehaviour
     public bool showLogs = true;
 
     public Material alertedMat;
-    public Material seekingMat;
     public Material chasingMat;
     public Material idleMat;
     public Material patrolMat;
@@ -235,7 +227,6 @@ public class Enemy_Controller : MonoBehaviour
                     if (path.status == NavMeshPathStatus.PathComplete)
                         ThisEnemy.SetDestination(relocateSpot);
                     break;
-
                 case MotionState.Chasing:
                     ThisEnemy.speed = chaseSpeed;
                     ThisEnemy.stoppingDistance = 10;
@@ -929,56 +920,6 @@ public class Enemy_Controller : MonoBehaviour
     {
         return quadrant;
     }
-
-    //after 0.5 & 1.5 seconds
-        //track a delta float of distance between player and enemy
-        //significantly away from the enemy -> enemy returns to what it was doing
-        //significatnly towards the enemy -> enemy chases player
-        //if neither threshold is reached -> seek the player      
-    /* IEnumerator decideAlertedAction()
-    {
-        float delta;
-        float beforeDist = 0f;
-        float afterDist = 0f;
-        for (int i = 0; i < numTimesCheckIfNeedChase; i++)
-        {
-            //get distance before
-            if (ThisEnemy.CalculatePath(player.transform.position, path))
-            {
-                ThisEnemy.SetDestination(player.transform.position);
-                beforeDist = ThisEnemy.remainingDistance;
-            }
-            //ThisEnemy.ResetPath();
-            //wait half second
-            yield return new WaitForSeconds(0.5f);
-
-            //get distance after
-            if (ThisEnemy.CalculatePath(player.transform.position, path))
-            {
-                ThisEnemy.SetDestination(player.transform.position);
-                afterDist = ThisEnemy.remainingDistance;
-            }
-            //ThisEnemy.ResetPath();
-            //two cases
-            //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
-            //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
-
-            delta = beforeDist - afterDist;
-            if (delta > chaseThreshold)
-            {
-                Log("Delta -> chaseThreshold -> NOW CHASING");
-                ThisEnemy.ResetPath();
-                EnemyMotion = MotionState.Chasing;
-                yield break;
-            }
-        }
-        if (EnemyMotion != MotionState.Chasing) 
-        {
-            ThisEnemy.ResetPath();
-            EnemyMotion = MotionState.Seeking;
-            Log("Didn't need to chase player -> Seeking after alerted");
-        }
-    } */
 
     IEnumerator unstuckTimer()
     {
