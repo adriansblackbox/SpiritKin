@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1866b9f4aa5483744b06077246fed1d4, type: 3}
   m_Name: Left Swipe
   m_EditorClassIdentifier: 
-  actionAnimation: 
-  attackPriority: 3
-  recoveryTime: 2
+  actionAnimation: Swipe Left
+  attackNumber: 1
+  attackPriority: 6
+  recoveryTime: 1.25
   minimumAttackAngle: -50
   maximumAttackAngle: 50
   minimumAttackRange: 0
-  maximumAttackRange: 5
+  maximumAttackRange: 15
