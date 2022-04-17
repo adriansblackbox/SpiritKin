@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class Enemy_Controller : MonoBehaviour
 {
+    // Lmao 2 month old comment on what this structure would be
+
     //Waypoints (4-8 waypoints around the shrine)
         //more will ensure less obvious patrol paths
             //can generate paths rather than having them set
@@ -29,10 +31,8 @@ public class Enemy_Controller : MonoBehaviour
 
     //ADD HITSTUN STATE
     public enum MotionState {
-        Alerted,
         Idling,
         Patroling,
-        Seeking,
         Relocating,
         Chasing,
         Surrounding,
@@ -120,13 +120,6 @@ public class Enemy_Controller : MonoBehaviour
 
     public int numTimesCheckIfNeedChase = 4;
 
-    //threshold for the enemy to go from alerted into chase
-        //represents 1/2 second of movement
-    public float chaseThreshold;
-
-    //necessary for starting the coroutine
-    private bool justAlerted;
-
     //check if enemy has left arena
     public bool exitedArena;
 
@@ -159,7 +152,6 @@ public class Enemy_Controller : MonoBehaviour
     public bool showLogs = true;
 
     public Material alertedMat;
-    public Material seekingMat;
     public Material chasingMat;
     public Material idleMat;
     public Material patrolMat;
@@ -277,37 +269,6 @@ public class Enemy_Controller : MonoBehaviour
                     if (path.status == NavMeshPathStatus.PathComplete)
                         ThisEnemy.SetDestination(relocateSpot);
                     break;
-                /*case MotionState.Alerted:
-                    // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
-                    //look in player's direction
-                    transform.LookAt(player.transform.position);
-                    transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-                    if (justAlerted)
-                    {
-                        ThisEnemy.ResetPath();
-                        justAlerted = false;
-                        // StartCoroutine(decideAlertedAction());
-                    }
-                    break;
-                 case MotionState.Seeking:
-                    if (exitedArena)
-                    {
-                        ThisEnemy.ResetPath();
-                        exitedArena = false;
-                        EnemyMotion = MotionState.Relocating;
-                        break;
-                    }    
-                    //set speed to normal
-                    ThisEnemy.speed = seekSpeed;
-                    ThisEnemy.stoppingDistance = 10;
-                    StopCoroutine(decideAlertedAction());
-                    if (!ThisEnemy.hasPath)
-                        startOfPath = transform.position;
-                    ThisEnemy.CalculatePath(player.transform.position, path);
-                    if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-                        ThisEnemy.SetDestination(player.transform.position);
-                    }
-                    break; */
                 case MotionState.Chasing:
                     if (exitedArena)
                     {
@@ -319,7 +280,6 @@ public class Enemy_Controller : MonoBehaviour
                     //set speed to faster
                     ThisEnemy.speed = chaseSpeed;
                     ThisEnemy.stoppingDistance = 10;
-                    //StopCoroutine(decideAlertedAction());
 
                     //if the player is inside breakDist swap to surrounding
                     if (Vector3.Distance(player.transform.position, transform.position) < breakDist - 1f)
@@ -351,6 +311,11 @@ public class Enemy_Controller : MonoBehaviour
                     //look in player's direction
                     transform.LookAt(player.transform.position);
                     transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+
+                    if(Vector3.Distance(player.transform.position, transform.position) < 4f) {
+                        EnemyAttack = AttackState.Attacking;
+                        swipeAttack();
+                    }
 
                     //if the player is outside breakDist swap to chasing
                     if (Vector3.Distance(player.transform.position, transform.position) > breakDist + 1f)
@@ -819,56 +784,6 @@ public class Enemy_Controller : MonoBehaviour
     {
         return quadrant;
     }
-
-    //after 0.5 & 1.5 seconds
-        //track a delta float of distance between player and enemy
-        //significantly away from the enemy -> enemy returns to what it was doing
-        //significatnly towards the enemy -> enemy chases player
-        //if neither threshold is reached -> seek the player      
-    /* IEnumerator decideAlertedAction()
-    {
-        float delta;
-        float beforeDist = 0f;
-        float afterDist = 0f;
-        for (int i = 0; i < numTimesCheckIfNeedChase; i++)
-        {
-            //get distance before
-            if (ThisEnemy.CalculatePath(player.transform.position, path))
-            {
-                ThisEnemy.SetDestination(player.transform.position);
-                beforeDist = ThisEnemy.remainingDistance;
-            }
-            //ThisEnemy.ResetPath();
-            //wait half second
-            yield return new WaitForSeconds(0.5f);
-
-            //get distance after
-            if (ThisEnemy.CalculatePath(player.transform.position, path))
-            {
-                ThisEnemy.SetDestination(player.transform.position);
-                afterDist = ThisEnemy.remainingDistance;
-            }
-            //ThisEnemy.ResetPath();
-            //two cases
-            //before > after positive -> running at enemy (check if dist is negligible like < 0.5 units)
-            //after > before negative -> running away from enemy (check if dist is negligible like < 0.5 units)
-
-            delta = beforeDist - afterDist;
-            if (delta > chaseThreshold)
-            {
-                Log("Delta -> chaseThreshold -> NOW CHASING");
-                ThisEnemy.ResetPath();
-                EnemyMotion = MotionState.Chasing;
-                yield break;
-            }
-        }
-        if (EnemyMotion != MotionState.Chasing) 
-        {
-            ThisEnemy.ResetPath();
-            EnemyMotion = MotionState.Seeking;
-            Log("Didn't need to chase player -> Seeking after alerted");
-        }
-    } */
 
     IEnumerator unstuckTimer()
     {
