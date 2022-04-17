@@ -277,7 +277,7 @@ public class Enemy_Controller : MonoBehaviour
                     if (path.status == NavMeshPathStatus.PathComplete)
                         ThisEnemy.SetDestination(relocateSpot);
                     break;
-                case MotionState.Alerted:
+                /*case MotionState.Alerted:
                     // Tether movement to player's, but reduce our movement speed. Keep turned towards the player. If player approaches for N seconds, Chasing state
                     //look in player's direction
                     transform.LookAt(player.transform.position);
@@ -289,7 +289,7 @@ public class Enemy_Controller : MonoBehaviour
                         // StartCoroutine(decideAlertedAction());
                     }
                     break;
-                /* case MotionState.Seeking:
+                 case MotionState.Seeking:
                     if (exitedArena)
                     {
                         ThisEnemy.ResetPath();
@@ -890,18 +890,18 @@ public class Enemy_Controller : MonoBehaviour
 /////////////////////////////////////////////////SPHERECASTING
     private void checkForPlayer()
     {
-        foreach (Transform originPoint in rightSwipeOriginPoints) 
+        foreach (Transform originPoint in visionFanOrigins)
         {
             Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange, Color.red);
             if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hitInfo, targetDetectionRange, swipeLayerMask))
             {
-                if (hitInfo.transform.CompareTag("Player") && (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling))
+                if (EnemyMotion == MotionState.Idling || EnemyMotion == MotionState.Patroling)
                 {
                     Log("Player Detected!");
                     ThisEnemy.ResetPath();
                     EnemyMotion = MotionState.Chasing;
                 }
-                else if (!hitInfo.transform.CompareTag("Player"))
+                else
                 {
                     hasDetectedPlayer = false;
                 }
@@ -913,22 +913,6 @@ public class Enemy_Controller : MonoBehaviour
 
     private void AttackEnd() {
         enemyAnimator.SetBool("Attack", false);
-    }
-
-    //NEED TO CHANGE TO BE MORE FLUENT AND DETECT BETTER (MAYBE NOT SPHERECAST AND RATHER JUST A SPHERE IN FRONT OF ENEMY AT ALL TIMES)
-    void OnDrawGizmos()
-    {
-        if (hasDetectedPlayer)
-        {
-            Gizmos.color = Color.red;
-        }
-        else
-        {
-            Gizmos.color = Color.green;
-        }
-        Gizmos.matrix = transform.localToWorldMatrix;
-
-        Gizmos.DrawWireCube(new Vector3(0f, 0f, targetDetectionRange / 4f), new Vector3(raycastRadius, raycastRadius / 5, targetDetectionRange - 20));
     }
 
     private void Log(object message)
