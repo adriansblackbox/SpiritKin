@@ -1983,6 +1983,11 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6292342121008413548, guid: 20c9ece6158e8554992a878cf6b539ac, type: 3}
+--- !u!1 &114648653 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5503858657212293158, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+  m_PrefabInstance: {fileID: 1334573957}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &114697221 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7395704305543789238, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
@@ -14281,6 +14286,11 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5741174448488666723, guid: 70faa36243dc2ac4b94b1ee0e4ff4cfb, type: 3}
+--- !u!1 &789186170 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5503858657403739942, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+  m_PrefabInstance: {fileID: 1334573957}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &791440740 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3540495426589365078, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
@@ -23963,6 +23973,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
+--- !u!1 &1130861096 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5503858657061527909, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+  m_PrefabInstance: {fileID: 1334573957}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1131136267 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4103881766339141800, guid: 20c9ece6158e8554992a878cf6b539ac, type: 3}
@@ -27440,12 +27455,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5503858657507747481, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5503858657507747483, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+      propertyPath: playfabManager
+      value: 
+      objectReference: {fileID: 4931512991430563515}
     - target: {fileID: 5503858657871384692, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: Shrine
       value: 
       objectReference: {fileID: 1314138439}
+    - target: {fileID: 5503858657927212326, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5503858657966348274, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: player
       value: 
@@ -36326,6 +36349,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 881556154}
     - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: currentBuff
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: displayNext
       value: 
       objectReference: {fileID: 101884479}
@@ -36333,6 +36360,26 @@ PrefabInstance:
       propertyPath: displayPrev
       value: 
       objectReference: {fileID: 1366924229}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: armorBuffSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d0b510638ad2ec841aa0999baa77fa46, type: 3}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: speedBuffSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c644c444253a01e4f8e3f2fe0306e3f3, type: 3}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: damageBuffSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1e6d49103649e954ca5f0f0c9f0bc28c, type: 3}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: healthBuffSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4c225ae334f0b604d89c7e4f205939f5, type: 3}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: shopBuffList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7163950330275300677, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -56566,6 +56613,7 @@ GameObject:
   - component: {fileID: 4931512991430563517}
   - component: {fileID: 4931512991430563518}
   - component: {fileID: 4931512991430563519}
+  - component: {fileID: 4931512991430563515}
   m_Layer: 3
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -56573,6 +56621,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &4931512991430563515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4931512991430563514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa90e3f5a45aa53448cbb4430bb3814d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &4931512991430563516
 Camera:
   m_ObjectHideFlags: 0
@@ -57129,6 +57189,22 @@ PrefabInstance:
       propertyPath: deathUI
       value: 
       objectReference: {fileID: 116403771}
+    - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: playfabManager
+      value: 
+      objectReference: {fileID: 4931512991430563515}
+    - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: BuffsUI.Array.data[0]
+      value: 
+      objectReference: {fileID: 1130861096}
+    - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: BuffsUI.Array.data[1]
+      value: 
+      objectReference: {fileID: 789186170}
+    - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: BuffsUI.Array.data[2]
+      value: 
+      objectReference: {fileID: 114648653}
     - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: SpringTransforms.Array.size
       value: 1

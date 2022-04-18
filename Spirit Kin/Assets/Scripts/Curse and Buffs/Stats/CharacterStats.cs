@@ -21,8 +21,11 @@ public class CharacterStats : MonoBehaviour
 
     public GameObject player;
     
+    
+    
     void Start ()
     {
+        
         if(gameObject.tag == "Player"){
             player = gameObject;
         }
@@ -74,6 +77,7 @@ public class CharacterStats : MonoBehaviour
             Destroy(this.gameObject, 0.025f);
         }
         if (this.gameObject.tag == "Player"){
+            
             StartCoroutine(PlayerDeath(this.gameObject));
         }
         
