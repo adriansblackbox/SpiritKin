@@ -15,6 +15,8 @@ public class PlayerStats : CharacterStats
 
     void Start()
     {
+        //give player 100 coins
+        coins = 100;
         currentHealth = maxHealth;
         //reset buffs
         

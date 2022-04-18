@@ -9,7 +9,6 @@ public class equipmentShop : MonoBehaviour
     public GameObject Player;
     public GameObject equipmentMenu;
     public GameObject equipmentCamera;
-    public Buff theBuff;
     private bool isInteractable;
     private bool isOpen;
     // Start is called before the first frame update
@@ -40,10 +39,6 @@ public class equipmentShop : MonoBehaviour
         //need condition to check if interactable
         // if()isInteractable = false;
         if(Input.GetKeyDown(KeyCode.F) && isInteractable &&!isOpen){
-            //do something;
-            // if(!theBuff.isApplied){
-            //     GameObject.Find("Player").GetComponent<PlayerStats>().Buffs.Add(theBuff);
-            // }
             
             Cursor.lockState = CursorLockMode.None;
             equipmentMenu.SetActive(true);

@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+// using static Buff;
 
 
 public class TeaShopManager : MonoBehaviour
 {
+    public Sprite armorBuffSprite, damageBuffSprite, healthBuffSprite, speedBuffSprite;
     public List<Buff> shopBuffList = new List<Buff>();
     public PlayerStats playStats;
     public Text UICoinTXT;
@@ -41,22 +43,30 @@ public class TeaShopManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //refresh buffs
-        foreach (Buff i in shopBuffList)
-        {
-            i.isApplied = false;
-        }
-        menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
-        UICoinTXT.text = "Coins:" + playStats.coins.ToString();
-        UpdateDisplay(0);
+        // //refresh buffs
+        // foreach (Buff i in shopBuffList)
+        // {
+        //     i.isApplied = false;
+        // }
+        // menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
+        // UICoinTXT.text = "Coins:" + playStats.coins.ToString();
+        // UpdateDisplay(0);
     }
     void Awake(){
+        
+        ArmorBuff armorBuff = new ArmorBuff(armorBuffSprite);
+        DamageBuff damageBuff = new DamageBuff(damageBuffSprite);
+        SpeedBuff speedBuff = new SpeedBuff(speedBuffSprite);
+        HealthBuff healthBuff = new HealthBuff(healthBuffSprite);
+
+        shopBuffList.Add(armorBuff);
+        shopBuffList.Add(damageBuff);
+        shopBuffList.Add(speedBuff);
+        shopBuffList.Add(healthBuff);
+
         UpdateDisplay(0);
     }
     
-    public void Initial(){
-        UpdateDisplay(0);
-    }
     public void NextOption()
     {
         selectedOption++;
@@ -128,7 +138,7 @@ public class TeaShopManager : MonoBehaviour
         display.GetComponent<Image>().sprite = currentBuff.buffSprite;
         displayPrev.GetComponent<Image>().sprite = prevBuff.buffSprite;
         displayNext.GetComponent<Image>().sprite = nextBuff.buffSprite;
-        buffName.text = currentBuff.name;
+        buffName.text = currentBuff.teaName;
         description.text = currentBuff.description;
         costTXT.text = "$: " + currentBuff.Cost.ToString();
         investCostTXT.text = "$: " + currentBuff.InvestCost.ToString();

@@ -11,7 +11,6 @@ public class TeaShop : MonoBehaviour
     public GameObject teaMenu;
     public GameObject teaCamera;
     public PauseMenu pauseMenu;
-    public Buff theBuff;
     
 
     private bool isInteractable;
@@ -55,10 +54,6 @@ public class TeaShop : MonoBehaviour
         // if()isInteractable = false;
         if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("A Button"))&& isInteractable && !isOpen && !pauseMenu.GameIsPaused)
         {
-            //do something;
-            // if(!theBuff.isApplied){
-            //     GameObject.Find("Player").GetComponent<PlayerStats>().Buffs.Add(theBuff);
-            // }
             OpenMenu();
         }
         else if (Input.GetKeyDown(KeyCode.F) && isOpen && !pauseMenu.GameIsPaused)
