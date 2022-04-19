@@ -56,7 +56,6 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        Debug.Log(Input.GetAxis("Mouse X") + "   " +  Input.GetAxis("Mouse Y"));
         PlayerInput(); 
         RotateCamera();
         // If the player is in the move tree state machine, allow ilde movement.
