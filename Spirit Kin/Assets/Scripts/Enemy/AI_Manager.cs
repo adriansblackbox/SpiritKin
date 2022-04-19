@@ -27,11 +27,6 @@ public class AI_Manager : MonoBehaviour
     private void Update()
     {
         selectAttackerTimer += Time.deltaTime;
-        //Goal:
-            //basic framework for selecting an enemy to attack
-                //-> random !!!
-                //-> queue system
-                //-> order they arrive in
 
         if (selectAttackerTimer > 0.75f)
         {
@@ -42,10 +37,10 @@ public class AI_Manager : MonoBehaviour
                     //EnemyMotion -> Waiting
                     //EnemyAttack -> Attacking
                 int ind = UnityEngine.Random.Range(0, enemiesReadyToAttack.Count - 1);
-                if (enemiesReadyToAttack[ind] != null) 
+                if (enemiesReadyToAttack[ind] != null)
                 {
                     attackingEnemy = enemiesReadyToAttack[ind];
-                    attackingEnemy.GetComponent<Enemy_Controller>().EnemyMotion = Enemy_Controller.MotionState.Waiting;
+                    attackingEnemy.GetComponent<Enemy_Controller>().changeState(Enemy_Controller.MotionState.Waiting);
                     attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
                     attackingEnemy.GetComponent<Enemy_Controller>().movementQueue.Clear();
                     attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
@@ -53,7 +48,7 @@ public class AI_Manager : MonoBehaviour
                 }
                 else
                 {
-                  enemiesReadyToAttack.RemoveAt(ind);
+                    enemiesReadyToAttack.RemoveAt(ind);
                 }
             }
         }
@@ -227,41 +222,4 @@ public class AI_Manager : MonoBehaviour
         }
         return false;
     }
-
-    //No longer needed, was too complex for our needs
-
-    /*
-    public float checkPatrol(float baseChance)
-    {
-        //go through enemies
-            //if > 50% are patroling special chance to go idle
-            //else normal chance
-        var enemyCount = enemiesContainer.childCount;
-        float enemiesPatrolingCount = 0.0f;
-        for (int i = 0; i < enemyCount; i++)
-        {
-            if (enemiesContainer.GetChild(i).GetComponent<Enemy_Controller>().EnemyMotion == Enemy_Controller.MotionState.Patroling) enemiesPatrolingCount += 1;
-        }
-        if (enemiesPatrolingCount / (float) enemyCount > 0.5f)
-            return baseChance * 1.5f;
-        return baseChance;
-    }
-
-    public float checkIdle(float baseChance)
-    {
-        //go through enemies
-            //if < .25f are patroling special chance to go idle
-            //else normal chance
-        var enemyCount = enemiesContainer.childCount;
-        float enemiesPatrolingCount = 0.0f;
-        for (int i = 0; i < enemyCount; i++)
-        {
-            if (enemiesContainer.GetChild(i).GetComponent<Enemy_Controller>().EnemyMotion == Enemy_Controller.MotionState.Patroling) enemiesPatrolingCount += 1;
-        }
-        if (enemiesPatrolingCount / (float) enemyCount < 0.25f)
-            return baseChance * 1.5f;
-        else
-            return baseChance;
-    }
-    */
 }

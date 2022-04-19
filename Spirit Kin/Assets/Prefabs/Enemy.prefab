@@ -2100,9 +2100,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAnimator: {fileID: 0}
+  combo: 0
   currentAttack: {fileID: 0}
   enemyAttacks:
+  - {fileID: 11400000, guid: 8529a224114adab448bb599b35f0826c, type: 2}
   - {fileID: 11400000, guid: 9cc04f76a7df0fe46821fac8ca695cd5, type: 2}
   - {fileID: 11400000, guid: 286ed1c416d37eb43b202820411ea162, type: 2}
   enemyAttackingMat: {fileID: 2100000, guid: 2ec4b578a34fb044a95787eae5d3dd10, type: 2}
@@ -2909,7 +2910,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7150751930114154714}
   m_LocalRotation: {x: 0, y: 0, z: 0.26609454, w: 0.963947}
-  m_LocalPosition: {x: -0.854, y: 0.069, z: 0.264}
+  m_LocalPosition: {x: -0.854, y: -0.045, z: 0.264}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1437035194831078844}
@@ -7847,7 +7848,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7653522845925152191}
   m_LocalRotation: {x: -0, y: -0, z: -0.2660906, w: 0.963948}
-  m_LocalPosition: {x: 0.84, y: 0.069, z: 0.264}
+  m_LocalPosition: {x: 0.84, y: -0.045, z: 0.264}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2669559759521585740}
