@@ -480,7 +480,7 @@ public class Enemy_Controller : MonoBehaviour
             currentAttack = enemyAttacks[1];
 
         }
-        enemyAnimator.SetInteger("AttackNumber", currentAttack.attackNumber);
+        enemyAnimator.SetInteger("Attack Number", currentAttack.attackNumber);
         enemyAnimator.SetBool("Attack", true);
     }
     
