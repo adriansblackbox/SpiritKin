@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// using static Buff;
-public class TeaShopManager : MonoBehaviour
+// using static Equip;
+public class EquipShopManager : MonoBehaviour
 {
     public Sprite
 
-            armorBuffSprite,
-            damageBuffSprite,
-            healthBuffSprite,
-            speedBuffSprite;
+            equipSprite;
 
-    public List<Buff> shopBuffList = new List<Buff>();
+
+    public List<Equipment> shopEquipList = new List<Equipment>();
 
     public PlayerStats playStats;
 
@@ -25,15 +23,15 @@ public class TeaShopManager : MonoBehaviour
 
     public Text investCostTXT;
 
-    public Text buffName;
+    public Text equipName;
 
     public Text description;
 
-    public Buff currentBuff;
+    public Equipment currentEquip;
 
-    public Buff prevBuff;
+    public Equipment prevEquip;
 
-    public Buff nextBuff;
+    public Equipment nextEquip;
 
     public GameObject displayPrev;
 
@@ -58,15 +56,10 @@ public class TeaShopManager : MonoBehaviour
 
     void Awake()
     {
-        ArmorBuff armorBuff = new ArmorBuff(armorBuffSprite);
-        DamageBuff damageBuff = new DamageBuff(damageBuffSprite);
-        SpeedBuff speedBuff = new SpeedBuff(speedBuffSprite);
-        HealthBuff healthBuff = new HealthBuff(healthBuffSprite);
+        testWeapon testEquip = new testWeapon(equipSprite);
+        
 
-        shopBuffList.Add (armorBuff);
-        shopBuffList.Add (damageBuff);
-        shopBuffList.Add (speedBuff);
-        shopBuffList.Add (healthBuff);
+        shopEquipList.Add(testEquip);
 
         UpdateDisplay(0);
     }
@@ -74,7 +67,7 @@ public class TeaShopManager : MonoBehaviour
     public void NextOption()
     {
         selectedOption++;
-        if (selectedOption >= shopBuffList.Count)
+        if (selectedOption >= shopEquipList.Count)
         {
             selectedOption = 0;
         }
@@ -87,7 +80,7 @@ public class TeaShopManager : MonoBehaviour
         selectedOption--;
         if (selectedOption < 0)
         {
-            selectedOption = shopBuffList.Count - 1;
+            selectedOption = shopEquipList.Count - 1;
         }
 
         UpdateDisplay (selectedOption);
@@ -96,77 +89,78 @@ public class TeaShopManager : MonoBehaviour
     public void Buy()
     {
         if (
-            playStats.coins >= currentBuff.Cost &&
-            !currentBuff.isApplied &&
-            playStats.Buffs.Count < 3
+            playStats.coins >= currentEquip.Cost &&
+            !currentEquip.isEquipped &&
+            playStats.Equipment.Count < 3
         )
         {
             //update coins
-            playStats.coins -= currentBuff.Cost;
+            playStats.coins -= currentEquip.Cost;
             menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
 
-            //add buffs to player
-            playStats.addBuff (currentBuff);
+            //add Equipment to player
+            //Todo: add to player
+            playStats.addEquip (currentEquip);
         }
     }
 
     public void Upgrade()
     {
         if (
-            playStats.coins >= currentBuff.InvestCost &&
-            currentBuff.duration <= 400
+            playStats.coins >= currentEquip.InvestCost &&
+            currentEquip.duration <= 400
         )
         {
             //update coins
-            playStats.coins -= currentBuff.InvestCost;
+            playStats.coins -= currentEquip.InvestCost;
             menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
 
-            //add duration to buffs
-            currentBuff.duration += 100;
+            //add duration to Equips
+            currentEquip.duration += 100;
         }
     }
 
     public void Exit()
     {
+        
         GameObject
-            .FindGameObjectWithTag("TeaShop")
-            .GetComponent<TeaShop>()
+            .FindGameObjectWithTag("EquipmentShop")
+            .GetComponent<equipmentShop>()
             .CloseMenu();
     }
 
     public void UpdateDisplay(int selectedOption)
     {
-        currentBuff = shopBuffList[selectedOption];
+        currentEquip = shopEquipList[selectedOption];
 
         if (selectedOption == 0)
         {
-            prevBuff = shopBuffList[shopBuffList.Count - 1];
+            prevEquip = shopEquipList[shopEquipList.Count - 1];
         }
         else
         {
-            prevBuff = shopBuffList[selectedOption - 1];
+            prevEquip = shopEquipList[selectedOption - 1];
         }
 
-        if (selectedOption == shopBuffList.Count - 1)
+        if (selectedOption == shopEquipList.Count - 1)
         {
-            nextBuff = shopBuffList[0];
+            nextEquip = shopEquipList[0];
         }
         else
         {
-            nextBuff = shopBuffList[selectedOption + 1];
+            nextEquip = shopEquipList[selectedOption + 1];
         }
 
-        // nextBuff = shopBuffList[selectedOption+1];
-        // nextBuff = shopBuffList[selectedOption-1];
-        display.GetComponent<Image>().sprite = currentBuff.buffSprite;
-        displayPrev.GetComponent<Image>().sprite = prevBuff.buffSprite;
-        displayNext.GetComponent<Image>().sprite = nextBuff.buffSprite;
-        buffName.text = currentBuff.teaName;
-        description.text = currentBuff.description;
-        costTXT.text = "$: " + currentBuff.Cost.ToString();
-        investCostTXT.text = "$: " + currentBuff.InvestCost.ToString();
+        
+        display.GetComponent<Image>().sprite = currentEquip.equipSprite;
+        displayPrev.GetComponent<Image>().sprite = prevEquip.equipSprite;
+        displayNext.GetComponent<Image>().sprite = nextEquip.equipSprite;
+        equipName.text = currentEquip.equipName;
+        description.text = currentEquip.description;
+        costTXT.text = "$: " + currentEquip.Cost.ToString();
+        investCostTXT.text = "$: " + currentEquip.InvestCost.ToString();
     }
 
     // Update is called once per frame
@@ -174,8 +168,8 @@ public class TeaShopManager : MonoBehaviour
     {
         if (
             GameObject
-                .FindGameObjectWithTag("TeaShop")
-                .GetComponent<TeaShop>()
+                .FindGameObjectWithTag("EquipmentShop")
+                .GetComponent<equipmentShop>()
                 .isOpen
         )
         {

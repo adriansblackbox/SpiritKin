@@ -7,6 +7,7 @@ public class PlayerStats : CharacterStats
 {
     [SerializeField]
     public List<Buff> Buffs = new List<Buff>();
+    public List<Equipment> Equipment = new List<Equipment>();
 
     public List<GameObject> BuffsUI = new List<GameObject>();
     public Sprite Notch, damageBuff, speedBuff, armorBuff, healthBuff;
@@ -162,5 +163,21 @@ public class PlayerStats : CharacterStats
         Buffs[i].removeFlag = true;
         // make sure that shop buff is purchasable
         Buffs[i].isApplied = false;
+    }
+
+    //todo: add equipment handler
+    public void addEquip(Equipment x)
+    {
+        if(Equipment.Count < 3){
+            Equipment.Add(x);
+            Debug.Log(x.equipName);
+        }
+    }
+
+    public void removeEquip(Equipment x)
+    {
+        int i = Equipment.FindIndex(y => y.equipName == x.equipName);
+        Equipment.RemoveAt(i);
+        Debug.Log(x.equipName);
     }
 }

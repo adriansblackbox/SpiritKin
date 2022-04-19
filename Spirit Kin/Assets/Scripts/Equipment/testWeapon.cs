@@ -6,9 +6,12 @@ public class testWeapon : Equipment
 {
     public testWeapon(Sprite sprite)
     {
-        name = "testWeapon";
+        equipName = "testWeapon";
         description = "testWeapon";
-        icon = sprite;
+        equipSprite = sprite;
+        duration = 60f;
+        Cost = 1;
+        InvestCost = 5;
         isEquipped = false;
     }
 }

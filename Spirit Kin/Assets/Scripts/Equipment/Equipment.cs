@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Equipment
 {
-    public string name;
+    public string equipName;
     public string description;
-    public Sprite icon;
+    public Sprite equipSprite;
+    public float duration;
+    public int Cost;
+    public int InvestCost;
     public bool isEquipped;
 }
