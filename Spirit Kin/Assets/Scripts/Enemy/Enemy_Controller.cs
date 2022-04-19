@@ -70,7 +70,7 @@ public class Enemy_Controller : MonoBehaviour
     public Vector3 unstuckingCheck = Vector3.zero; // Necessary for helping the AI get unstuck from where its at
     public int surroundIndex = -1; //necessary for resetting surrounding spots after leaving surround state
 
-    public List<Vector3> movementQueue = new List<Vector3>();
+    public List<Vector3> movementQueue;
 
 
     private float myTime = 0.0f;
@@ -133,6 +133,7 @@ public class Enemy_Controller : MonoBehaviour
         ai = shrine.GetComponent<AI_Manager>();
         enemyAnimator = GetComponent<Animator>();
         determineQuadrant();
+        movementQueue = new List<Vector3>();
     }
 
     // Update is called once per frame
@@ -329,7 +330,7 @@ public class Enemy_Controller : MonoBehaviour
             surroundTarget = Vector3.zero;
             surroundIndex = -1;
         }
-        ThisEnemy.ResetPath();
+        ThisEnemy.ResetPath();  
         ai.enemiesReadyToAttack.Remove(gameObject);
         EnemyAttack = AttackState.Waiting;
     }
@@ -362,6 +363,7 @@ public class Enemy_Controller : MonoBehaviour
         {
             enemyAnimator.SetBool("PlayerInRange", true);
             combo = true;
+            hasHitPlayer = false;
         }
         else 
         {
@@ -480,7 +482,7 @@ public class Enemy_Controller : MonoBehaviour
             currentAttack = enemyAttacks[1];
 
         }
-        enemyAnimator.SetInteger("AttackNumber", currentAttack.attackNumber);
+        enemyAnimator.SetInteger("Attack Number", currentAttack.attackNumber);
         enemyAnimator.SetBool("Attack", true);
     }
     
