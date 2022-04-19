@@ -51,10 +51,13 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         State = "Idle";
         animator.SetFloat("Attack Number", 1);
+        CinemachineTargetYaw = 90;
+        CinemachineTargetPitch = 0;
     }
     void Update()
     {
-        PlayerInput();
+        Debug.Log(Input.GetAxis("Mouse X") + "   " +  Input.GetAxis("Mouse Y"));
+        PlayerInput(); 
         RotateCamera();
         // If the player is in the move tree state machine, allow ilde movement.
         // else, base movement off of attack when attack allows movement
