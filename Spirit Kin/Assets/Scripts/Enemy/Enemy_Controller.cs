@@ -262,26 +262,33 @@ public class Enemy_Controller : MonoBehaviour
                         break;
                     }
 
-                    //Calculate path to SurroundSpot
-                    if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
-                        movementQueue = ai.determineSurroundSpot(transform);
-                        if (movementQueue.Count == 0) {
-                            changeState(MotionState.Relocating);
-                            break;
+                    if (movementQueue != null) 
+                    {
+                        //Calculate path to SurroundSpot
+                        if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
+                            //movementQueue = new List<Vector3>();
+                            movementQueue = ai.determineSurroundSpot(transform);
+                            if (movementQueue.Count == 0) {
+                                changeState(MotionState.Relocating);
+                                break;
+                            }
+                        }
+
+                        if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count > 0) //Direct enemy along their movementQueue
+                        {
+                            nextSpot = movementQueue[0];
+                            movementQueue.RemoveAt(0);
+                            ThisEnemy.speed = chaseSpeed;
+                        } 
+                        else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
+                        {
+                            ai.enemiesReadyToAttack.Add(gameObject);
+                            ThisEnemy.speed = surroundSpeed / 1.4f;
                         }
                     }
-
-                    //Direct enemy along their movementQueue
-                    if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count > 0)
+                    else 
                     {
-                        nextSpot = movementQueue[0];
-                        movementQueue.RemoveAt(0);
-                        ThisEnemy.speed = chaseSpeed;
-                    } 
-                    else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
-                    {
-                        ai.enemiesReadyToAttack.Add(gameObject);
-                        ThisEnemy.speed = surroundSpeed / 1.4f;
+                        Log("Movement Queue is null");
                     }
 
                     //Ensure that the enemy stays on the navmesh
