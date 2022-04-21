@@ -26,14 +26,14 @@ public class CharacterStats : MonoBehaviour
     void Start ()
     {
         
-        if(gameObject.tag == "Player"){
+        if (gameObject.tag == "Player")
+        {
             player = gameObject;
         }
-        else{
+        else
+        {
             player = GameObject.FindGameObjectWithTag("Player");
-            coins = Random.Range(5, 25);
         }
-        
         currentHealth = maxHealth;
     }
 
@@ -72,6 +72,7 @@ public class CharacterStats : MonoBehaviour
         //Die in some way
         if (gameObject.tag == "Enemy") {
             player.GetComponent<PlayerStats>().coins += coins;
+            //vvv this line will need to be changed because the player will gain curses way too fast with difficulty scaling
             player.GetComponent<CurseMeter>().curseMeter += (float)coins / player.GetComponent<CurseMeter>().fillRate;
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().surroundSpotAvailability[gameObject.GetComponent<Enemy_Controller>().surroundIndex] = true;

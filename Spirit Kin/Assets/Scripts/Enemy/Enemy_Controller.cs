@@ -392,6 +392,12 @@ public class Enemy_Controller : MonoBehaviour
             enemyAnimator.SetBool("PlayerInRange", true);
             combo = true;
             hasHitPlayer = false;
+            
+            //if comboing need to change the attack
+            if (currentAttack.attackNumber == 1)
+                currentAttack = enemyAttacks[2];
+            else
+                currentAttack = enemyAttacks[1];
         }
         else 
         {

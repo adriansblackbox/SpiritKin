@@ -43,9 +43,14 @@ public class Shrine : MonoBehaviour
         ai.generateSurroundLocations();
     }
 
-    public void Update()
+    //ensure that timers aren't running when timeScale = 0
+    public void FixedUpdate()
     {
         myTime += Time.deltaTime;
+    }
+
+    public void Update()
+    {
 
         if (amountAlreadySpawned >= enemiesToSpawn && transform.GetChild(0).childCount == 0 && cursed)
         {   

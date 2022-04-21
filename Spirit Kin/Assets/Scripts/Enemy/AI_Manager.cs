@@ -23,10 +23,15 @@ public class AI_Manager : MonoBehaviour
         enemiesContainer = transform.GetChild(0);
         Player = GameObject.Find("Player").transform;
     }
+    
+    //ensure that timers aren't running when timeScale = 0
+    private void FixedUpdate()
+    {
+        selectAttackerTimer += Time.deltaTime;
+    }
 
     private void Update()
     {
-        selectAttackerTimer += Time.deltaTime;
 
         if (selectAttackerTimer > 0.75f)
         {
