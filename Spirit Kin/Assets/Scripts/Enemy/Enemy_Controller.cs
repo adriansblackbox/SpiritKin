@@ -635,8 +635,8 @@ public class Enemy_Controller : MonoBehaviour
 
         //Hit detection of swipe
         foreach (Transform originPoint in leftSwipeOriginPoints) {
-            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
-            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
+            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 7.5f, Color.red);
+            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 7.5f, swipeLayerMask))
             {
                 if(!hasHitPlayer) {
                     hasHitPlayer = true;
