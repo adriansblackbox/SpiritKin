@@ -181,6 +181,11 @@ public class PlayerController : MonoBehaviour
         // resets attack delay in the case that the player dashes before the delay window closes
         animator.SetFloat("Attack Delay", 0);
         animator.SetInteger("Attack Number", 1);
+        inputDirection = new Vector2(input_x, input_y);
+        if (inputDirection != Vector2.zero){
+            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+            transform.GetChild(0).transform.rotation = Quaternion.Euler(0.0f, targetRotation, 0.0f);
+        }
     }
     private void DashEnd(){
         animator.SetBool("Dash End", true);
@@ -192,11 +197,6 @@ public class PlayerController : MonoBehaviour
     // Attack/Dash movment logic, effects, sounds, and execution
     //====================================================
     private void DashMovement(){
-        inputDirection = new Vector2(input_x, input_y);
-        if (inputDirection != Vector2.zero){
-            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-            transform.GetChild(0).transform.rotation = Quaternion.Euler(0.0f, targetRotation, 0.0f);
-        }
         moveDirection = transform.GetChild(0).transform.forward.normalized;
         speed = DashSpeed;
         controller.Move(moveDirection * speed * Time.deltaTime);
