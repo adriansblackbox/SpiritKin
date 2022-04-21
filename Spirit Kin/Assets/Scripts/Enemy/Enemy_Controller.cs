@@ -42,6 +42,8 @@ public class Enemy_Controller : MonoBehaviour
     Vector3 endPosition = Vector3.zero;
     float timeCharging = 0;
     float timeLunging = 0;
+    float timeSlerping = 0;
+    float durationOfSlerp = 0.2f;
 
     public Transform[] rightSwipeOriginPoints;
     public Transform[] leftSwipeOriginPoints;
@@ -103,11 +105,11 @@ public class Enemy_Controller : MonoBehaviour
 ///////////////////////////////////////////////// SPHERECASTING
     [Header("Spherecasting")]
     public Transform[] visionFanOrigins;
+    public Transform[] sideAndBackDetectionOrigins;
     public float raycastRadius;
     public float targetDetectionRange;
 
     private RaycastHit hitInfo;
-    private bool hasDetectedPlayer = false;
 
 ///////////////////////////////////////////////// STATE BOX FOR TESTING
     [Header("Debugging")]
@@ -153,7 +155,6 @@ public class Enemy_Controller : MonoBehaviour
                 attackPlayer();
                 break;
             case AttackState.Waiting:
-                Log("Waiting to attack");
                 break;
         }
 
@@ -170,7 +171,6 @@ public class Enemy_Controller : MonoBehaviour
             switch (EnemyMotion)
             {
                 case MotionState.Idling:
-
                     ThisEnemy.speed = chaseSpeed;
                     ThisEnemy.stoppingDistance = 2.5f;
                     //If enemy has reached destination find next waypoint
@@ -208,7 +208,7 @@ public class Enemy_Controller : MonoBehaviour
 
                 case MotionState.Chasing:
                     ThisEnemy.speed = chaseSpeed;
-                    ThisEnemy.stoppingDistance = 10;
+                    ThisEnemy.stoppingDistance = 10f;
 
                     List<GameObject> nearbyEnemies = ai.getNearbyEnemies(gameObject);
                     foreach (GameObject gameObj in nearbyEnemies)
@@ -241,9 +241,21 @@ public class Enemy_Controller : MonoBehaviour
                     break;
 
                 case MotionState.Surrounding:
+                    ThisEnemy.speed = chaseSpeed;
                     ThisEnemy.stoppingDistance = 5f;
-                    transform.LookAt(player.transform.position);
-                    transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+
+                    //replace with slerp
+                    if (timeSlerping < durationOfSlerp / 2)
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirVec), timeSlerping);
+                        transform.rotation = Quaternion.Euler(new Vector3(0f, transform.eulerAngles.y, 0f));
+                        timeSlerping += Time.deltaTime;
+                    }
+                    else
+                    {
+                        transform.LookAt(player.transform.position);
+                        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+                    }
 
                     //If enemy has left the arena set EnemyMotion -> MotionState.Relocating
                     if (exitedArena)
@@ -266,7 +278,6 @@ public class Enemy_Controller : MonoBehaviour
                     {
                         //Calculate path to SurroundSpot
                         if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
-                            //movementQueue = new List<Vector3>();
                             movementQueue = ai.determineSurroundSpot(transform);
                             if (movementQueue.Count == 0) {
                                 changeState(MotionState.Relocating);
@@ -300,7 +311,6 @@ public class Enemy_Controller : MonoBehaviour
                     }
                     break;
                 case MotionState.Waiting:
-                    Log(EnemyMotion);
                     break;
             }
         }
@@ -324,6 +334,10 @@ public class Enemy_Controller : MonoBehaviour
             ai.enemiesIdling.Remove(gameObject);
 
         EnemyMotion = targetState;
+
+        if (targetState == MotionState.Surrounding) dirVec = player.transform.position - transform.position;
+
+        Log("Changed Motion State -> " + targetState);
     }
 
     public void resetSurround()
@@ -353,6 +367,10 @@ public class Enemy_Controller : MonoBehaviour
     private void AttackStart()
     {
         enemyAnimator.SetBool("Attack", true);
+        if (currentAttack.attackNumber != 3)
+            generateLungePath();
+        else
+            generateChargePath();
     }
 
     private void AttackEnd()
@@ -360,6 +378,9 @@ public class Enemy_Controller : MonoBehaviour
         enemyAnimator.SetBool("Attack", false);
         leftSwipeTrail.SetActive(false);
         rightSwipeTrail.SetActive(false);
+        timeLunging = 0;
+        timeCharging = 0;
+        timeSlerping = 0;
 
         if (currentAttack.attackNumber == 0)
         {
@@ -391,6 +412,7 @@ public class Enemy_Controller : MonoBehaviour
         {
             changeState(MotionState.Surrounding);
         }
+
         EnemyAttack = AttackState.Waiting;
         currentAttack = null;
         hasHitPlayer = false;
@@ -415,8 +437,16 @@ public class Enemy_Controller : MonoBehaviour
         hitEnabled = false;
     }
 
-    private void attackPlayer() 
+    private void attackPlayer()
     {
+        //slerp to align with dirvec generated in lungepath/chargepath
+        if (timeSlerping < durationOfSlerp)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirVec), timeSlerping);
+            transform.rotation = Quaternion.Euler(new Vector3(0f, transform.eulerAngles.y, 0f));
+            timeSlerping += Time.deltaTime;
+        }
+
         if (hitEnabled)
         {
             switch (currentAttack.attackNumber)
@@ -518,8 +548,6 @@ public class Enemy_Controller : MonoBehaviour
     //     }
     //     else if (attackTimer > yellowTime + orangeTime + 0.05f)
     //     {
-    //         if (timeCharging == 0)
-    //             generateChargePath();
     //         GetComponentInChildren<MeshRenderer>().material = enemyAttackingMat;
     //         timeCharging += Time.deltaTime;
     //         transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
@@ -564,15 +592,12 @@ public class Enemy_Controller : MonoBehaviour
         startPosition = transform.position;
         endPosition = transform.position + (dirVec.normalized * lungeLength);
         endPosition.y = transform.position.y;
-        timeLunging = 0;
-        // Note - to lerp, we need a bit more time than in a function
-        //transform.LookAt(player.transform.position); //this should LERP not happen instantly
+        timeSlerping = 0;
     }
 
     private void rightSwipeAttack()
     {
         rightSwipeTrail.SetActive(true);
-        generateLungePath();
         RaycastHit hit;
         
         //Lunge motion
@@ -580,7 +605,6 @@ public class Enemy_Controller : MonoBehaviour
         transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);
 
         //Hit detection of swipe
-        rightSwipeTrail.SetActive(true);
         foreach (Transform originPoint in rightSwipeOriginPoints) {
             Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 7.5f, Color.red);
             if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 7.5f, swipeLayerMask))
@@ -597,7 +621,6 @@ public class Enemy_Controller : MonoBehaviour
     private void leftSwipeAttack()
     {
         leftSwipeTrail.SetActive(true);
-        generateLungePath();
         RaycastHit hit;
 
         //Lunge motion
@@ -605,7 +628,6 @@ public class Enemy_Controller : MonoBehaviour
         transform.position = Vector3.Lerp(startPosition, endPosition, timeLunging/durationOfLunge);                
 
         //Hit detection of swipe
-        leftSwipeTrail.SetActive(true);
         foreach (Transform originPoint in leftSwipeOriginPoints) {
             Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
             if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
@@ -617,14 +639,6 @@ public class Enemy_Controller : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void checkForSecondSwipe()
-    {
-        if (Vector3.Distance(player.transform.position, transform.position) < 12.5f)
-            enemyAnimator.SetBool("PlayerInRange", true);
-        else
-            enemyAnimator.SetBool("PlayerInRange", false);
     }
 
     #endregion
@@ -751,9 +765,19 @@ public class Enemy_Controller : MonoBehaviour
                     ThisEnemy.ResetPath();
                     EnemyMotion = MotionState.Chasing;
                 }
-                else
+            }
+        }
+
+        foreach (Transform originPoint in sideAndBackDetectionOrigins)
+        {
+            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange / 2.5f, Color.red);
+            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hitInfo, targetDetectionRange / 2.5f, swipeLayerMask))
+            {
+                if (EnemyMotion == MotionState.Idling)
                 {
-                    hasDetectedPlayer = false;
+                    Log("Player Detected!");
+                    ThisEnemy.ResetPath();
+                    EnemyMotion = MotionState.Chasing;
                 }
             }
         }
