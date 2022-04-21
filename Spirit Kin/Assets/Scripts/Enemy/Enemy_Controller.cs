@@ -158,170 +158,170 @@ public class Enemy_Controller : MonoBehaviour
                 break;
         }
 
-        if (!stunned)
+        // if (!stunned)
+        // {
+        //     if (stunnedLastFrame)
+        //     {
+        //         stunnedLastFrame = false;
+        //         alertBox.SetActive(false);
+        //         if (EnemyAttack != AttackState.Attacking) {
+        //             changeState(MotionState.Chasing);
+        //         } 
+        //     }
+        switch (EnemyMotion)
         {
-            if (stunnedLastFrame)
-            {
-                stunnedLastFrame = false;
-                alertBox.SetActive(false);
-                if (EnemyAttack != AttackState.Attacking) {
+            case MotionState.Idling:
+                ThisEnemy.speed = chaseSpeed;
+                ThisEnemy.stoppingDistance = 2.5f;
+                //If enemy has reached destination find next waypoint
+                if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance) {
+                    ThisEnemy.SetDestination(findNextWaypoint());
+                }
+                break;
+
+            case MotionState.Relocating:
+                ThisEnemy.speed = chaseSpeed + 5f;
+                ThisEnemy.stoppingDistance = 5f;
+
+                //Debugging
+                if (unstuckingCheck == Vector3.zero) {
+                    StartCoroutine(unstuckTimer());
+                }
+
+                //If enemy has reached destination set EnemyMotion -> MotionState.Idling
+                if (path.status == NavMeshPathStatus.PathComplete && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
+                {
+                    ThisEnemy.ResetPath();
+                    changeState(MotionState.Idling);
+                    break;
+                }
+
+                //If relocate spot is invalid select another
+                if (relocateSpot == Vector3.zero)
+                    relocateSpot = es.chooseLocation(shrine).position;
+                else
+                    ThisEnemy.CalculatePath(relocateSpot, path);
+
+                if (path.status == NavMeshPathStatus.PathComplete)
+                    ThisEnemy.SetDestination(relocateSpot);
+                break;
+
+            case MotionState.Chasing:
+                ThisEnemy.speed = chaseSpeed;
+                ThisEnemy.stoppingDistance = 10f;
+
+                List<GameObject> nearbyEnemies = ai.getNearbyEnemies(gameObject);
+                foreach (GameObject gameObj in nearbyEnemies)
+                {
+                    gameObj.SendMessage("changeState", MotionState.Chasing);
+                }
+
+                //If enemy has left the arena set EnemyMotion -> MotionState.Relocating
+                if (exitedArena)
+                {
+                    ThisEnemy.ResetPath();
+                    exitedArena = false;
+                    changeState(MotionState.Relocating);
+                    break;
+                }
+
+                //If the enemy's distance to the player is less than breakDist EnemyMotion -> MotionState.Surrounding
+                if (Vector3.Distance(player.transform.position, transform.position) < breakDist - 1f)
+                {
+                    changeState(MotionState.Surrounding);
+                    ThisEnemy.ResetPath();
+                    break;
+                }
+
+                //Calculate path to the player
+                ThisEnemy.CalculatePath(player.transform.position, path);
+                if (path.status == NavMeshPathStatus.PathComplete) {
+                    ThisEnemy.SetDestination(player.transform.position);
+                }
+                break;
+
+            case MotionState.Surrounding:
+                ThisEnemy.speed = chaseSpeed;
+                ThisEnemy.stoppingDistance = 5f;
+
+                //replace with slerp
+                if (timeSlerping < durationOfSlerp / 2)
+                {
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirVec), timeSlerping);
+                    transform.rotation = Quaternion.Euler(new Vector3(0f, transform.eulerAngles.y, 0f));
+                    timeSlerping += Time.deltaTime;
+                }
+                else
+                {
+                    transform.LookAt(player.transform.position);
+                    transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+                }
+
+                //If enemy has left the arena set EnemyMotion -> MotionState.Relocating
+                if (exitedArena)
+                {
+                    resetSurround();
+                    exitedArena = false;
+                    changeState(MotionState.Relocating);
+                    break;
+                }
+
+                //If the enemy's distance to the player is greater than breakDist EnemyMotion -> MotionState.Chasing
+                if (Vector3.Distance(player.transform.position, transform.position) > breakDist + 1f)
+                {
                     changeState(MotionState.Chasing);
-                } 
-            }
-            switch (EnemyMotion)
-            {
-                case MotionState.Idling:
-                    ThisEnemy.speed = chaseSpeed;
-                    ThisEnemy.stoppingDistance = 2.5f;
-                    //If enemy has reached destination find next waypoint
-                    if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance) {
-                        ThisEnemy.SetDestination(findNextWaypoint());
-                    }
+                    resetSurround();
                     break;
+                }
 
-                case MotionState.Relocating:
-                    ThisEnemy.speed = chaseSpeed + 5f;
-                    ThisEnemy.stoppingDistance = 5f;
-
-                    //Debugging
-                    if (unstuckingCheck == Vector3.zero) {
-                        StartCoroutine(unstuckTimer());
-                    }
-
-                    //If enemy has reached destination set EnemyMotion -> MotionState.Idling
-                    if (path.status == NavMeshPathStatus.PathComplete && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
-                    {
-                        ThisEnemy.ResetPath();
-                        changeState(MotionState.Idling);
-                        break;
-                    }
-
-                    //If relocate spot is invalid select another
-                    if (relocateSpot == Vector3.zero)
-                        relocateSpot = es.chooseLocation(shrine).position;
-                    else
-                        ThisEnemy.CalculatePath(relocateSpot, path);
-
-                    if (path.status == NavMeshPathStatus.PathComplete)
-                        ThisEnemy.SetDestination(relocateSpot);
-                    break;
-
-                case MotionState.Chasing:
-                    ThisEnemy.speed = chaseSpeed;
-                    ThisEnemy.stoppingDistance = 10f;
-
-                    List<GameObject> nearbyEnemies = ai.getNearbyEnemies(gameObject);
-                    foreach (GameObject gameObj in nearbyEnemies)
-                    {
-                        gameObj.SendMessage("changeState", MotionState.Chasing);
-                    }
-
-                    //If enemy has left the arena set EnemyMotion -> MotionState.Relocating
-                    if (exitedArena)
-                    {
-                        ThisEnemy.ResetPath();
-                        exitedArena = false;
-                        changeState(MotionState.Relocating);
-                        break;
-                    }
-
-                    //If the enemy's distance to the player is less than breakDist EnemyMotion -> MotionState.Surrounding
-                    if (Vector3.Distance(player.transform.position, transform.position) < breakDist - 1f)
-                    {
-                        changeState(MotionState.Surrounding);
-                        ThisEnemy.ResetPath();
-                        break;
-                    }
-
-                    //Calculate path to the player
-                    ThisEnemy.CalculatePath(player.transform.position, path);
-                    if (path.status == NavMeshPathStatus.PathComplete) {
-                        ThisEnemy.SetDestination(player.transform.position);
-                    }
-                    break;
-
-                case MotionState.Surrounding:
-                    ThisEnemy.speed = chaseSpeed;
-                    ThisEnemy.stoppingDistance = 5f;
-
-                    //replace with slerp
-                    if (timeSlerping < durationOfSlerp / 2)
-                    {
-                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirVec), timeSlerping);
-                        transform.rotation = Quaternion.Euler(new Vector3(0f, transform.eulerAngles.y, 0f));
-                        timeSlerping += Time.deltaTime;
-                    }
-                    else
-                    {
-                        transform.LookAt(player.transform.position);
-                        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-                    }
-
-                    //If enemy has left the arena set EnemyMotion -> MotionState.Relocating
-                    if (exitedArena)
-                    {
-                        resetSurround();
-                        exitedArena = false;
-                        changeState(MotionState.Relocating);
-                        break;
-                    }
-
-                    //If the enemy's distance to the player is greater than breakDist EnemyMotion -> MotionState.Chasing
-                    if (Vector3.Distance(player.transform.position, transform.position) > breakDist + 1f)
-                    {
-                        changeState(MotionState.Chasing);
-                        resetSurround();
-                        break;
-                    }
-
-                    if (movementQueue != null) 
-                    {
-                        //Calculate path to SurroundSpot
-                        if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
-                            movementQueue = ai.determineSurroundSpot(transform);
-                            if (movementQueue.Count == 0) {
-                                changeState(MotionState.Relocating);
-                                break;
-                            }
-                        }
-
-                        if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count > 0) //Direct enemy along their movementQueue
-                        {
-                            nextSpot = movementQueue[0];
-                            movementQueue.RemoveAt(0);
-                            ThisEnemy.speed = chaseSpeed;
-                        } 
-                        else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
-                        {
-                            ai.enemiesReadyToAttack.Add(gameObject);
-                            ThisEnemy.speed = surroundSpeed / 1.4f;
+                if (movementQueue != null) 
+                {
+                    //Calculate path to SurroundSpot
+                    if (!(GetComponent<CharacterStats>().isDying) && movementQueue.Count == 0 && surroundSpot == Vector3.zero) {
+                        movementQueue = ai.determineSurroundSpot(transform);
+                        if (movementQueue.Count == 0) {
+                            changeState(MotionState.Relocating);
+                            break;
                         }
                     }
-                    else 
-                    {
-                        Log("Movement Queue is null");
-                    }
 
-                    //Ensure that the enemy stays on the navmesh
-                    NavMeshHit hit;
-                    NavMesh.SamplePosition(nextSpot + player.transform.position, out hit, 400.0f, NavMesh.AllAreas);
-                    ThisEnemy.CalculatePath(hit.position, path); //might need to do the find spot Navmesh thing if doesnt work
-                    if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
-                        ThisEnemy.SetDestination(hit.position);
+                    if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count > 0) //Direct enemy along their movementQueue
+                    {
+                        nextSpot = movementQueue[0];
+                        movementQueue.RemoveAt(0);
+                        ThisEnemy.speed = chaseSpeed;
+                    } 
+                    else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
+                    {
+                        ai.enemiesReadyToAttack.Add(gameObject);
+                        ThisEnemy.speed = surroundSpeed / 1.4f;
                     }
-                    break;
-                case MotionState.Waiting:
-                    break;
-            }
+                }
+                else 
+                {
+                    Log("Movement Queue is null");
+                }
+
+                //Ensure that the enemy stays on the navmesh
+                NavMeshHit hit;
+                NavMesh.SamplePosition(nextSpot + player.transform.position, out hit, 400.0f, NavMesh.AllAreas);
+                ThisEnemy.CalculatePath(hit.position, path); //might need to do the find spot Navmesh thing if doesnt work
+                if (path.status == NavMeshPathStatus.PathComplete) { // Check if player is in navmesh. Has something to do with the NavMeshPathStatus enum
+                    ThisEnemy.SetDestination(hit.position);
+                }
+                break;
+            case MotionState.Waiting:
+                break;
         }
-        else
-        {
-            ai.enemiesReadyToAttack.Remove(gameObject);
-            alertBox.SetActive(true);
-            alertBox.GetComponent<MeshRenderer>().material = patrolMat;
-            Log("Stunned");
-            stunnedLastFrame = true;
-        }
+        // }
+        // else
+        // {
+        //     ai.enemiesReadyToAttack.Remove(gameObject);
+        //     alertBox.SetActive(true);
+        //     alertBox.GetComponent<MeshRenderer>().material = patrolMat;
+        //     Log("Stunned");
+        //     stunnedLastFrame = true;
+        // }
     }
 
     public void changeState(MotionState targetState)
@@ -392,6 +392,12 @@ public class Enemy_Controller : MonoBehaviour
             enemyAnimator.SetBool("PlayerInRange", true);
             combo = true;
             hasHitPlayer = false;
+            
+            //if comboing need to change the attack
+            if (currentAttack.attackNumber == 1)
+                currentAttack = enemyAttacks[2];
+            else
+                currentAttack = enemyAttacks[1];
         }
         else 
         {
@@ -629,8 +635,8 @@ public class Enemy_Controller : MonoBehaviour
 
         //Hit detection of swipe
         foreach (Transform originPoint in leftSwipeOriginPoints) {
-            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 10f, Color.red);
-            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 10f, swipeLayerMask))
+            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 7.5f, Color.red);
+            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 7.5f, swipeLayerMask))
             {
                 if(!hasHitPlayer) {
                     hasHitPlayer = true;

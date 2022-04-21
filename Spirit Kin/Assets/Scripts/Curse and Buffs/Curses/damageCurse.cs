@@ -28,7 +28,7 @@ public class damageCurse : Curse
         cMeter.activeCurses.Add(this);
         cDamage = pStats.damage.GetValue();
 
-        pStats.damage.AddBaseValue(-(cDamage - 5));
+        pStats.damage.AddBaseValue(-(cDamage/2));
     } 
 
     override public void removeCurse () 
@@ -36,6 +36,6 @@ public class damageCurse : Curse
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.damage.AddBaseValue(cDamage - 5);
+        pStats.damage.AddBaseValue(cDamage);
     } 
 }
