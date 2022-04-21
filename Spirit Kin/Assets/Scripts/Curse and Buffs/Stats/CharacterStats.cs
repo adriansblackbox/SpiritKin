@@ -51,9 +51,10 @@ public class CharacterStats : MonoBehaviour
 
         currentHealth -= damage;
 
-        if (gameObject.tag == "Enemy") {
-            StartCoroutine(stunEnemy());
-        }
+        //vvv will reimplement once its cleaner
+        // if (gameObject.tag == "Enemy") {
+        //     StartCoroutine(stunEnemy());
+        // }
         if(gameObject.tag == "Player") {
             gameObject.GetComponent<PlayerController>().Stun();
         }
