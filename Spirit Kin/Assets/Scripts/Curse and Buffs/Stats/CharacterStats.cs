@@ -18,7 +18,7 @@ public class CharacterStats : MonoBehaviour
     public ParticleSystem hitVFX;
 
     public GameObject deathUI;
-    public GameObject HealthBar;
+    //public GameObject HealthBar;
 
     public GameObject player;
     
@@ -52,7 +52,7 @@ public class CharacterStats : MonoBehaviour
 
         currentHealth -= damage;
 
-        if (gameObject.tag != "Player" && currentHealth != maxHealth) HealthBar.SetActive(true);
+        // if (gameObject.tag != "Player" && currentHealth != maxHealth) HealthBar.SetActive(true);
 
         //vvv will reimplement once its cleaner
         // if (gameObject.tag == "Enemy") {
