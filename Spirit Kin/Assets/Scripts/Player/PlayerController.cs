@@ -77,37 +77,32 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("Z Direction Input", Mathf.Abs(input_y));
         if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0))
             animator.SetBool("X Pressed", true);
-        //if(Input.GetButtonDown("Y Button"))
-        //   animator.SetBool("Y Pressed", true);
+        if(Input.GetButtonDown("Y Button") || Input.GetKeyDown(KeyCode.Mouse1))
+           animator.SetBool("Y Pressed", true);
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space) && !animator.GetBool("Dash Movement"))
             animator.SetBool("A Pressed", true);
     }
     //===========================================================
     // Animation events and triggers
     //===========================================================
-    private void AttackStart(){
+    private void AnimationStart() {
         // Set Animator Param
         animator.SetBool("Dash End", false);
         animator.SetBool("A Pressed", false);
         animator.SetBool("X Pressed", false);
-        animator.SetBool("A Pressed", false);
+        animator.SetBool("Y Pressed", false);
         animator.SetBool("Attack Movement", false);
         animator.SetBool("Attack Cancel", false);
         animator.SetBool("Move Cancel", false);
         animator.SetBool("Combo Reset", false);
         animator.SetBool("Attack End", false);
+        DisableHitRay();
+    }
+    private void AttackStart(){
+       AnimationStart();
     }
     private void DashStart(){
-        // Set Animator Param
-        animator.SetBool("Dash End", false);
-        animator.SetBool("A Pressed", false);
-        animator.SetBool("X Pressed", false);
-        animator.SetBool("A Pressed", false);
-        animator.SetBool("Attack Movement", false);
-        animator.SetBool("Attack Cancel", false);
-        animator.SetBool("Move Cancel", false);
-        animator.SetBool("Combo Reset", false);
-        animator.SetBool("Attack End", false);
+       AnimationStart();
     }
     private void SetAttackCancelTrue(){
         animator.SetBool("Attack Cancel", true);
@@ -354,17 +349,7 @@ public class PlayerController : MonoBehaviour
     }
     //===========================================================
     public void Stun() {
-        animator.SetBool("Dash End", false);
-        animator.SetBool("A Pressed", false);
-        animator.SetBool("X Pressed", false);
-        animator.SetBool("A Pressed", false);
-        animator.SetBool("Attack Movement", false);
-        animator.SetBool("Attack Cancel", false);
-        animator.SetBool("Move Cancel", false);
-        animator.SetBool("Combo Reset", false);
-        animator.SetBool("Attack End", false);
-
-
+        AnimationStart();
         animator.SetBool("Stunned", true);
         animator.SetLayerWeight(1, 1);
         animator.SetLayerWeight(0, 0);
@@ -374,5 +359,12 @@ public class PlayerController : MonoBehaviour
         animator.SetLayerWeight(1, 0);
         animator.SetLayerWeight(0, 1);
         animator.SetBool("Stunned", false);
+    }
+    private void SpecialStart() {
+        AnimationStart();
+        animator.SetBool("Special End", false);
+    }
+     private void SpecialEnd() {
+        animator.SetBool("Special End", true);
     }
 }
