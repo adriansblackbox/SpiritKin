@@ -37,10 +37,11 @@ public class PlayerController : MonoBehaviour
     private float animationBlend;
     private Vector3 moveDirection;
     private CharacterController controller;
+    private SwordCollision swordScript;
     private Animator animator;
 	private GameObject mainCamera;
     
-    public Transform[] A1RayCast, A2RayCast, A3RayCast, A4RayCast, A5RayCast;
+    public Transform A1RayCast, A2RayCast, A3RayCast, A4RayCast, A5RayCast;
     public ParticleSystem[] AttackVFX;
 
     void Start()
@@ -53,6 +54,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("Attack Number", 1);
         CinemachineTargetYaw = 90;
         CinemachineTargetPitch = 0;
+        swordScript = GetComponent<SwordCollision>();
     }
     void Update()
     {
@@ -116,7 +118,6 @@ public class PlayerController : MonoBehaviour
     }
     public void EnableHitRay(){
         string attackName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
-        SwordCollision swordScript = FindObjectOfType<SwordCollision>();
         switch(attackName){
             case "Attack 1":
                 // sets attack num to the next attack for delay 
@@ -158,7 +159,6 @@ public class PlayerController : MonoBehaviour
 
     }
     public void DisableHitRay(){
-        SwordCollision swordScript = FindObjectOfType<SwordCollision>();
         swordScript.RaycastOn = false;
     }
     private void AttackEnd(){

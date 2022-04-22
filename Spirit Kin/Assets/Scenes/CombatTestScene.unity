@@ -15549,6 +15549,11 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -745928167409971724, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
+--- !u!4 &857145212 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 563864975969838445, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+  m_PrefabInstance: {fileID: 8669201217155251026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &858690312
 GameObject:
   m_ObjectHideFlags: 0
@@ -15935,6 +15940,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf510e60bccb9ed44abdc1a6975d2e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &881556158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881556148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cc70b62f1920014c9ce5748e36c158e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BladeLength: 12
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  immuneEnemies: []
+  RaycastOn: 0
+  AttackOriginPoints: {fileID: 857145212}
 --- !u!4 &881765604 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 20c9ece6158e8554992a878cf6b539ac, type: 3}
@@ -48919,30 +48943,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1192326751526488301, guid: b19eaa90dbcbb00428bb090fa8a8c13e, type: 3}
---- !u!1 &1877949734 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5236670066685210942, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
-  m_PrefabInstance: {fileID: 8669201217155251026}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1877949738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1877949734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cc70b62f1920014c9ce5748e36c158e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BladeLength: 10
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  immuneEnemies: []
-  RaycastOn: 0
-  AttackOriginPoints: []
 --- !u!1 &1879967352 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2024283774511849237, guid: 9a51e86218e34564fa61034e766a0f19, type: 3}
@@ -50361,6 +50361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35550142568c1844383a836b13719bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  difficulty: 0
   totalShrinesCursed: 0
   lowerLimitEnemyCount: 1
   upperLimitEnemyCount: 4
@@ -59149,6 +59150,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3251924000613929391, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: A1RayCast
+      value: 
+      objectReference: {fileID: 857145212}
+    - target: {fileID: 3251924000613929391, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: A2RayCast
+      value: 
+      objectReference: {fileID: 857145212}
+    - target: {fileID: 3251924000613929391, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: A3RayCast
+      value: 
+      objectReference: {fileID: 857145212}
+    - target: {fileID: 3251924000613929391, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: A4RayCast
+      value: 
+      objectReference: {fileID: 857145212}
+    - target: {fileID: 3251924000613929391, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: A5RayCast
+      value: 
+      objectReference: {fileID: 857145212}
+    - target: {fileID: 3251924000613929391, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: DashSpeed
       value: 100
       objectReference: {fileID: 0}
@@ -59440,6 +59461,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Point 17
       objectReference: {fileID: 0}
+    - target: {fileID: 5789538342916794855, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_Name
+      value: Attack Range 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5798192810001218214, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_Name
       value: Point 15
@@ -59493,4 +59518,5 @@ PrefabInstance:
     - {fileID: 3522750855493986059, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
     - {fileID: 3522750855629024702, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
     - {fileID: 3522750856141052612, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+    - {fileID: 5765025912560050946, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
