@@ -18,6 +18,8 @@ public class CharacterStats : MonoBehaviour
     public ParticleSystem hitVFX;
 
     public GameObject deathUI;
+    public GameObject healthBarCanvas;
+    public GameObject healthBar;
 
     public GameObject player;
     
@@ -50,6 +52,9 @@ public class CharacterStats : MonoBehaviour
         damage = Mathf.Clamp(damage, 0, float.MaxValue);
 
         currentHealth -= damage;
+        if (gameObject.tag != "Player" && currentHealth != maxHealth) healthBarCanvas.SetActive(true);
+        if (gameObject.tag != "Player" ) healthBar.transform.localScale = new Vector3 (40 * (currentHealth / maxHealth), 0.3f, 1f);
+        //healthBarCanvas.GetComponent<EnemyHealthBar>().takeDamageUI(currentHealth / maxHealth); // Lerp health bar aint doin it rn. Swap out one-line logic with this.
 
         //vvv will reimplement once its cleaner
         // if (gameObject.tag == "Enemy") {
@@ -77,6 +82,7 @@ public class CharacterStats : MonoBehaviour
             player.GetComponent<CurseMeter>().curseMeter += (float)coins / player.GetComponent<CurseMeter>().fillRate;
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().surroundSpotAvailability[gameObject.GetComponent<Enemy_Controller>().surroundIndex] = true;
+            if (gameObject.tag != "Player" && currentHealth != maxHealth) healthBarCanvas.SetActive(false);
             Destroy(this.gameObject, 0.025f);
         }
         if (this.gameObject.tag == "Player"){
