@@ -114,17 +114,32 @@ public class TeaShopManager : MonoBehaviour
     public void Upgrade()
     {
         if (
-            playStats.coins >= currentBuff.InvestCost &&
-            currentBuff.duration <= 400
+            playStats.coins >= currentBuff.investCost &&
+            currentBuff.level < 3 //3 is the max level
         )
         {
             //update coins
-            playStats.coins -= currentBuff.InvestCost;
+            playStats.coins -= currentBuff.investCost;
             menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
 
-            //add duration to buffs
-            currentBuff.duration += 100;
+            //make buff stronger
+            currentBuff.level += 1; //level gets increased by 1
+            currentBuff.duration += 60; //duration gets increased by a minute
+            currentBuff.power += currentBuff.basePower * currentBuff.level;
+            if (currentBuff.level < 3)
+            {
+                currentBuff.investCost += 150;
+                investCostTXT.text = "$: " + currentBuff.investCost.ToString();
+                currentBuff.updateDescription();
+                description.text = currentBuff.description;
+            }
+            else
+            {
+                //disable upgrade button rather than saying max or maybe do both
+                investCostTXT.text = "Max";
+                description.text = "Maximum potency reached";
+            }
         }
     }
 
@@ -164,9 +179,18 @@ public class TeaShopManager : MonoBehaviour
         displayPrev.GetComponent<Image>().sprite = prevBuff.buffSprite;
         displayNext.GetComponent<Image>().sprite = nextBuff.buffSprite;
         buffName.text = currentBuff.teaName;
-        description.text = currentBuff.description;
         costTXT.text = "$: " + currentBuff.Cost.ToString();
-        investCostTXT.text = "$: " + currentBuff.InvestCost.ToString();
+
+        if (currentBuff.level < 3)
+        {
+            description.text = currentBuff.description;
+            investCostTXT.text = "$: " + currentBuff.investCost.ToString();
+        }
+        else
+        {
+            investCostTXT.text = "Max";
+            description.text = "Maximum potency reached";            
+        }
     }
 
     // Update is called once per frame

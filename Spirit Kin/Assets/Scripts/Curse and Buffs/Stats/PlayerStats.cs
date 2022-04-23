@@ -16,10 +16,9 @@ public class PlayerStats : CharacterStats
 
     void Start()
     {
-        //give player 100 coins
-        coins = 100;
+        //set player starting coins here
+        coins = 1000;
         currentHealth = maxHealth;
-        //reset buffs
         
 
     }
@@ -62,8 +61,8 @@ public class PlayerStats : CharacterStats
                     {
                         case (Buff.statType.health):
                             {
-                                this.maxHealth += x.basePower;
-                                this.currentHealth += x.basePower;
+                                this.maxHealth += x.power;
+                                this.currentHealth += x.power;
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = healthBuff;
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
@@ -71,7 +70,7 @@ public class PlayerStats : CharacterStats
                             }
                         case (Buff.statType.armor):
                             {
-                                this.armor.AddBaseValue(x.basePower);
+                                this.armor.AddBaseValue(x.power);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = armorBuff;
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
@@ -79,7 +78,7 @@ public class PlayerStats : CharacterStats
                             }
                         case (Buff.statType.damage):
                             {
-                                this.damage.AddBaseValue(x.basePower);
+                                this.damage.AddBaseValue(x.power);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = damageBuff;
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
@@ -87,7 +86,7 @@ public class PlayerStats : CharacterStats
                             }
                         case (Buff.statType.speed):
                             {
-                                this.speed.AddBaseValue(x.basePower);
+                                this.speed.AddBaseValue(x.power);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = speedBuff;
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
@@ -102,7 +101,7 @@ public class PlayerStats : CharacterStats
                     {
                         case (Buff.statType.health):
                             {
-                                this.maxHealth -= x.basePower;
+                                this.maxHealth -= x.power;
                                 if (this.currentHealth > this.maxHealth)
                                 {
                                     this.currentHealth = this.maxHealth;
@@ -113,21 +112,21 @@ public class PlayerStats : CharacterStats
                             }
                         case (Buff.statType.armor):
                             {
-                                this.armor.AddBaseValue(-x.basePower);
+                                this.armor.AddBaseValue(-x.power);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.damage):
                             {
-                                this.damage.AddBaseValue(-x.basePower);
+                                this.damage.AddBaseValue(-x.power);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.speed):
                             {
-                                this.speed.AddBaseValue(-x.basePower);
+                                this.speed.AddBaseValue(-x.power);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;

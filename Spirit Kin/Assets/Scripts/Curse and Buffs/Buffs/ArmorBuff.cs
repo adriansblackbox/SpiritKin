@@ -9,17 +9,25 @@ public class ArmorBuff : Buff
     {
         baseDuration = 60f;
         baseTimeActive = 0f;
-        duration = baseDuration;
-        timeActive = baseTimeActive;
+        baseLevel = 0;
 
         teaName = "Armor Buff";
-        description = "Increases armor by 10";
-        Cost = 1;
-        InvestCost = 5;
+        type = "armor";
+        Cost = 25;
+        baseInvestCost = 100;
         buffSprite = sprite;
         stat = statType.armor;
         basePower = 10;
         isApplied = false;
         removeFlag = false;
+
+        power = 0;
+        investCost = baseInvestCost;
+        duration = baseDuration;
+        timeActive = baseTimeActive;
+        level = baseLevel;
+
+        description = "Increases armor by " + basePower;
+
     }
 }

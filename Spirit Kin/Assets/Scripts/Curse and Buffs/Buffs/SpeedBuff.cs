@@ -8,17 +8,24 @@ public class SpeedBuff : Buff
     {
         baseDuration = 60f;
         baseTimeActive = 0f;
-        duration = baseDuration;
-        timeActive = baseTimeActive;
+        baseLevel = 0;
 
         teaName = "Speed Buff";
-        description = "Increases speed by 0.5";
-        Cost = 1;
-        InvestCost = 5;
+        type = "speed";
+        Cost = 25;
+        baseInvestCost = 100;
         buffSprite = sprite;
         stat = statType.speed;
         basePower = 0.5f;
         isApplied = false;
         removeFlag = false;
+
+        power = 0;
+        investCost = baseInvestCost;
+        duration = baseDuration;
+        timeActive = baseTimeActive;
+        level = baseLevel;
+
+        description = "Increases speed by " + basePower;
     }
 }

@@ -8,17 +8,24 @@ public class DamageBuff : Buff
     {
         baseDuration = 60f;
         baseTimeActive = 0f;
-        duration = baseDuration;
-        timeActive = baseTimeActive;
+        baseLevel = 0;
 
         teaName = "Damage Buff";
-        description = "Increases damage by 10";
-        Cost = 1;
-        InvestCost = 5;
+        type = "damage";
+        Cost = 25;
+        baseInvestCost = 100;
         buffSprite = sprite;
         stat = statType.damage;
         basePower = 10;
         isApplied = false;
         removeFlag = false;
+
+        duration = baseDuration;
+        timeActive = baseTimeActive;
+        power = 0;
+        investCost = baseInvestCost;
+        level = baseLevel;
+
+        description = "Increases damage by " + basePower;
     }
 }

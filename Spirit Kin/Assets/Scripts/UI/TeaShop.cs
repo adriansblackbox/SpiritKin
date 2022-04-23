@@ -69,12 +69,14 @@ public class TeaShop : MonoBehaviour
         //preload
         // teaMenu.GetComponent<NewShopManager>().Initial();
         teaCamera.SetActive(true);
-        isOpen = true;
 
         //clear selected button
         EventSystem.current.SetSelectedGameObject(null);
         //reassign
         EventSystem.current.SetSelectedGameObject(ShopFirstButton);
+
+        //shop is now open
+        isOpen = true;
 
         //disable player's script here
         Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
