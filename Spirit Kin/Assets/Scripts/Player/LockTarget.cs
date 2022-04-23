@@ -22,10 +22,9 @@ public class LockTarget : MonoBehaviour
     private float inputX;
     private float inputY;
     private Transform playerBody;
-    private Animator animator;
+    public LayerMask EnemyLayer;
     private void Start() {
         controller = GetComponent<PlayerController>();
-        animator = GetComponent<Animator>();
         playerBody = transform.GetChild(0).gameObject.transform;
     }
 
@@ -34,12 +33,6 @@ public class LockTarget : MonoBehaviour
         if(Target != null){
             LockOnTarget();
         }
-        // updates the plaeyr's aniamtion according to input direction. Lerping is
-        // used for smooth and organic transitioning between animations
-        inputX = Mathf.Lerp(inputX, Input.GetAxis("Horizontal"), Time.deltaTime*10f);
-        inputY = Mathf.Lerp(inputY, Input.GetAxis("Vertical"), Time.deltaTime*10f);
-        animator.SetFloat("X Direction", inputX * 2f);
-        animator.SetFloat("Z Direction", inputY * 2f);
     }
     
     private void LockOnTarget(){
@@ -70,8 +63,11 @@ public class LockTarget : MonoBehaviour
         if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             if(Target != null)
                 DelockTarget();
-            else
-                Target = FindObjectOfType<LockableTargets>().AssessTarget();
+            else {
+                float rayLength = 200f;
+                RaycastHit[] hit;
+                hit = Physics.SphereCastAll(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, rayLength, EnemyLayer);
+            }
         }
     }
 }

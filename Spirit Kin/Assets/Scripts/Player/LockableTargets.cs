@@ -12,11 +12,6 @@ public class LockableTargets : MonoBehaviour
     void Update()
     {
     }
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(this.transform.position, 20f);
-    }
-
     public Transform AssessTarget(){
         //sphere cast and check enemies in cast
         //append each enemy into a list
