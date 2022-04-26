@@ -45,7 +45,7 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
-    public void TakeDamage (float damage) {
+    public void TakeDamage (float damage, float knockBackStrength) {
         hitVFX.Play();
         //armor system
         damage -= armor.GetValue();
@@ -57,9 +57,11 @@ public class CharacterStats : MonoBehaviour
         //healthBarCanvas.GetComponent<EnemyHealthBar>().takeDamageUI(currentHealth / maxHealth); // Lerp health bar aint doin it rn. Swap out one-line logic with this.
 
         //vvv will reimplement once its cleaner
-        // if (gameObject.tag == "Enemy") {
-        //     StartCoroutine(stunEnemy());
-        // }
+        if (gameObject.tag == "Enemy") {
+            gameObject.GetComponent<Enemy_Controller>().GenerateKnockBack(knockBackStrength);
+            if(gameObject.GetComponent<Enemy_Controller>().EnemyAttack != Enemy_Controller.AttackState.Attacking)
+                StartCoroutine(stunEnemy());
+        }
         if(gameObject.tag == "Player") {
             gameObject.GetComponent<PlayerController>().Stun();
         }
@@ -94,7 +96,7 @@ public class CharacterStats : MonoBehaviour
     public IEnumerator stunEnemy()
     {
         GetComponent<Enemy_Controller>().stunned = true;
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(10f);
         GetComponent<Enemy_Controller>().stunned = false;
     }
 
