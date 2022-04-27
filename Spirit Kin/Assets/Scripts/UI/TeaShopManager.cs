@@ -98,7 +98,11 @@ public class TeaShopManager : MonoBehaviour
         if (
             playStats.coins >= currentBuff.Cost &&
             !currentBuff.isApplied &&
-            playStats.Buffs.Count < 3
+            playStats.Buffs.Count < 3 &&
+            GameObject
+                .FindGameObjectWithTag("TeaShop")
+                .GetComponent<TeaShop>()
+                .isOpen
         )
         {
             //update coins
@@ -114,8 +118,7 @@ public class TeaShopManager : MonoBehaviour
     public void Upgrade()
     {
         if (
-            playStats.coins >= currentBuff.investCost &&
-            currentBuff.level < 3 //3 is the max level
+            playStats.coins >= currentBuff.investCost && currentBuff.level < 3 //3 is the max level
         )
         {
             //update coins
@@ -189,7 +192,7 @@ public class TeaShopManager : MonoBehaviour
         else
         {
             investCostTXT.text = "Max";
-            description.text = "Maximum potency reached";            
+            description.text = "Maximum potency reached";
         }
     }
 
