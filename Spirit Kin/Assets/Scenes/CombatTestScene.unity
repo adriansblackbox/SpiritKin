@@ -16065,7 +16065,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   immuneEnemies: []
-  RaycastOn: 0
+  RaycastOn: 1
   AttackOriginPoints: {fileID: 857145212}
 --- !u!4 &881765604 stripped
 Transform:
@@ -29096,6 +29096,10 @@ PrefabInstance:
     - target: {fileID: 5503858658298197369, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -399
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039193249910268052, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
@@ -59238,6 +59242,10 @@ PrefabInstance:
     - target: {fileID: 156200618741131168, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_Name
       value: Point 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 319273366110682356, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_SlopeLimit
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 531363836807987785, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_Name

@@ -133,9 +133,10 @@ public class Enemy_Spawner : MonoBehaviour
         shrineToSpawnAt.GetComponent<AI_Manager>().enemiesIdling.Add(enemy);
 
         //set their stats to scale with difficulty
-        float tmp = Random.Range(5,20);
+        float tmp = Random.Range(5,15);
         CharacterStats enemyStats = enemy.GetComponent<CharacterStats>();
         enemyStats.coins = (int) (tmp + tmp * difficulty);
+        enemyStats.fillAmount = (int) (tmp + tmp * difficulty / 7.5);
         enemyStats.maxHealth = Mathf.Round(enemyStats.maxHealth + enemyStats.maxHealth * difficulty);
         enemyStats.currentHealth = enemyStats.maxHealth;
         enemyStats.damage.AddBaseValue(Mathf.Round(25 * (difficulty/4))); //The 25 should be an adjustable value linked to the damage stat, but works for now

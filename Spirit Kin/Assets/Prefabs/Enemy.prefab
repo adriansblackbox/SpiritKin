@@ -898,8 +898,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.3456349, y: 1.3032308, z: 1}
+  m_Center: {x: 0.047067747, y: 0.15161493, z: 0}
 --- !u!1 &2209196889553450514
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,8 +2802,8 @@ GameObject:
   - component: {fileID: 7815490150938240165}
   - component: {fileID: 559340711}
   - component: {fileID: -3225969771426942249}
-  - component: {fileID: 3395744986304884326}
   - component: {fileID: 657498701014188137}
+  - component: {fileID: 6231500921285118814}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -2872,6 +2872,7 @@ MonoBehaviour:
   maxHealth: 60
   currentHealth: 0
   isDying: 0
+  fillAmount: 0
   armor:
     baseValue: 0
   damage:
@@ -2906,10 +2907,12 @@ MonoBehaviour:
   enemyAttackingTwoMat: {fileID: 2100000, guid: c2d66f0ddcd87eb46a9119e9821dd2ea, type: 2}
   enemyCollider: {fileID: 6213425905927084345}
   hitEnabled: 0
+  tracking: 1
   durationOfCharge: 0.5
   chargeLength: 35
   durationOfLunge: 0.25
   lungeLength: 7.5
+  durationOfKnockBack: 0.1
   rightSwipeOriginPoints:
   - {fileID: 2669559759521585740}
   - {fileID: 1065621434175330383}
@@ -3030,22 +3033,6 @@ MonoBehaviour:
   surroundMat: {fileID: 2100000, guid: 204045e4779574a4bbb89d75e026cec7, type: 2}
   attackMat: {fileID: 2100000, guid: f17027f96abdc724c8feeb447ee3d0d7, type: 2}
   recoverMat: {fileID: 2100000, guid: 518f7a53f518aff478bc6c0e910acd91, type: 2}
---- !u!54 &3395744986304884326
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6192531991054698248}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 3
 --- !u!195 &657498701014188137
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3068,6 +3055,22 @@ NavMeshAgent:
   m_BaseOffset: 0.50000006
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!54 &6231500921285118814
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6192531991054698248}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6212113194617426052
 GameObject:
   m_ObjectHideFlags: 0

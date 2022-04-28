@@ -236,6 +236,7 @@ public class CurseMeter : MonoBehaviour
                     var a = x.image;
                     curCurseUI.transform.Find("Curse").gameObject.GetComponent<Image>().sprite = a;
                     curCurseUI.transform.Find("Bar").gameObject.SetActive(false);
+                    cp.showCursePopup(x.type);
                     x.invokeCurse();
                     manageCurseUI();
                     FindObjectOfType<StatVFX>().addCurseStat(x.type);

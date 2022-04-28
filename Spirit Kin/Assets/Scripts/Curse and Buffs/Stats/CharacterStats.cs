@@ -10,6 +10,8 @@ public class CharacterStats : MonoBehaviour
     public float currentHealth;
     public bool isDying = false;
 
+    public int fillAmount;
+
     public Stat armor;
     public Stat damage;
     public Stat speed;
@@ -86,7 +88,8 @@ public class CharacterStats : MonoBehaviour
         if (gameObject.tag == "Enemy") {
             player.GetComponent<PlayerStats>().coins += coins;
             //vvv this line will need to be changed because the player will gain curses way too fast with difficulty scaling
-            player.GetComponent<CurseMeter>().curseMeter += (float)coins / player.GetComponent<CurseMeter>().fillRate;
+            // player.GetComponent<CurseMeter>().curseMeter += (float)coins / player.GetComponent<CurseMeter>().fillRate;
+            player.GetComponent<CurseMeter>().curseMeter += (float) fillAmount / player.GetComponent<CurseMeter>().fillRate;
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().surroundSpotAvailability[gameObject.GetComponent<Enemy_Controller>().surroundIndex] = true;
             if (gameObject.tag != "Player" && currentHealth != maxHealth) healthBarCanvas.SetActive(false);

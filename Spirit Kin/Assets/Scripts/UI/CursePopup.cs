@@ -34,27 +34,26 @@ public class CursePopup : MonoBehaviour
         }
     }
 
-    public void showCursePopup(string curseName)
+    public void showCursePopup(string curseType)
     {
         showing = true;
         background.SetActive(true);
 
-        switch (curseName)
+        switch (curseType)
         {
-            case "Speed":
-                curseText.GetComponent<Text>().text = "Speed Curse";
+            case "Slow_Curse":
+                curseText.GetComponent<Text>().text = "Slow Curse";
                 curseImage.GetComponent<Image>().sprite = speedCurseImage;
                 break;
-            case "Defense":
-                curseText.GetComponent<Text>().text = "Defense Curse";
+            case "Armor_Curse":
+                curseText.GetComponent<Text>().text = "Frail Curse";
                 curseImage.GetComponent<Image>().sprite = armorCurseImage;
                 break;
-            case "Damage":
+            case "Damage_Curse":
                 curseText.GetComponent<Text>().text = "Damage Curse";
                 curseImage.GetComponent<Image>().sprite = damageCurseImage;
                 break;
         }
-
     }
 
     public void hideCursePopup()
