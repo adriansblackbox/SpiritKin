@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1159954109}
-  m_IndirectSpecularColor: {r: 0.44654095, g: 0.4963737, b: 0.57479686, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465412, g: 0.49637437, b: 0.574798, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -29075,6 +29075,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+--- !u!1 &1334573958 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5046282402189308105, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+  m_PrefabInstance: {fileID: 1334573957}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &1335043094 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1002554245, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
@@ -59526,6 +59531,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Point 13
       objectReference: {fileID: 0}
+    - target: {fileID: 3812787898400857073, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: cursePopup
+      value: 
+      objectReference: {fileID: 1334573958}
     - target: {fileID: 3812787898400857073, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: cursesUI.Array.data[0]
       value: 

@@ -23,6 +23,10 @@ public class CurseMeter : MonoBehaviour
     public Sprite Notch, weakImage, slowImage, frailImage;
     public GameObject ActiveSword;
 
+    // Needed Curse Obtained Popup
+    public GameObject cursePopup;
+    private CursePopup cp;
+
     // Bonus sword damage & current health capping?
     public float[] bonusDamages;
     public bool[] bonusDamagesActive;
@@ -49,6 +53,8 @@ public class CurseMeter : MonoBehaviour
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
         ActiveSword = Sword0;
         Sword1.SetActive(false); Sword2.SetActive(false); Sword3.SetActive(false);
+
+        cp = cursePopup.GetComponent<CursePopup>();
     }
 
     // Update is called once per frame
