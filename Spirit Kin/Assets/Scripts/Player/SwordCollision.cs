@@ -22,7 +22,7 @@ public class SwordCollision : MonoBehaviour
                 Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.red);
                 if(!immuneEnemies.Contains(hit.transform.gameObject)){
                     immuneEnemies.Add(hit.transform.gameObject);
-                    hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<PlayerStats>().damage.GetValue(), 100f);
+                    hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<PlayerStats>().damage.GetValue(), 5f);
                 }
             }
             else if(RaycastOn)

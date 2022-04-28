@@ -31,21 +31,28 @@ public class Enemy_Controller : MonoBehaviour
     public Material enemyAttackingTwoMat;    
     public BoxCollider enemyCollider;
     public bool hitEnabled;
+    public bool tracking = true;
+    
     [Tooltip("Determines Speed of Charge")]
     public float durationOfCharge = 0.5f;
     [Tooltip("Determines Length of Charge")]
     public float chargeLength = 20f;
+    [Tooltip("Determines Speed of Lunge")]
     public float durationOfLunge = 0.25f;
+    [Tooltip("Determines Length of Lunge")]
     public float lungeLength = 7.5f;
+    [Tooltip("Determines Speed of KnockBack")]
+    public float durationOfKnockBack = 0.1f;
+    
     private Vector3 dirVec;
     Vector3 startPosition = Vector3.zero;
     Vector3 endPosition = Vector3.zero;
     float timeCharging = 0;
     float timeLunging = 0;
     float timeSlerping = 0;
+    float timeKnockingBack = 0;
     float durationOfSlerp = 0.2f;
     float knockBackStrength;
-    Vector3 knockBackDirection;
 
     public Transform[] rightSwipeOriginPoints;
     public Transform[] leftSwipeOriginPoints;
@@ -59,7 +66,7 @@ public class Enemy_Controller : MonoBehaviour
     public AttackState EnemyAttack;
 
     public bool stunned = false;
-    private bool stunnedLastFrame = false;
+    private Vector3 lastLooking = Vector3.zero;
     public float shrineSpawnRange = 200f;
 
     #endregion
@@ -162,7 +169,8 @@ public class Enemy_Controller : MonoBehaviour
 
         if (!stunned)
         {
-            
+            lastLooking = player.transform.position;
+
             switch (EnemyMotion)
             {
                 case MotionState.Idling:
@@ -308,15 +316,25 @@ public class Enemy_Controller : MonoBehaviour
                 case MotionState.Waiting:
                     break;
             }
-        } else 
+        } 
+        else 
         {
             Debug.Log("BEING KNCOKED UP?");
-            this.gameObject.GetComponent<Rigidbody>().AddForce(-knockBackStrength * knockBackDirection);
-            if(Mathf.Abs(knockBackStrength) > 0) {
-                knockBackStrength = Mathf.Lerp(knockBackStrength, 0, 5f * Time.deltaTime);
-            }
+
+            //look at last spot rather than turning around -> first pass just look at where player last was
+            transform.LookAt(lastLooking);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+
+            //Knockback Motion
+            timeKnockingBack += Time.deltaTime;
+            transform.position = Vector3.Lerp(startPosition, endPosition, timeKnockingBack/durationOfKnockBack);
+            
+            // //lerp knockBackStrength to 0
+            // if (Mathf.Abs(knockBackStrength) > 0)
+            // {
+            //     knockBackStrength = Mathf.Lerp(knockBackStrength, 0, 5f * Time.deltaTime);
+            // }
         }
-        
     }
 
     public void changeState(MotionState targetState)
@@ -333,6 +351,26 @@ public class Enemy_Controller : MonoBehaviour
         if (targetState == MotionState.Surrounding) dirVec = player.transform.position - transform.position;
 
         Log("Changed Motion State -> " + targetState);
+    }
+
+    public void beginStun()
+    {
+        stunned = true;
+        ai.enemiesReadyToAttack.Remove(gameObject);
+    }
+
+    public void endStun()
+    {
+        stunned = false;
+    }
+
+    public void resetKnockback()
+    {
+        timeKnockingBack = 0;
+        stunned = false;
+        dirVec = Vector3.zero;
+        endPosition = Vector3.zero;
+        startPosition = Vector3.zero;
     }
 
     public void resetSurround()
@@ -362,10 +400,8 @@ public class Enemy_Controller : MonoBehaviour
     private void AttackStart()
     {
         enemyAnimator.SetBool("Attack", true);
-        if (currentAttack.attackNumber != 3)
-            generateLungePath();
-        else
-            generateChargePath();
+        dirVec = player.transform.position - transform.position;
+        tracking = true;
     }
 
     private void AttackEnd()
@@ -376,6 +412,10 @@ public class Enemy_Controller : MonoBehaviour
         timeLunging = 0;
         timeCharging = 0;
         timeSlerping = 0;
+
+        endPosition = Vector3.zero;
+        startPosition = Vector3.zero;
+        dirVec = Vector3.zero;
 
         if (currentAttack.attackNumber == 0)
         {
@@ -431,6 +471,7 @@ public class Enemy_Controller : MonoBehaviour
     private void EnableHit()
     {
         hitEnabled = true;
+        tracking = false;
     }
 
     private void DisableHit()
@@ -440,12 +481,17 @@ public class Enemy_Controller : MonoBehaviour
 
     private void attackPlayer()
     {
-        //slerp to align with dirvec generated in lungepath/chargepath
+        //slerp to align with player
         if (timeSlerping < durationOfSlerp)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirVec), timeSlerping);
             transform.rotation = Quaternion.Euler(new Vector3(0f, transform.eulerAngles.y, 0f));
             timeSlerping += Time.deltaTime;
+        }
+        else if (tracking) //issue with this is after the enemy has thier hit disabled it looks snappy and unrealistic + the first moment this is used it looks unrealistic
+        {
+            transform.LookAt(player.transform.position);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);            
         }
 
         if (hitEnabled)
@@ -453,12 +499,18 @@ public class Enemy_Controller : MonoBehaviour
             switch (currentAttack.attackNumber)
             {
                 case 0:
+                    if (Mathf.Approximately(endPosition.x, 0f))
+                        generateChargePath();
                     //chargeAttack();
                     break;
                 case 1:
+                    if (Mathf.Approximately(endPosition.x, 0f))
+                        generateLungePath();
                     leftSwipeAttack();
                     break;
                 case 2:
+                    if (Mathf.Approximately(endPosition.x, 0f))
+                        generateLungePath();
                     rightSwipeAttack();
                     break;
             }
@@ -593,12 +645,14 @@ public class Enemy_Controller : MonoBehaviour
         startPosition = transform.position;
         endPosition = transform.position + (dirVec.normalized * lungeLength);
         endPosition.y = transform.position.y;
-        timeSlerping = 0;
     }
+
+    //first time through will be a consistent speed the entire time, but polish would have deccelaration
     public void GenerateKnockBack(float strength) {
-        Vector3 playerPos = player.transform.position;
-        Vector3 target = new Vector3(playerPos.x, this.transform.position.y, playerPos.z);
-        knockBackDirection = this.transform.position - target;
+        dirVec = transform.position - player.transform.position;
+        startPosition = transform.position;
+        endPosition = transform.position + (dirVec.normalized * strength);
+        endPosition.y = transform.position.y;
         knockBackStrength = strength;
     }
 
@@ -692,19 +746,6 @@ public class Enemy_Controller : MonoBehaviour
         return es.chooseLocation(shrine).position;        
     }
 
-    //4 cases
-        //Quadrant 1, or Upper Left
-            //x is negative
-            //z is positive
-        //Quadrant 2, or Upper Right
-            //x is positive
-            //z is positive
-        //Quadrant 3, or Lower Left
-            //x is negative
-            //z is negative
-        //Quadrant 4, or Lower Right
-            //x is positive
-            //z is negative
     private Vector3 findNextWaypoint()
     {
         return es.chooseLocation(shrine).position;
