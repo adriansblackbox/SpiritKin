@@ -28,7 +28,7 @@ public class slowCurse : Curse
         cMeter.activeCurses.Add(this);
         pSpeed = pStats.speed.GetValue();
 
-        pStats.speed.AddBaseValue(pSpeed * -0.5f);
+        pStats.speed.AddBaseValue(pSpeed * -0.25f);
     } 
 
     override public void removeCurse () 
@@ -36,6 +36,6 @@ public class slowCurse : Curse
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.speed.AddBaseValue(pSpeed * 0.5f);
+        pStats.speed.AddBaseValue(pSpeed * 0.25f);
     } 
 }

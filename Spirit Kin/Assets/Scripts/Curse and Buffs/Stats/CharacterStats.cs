@@ -57,12 +57,17 @@ public class CharacterStats : MonoBehaviour
         //healthBarCanvas.GetComponent<EnemyHealthBar>().takeDamageUI(currentHealth / maxHealth); // Lerp health bar aint doin it rn. Swap out one-line logic with this.
 
         //vvv will reimplement once its cleaner
-        if (gameObject.tag == "Enemy") {
-            gameObject.GetComponent<Enemy_Controller>().GenerateKnockBack(knockBackStrength);
-            if(gameObject.GetComponent<Enemy_Controller>().EnemyAttack != Enemy_Controller.AttackState.Attacking)
+        if (gameObject.tag == "Enemy") 
+        {
+            if (gameObject.GetComponent<Enemy_Controller>().EnemyAttack != Enemy_Controller.AttackState.Attacking)
+            {
+                gameObject.GetComponent<Enemy_Controller>().GenerateKnockBack(knockBackStrength);
+                StopCoroutine(stunEnemy()); //so multiple can't be running at the same time -> This doesn't work in theory because knockbackingTime needs to be reset
                 StartCoroutine(stunEnemy());
+            }         
         }
-        if(gameObject.tag == "Player") {
+        if (gameObject.tag == "Player") 
+        {
             gameObject.GetComponent<PlayerController>().Stun();
         }
     }
@@ -95,9 +100,9 @@ public class CharacterStats : MonoBehaviour
     }
     public IEnumerator stunEnemy()
     {
-        GetComponent<Enemy_Controller>().stunned = true;
-        yield return new WaitForSeconds(10f);
-        GetComponent<Enemy_Controller>().stunned = false;
+        GetComponent<Enemy_Controller>().beginStun();
+        yield return new WaitForSeconds(1f);
+        GetComponent<Enemy_Controller>().resetKnockback();
     }
 
     public IEnumerator PlayerDeath(GameObject player){
