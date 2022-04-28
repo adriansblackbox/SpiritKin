@@ -10,10 +10,15 @@ public abstract class Curse
     public bool active;
     public bool isApplied;
     public bool removeFlag;
+    public float penaltyValue;
 
     //public Curse () {}
 
     public virtual void invokeCurse () {}
+
+    public virtual void updateCurse () {}
+
+    public virtual void updateCurse (float newValue) {}
 
     public virtual void removeCurse () {}
 }

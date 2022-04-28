@@ -9,7 +9,6 @@ public class damageCurse : Curse
 {
     private CharacterStats pStats;
     private CurseMeter cMeter;
-    private float cDamage;
     
     public damageCurse (Sprite _image, CharacterStats _pStats, CurseMeter _cMeter)
     {
@@ -19,23 +18,27 @@ public class damageCurse : Curse
         removeFlag = false;
         image = _image;
         cMeter = _cMeter;
+        penaltyValue = -5;
     }
 
     override public void invokeCurse () 
     {
-        Debug.Log(type + " Added!");
         isApplied = true;
         cMeter.activeCurses.Add(this);
-        cDamage = pStats.damage.GetValue();
 
-        pStats.damage.AddBaseValue(-(cDamage/2));
-    } 
+        pStats.damage.AddBaseValue(penaltyValue);
+    }
+
+    override public void updateCurse (float newValue) {
+        pStats.damage.AddBaseValue(newValue - penaltyValue);
+        penaltyValue = newValue;
+    }
 
     override public void removeCurse () 
     {
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.damage.AddBaseValue(cDamage);
+        pStats.damage.AddBaseValue(-penaltyValue);
     } 
 }

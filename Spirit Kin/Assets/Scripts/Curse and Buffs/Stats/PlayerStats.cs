@@ -8,6 +8,7 @@ public class PlayerStats : CharacterStats
     [SerializeField]
     public List<Buff> Buffs = new List<Buff>();
     public List<Equipment> Equipment = new List<Equipment>();
+    public CurseMeter curseMeter;
 
     public List<GameObject> BuffsUI = new List<GameObject>();
     public Sprite Notch, damageBuff, speedBuff, armorBuff, healthBuff;
@@ -19,8 +20,6 @@ public class PlayerStats : CharacterStats
         //set player starting coins here
         coins = 1000;
         currentHealth = maxHealth;
-        
-
     }
 
     // Update is called once per frame
@@ -89,6 +88,7 @@ public class PlayerStats : CharacterStats
                                 this.speed.AddBaseValue(x.power);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = speedBuff;
                                 x.isApplied = true;
+                                curseMeter.SendMessage("updateCurses");
                                 Debug.Log(Buffs.Count);
                                 break;
                             }

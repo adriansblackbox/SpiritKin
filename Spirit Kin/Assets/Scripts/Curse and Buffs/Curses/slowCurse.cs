@@ -19,23 +19,38 @@ public class slowCurse : Curse
         removeFlag = false;
         image = _image;
         cMeter = _cMeter;
+        penaltyValue = -0.1f;
     }
 
     override public void invokeCurse () 
     {
-        Debug.Log(type + " Added!");
         isApplied = true;
         cMeter.activeCurses.Add(this);
         pSpeed = pStats.speed.GetValue();
 
-        pStats.speed.AddBaseValue(pSpeed * -0.25f);
-    } 
+        pStats.speed.AddBaseValue(pSpeed * penaltyValue);
+    }
+
+    override public void updateCurse () {
+        pStats.speed.AddBaseValue(pSpeed * -penaltyValue);
+        pSpeed = pStats.speed.GetValue();
+        pStats.speed.AddBaseValue(pSpeed * penaltyValue);
+    }
+
+    override public void updateCurse (float newValue) {
+        pStats.speed.AddBaseValue(pSpeed * -penaltyValue);
+        penaltyValue = newValue;
+        if(pSpeed + (pSpeed * penaltyValue) < 0.15f) {
+            penaltyValue = -0.85f; // Cap speed curse at 85%
+        }
+        pStats.speed.AddBaseValue(pSpeed * penaltyValue);
+    }
 
     override public void removeCurse () 
     {
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.speed.AddBaseValue(pSpeed * 0.25f);
+        pStats.speed.AddBaseValue(pSpeed * -penaltyValue);
     } 
 }

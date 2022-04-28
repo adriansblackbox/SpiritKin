@@ -12,6 +12,7 @@ public class CurseMeter : MonoBehaviour
     private CharacterStats pStats;
 
     public bool newCurse;
+
     public float curseMeter;
     public float fillRate; // Value is inverse to rate
     public List<Curse> curseArray = new List<Curse>();
@@ -22,11 +23,14 @@ public class CurseMeter : MonoBehaviour
     public Sprite Notch, weakImage, slowImage, frailImage;
     public GameObject ActiveSword;
 
+    // Bonus sword damage & current health capping?
+    public float[] bonusDamages;
+    public bool[] bonusDamagesActive;
+
     public bool debugbool = false;
 
     // Start is called before the first frame update
-    private void Start()
-    {
+    private void Start() {
         newCurse = false;
         curseMeter = 0f;
         pStats = gameObject.GetComponent<PlayerStats>();
@@ -48,42 +52,36 @@ public class CurseMeter : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
-    {
-        if (activeCurses.Count < 3)
-        {
+    private void Update() {
+        if (activeCurses.Count < 3) {
             curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
-            if (curseMeter >= 1f)
-            {
+            if (curseMeter >= 1f) {
                 curseMeter = 0;
                 curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
                 addCurse();
             }
         }
 
-        if (debugbool)
-        {
+        if (debugbool) { // Debug to remove all curses
             removeCurse();
             //debugbool = !debugbool;
         }
 
-        if (newCurse)
-        {
+        if (newCurse) { // If this is flipped, we need to update something about curses
             CurseHandler();
             newCurse = false;
+            HandleSword();
         }
-        HandleSword();
-
     }
-    private void HandleSword()
-    {
-        switch (activeCurses.Count)
-        {
+
+    private void HandleSword () {
+        switch (activeCurses.Count) {
             case 0:
                 Sword0.SetActive(true);
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
+                //handleSwordDamage();
                 ActiveSword = Sword0;
                 break;
             case 1:
@@ -91,39 +89,62 @@ public class CurseMeter : MonoBehaviour
                 Sword0.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
+                //handleSwordDamage();
                 ActiveSword = Sword1;
+                //pStats.damage.AddBaseValue(bonusDamages[1]);
+                //bonusDamagesActive[1] = true;
                 break;
             case 2:
                 Sword2.SetActive(true);
                 Sword1.SetActive(false);
                 Sword0.SetActive(false);
                 Sword3.SetActive(false);
+                //handleSwordDamage();
                 ActiveSword = Sword2;
+                //pStats.damage.AddBaseValue(bonusDamages[2]);
+                //bonusDamagesActive[2] = true;
                 break;
             case 3:
                 Sword3.SetActive(true);
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword0.SetActive(false);
+                //handleSwordDamage();
                 ActiveSword = Sword3;
+                //pStats.damage.AddBaseValue(bonusDamages[3]);
+                //bonusDamagesActive[3] = true;
                 break;
         }
     }
 
-    public void addCurse()
-    {
+    private void handleSwordDamage () {
+        if (ActiveSword == Sword1) {
+            pStats.damage.AddBaseValue(-bonusDamages[1]);
+            bonusDamagesActive[1] = false;
+            // currentHealthCap = 75%
+        }
+        else if (ActiveSword == Sword2) {
+            pStats.damage.AddBaseValue(-bonusDamages[2]);
+            bonusDamagesActive[2] = false;
+            // currentHealthCap = 50%
+        }
+        else { 
+            pStats.damage.AddBaseValue(-bonusDamages[3]);
+            bonusDamagesActive[3] = false;
+            // currentHealthCap = 25%
+        }
+    }
+
+    public void addCurse() {
         List<Curse> unactiveCurses = curseArray.Except(activeCurses).ToList();
-        if (unactiveCurses.Count > 0)
-        {
+        if (unactiveCurses.Count > 0) {
             unactiveCurses[Random.Range(0, unactiveCurses.Count - 1)].active = true;
         }
         newCurse = true;
     }
 
-    private void manageCurseUI()
-    {
-        switch (activeCurses.Count)
-        {
+    private void manageCurseUI() {
+        switch (activeCurses.Count) {
             case 3:
                 cursesUI[0].transform.Find("Bar").gameObject.SetActive(false);
                 cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
@@ -149,8 +170,7 @@ public class CurseMeter : MonoBehaviour
                 break;
         }
 
-        if (activeCurses.Count < 3)
-        {
+        if (activeCurses.Count < 3) {
             curCurseUI = cursesUI[activeCurses.Count];
         }
     }
@@ -158,8 +178,7 @@ public class CurseMeter : MonoBehaviour
 
     public void removeCurse()
     {
-        if (activeCurses.Count == 0)
-        {
+        if (activeCurses.Count == 0) {
             Debug.Log("No curses to clear!");
             return;
         }
@@ -173,8 +192,7 @@ public class CurseMeter : MonoBehaviour
         activeCurses.RemoveAt(i);
         cursesUI[i].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch; // Hide curse with an invisible circle
 
-        switch (i)
-        {
+        switch (i) {
             case 0:
                 cursesUI[0].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite;
                 goto case 1;
@@ -184,6 +202,16 @@ public class CurseMeter : MonoBehaviour
         }
 
         newCurse = true;
+    }
+
+    public void updateCurses () {
+        activeCurses.ForEach(x => x.updateCurse());
+        Debug.Log("Curses updated after buying a buff!");
+    }
+
+    public void difficultyUpdateCurse (float difficulty) {
+        activeCurses.ForEach(x => x.updateCurse(x.penaltyValue * difficulty));
+        Debug.Log("Curse difficulty updated!");
     }
 
     public void CurseHandler()
@@ -206,7 +234,6 @@ public class CurseMeter : MonoBehaviour
                     manageCurseUI();
                     FindObjectOfType<StatVFX>().addCurseStat(x.type);
                 }
-
             }
         );
     }

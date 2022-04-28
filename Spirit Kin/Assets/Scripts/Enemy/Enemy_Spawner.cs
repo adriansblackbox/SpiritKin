@@ -14,6 +14,7 @@ public class Enemy_Spawner : MonoBehaviour
     public GameObject nonCursedContainer;
     public GameObject cursedContainer;
     public GameObject enemyPrefab;
+    public CurseMeter curseMeter;
 
     public int totalShrines;
 
@@ -102,6 +103,7 @@ public class Enemy_Spawner : MonoBehaviour
         else
             difficulty += 0.0834f;
         Debug.Log("Difficulty is: " + difficulty);
+        curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
     }
 
     private void selectShrineEnemyCount()

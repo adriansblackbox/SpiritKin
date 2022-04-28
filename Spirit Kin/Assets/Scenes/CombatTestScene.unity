@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1159954109}
-  m_IndirectSpecularColor: {r: 0.4465412, g: 0.49637437, b: 0.574798, a: 1}
+  m_IndirectSpecularColor: {r: 0.44654095, g: 0.4963737, b: 0.57479686, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6571,8 +6571,7 @@ VFXRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6601,7 +6600,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398285548}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 7ba46984420c8dc48928c28ea4f7e0cb, type: 3}
+  m_Asset: {fileID: 0}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -50493,6 +50492,7 @@ MonoBehaviour:
   nonCursedContainer: {fileID: 1984820682}
   cursedContainer: {fileID: 255756218}
   enemyPrefab: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
+  curseMeter: {fileID: 8669201217155251027}
   totalShrines: 1
   spawnInterval: 3
   currentCursedShrines: 0
@@ -59538,6 +59538,26 @@ PrefabInstance:
       propertyPath: cursesUI.Array.data[2]
       value: 
       objectReference: {fileID: 1163744195}
+    - target: {fileID: 3812787898400857073, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: bonusDamages.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3812787898400857073, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: bonusDamages.Array.data[1]
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3812787898400857073, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: bonusDamages.Array.data[2]
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3812787898400857073, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: bonusDamages.Array.data[3]
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3812787898400857073, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: bonusDamagesActive.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3940715602708672924, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_Name
       value: Point 5
@@ -59559,6 +59579,10 @@ PrefabInstance:
       value: Point 8
       objectReference: {fileID: 0}
     - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: coins
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: SoulsUI
       value: 
       objectReference: {fileID: 615915110}
@@ -59566,6 +59590,10 @@ PrefabInstance:
       propertyPath: deathUI
       value: 
       objectReference: {fileID: 116403771}
+    - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: curseMeter
+      value: 
+      objectReference: {fileID: 8669201217155251027}
     - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: playfabManager
       value: 
@@ -59677,3 +59705,14 @@ PrefabInstance:
     - {fileID: 3522750856141052612, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
     - {fileID: 5765025912560050946, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+--- !u!114 &8669201217155251027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3812787898400857073, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+  m_PrefabInstance: {fileID: 8669201217155251026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881556148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 939b29ebe6d0e20479816374a79c7b43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
