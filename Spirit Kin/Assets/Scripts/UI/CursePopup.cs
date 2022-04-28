@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CursePopup : MonoBehaviour
 {
@@ -42,15 +43,15 @@ public class CursePopup : MonoBehaviour
         switch (curseType)
         {
             case "Slow_Curse":
-                curseText.GetComponent<Text>().text = "Slow Curse";
+                curseText.GetComponent<TextMeshProUGUI>().text = "Slow Curse";
                 curseImage.GetComponent<Image>().sprite = speedCurseImage;
                 break;
             case "Armor_Curse":
-                curseText.GetComponent<Text>().text = "Frail Curse";
+                curseText.GetComponent<TextMeshProUGUI>().text = "Frail Curse";
                 curseImage.GetComponent<Image>().sprite = armorCurseImage;
                 break;
             case "Damage_Curse":
-                curseText.GetComponent<Text>().text = "Damage Curse";
+                curseText.GetComponent<TextMeshProUGUI>().text = "Damage Curse";
                 curseImage.GetComponent<Image>().sprite = damageCurseImage;
                 break;
         }
