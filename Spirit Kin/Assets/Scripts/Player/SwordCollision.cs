@@ -15,7 +15,7 @@ public class SwordCollision : MonoBehaviour
     private void Update() {
         RaycastHit hit;
         //checking to see if we hit an enemy
-        foreach(Transform child in AttackOriginPoints){
+        foreach(Transform child in AttackOriginPoints) {
 
             if (Physics.SphereCast(child.position, 1f,  child.TransformDirection(Vector3.forward), out hit, BladeLength, layerMask) && RaycastOn)
             {

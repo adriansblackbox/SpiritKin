@@ -54,18 +54,19 @@ public class CharacterStats : MonoBehaviour
         damage = Mathf.Clamp(damage, 0, float.MaxValue);
 
         currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, float.MaxValue);
+        
         if (gameObject.tag != "Player" && currentHealth != maxHealth) healthBarCanvas.SetActive(true);
-        if (gameObject.tag != "Player" ) healthBar.transform.localScale = new Vector3 (40 * (currentHealth / maxHealth), 0.3f, 1f);
+        if (gameObject.tag != "Player") healthBar.transform.localScale = new Vector3 (40 * (currentHealth / maxHealth), 0.3f, 1f);
         //healthBarCanvas.GetComponent<EnemyHealthBar>().takeDamageUI(currentHealth / maxHealth); // Lerp health bar aint doin it rn. Swap out one-line logic with this.
 
         //vvv will reimplement once its cleaner
-        if (gameObject.tag == "Enemy") 
+        if (gameObject.tag == "Enemy" && currentHealth > 0)
         {
             if (gameObject.GetComponent<Enemy_Controller>().EnemyAttack != Enemy_Controller.AttackState.Attacking)
             {
                 gameObject.GetComponent<Enemy_Controller>().GenerateKnockBack(knockBackStrength);
-                StopCoroutine(stunEnemy()); //so multiple can't be running at the same time -> This doesn't work in theory because knockbackingTime needs to be reset
-                StartCoroutine(stunEnemy());
+                gameObject.GetComponent<Enemy_Controller>().beginStun();
             }         
         }
         if (gameObject.tag == "Player") 
@@ -84,31 +85,24 @@ public class CharacterStats : MonoBehaviour
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
         }
-        //Die in some way
+
         if (gameObject.tag == "Enemy") {
-            player.GetComponent<PlayerStats>().coins += coins;
-            //vvv this line will need to be changed because the player will gain curses way too fast with difficulty scaling
-            // player.GetComponent<CurseMeter>().curseMeter += (float)coins / player.GetComponent<CurseMeter>().fillRate;
-            player.GetComponent<CurseMeter>().curseMeter += (float) fillAmount / player.GetComponent<CurseMeter>().fillRate;
+            gameObject.GetComponent<Enemy_Controller>().enemyAnimator.SetBool("Dead", isDying);
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
-            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().surroundSpotAvailability[gameObject.GetComponent<Enemy_Controller>().surroundIndex] = true;
-            if (gameObject.tag != "Player" && currentHealth != maxHealth) healthBarCanvas.SetActive(false);
-            Destroy(this.gameObject, 0.025f);
+            gameObject.GetComponent<Enemy_Controller>().enemyCollider.isTrigger = true;
+            gameObject.GetComponent<Enemy_Controller>().changeState(Enemy_Controller.MotionState.Waiting);
+            gameObject.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Waiting;
+            if (currentHealth != maxHealth) healthBarCanvas.SetActive(false);
         }
-        if (this.gameObject.tag == "Player"){
+        
+        if (this.gameObject.tag == "Player") {
             
             StartCoroutine(PlayerDeath(this.gameObject));
         }
         
     }
-    public IEnumerator stunEnemy()
-    {
-        GetComponent<Enemy_Controller>().beginStun();
-        yield return new WaitForSeconds(1f);
-        GetComponent<Enemy_Controller>().resetKnockback();
-    }
 
-    public IEnumerator PlayerDeath(GameObject player){
+    public IEnumerator PlayerDeath(GameObject player) {
         
         // disable player move script
         // play death animation
