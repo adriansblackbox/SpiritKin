@@ -119,32 +119,32 @@ public class PlayerController : MonoBehaviour
     public void EnableHitRay(){
         string attackName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
         switch(attackName){
-            case "Attack 1":
+            case "Attack1_K":
                 // sets attack num to the next attack for delay 
                 animator.SetInteger("Attack Number", 2);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[0].Play();
                 //sound play
             break;
-            case "Attack 2":
+            case "Attack2_K":
                 animator.SetInteger("Attack Number", 3);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[1].Play();
                 //sound play
             break;
-            case "Attack 3":
+            case "Attack3_K":
                 animator.SetInteger("Attack Number", 4);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[2].Play();
                 //sound play
             break;
-            case "Attack 4":
+            case "Attack4_K":
                 animator.SetInteger("Attack Number", 5);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[3].Play();
                 //sound play
             break;
-            case "Attack 5":
+            case "Attack5_K":
                 animator.SetInteger("Attack Number", 1);
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[4].Play();
@@ -212,16 +212,16 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(animator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
         string attackName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
         switch(attackName){
-            case "Attack 1":
+            case "Attack1_K":
                 AttackOneMovement();
             break;
-            case "Attack 2":
+            case "Attack2_K":
             break;
-            case "Attack 3":
+            case "Attack3_K":
             break;
-            case "Attack 4":
+            case "Attack4_K":
             break;
-            case "Attack 5":
+            case "Attack5_K":
             break;
         }
     }
@@ -277,8 +277,12 @@ public class PlayerController : MonoBehaviour
         }
         // creates curved result rather than a linear one giving a more organic speed change
         // round speed to 3 decimal places
-        speed = Mathf.Lerp(speed, targetSpeed, Time.deltaTime * SpeedChangeRate);
-        speed = Mathf.Round(speed * 1000f) / 1000f;
+        if(inputDirection != Vector2.zero) {
+            speed = Mathf.Lerp(speed, targetSpeed, Time.deltaTime * SpeedChangeRate);
+            speed = Mathf.Round(speed * 1000f) / 1000f;
+        }else {
+            speed = 0;
+        }
         // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
         // if there is a move input rotate player when the player is moving
         inputDirection.Normalize();
