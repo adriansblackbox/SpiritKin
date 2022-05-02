@@ -49,24 +49,22 @@ public class LockTarget : MonoBehaviour
         controller.CinemachineTargetYaw =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         // Cancel lock
         if((this.transform.position - Target.transform.position).magnitude > LetGoDistance){
-            DelockTarget();
+            Target = null;
         }
-    }
-    public void DelockTarget(){
-        Target = null;
-        FindObjectOfType<LockableTargets>().ClearTargetList();
-        transform.forward =  playerBody.forward;
-        playerBody.forward = transform.forward;
     }
 
     private void FindTarget(){
         if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             if(Target != null)
-                DelockTarget();
+                Target = null;
             else {
                 float rayLength = 200f;
-                RaycastHit[] hit;
-                hit = Physics.SphereCastAll(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, rayLength, EnemyLayer);
+                RaycastHit hit;
+                if(Physics.SphereCast(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, out hit, rayLength, EnemyLayer)) {
+                    Target = hit.transform;
+                } else {
+                    Target = null;
+                }
             }
         }
     }

@@ -80,7 +80,7 @@ public class CharacterStats : MonoBehaviour
         isDying = true;
         Debug.Log("I died!");
         if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
-            FindObjectOfType<LockTarget>().DelockTarget();
+            FindObjectOfType<LockTarget>().Target = null;
         }
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
