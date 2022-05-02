@@ -56,17 +56,25 @@ public class CharacterStats : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, float.MaxValue);
         
-        if (gameObject.tag != "Player" && currentHealth != maxHealth) healthBarCanvas.SetActive(true);
+        if (gameObject.tag != "Player" && currentHealth != maxHealth && currentHealth > 0) healthBarCanvas.SetActive(true);
         if (gameObject.tag != "Player") healthBar.transform.localScale = new Vector3 (40 * (currentHealth / maxHealth), 0.3f, 1f);
         //healthBarCanvas.GetComponent<EnemyHealthBar>().takeDamageUI(currentHealth / maxHealth); // Lerp health bar aint doin it rn. Swap out one-line logic with this.
 
         //vvv will reimplement once its cleaner
         if (gameObject.tag == "Enemy" && currentHealth > 0)
         {
-            if (gameObject.GetComponent<Enemy_Controller>().EnemyAttack != Enemy_Controller.AttackState.Attacking)
+            Enemy_Controller enemyController = gameObject.GetComponent<Enemy_Controller>();
+            if (enemyController.EnemyAttack != Enemy_Controller.AttackState.Attacking)
             {
-                gameObject.GetComponent<Enemy_Controller>().GenerateKnockBack(knockBackStrength);
-                gameObject.GetComponent<Enemy_Controller>().beginStun();
+                enemyController.GenerateKnockBack(knockBackStrength);
+                if (enemyController.EnemyMotion == Enemy_Controller.MotionState.Stunned)
+                {
+                    enemyController.changeStun();
+                }
+                else
+                {
+                    enemyController.beginStun();
+                }
             }         
         }
         if (gameObject.tag == "Player") 

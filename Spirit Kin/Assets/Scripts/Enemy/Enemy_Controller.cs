@@ -22,6 +22,7 @@ public class Enemy_Controller : MonoBehaviour
     }
 
     public Animator enemyAnimator;
+    private string selectedStunAnim;
 
     [Header("Attacks")]
 
@@ -361,17 +362,33 @@ public class Enemy_Controller : MonoBehaviour
     {
         changeState(MotionState.Stunned);
         enemyAnimator.SetBool("Stunned", true);
+        enemyAnimator.SetBool("InStun", true);
 
+        //select which stun animation will be played
         int temp = Random.Range(0, stunAnimTriggers.Length);
-        enemyAnimator.SetTrigger(stunAnimTriggers[temp]);
+        selectedStunAnim = stunAnimTriggers[temp];
+        enemyAnimator.SetTrigger(selectedStunAnim);
         lastLooking = player.transform.position;
+    }
+
+    public void changeStun()
+    {
+        enemyAnimator.SetBool("InStun", false);
+        enemyAnimator.ResetTrigger(selectedStunAnim);
+
+        //select which stun animation will be played
+        int temp = Random.Range(0, stunAnimTriggers.Length);
+        selectedStunAnim = stunAnimTriggers[temp];
+        enemyAnimator.SetTrigger(selectedStunAnim);
+
     }
 
     public void endStun()
     {
         changeState(MotionState.Chasing);
+        enemyAnimator.SetBool("InStun", false);
         enemyAnimator.SetBool("Stunned", false);
-        enemyAnimator.ResetTrigger("Stun 1L");
+        enemyAnimator.ResetTrigger(selectedStunAnim);
     }
 
     public void resetKnockback()
