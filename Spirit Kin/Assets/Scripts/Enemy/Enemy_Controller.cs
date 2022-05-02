@@ -361,7 +361,9 @@ public class Enemy_Controller : MonoBehaviour
     {
         changeState(MotionState.Stunned);
         enemyAnimator.SetBool("Stunned", true);
-        enemyAnimator.SetTrigger("Stun 1L");
+
+        int temp = Random.Range(0, stunAnimTriggers.Length);
+        enemyAnimator.SetTrigger(stunAnimTriggers[temp]);
         lastLooking = player.transform.position;
     }
 
