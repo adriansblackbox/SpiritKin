@@ -92,6 +92,7 @@ public class CharacterStats : MonoBehaviour
             gameObject.GetComponent<Enemy_Controller>().enemyCollider.isTrigger = true;
             gameObject.GetComponent<Enemy_Controller>().changeState(Enemy_Controller.MotionState.Waiting);
             gameObject.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Waiting;
+            gameObject.GetComponent<Enemy_Controller>().resetSurround();
             if (currentHealth != maxHealth) healthBarCanvas.SetActive(false);
         }
         

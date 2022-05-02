@@ -16,7 +16,7 @@ public class SpeedBuff : Buff
         baseInvestCost = 100;
         buffSprite = sprite;
         stat = statType.speed;
-        basePower = 0.25f;
+        basePower = 0.15f;
         isApplied = false;
         removeFlag = false;
 

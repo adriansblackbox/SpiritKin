@@ -821,11 +821,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2029845626342425915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cd31e406b075664abc850e2ea31fd60, type: 3}
+  m_Script: {fileID: 11500000, guid: 73311ee867673774d981341c5d7482c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemy_Stats: {fileID: 559340711}
-  updateSpeed: 0.4
+  updateSpeed: 10
 --- !u!1 &2053725265228558702
 GameObject:
   m_ObjectHideFlags: 0
@@ -2897,6 +2897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2157c25ca0b865943a62892a78ef51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyAnimator: {fileID: 0}
   combo: 0
   currentAttack: {fileID: 0}
   enemyAttacks:
@@ -2948,7 +2949,6 @@ MonoBehaviour:
   rightSwipeTrail: {fileID: 4793605687023833881}
   EnemyMotion: 1
   EnemyAttack: 2
-  dead: 0
   stunned: 0
   shrineSpawnRange: 200
   relocateSpot: {x: 0, y: 0, z: 0}
