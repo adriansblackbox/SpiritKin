@@ -18,7 +18,7 @@ public class CurseMeter : MonoBehaviour
     public List<Curse> curseArray = new List<Curse>();
     public List<Curse> activeCurses = new List<Curse>();
     public GameObject[] cursesUI;
-    public GameObject Sword0, Sword1, Sword2, Sword3;
+    public GameObject Sword1, Sword2, Sword3;
     private GameObject curCurseUI;
     public Sprite Notch, weakImage, slowImage, frailImage;
     public GameObject ActiveSword;
@@ -83,7 +83,7 @@ public class CurseMeter : MonoBehaviour
     private void HandleSword () {
         switch (activeCurses.Count) {
             case 0:
-                Sword0.SetActive(true);
+                // Sword0.SetActive(true);
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
@@ -92,7 +92,7 @@ public class CurseMeter : MonoBehaviour
                 break;
             case 1:
                 Sword1.SetActive(true);
-                Sword0.SetActive(false);
+                // Sword0.SetActive(false);
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
                 //handleSwordDamage();
@@ -103,7 +103,7 @@ public class CurseMeter : MonoBehaviour
             case 2:
                 Sword2.SetActive(true);
                 Sword1.SetActive(false);
-                Sword0.SetActive(false);
+                // Sword0.SetActive(false);
                 Sword3.SetActive(false);
                 //handleSwordDamage();
                 ActiveSword = Sword2;
@@ -114,7 +114,7 @@ public class CurseMeter : MonoBehaviour
                 Sword3.SetActive(true);
                 Sword1.SetActive(false);
                 Sword2.SetActive(false);
-                Sword0.SetActive(false);
+                // Sword0.SetActive(false);
                 //handleSwordDamage();
                 ActiveSword = Sword3;
                 //pStats.damage.AddBaseValue(bonusDamages[3]);
