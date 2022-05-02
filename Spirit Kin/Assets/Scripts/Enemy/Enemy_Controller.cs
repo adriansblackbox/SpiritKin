@@ -362,7 +362,6 @@ public class Enemy_Controller : MonoBehaviour
     {
         changeState(MotionState.Stunned);
         enemyAnimator.SetBool("Stunned", true);
-        enemyAnimator.SetBool("InStun", true);
 
         //select which stun animation will be played
         int temp = Random.Range(0, stunAnimTriggers.Length);
@@ -380,7 +379,11 @@ public class Enemy_Controller : MonoBehaviour
         int temp = Random.Range(0, stunAnimTriggers.Length);
         selectedStunAnim = stunAnimTriggers[temp];
         enemyAnimator.SetTrigger(selectedStunAnim);
+    }
 
+    public void startOfStun()
+    {
+        enemyAnimator.SetBool("InStun", true);
     }
 
     public void endStun()

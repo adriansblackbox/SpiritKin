@@ -70,6 +70,8 @@ public class CharacterStats : MonoBehaviour
                 if (enemyController.EnemyMotion == Enemy_Controller.MotionState.Stunned)
                 {
                     enemyController.changeStun();
+                    enemyController.resetKnockback();
+                    enemyController.GenerateKnockBack(knockBackStrength);
                 }
                 else
                 {
