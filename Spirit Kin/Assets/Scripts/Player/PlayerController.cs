@@ -149,6 +149,7 @@ public class PlayerController : MonoBehaviour
                 swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[4].Play();
                 //sound play
+                speed = 80f;
             break;
              case "Dash Attack":
                 animator.SetFloat("Attack Number", 1);
@@ -216,12 +217,16 @@ public class PlayerController : MonoBehaviour
                 AttackOneMovement();
             break;
             case "Attack2_K":
+                AttackOneMovement();
             break;
             case "Attack3_K":
+                AttackOneMovement();
             break;
             case "Attack4_K":
+                AttackOneMovement();
             break;
             case "Attack5_K":
+                AttackFiveMovement();
             break;
         }
     }
@@ -231,7 +236,7 @@ public class PlayerController : MonoBehaviour
             speed = Mathf.Clamp(speed, 2f, float.MaxValue);
         else
             speed = 0f;
-        speed = Mathf.Lerp(speed, WalkSpeed/2f, Time.deltaTime * 20f);
+        speed = Mathf.Lerp(speed, WalkSpeed/1.5f, Time.deltaTime * 20f);
         inputDirection.Normalize();
         if (inputDirection != Vector2.zero){
             targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
@@ -255,7 +260,11 @@ public class PlayerController : MonoBehaviour
         
     }
     private void AttackFiveMovement(){
-        
+        speed =  Mathf.Lerp(speed, 0f, Time.deltaTime * 3f);
+        moveDirection = transform.GetChild(0).gameObject.transform.forward;
+        moveDirection.y = Gravity;
+        moveDirection = moveDirection.normalized * (speed * GetComponent<PlayerStats>().speed.GetValue());
+        controller.Move(moveDirection * Time.deltaTime);
     }
     //===========================================================
     // Idle movement, and camera rotation
