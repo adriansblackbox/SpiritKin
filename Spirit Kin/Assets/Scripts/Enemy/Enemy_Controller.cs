@@ -140,6 +140,7 @@ public class Enemy_Controller : MonoBehaviour
     public Material recoverMat;
 
     // Start is called before the first frame update
+    public GameObject LockOnArrow;
     void Start()
     {
         path = new UnityEngine.AI.NavMeshPath();

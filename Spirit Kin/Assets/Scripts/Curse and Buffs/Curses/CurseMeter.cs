@@ -51,7 +51,11 @@ public class CurseMeter : MonoBehaviour
         cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
+<<<<<<< HEAD
         // ActiveSword = Sword0;
+=======
+        //ActiveSword = Sword0;
+>>>>>>> f8eddae71a1752bc89e8db3204b81c443dd07d73
         Sword1.SetActive(false); Sword2.SetActive(false); Sword3.SetActive(false);
 
         cp = cursePopup.GetComponent<CursePopup>();
@@ -88,7 +92,11 @@ public class CurseMeter : MonoBehaviour
                 Sword2.SetActive(false);
                 Sword3.SetActive(false);
                 //handleSwordDamage();
+<<<<<<< HEAD
                 // ActiveSword = Sword0;
+=======
+                //ActiveSword = Sword0;
+>>>>>>> f8eddae71a1752bc89e8db3204b81c443dd07d73
                 break;
             case 1:
                 Sword1.SetActive(true);
