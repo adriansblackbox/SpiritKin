@@ -81,6 +81,7 @@ public class CharacterStats : MonoBehaviour
         }
         if (gameObject.tag == "Player") 
         {
+            if(!gameObject.GetComponent<Animator>().GetBool("Death"))
             gameObject.GetComponent<PlayerController>().Stun();
         }
     }
@@ -118,6 +119,7 @@ public class CharacterStats : MonoBehaviour
         // disable player move script
         // play death animation
         deathUI.SetActive(true);
+        player.GetComponent<Animator>().SetBool("Death", true);
         player.GetComponent<CharacterController>().enabled = false;
         Transform[] springTransforms = FindObjectOfType<PlayerStats>().SpringTransforms;
         Vector3 respawnPosition = Vector3.zero;
@@ -130,9 +132,10 @@ public class CharacterStats : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(3f);
+        player.GetComponent<Animator>().SetBool("Death", false);
         player.transform.position = respawnPosition;
-        player.GetComponent<PlayerStats>().currentHealth = player.GetComponent<PlayerStats>().maxHealth;
         player.GetComponent<CharacterController>().enabled = true;
+        player.GetComponent<PlayerStats>().currentHealth = player.GetComponent<PlayerStats>().maxHealth;
         yield return null;
     }
 }

@@ -58,8 +58,10 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        PlayerInput(); 
-        RotateCamera();
+        if(!animator.GetBool("Death")) {
+            PlayerInput(); 
+            RotateCamera();
+        }
         // If the player is in the move tree state machine, allow ilde movement.
         // else, base movement off of attack when attack allows movement
         if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash && animator.GetLayerWeight(1) != 1)
