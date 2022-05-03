@@ -55,13 +55,16 @@ public class LockTarget : MonoBehaviour
 
     private void FindTarget(){
         if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
-            if(Target != null)
+            if(Target != null) {
+                Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
                 Target = null;
-            else {
+                
+            }else {
                 float rayLength = 200f;
                 RaycastHit hit;
                 if(Physics.SphereCast(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, out hit, rayLength, EnemyLayer)) {
                     Target = hit.transform;
+                    Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(true);
                 } else {
                     Target = null;
                 }

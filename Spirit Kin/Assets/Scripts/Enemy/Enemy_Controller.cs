@@ -152,6 +152,7 @@ public class Enemy_Controller : MonoBehaviour
         enemyAnimator = GetComponent<Animator>();
         determineQuadrant();
         movementQueue = new List<Vector3>();
+        LockOnArrow.SetActive(false);
     }
 
     // Update is called once per frame
