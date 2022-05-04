@@ -90,14 +90,12 @@ public class CharacterStats : MonoBehaviour
     public virtual void Die () {
         isDying = true;
         Debug.Log("I died!");
-        if (FindObjectOfType<LockableTargets>()._possibleTargets.Contains(this.gameObject)) {
-            FindObjectOfType<LockTarget>().Target = null;
-        }
-        if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject)) {
-            FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
-        }
 
         if (gameObject.tag == "Enemy") {
+            if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject))
+                FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
+            if(FindObjectOfType<LockTarget>().Target = this.gameObject.transform)
+                FindObjectOfType<LockTarget>().DelockTarget();
             gameObject.GetComponent<Enemy_Controller>().enemyAnimator.SetBool("Dead", isDying);
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
             gameObject.GetComponent<Enemy_Controller>().enemyCollider.isTrigger = true;
@@ -114,8 +112,10 @@ public class CharacterStats : MonoBehaviour
         
     }
 
+
     public IEnumerator PlayerDeath(GameObject player) {
-        
+        // turning the lockon camera off in the case that it's on while dying
+        GetComponent<LockTarget>().LockOnCamera.SetActive(false);
         // disable player move script
         // play death animation
         deathUI.SetActive(true);

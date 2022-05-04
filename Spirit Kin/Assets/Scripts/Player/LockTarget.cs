@@ -23,9 +23,11 @@ public class LockTarget : MonoBehaviour
     private float inputY;
     private Transform playerBody;
     public LayerMask EnemyLayer;
+    public GameObject LockOnCamera;
     private void Start() {
         controller = GetComponent<PlayerController>();
         playerBody = transform.GetChild(0).gameObject.transform;
+        LockOnCamera.SetActive(false);
     }
 
     private void Update(){
@@ -55,8 +57,12 @@ public class LockTarget : MonoBehaviour
         // Cancel lock
         if((this.transform.position - Target.transform.position).magnitude > LetGoDistance){
             Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
-            Target = null;
+            DelockTarget();
         }
+    }
+    public void DelockTarget() {
+        Target = null;
+        LockOnCamera.SetActive(false);
     }
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
@@ -69,7 +75,7 @@ public class LockTarget : MonoBehaviour
         if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             if(Target != null) {
                 Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
-                Target = null;
+                DelockTarget();
                 
             }else {
                 float rayLength = 200f;
@@ -77,8 +83,7 @@ public class LockTarget : MonoBehaviour
                 if(Physics.SphereCast(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, out hit, rayLength, EnemyLayer)) {
                     Target = hit.transform;
                     Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(true);
-                } else {
-                    Target = null;
+                    LockOnCamera.SetActive(true);
                 }
             }
         }
