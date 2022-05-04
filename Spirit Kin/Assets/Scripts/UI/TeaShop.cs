@@ -22,7 +22,7 @@ public class TeaShop : MonoBehaviour
     void Start()
     {
         isInteractable = false;
-        isOpen = false;
+        
         teaCamera.SetActive(false);
         pauseMenu = GameObject.Find("PauseCanvas").GetComponent<PauseMenu>();
 
@@ -52,7 +52,7 @@ public class TeaShop : MonoBehaviour
     {
         //need condition to check if interactable
         // if()isInteractable = false;
-        if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("A Button"))&& isInteractable && !isOpen && !pauseMenu.GameIsPaused)
+        if ((Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.JoystickButton5))&& isInteractable && !isOpen && !pauseMenu.GameIsPaused)
         {
             OpenMenu();
         }
@@ -66,6 +66,7 @@ public class TeaShop : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         teaMenu.SetActive(true);
+        
         //preload
         // teaMenu.GetComponent<NewShopManager>().Initial();
         teaCamera.SetActive(true);
@@ -75,8 +76,6 @@ public class TeaShop : MonoBehaviour
         //reassign
         EventSystem.current.SetSelectedGameObject(ShopFirstButton);
 
-        //shop is now open
-        isOpen = true;
 
         //disable player's script here
         Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
@@ -85,6 +84,8 @@ public class TeaShop : MonoBehaviour
 
         //disable UI
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
+        //shop is now open
+        isOpen = true;
         Debug.Log (isOpen);
     }
 

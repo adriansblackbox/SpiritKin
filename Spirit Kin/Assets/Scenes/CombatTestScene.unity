@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1159954109}
-  m_IndirectSpecularColor: {r: 0.4465412, g: 0.49637437, b: 0.574798, a: 1}
+  m_IndirectSpecularColor: {r: 0.44654077, g: 0.49637353, b: 0.57479686, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -22526,6 +22526,30 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
   m_PrefabInstance: {fileID: 1126757718}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1295417043 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7163950331735155688, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+  m_PrefabInstance: {fileID: 1561805603}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1295417044
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295417043}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a22d7dd023a06064386b83f01d3c0289, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1300336790 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7768796009490323730, guid: b19eaa90dbcbb00428bb090fa8a8c13e, type: 3}
@@ -28056,6 +28080,10 @@ PrefabInstance:
     - target: {fileID: 7163950330768084953, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163950331046065327, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Text
+      value: Press [F/X Button] to Buy!
       objectReference: {fileID: 0}
     - target: {fileID: 7163950331183061608, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: m_AnchorMax.y
