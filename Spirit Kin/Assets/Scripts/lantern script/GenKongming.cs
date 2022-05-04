@@ -31,10 +31,10 @@ public class GenKongming : MonoBehaviour
         camTrans = cam.transform;
 
         //初始创建n个孔明灯
-        for (int i = 0; i < 20; ++i)
+        for (int i = 0; i < 5; ++i)
         {
             var go = Instantiate(lanternObj);
-            go.transform.position = new Vector3(Random.Range(-100, 50), Random.Range(10, 50), Random.Range(-100, 10));
+            go.transform.position = new Vector3(Random.Range(-25, 30),Random.Range(10, 30), Random.Range(-25, 10));
             go.transform.SetParent(selfTrans, false);
         }
 

@@ -20,7 +20,7 @@ public class KongmingLamp : MonoBehaviour
         trans.position += speed * Time.deltaTime;
 
         // 高度达到500，自我销毁
-        if (trans.position.y > 500)
+        if (trans.position.y > 100)
         {
             Destroy(gameObject);
         }
