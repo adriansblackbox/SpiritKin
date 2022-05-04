@@ -44,13 +44,25 @@ public class LockTarget : MonoBehaviour
         focusTarget = new Vector3(focusTarget.x, focusTarget.y - 0.15f, focusTarget.z);
         controller.CinemachineCameraTarget.transform.forward =
         Vector3.Lerp(GetComponent<PlayerController>().CinemachineCameraTarget.transform.forward, focusTarget, Time.deltaTime * CamRotateToTargetSpeed);
+        controller.CinemachineCameraTarget.transform.eulerAngles = new Vector3(
+            ClampAngle(controller.CinemachineCameraTarget.transform.eulerAngles.x, -40f, 20f),
+            controller.CinemachineCameraTarget.transform.eulerAngles.y,
+            controller.CinemachineCameraTarget.transform.eulerAngles.z
+            );
         // makes sure that the camera will be consistent with the locked rotation when delocked
         controller.CinemachineTargetPitch =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.x;
         controller.CinemachineTargetYaw =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         // Cancel lock
         if((this.transform.position - Target.transform.position).magnitude > LetGoDistance){
+            Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
             Target = null;
         }
+    }
+    private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+    {
+        if (lfAngle < -360f) lfAngle += 360f;
+        if (lfAngle > 360f) lfAngle -= 360f;
+        return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
     private void FindTarget(){
