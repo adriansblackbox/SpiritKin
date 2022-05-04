@@ -351,7 +351,7 @@ public class PlayerController : MonoBehaviour
             CinemachineTargetPitch += -1 * Input.GetAxis("Mouse Y") * Time.deltaTime * MouseSensitivity;
             // with a helper fucntion, the player's camera rotation is clmaped with the given angles
             CinemachineTargetYaw = ClampAngle(CinemachineTargetYaw, float.MinValue, float.MaxValue);
-            CinemachineTargetPitch = ClampAngle(CinemachineTargetPitch, -30.0f, 70.0f);
+            CinemachineTargetPitch = ClampAngle(CinemachineTargetPitch, -40.0f, 70.0f);
             // rotates the camera
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(CinemachineTargetPitch, CinemachineTargetYaw, 0.0f);
         }
