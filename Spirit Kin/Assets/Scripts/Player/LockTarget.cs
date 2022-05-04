@@ -17,7 +17,7 @@ public class LockTarget : MonoBehaviour
     [SerializeField] private Transform LookAtRoot;
     [SerializeField] float LetGoDistance = 10f;
     [SerializeField] private CinemachineVirtualCamera FollowCamera;
-    [HideInInspector] public Transform Target = null;
+    [HideInInspector] public Transform Target, PossibleTarget = null;
     private PlayerController controller;
     private float inputX;
     private float inputY;
@@ -61,6 +61,7 @@ public class LockTarget : MonoBehaviour
         }
     }
     public void DelockTarget() {
+        Target.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().SetPossibleArrow();
         Target = null;
         LockOnCamera.SetActive(false);
     }
@@ -72,19 +73,32 @@ public class LockTarget : MonoBehaviour
     }
 
     private void FindTarget(){
+        RaycastHit hit;
+        float rayLength = 200f;
+        if(Target == null) {
+            if(Physics.SphereCast(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, out hit, rayLength, EnemyLayer)) {
+                if(PossibleTarget == null) {
+                    PossibleTarget = hit.transform;
+                    PossibleTarget.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(true);
+                } else {
+                    PossibleTarget.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
+                    PossibleTarget = hit.transform;
+                    PossibleTarget.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(true);
+                }
+            }else if(PossibleTarget != null) {
+                PossibleTarget.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
+                PossibleTarget = null;
+            }
+        }
         if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             if(Target != null) {
                 Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
                 DelockTarget();
-                
-            }else {
-                float rayLength = 200f;
-                RaycastHit hit;
-                if(Physics.SphereCast(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, out hit, rayLength, EnemyLayer)) {
-                    Target = hit.transform;
-                    Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(true);
-                    LockOnCamera.SetActive(true);
-                }
+                Target = null;
+            }else if(PossibleTarget != null){    
+                Target = PossibleTarget;
+                Target.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().SetLockArrow();
+                LockOnCamera.SetActive(true);
             }
         }
     }
