@@ -26,42 +26,53 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial UI Elements")]
     [SerializeField] GameObject dialogueObject;
 
+
     void Start()
     {
-        pc.enabled = false;
-        st.ActivateText();
+        if (tutorialOn)
+        {
+            pc.enabled = false;
+            st.ActivateText();
+        }
+        else
+        {
+            dialogueObject.SetActive(false);
+        }
     }
 
     void Update()
     {
-        //show shrine
-        if (!shownShrine && st.GetCurrentDisplayingText() == 1 && CheckForInput())
+        if (tutorialOn)
         {
-            StartCoroutine("ShowShrine");
-        }
+            //show shrine
+            if (!shownShrine && st.GetCurrentDisplayingText() == 1 && CheckForInput())
+            {
+                StartCoroutine("ShowShrine");
+            }
 
-        //show purification pool
-        if (!shownPool && st.GetCurrentDisplayingText() == 4 && CheckForInput())
-        {
-            StartCoroutine("ShowPool");
-        }
+            //show purification pool
+            if (!shownPool && st.GetCurrentDisplayingText() == 4 && CheckForInput())
+            {
+                StartCoroutine("ShowPool");
+            }
 
-        //All dialogue has been shown and they give input
-        if (st.CheckIfDialogueCompleted() && CheckForInput())
-        {
-            tutorialFinished = true;
-            dialogueObject.SetActive(false);
-            pc.enabled = true;
-        }
-        //Stop typing and show entirety of NPC's line
-        else if (!tutorialFinished && !showingNonPlayerCamera && st.typing && CheckForInput())
-        {
-            st.DeactivateText();
-        }
-        //Move onto the next NPC line
-        else if (!tutorialFinished && !showingNonPlayerCamera && !st.typing && CheckForInput())
-        {
-            st.ActivateText();
+            //All dialogue has been shown and they give input
+            if (st.CheckIfDialogueCompleted() && CheckForInput())
+            {
+                tutorialFinished = true;
+                dialogueObject.SetActive(false);
+                pc.enabled = true;
+            }
+            //Stop typing and show entirety of NPC's line
+            else if (!tutorialFinished && !showingNonPlayerCamera && st.typing && CheckForInput())
+            {
+                st.DeactivateText();
+            }
+            //Move onto the next NPC line
+            else if (!tutorialFinished && !showingNonPlayerCamera && !st.typing && CheckForInput())
+            {
+                st.ActivateText();
+            }
         }
     }
 
