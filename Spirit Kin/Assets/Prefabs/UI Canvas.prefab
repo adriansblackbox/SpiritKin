@@ -1331,6 +1331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118dbc3d343ce534d9062ab0d5093ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
   dialogueLines:
   - Kin, we require your aid in protecting the village. There are evil spirits cursing
     our sacred shrines.
@@ -1341,9 +1342,7 @@ MonoBehaviour:
   textSpeed: 0.01
   dialogueText: {fileID: 1182328629}
   nextLineIndicator: {fileID: 0}
-  playerController: {fileID: 0}
   typing: 0
-  finishedWithTutorial: 0
 --- !u!1 &1347840456
 GameObject:
   m_ObjectHideFlags: 0
@@ -2181,9 +2180,10 @@ MonoBehaviour:
   curseImage: {fileID: 388668114729707822}
   curseText: {fileID: 4549357086953521057}
   background: {fileID: 9039193249910268052}
-  speedCurseImage: {fileID: 21300000, guid: fe9be67bd76646f439bcb1bf280bc02f, type: 3}
-  armorCurseImage: {fileID: 21300000, guid: 4534ad1f9bd795c4ba118a28ae456e74, type: 3}
-  damageCurseImage: {fileID: 21300000, guid: 17127c7fb9807cd4ba5f1296b2503fef, type: 3}
+  speedCurseImage: {fileID: 21300000, guid: 910200687ec729e489d027127fa3526a, type: 3}
+  armorCurseImage: {fileID: 21300000, guid: cfc55aba8c3fa644882499361377133d, type: 3}
+  damageCurseImage: {fileID: 21300000, guid: 4896346daeeaa944fac545de87d1f77c, type: 3}
+  blindCurseImage: {fileID: 21300000, guid: 7ec75f40d0db9c64da4c9dde747aa069, type: 3}
   popupDuration: 5
 --- !u!1 &5503858656190840138
 GameObject:
@@ -3080,7 +3080,7 @@ GameObject:
   - component: {fileID: 5503858656529429819}
   - component: {fileID: 5503858656529429818}
   m_Layer: 5
-  m_Name: SoulsText
+  m_Name: CoinText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3159,7 +3159,7 @@ GameObject:
   - component: {fileID: 5503858656573182838}
   - component: {fileID: 5503858656573182837}
   m_Layer: 5
-  m_Name: SoulsIcon
+  m_Name: CoinIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3212,7 +3212,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 63980777d9e6e704b9f3c9bb77df0057, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4bd79b5ce75696048a3e231e962908d4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

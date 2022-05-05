@@ -52,8 +52,6 @@ public class CurseMeter : MonoBehaviour
         curseArray.Add(frail);
         curseArray.Add(blind);
 
-        cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
-        cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
         // ActiveSword = Sword0;
@@ -67,8 +65,6 @@ public class CurseMeter : MonoBehaviour
         if (activeCurses.Count < 3) {
             curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
             if (curseMeter >= 1f) {
-                curseMeter = 0;
-                curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
                 addCurse();
             }
         }
@@ -159,32 +155,26 @@ public class CurseMeter : MonoBehaviour
     private void manageCurseUI() {
         switch (activeCurses.Count) {
             case 3:
-                cursesUI[0].transform.Find("Bar").gameObject.SetActive(false);
-                cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
-                cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[2].transform.Find("Curse").gameObject.SetActive(true);
                 break; // All curses active. Flow for managing player max health.
             case 2:
-                cursesUI[2].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
-                cursesUI[0].transform.Find("Bar").gameObject.SetActive(false);
-                cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
-                cursesUI[2].transform.Find("Bar").gameObject.SetActive(true);
+                cursesUI[2].transform.Find("Curse").gameObject.SetActive(false);
+                cursesUI[1].transform.Find("Curse").gameObject.SetActive(true);
                 break;
             case 1:
-                cursesUI[1].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
-                cursesUI[0].transform.Find("Bar").gameObject.SetActive(false);
-                cursesUI[1].transform.Find("Bar").gameObject.SetActive(true);
-                cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[1].transform.Find("Curse").gameObject.SetActive(false);
+                cursesUI[0].transform.Find("Curse").gameObject.SetActive(true);
                 break;
             case 0:
-                cursesUI[0].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch;
-                cursesUI[0].transform.Find("Bar").gameObject.SetActive(true);
-                cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
-                cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
+                cursesUI[0].transform.Find("Curse").gameObject.SetActive(false);
                 break;
         }
 
         if (activeCurses.Count < 3) {
+            curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
             curCurseUI = cursesUI[activeCurses.Count];
+            curseMeter = 0;
+            curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
         }
     }
 
