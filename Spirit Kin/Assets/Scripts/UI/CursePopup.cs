@@ -13,6 +13,7 @@ public class CursePopup : MonoBehaviour
     public Sprite speedCurseImage;
     public Sprite armorCurseImage;
     public Sprite damageCurseImage;
+    public Sprite blindCurseImage;
 
     public float popupDuration = 5f;
 
@@ -53,6 +54,10 @@ public class CursePopup : MonoBehaviour
             case "Damage_Curse":
                 curseText.GetComponent<TextMeshProUGUI>().text = "Damage Curse";
                 curseImage.GetComponent<Image>().sprite = damageCurseImage;
+                break;
+            case "Blind_Curse":
+                curseText.GetComponent<TextMeshProUGUI>().text = "Blind Curse";
+                curseImage.GetComponent<Image>().sprite = blindCurseImage;
                 break;
         }
     }

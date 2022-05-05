@@ -9,7 +9,7 @@ using static slowCurse;
 
 public class CurseMeter : MonoBehaviour
 {
-    private CharacterStats pStats;
+    private PlayerStats pStats;
 
     public bool newCurse;
 
@@ -20,8 +20,11 @@ public class CurseMeter : MonoBehaviour
     public GameObject[] cursesUI;
     public GameObject Sword1, Sword2, Sword3;
     private GameObject curCurseUI;
-    public Sprite Notch, weakImage, slowImage, frailImage;
+    public Sprite Notch, weakImage, slowImage, frailImage, blindImage;
     public GameObject ActiveSword;
+    public GameObject[] shrines;
+    public GameObject blindVignette;
+    public GameObject healthBar;
 
     // Needed Curse Obtained Popup
     public GameObject cursePopup;
@@ -42,10 +45,12 @@ public class CurseMeter : MonoBehaviour
         damageCurse weak = new damageCurse(weakImage, gameObject.GetComponent<PlayerStats>(), this);
         slowCurse slow = new slowCurse(slowImage, gameObject.GetComponent<PlayerStats>(), this);
         armorCurse frail = new armorCurse(frailImage, gameObject.GetComponent<PlayerStats>(), this);
+        blindCurse blind = new blindCurse(blindImage, this, shrines, blindVignette, healthBar);
 
         curseArray.Add(weak);
         curseArray.Add(slow);
         curseArray.Add(frail);
+        curseArray.Add(blind);
 
         cursesUI[1].transform.Find("Bar").gameObject.SetActive(false);
         cursesUI[2].transform.Find("Bar").gameObject.SetActive(false);
@@ -144,7 +149,9 @@ public class CurseMeter : MonoBehaviour
     public void addCurse() {
         List<Curse> unactiveCurses = curseArray.Except(activeCurses).ToList();
         if (unactiveCurses.Count > 0) {
-            unactiveCurses[Random.Range(0, unactiveCurses.Count - 1)].active = true;
+            pStats.currentHealthCap -= 0.17f;
+            pStats.damage.AddBaseValue(5.0f);
+            unactiveCurses[Random.Range(0, unactiveCurses.Count)].active = true;
         }
         newCurse = true;
     }
@@ -189,6 +196,10 @@ public class CurseMeter : MonoBehaviour
             return;
         }
         int i = Random.Range(0, activeCurses.Count - 1);
+
+        pStats.currentHealthCap += 0.17f;
+        pStats.damage.AddBaseValue(-5.0f);
+        pStats.currentHealth += pStats.maxHealth * 0.17f;
 
         FindObjectOfType<StatVFX>().removeCurseStat(activeCurses[i].type);
 
