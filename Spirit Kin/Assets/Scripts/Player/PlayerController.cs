@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
     //===========================================================
     // Animation events and triggers
     //===========================================================
-    private void AnimationStart() {
+    public void AnimationStart() {
         // Set Animator Param
         animator.SetBool("Dash End", false);
         animator.SetBool("A Pressed", false);

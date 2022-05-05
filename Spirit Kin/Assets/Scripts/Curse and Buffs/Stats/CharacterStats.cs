@@ -132,6 +132,7 @@ public class CharacterStats : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(3f);
+        player.GetComponent<PlayerController>().AnimationStart();
         player.GetComponent<Animator>().SetBool("Death", false);
         player.transform.position = respawnPosition;
         player.GetComponent<CharacterController>().enabled = true;
