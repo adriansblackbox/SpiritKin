@@ -57,11 +57,11 @@ public class LockTarget : MonoBehaviour
         // Cancel lock
         if((this.transform.position - Target.transform.position).magnitude > LetGoDistance){
             Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
+            Target.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().SetPossibleArrow();
             DelockTarget();
         }
     }
     public void DelockTarget() {
-        Target.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().SetPossibleArrow();
         Target = null;
         LockOnCamera.SetActive(false);
     }
@@ -93,6 +93,7 @@ public class LockTarget : MonoBehaviour
         if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
             if(Target != null) {
                 Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
+                Target.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().SetPossibleArrow();
                 DelockTarget();
                 Target = null;
             }else if(PossibleTarget != null){    

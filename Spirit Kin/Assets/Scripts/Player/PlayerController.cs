@@ -92,6 +92,7 @@ public class PlayerController : MonoBehaviour
     public void AnimationStart() {
         // Set Animator Param
         animator.SetBool("Dash End", false);
+        animator.SetBool("Dash Movement", false);
         animator.SetBool("A Pressed", false);
         animator.SetBool("X Pressed", false);
         animator.SetBool("Y Pressed", false);
