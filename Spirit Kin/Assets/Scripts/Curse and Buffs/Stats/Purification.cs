@@ -21,6 +21,7 @@ public class Purification : MonoBehaviour
     public float PurificationTime = 5.0f;
     public Image PurificationMeter;
     public GameObject VFX;
+    public float HealingRate = 5f;
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +59,9 @@ public class Purification : MonoBehaviour
         }
         if(FindObjectOfType<CurseMeter>().activeCurses.Count == 0){
             PurificationMeter.enabled = false;
+        }
+        if(isPurifying && player.GetComponent<PlayerStats>().currentHealth < player.GetComponent<PlayerStats>().maxHealth) {
+            player.GetComponent<PlayerStats>().currentHealth += Time.deltaTime * HealingRate;
         }
     }
 
