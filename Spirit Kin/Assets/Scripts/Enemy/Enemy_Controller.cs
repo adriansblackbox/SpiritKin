@@ -665,12 +665,11 @@ public class Enemy_Controller : MonoBehaviour
         RaycastHit hit;
         if (Physics.SphereCast(transform.position, 1f, dirVec, out hit, 2f, swipeLayerMask)) //might need detection to be more robust
         {
-            Debug.DrawRay(transform.position, dirVec * 7.5f, Color.blue);
-            if (!hasHitPlayer && hit.transform.gameObject.tag == "Player");
+            if (!hasHitPlayer);
             {
+                hasHitPlayer = true;
                 Log("Hit Player with Charge Attack");
                 player.GetComponent<PlayerStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue(), 0);
-                hasHitPlayer = true;
             } 
         }
     }
