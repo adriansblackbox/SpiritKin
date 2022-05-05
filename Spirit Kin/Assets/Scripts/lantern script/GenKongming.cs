@@ -34,7 +34,7 @@ public class GenKongming : MonoBehaviour
         for (int i = 0; i < 5; ++i)
         {
             var go = Instantiate(lanternObj);
-            go.transform.position = new Vector3(Random.Range(-25, 30),Random.Range(10, 30), Random.Range(-25, 10));
+            go.transform.position = new Vector3(Random.Range(-100, 100), Random.Range(50, 100), Random.Range(-100, 100));
             go.transform.SetParent(selfTrans, false);
         }
 
@@ -48,7 +48,7 @@ public class GenKongming : MonoBehaviour
         while (true)
         {
             var go = Instantiate(lanternObj);
-            go.transform.position = new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100));
+            go.transform.position = new Vector3(Random.Range(-30, 30), 0, Random.Range(-30, 30));
             go.transform.SetParent(selfTrans, false);
             yield return new WaitForSeconds(1);
         }

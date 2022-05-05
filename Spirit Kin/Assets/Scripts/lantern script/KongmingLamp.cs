@@ -19,8 +19,8 @@ public class KongmingLamp : MonoBehaviour
         // 沿着速度方向升空
         trans.position += speed * Time.deltaTime;
 
-        // 高度达到500，自我销毁
-        if (trans.position.y > 100)
+        // 高度达到n，自我销毁
+        if (trans.position.y > 1000)
         {
             Destroy(gameObject);
         }
