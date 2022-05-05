@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class TeaShop : MonoBehaviour
 {
+    [SerializeField] PlayerController playerController;
+
     public GameObject triggerText;
     public GameObject Player;
     public GameObject teaMenu;
@@ -52,7 +54,7 @@ public class TeaShop : MonoBehaviour
     {
         //need condition to check if interactable
         // if()isInteractable = false;
-        if ((Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.JoystickButton5))&& isInteractable && !isOpen && !pauseMenu.GameIsPaused)
+        if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("X Button")) && isInteractable && !isOpen && !pauseMenu.GameIsPaused)
         {
             OpenMenu();
         }
@@ -65,6 +67,8 @@ public class TeaShop : MonoBehaviour
     public void OpenMenu()
     {
         Cursor.lockState = CursorLockMode.None;
+        //disable player controller
+        playerController.enabled = false;
         teaMenu.SetActive(true);
         
         //preload
@@ -76,12 +80,6 @@ public class TeaShop : MonoBehaviour
         //reassign
         EventSystem.current.SetSelectedGameObject(ShopFirstButton);
 
-
-        //disable player's script here
-        Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
-        Player.GetComponent<PlayerController>().enabled = false;
-        //Player.GetComponent<PlayerCombat>().enabled = false;
-
         //disable UI
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
         //shop is now open
@@ -91,8 +89,8 @@ public class TeaShop : MonoBehaviour
 
     public void CloseMenu()
     {
-        Player.GetComponent<PlayerController>().enabled = true;
-        //Player.GetComponent<PlayerCombat>().enabled = true;
+        //enable player controller
+        playerController.enabled = true;
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
         Cursor.lockState = CursorLockMode.Locked;
         teaMenu.SetActive(false);

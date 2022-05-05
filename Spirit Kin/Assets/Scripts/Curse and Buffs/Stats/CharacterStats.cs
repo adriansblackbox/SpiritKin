@@ -94,7 +94,7 @@ public class CharacterStats : MonoBehaviour
         if (gameObject.tag == "Enemy") {
             if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject))
                 FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
-            if(FindObjectOfType<LockTarget>().Target = this.gameObject.transform)
+            if (FindObjectOfType<LockTarget>().Target = this.gameObject.transform)
                 FindObjectOfType<LockTarget>().DelockTarget();
             gameObject.GetComponent<Enemy_Controller>().enemyAnimator.SetBool("Dead", isDying);
             gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);

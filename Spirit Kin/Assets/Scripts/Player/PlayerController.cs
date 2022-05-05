@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         State = "Idle";
         animator.SetFloat("Attack Number", 1);
-        CinemachineTargetYaw = 90;
+        CinemachineTargetYaw = 180;
         CinemachineTargetPitch = 0;
         swordScript = GetComponent<SwordCollision>();
     }

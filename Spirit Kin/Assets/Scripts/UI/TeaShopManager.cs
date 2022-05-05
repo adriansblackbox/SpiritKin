@@ -6,6 +6,8 @@ using UnityEngine.UI;
 // using static Buff;
 public class TeaShopManager : MonoBehaviour
 {
+    [SerializeField] PlayerController playerController;
+
     public Sprite
 
             armorBuffSprite,
@@ -18,8 +20,6 @@ public class TeaShopManager : MonoBehaviour
     public PlayerStats playStats;
 
     public Text UICoinTXT;
-
-    public Text menuCoinTXT;
 
     public Text costTXT;
 
@@ -50,6 +50,8 @@ public class TeaShopManager : MonoBehaviour
     public AudioClip ButtonHoversfx;
 
     private AudioSource audioSource;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -107,12 +109,13 @@ public class TeaShopManager : MonoBehaviour
         {
             //update coins
             playStats.coins -= currentBuff.Cost;
-            menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
 
             //add buffs to player
             playStats.addBuff (currentBuff);
+            
         }
+        playerController.enabled = false;
     }
 
     public void Upgrade()
@@ -123,7 +126,6 @@ public class TeaShopManager : MonoBehaviour
         {
             //update coins
             playStats.coins -= currentBuff.investCost;
-            menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
 
             //make buff stronger
@@ -144,6 +146,7 @@ public class TeaShopManager : MonoBehaviour
                 description.text = "Maximum potency reached";
             }
         }
+        playerController.enabled = false;
     }
 
     public void Exit()

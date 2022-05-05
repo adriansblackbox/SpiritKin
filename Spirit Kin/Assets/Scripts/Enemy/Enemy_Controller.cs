@@ -663,9 +663,9 @@ public class Enemy_Controller : MonoBehaviour
         transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
 
         RaycastHit hit;
-        if (Physics.SphereCast(transform.position, 1f, dirVec, out hit, 2f, swipeLayerMask)) //might need detection to be more robust
+        if (Physics.SphereCast(transform.position, 2f, dirVec, out hit, 1f, swipeLayerMask)) //might need detection to be more robust
         {
-            if (!hasHitPlayer);
+            if (!hasHitPlayer)
             {
                 hasHitPlayer = true;
                 Log("Hit Player with Charge Attack");
@@ -688,7 +688,8 @@ public class Enemy_Controller : MonoBehaviour
             Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 7.5f, Color.red);
             if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 7.5f, swipeLayerMask))
             {
-                if (!hasHitPlayer) {
+                if (!hasHitPlayer) 
+                {
                     hasHitPlayer = true;
                     Log("Hit the Player with Right Swipe Attack");
                     hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue(), 0);
@@ -711,7 +712,8 @@ public class Enemy_Controller : MonoBehaviour
             Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 7.5f, Color.red);
             if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 7.5f, swipeLayerMask))
             {
-                if(!hasHitPlayer) {
+                if(!hasHitPlayer) 
+                {
                     hasHitPlayer = true;
                     Log("Hit the Player with Left Swipe Attack");
                     hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<CharacterStats>().damage.GetValue(), 0);

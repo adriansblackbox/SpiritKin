@@ -6,11 +6,15 @@ using UnityEngine.UI;
 
 public class Enemy_Spawner : MonoBehaviour
 {
+    [SerializeField] TutorialManager tm;
+
     public float difficulty = 0f;
 
     [SerializeField] int totalShrinesCursed = 0;
     [SerializeField] int lowerLimitEnemyCount = 1;
     [SerializeField] int upperLimitEnemyCount = 4;
+
+    public GameObject shrineForTutorial;
 
     public GameObject nonCursedContainer;
     public GameObject cursedContainer;
@@ -25,19 +29,23 @@ public class Enemy_Spawner : MonoBehaviour
     private float myTime;
     private float difficultyTimer;
     public float shrineInterval = 45f;
-    private bool firstSpawn = true;
+    public bool firstSpawn; //if the player isn't doing the tutorial curse the first shrine at 5 seconds
 
     public GameObject difficultyText;
 
     public void Start()
     {
         scaleNumberOfEnemiesToSpawn();
+        if (tm.tutorialOn)
+            firstSpawn = false;
+        else
+            firstSpawn = true;
     }
 
     //ensure that timers aren't running when timeScale = 0
     public void FixedUpdate()
     {
-        if (!FindObjectOfType<MainHub>().playerInHub)
+        if (!FindObjectOfType<MainHub>().playerInHub && tm.tutorialFinished)
         {
             myTime += Time.deltaTime;
             difficultyTimer += Time.deltaTime;
@@ -46,6 +54,7 @@ public class Enemy_Spawner : MonoBehaviour
 
     public void Update()
     {
+        //comment back in to get difficulty to auto scale
 
         // if (difficultyTimer >= 30f)
         // {
@@ -61,30 +70,45 @@ public class Enemy_Spawner : MonoBehaviour
                 myTime = 0;
                 if (nonCursedContainer.transform.childCount > 0)
                 {
-                    curseShrine();
+                    curseShrine(false);
                 }
             }
         }
         else if (myTime > shrineInterval) 
         {
             myTime = 0;
-            if (nonCursedContainer.transform.childCount > 0) //every 15 seconds -> actually 45 to 60 seconds is probably better
+            if (nonCursedContainer.transform.childCount > 0)
             {
-                curseShrine();
+                curseShrine(false);
             }
         }
     }
 
-    private void curseShrine()
+    //If the tutorial is on then curse the chosen shrine
+    //If the tutorial is off then curse a random shrine
+    public void curseShrine(bool tutorial)
     {
-        int temp = Random.Range(0, nonCursedContainer.transform.childCount);
-        Transform shrine = nonCursedContainer.transform.GetChild(temp);
-        shrine.parent = cursedContainer.transform;
-        shrine.GetComponent<Shrine>().cursed = true;
-        shrine.GetComponent<Shrine>().CurCurseTime = 0f;
-        currentCursedShrines++;
-        scaleNumberOfEnemiesToSpawn();
-        shrine.GetComponent<Shrine>().setEnemiesToSpawn();
+        if (tutorial)
+        {
+            Transform tutShrine = shrineForTutorial.transform;
+            tutShrine.parent = cursedContainer.transform;
+            tutShrine.GetComponent<Shrine>().cursed = true;
+            currentCursedShrines++;
+            scaleNumberOfEnemiesToSpawn();
+            tutShrine.GetComponent<Shrine>().setEnemiesToSpawn();
+        }
+        else
+        {
+            int temp = Random.Range(0, nonCursedContainer.transform.childCount);
+            Transform shrine = nonCursedContainer.transform.GetChild(temp);
+            shrine.parent = cursedContainer.transform;
+            shrine.GetComponent<Shrine>().cursed = true;
+            shrine.GetComponent<Shrine>().CurCurseTime = 0f;
+            currentCursedShrines++;
+            scaleNumberOfEnemiesToSpawn();
+            shrine.GetComponent<Shrine>().setEnemiesToSpawn();
+        }
+
     }
 
     //increments limits to help in scaling NumberOfEnemiesToSpawn

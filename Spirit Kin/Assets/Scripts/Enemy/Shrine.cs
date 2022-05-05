@@ -18,7 +18,7 @@ public class Shrine : MonoBehaviour
 
     //TRACK HOW MANY ENEMIES THE PLAYER HAS BEATEN
     
-    private float myTime;
+    private float myTime = 3f;
     public float TotalCurseTime = 90f;
     public float CurCurseTime = 0f;
     public GameObject Beacon;
