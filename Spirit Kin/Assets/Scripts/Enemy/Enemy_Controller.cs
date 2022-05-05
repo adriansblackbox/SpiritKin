@@ -18,6 +18,7 @@ public class Enemy_Controller : MonoBehaviour
 
     public enum AttackState {
         Attacking,
+        Recovering,
         Waiting
     }
 
@@ -25,6 +26,8 @@ public class Enemy_Controller : MonoBehaviour
     private string selectedStunAnim;
 
     [Header("Attacks")]
+
+    [SerializeField] private float recoveryTimer;
 
     private bool hasHitPlayer = false;
     [SerializeField] bool combo;
@@ -170,6 +173,9 @@ public class Enemy_Controller : MonoBehaviour
                 if (currentAttack == null)
                     getAttack();
                 attackPlayer();
+                break;
+            case AttackState.Recovering:
+                attackRecovery();
                 break;
             case AttackState.Waiting:
                 break;
@@ -450,7 +456,7 @@ public class Enemy_Controller : MonoBehaviour
 
         if (currentAttack.attackNumber == 3)
         {
-            finishAttack();
+            EnemyAttack = AttackState.Recovering;
             return;
         }
         else if (Vector3.Distance(player.transform.position, transform.position) < 15f && !combo)
@@ -469,6 +475,18 @@ public class Enemy_Controller : MonoBehaviour
         {
             enemyAnimator.SetBool("PlayerInRange", false);
             combo = false;
+            EnemyAttack = AttackState.Recovering;
+        }
+    }
+
+    private void attackRecovery()
+    {
+        if (recoveryTimer < currentAttack.recoveryTime)
+        {
+            recoveryTimer += Time.deltaTime;
+        }
+        else
+        {
             finishAttack();
         }
     }
@@ -490,12 +508,14 @@ public class Enemy_Controller : MonoBehaviour
         hasHitPlayer = false;
         ai.attackingEnemy = null;
         enemyCollider.isTrigger = false;
+        recoveryTimer = 0;
 
         //reset surround spot so they dont try to run back through player
         ThisEnemy.ResetPath();
         surroundTarget = Vector3.zero;
         surroundSpot = Vector3.zero;
-        ai.surroundSpotAvailability[surroundIndex] = true;
+        if (surroundIndex != -1)
+            ai.surroundSpotAvailability[surroundIndex] = true;
         surroundIndex = -1;
         nextSpot = Vector3.zero;
     }
@@ -643,8 +663,9 @@ public class Enemy_Controller : MonoBehaviour
         transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dirVec, out hit, 1f, swipeLayerMask)) //might need detection to be more robust
+        if (Physics.SphereCast(transform.position, 1f, dirVec, out hit, 2f, swipeLayerMask)) //might need detection to be more robust
         {
+            Debug.DrawRay(transform.position, dirVec * 7.5f, Color.blue);
             if (!hasHitPlayer && hit.transform.gameObject.tag == "Player");
             {
                 Log("Hit Player with Charge Attack");

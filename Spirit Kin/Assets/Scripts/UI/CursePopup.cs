@@ -61,6 +61,7 @@ public class CursePopup : MonoBehaviour
     {
         showing = false;
         background.SetActive(false);
+        popupTimer = 0;
     }
 
 
