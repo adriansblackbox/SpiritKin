@@ -14,6 +14,7 @@ public class PlayerStats : CharacterStats
     public Sprite Notch, damageBuff, speedBuff, armorBuff, healthBuff;
     private bool isDaed = false;
     public Transform[] SpringTransforms;
+    public float currentHealthCap = 1.0f;
 
     void Start()
     {
@@ -27,7 +28,9 @@ public class PlayerStats : CharacterStats
     {  
         //debug:
         if(Input.GetKeyDown(KeyCode.T)) Die();
-        
+
+        currentHealth = Mathf.Clamp(currentHealth, -0.1f, maxHealth * currentHealthCap); // Keep HP between -0.1 so death checking is ok, and the current health cap
+
         //death check
         if(currentHealth<=0){
             Die();
