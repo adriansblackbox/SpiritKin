@@ -6,7 +6,8 @@ public class ControlOverlayHandler : MonoBehaviour
 {
     public GameObject MouseKeyboardOverlay;
     public GameObject XboxControllerOverlay;
-    private bool keyboard = false;
+    
+    public bool keyboard = false;
     // Update is called once per frame
     void Update()
     {
@@ -33,11 +34,13 @@ public class ControlOverlayHandler : MonoBehaviour
 
         if (keyboard)
         {
+            Cursor.lockState = CursorLockMode.None;
             MouseKeyboardOverlay.SetActive(true);
             XboxControllerOverlay.SetActive(false);
         }
         else
         {
+            Cursor.lockState = CursorLockMode.Locked;
             MouseKeyboardOverlay.SetActive(false);
             XboxControllerOverlay.SetActive(true);           
         }
