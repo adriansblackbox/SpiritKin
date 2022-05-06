@@ -149,6 +149,7 @@ public class CurseMeter : MonoBehaviour
             pStats.damage.AddBaseValue(5.0f);
             unactiveCurses[Random.Range(0, unactiveCurses.Count)].active = true;
         }
+        curseMeter = 0;
         newCurse = true;
     }
 
@@ -156,20 +157,30 @@ public class CurseMeter : MonoBehaviour
         switch (activeCurses.Count) {
             case 3:
                 cursesUI[2].transform.Find("Curse").gameObject.SetActive(true);
+                cursesUI[2].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
                 break; // All curses active. Flow for managing player max health.
             case 2:
                 cursesUI[2].transform.Find("Curse").gameObject.SetActive(false);
+                cursesUI[2].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
                 cursesUI[1].transform.Find("Curse").gameObject.SetActive(true);
+                cursesUI[1].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
+                curCurseUI = cursesUI[activeCurses.Count];
                 break;
             case 1:
                 cursesUI[1].transform.Find("Curse").gameObject.SetActive(false);
+                cursesUI[1].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
                 cursesUI[0].transform.Find("Curse").gameObject.SetActive(true);
+                cursesUI[0].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
+                curCurseUI = cursesUI[activeCurses.Count];
                 break;
             case 0:
                 cursesUI[0].transform.Find("Curse").gameObject.SetActive(false);
+                cursesUI[0].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
+                curCurseUI = cursesUI[activeCurses.Count];
                 break;
         }
 
+        /*
         if (activeCurses.Count < 3) {
             curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
             curCurseUI = cursesUI[activeCurses.Count];
@@ -178,6 +189,7 @@ public class CurseMeter : MonoBehaviour
         }else {
             curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
         }
+        */
     }
 
 
@@ -199,7 +211,6 @@ public class CurseMeter : MonoBehaviour
         activeCurses[i].isApplied = false;
         activeCurses[i].removeFlag = true;
         activeCurses.RemoveAt(i);
-        cursesUI[i].transform.Find("Curse").gameObject.GetComponent<Image>().sprite = Notch; // Hide curse with an invisible circle
 
         switch (i) {
             case 0:
