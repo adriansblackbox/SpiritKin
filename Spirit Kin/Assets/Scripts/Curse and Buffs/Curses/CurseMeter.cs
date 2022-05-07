@@ -145,8 +145,6 @@ public class CurseMeter : MonoBehaviour
     public void addCurse() {
         List<Curse> unactiveCurses = curseArray.Except(activeCurses).ToList();
         if (unactiveCurses.Count > 0) {
-            pStats.currentHealthCap -= 0.17f;
-            pStats.damage.AddBaseValue(5.0f);
             unactiveCurses[Random.Range(0, unactiveCurses.Count)].active = true;
         }
         curseMeter = 0;
@@ -245,7 +243,7 @@ public class CurseMeter : MonoBehaviour
                 }
                 else if (x.active && !x.isApplied)
                 {
-                    manageCurseUI();
+                    //manageCurseUI();
                     curCurseUI.transform.Find("Curse").gameObject.SetActive(true);
                     var a = x.image;
                     curCurseUI.transform.Find("Curse").gameObject.GetComponent<Image>().sprite = a;
@@ -253,6 +251,8 @@ public class CurseMeter : MonoBehaviour
                     x.invokeCurse();
                     manageCurseUI();
                     FindObjectOfType<StatVFX>().addCurseStat(x.type);
+                    pStats.currentHealthCap -= 0.17f;
+                    pStats.damage.AddBaseValue(5.0f);
                 }
             }
         );
