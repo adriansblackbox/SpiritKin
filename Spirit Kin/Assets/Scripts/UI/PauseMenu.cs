@@ -30,9 +30,11 @@ public class PauseMenu : MonoBehaviour
                 // Player.GetComponent<PlayerCombat>().enabled = true;
                 
                 Resume();
-            }else{
+            }else if(teaShopMenu.isOpen){
+                teaShopMenu.CloseMenu();
                 // Player.GetComponent<PlayerController>().enabled = false;
                 // Player.GetComponent<PlayerCombat>().enabled = false;
+            }else{
                 Pause();
             }
         }

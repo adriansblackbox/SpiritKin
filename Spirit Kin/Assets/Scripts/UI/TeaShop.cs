@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class TeaShop : MonoBehaviour
 {
@@ -67,19 +68,26 @@ public class TeaShop : MonoBehaviour
         if (UI.GetComponent<ControlOverlayHandler>().keyboard)
         {   
             //disable texts
-            Instruct1.SetActive(false);
-            Instruct2.SetActive(false);
+            Instruct1.GetComponent<Text>().text = "A";
+            Instruct2.GetComponent<Text>().text = "D";
+            
+            triggerText.GetComponent<TextMeshProUGUI>().text = "Press F to open shop";
             
             if(eventSystem.currentSelectedGameObject != null){
-                ShopFirstButton = eventSystem.currentSelectedGameObject;
+                // ShopFirstButton = eventSystem.currentSelectedGameObject;
                 EventSystem.current.SetSelectedGameObject(null);
             }
         }
         else
         {
+
             //enable texts
-            Instruct1.SetActive(true);
-            Instruct2.SetActive(true);
+            Instruct1.GetComponent<Text>().text = "LB";
+            Instruct2.GetComponent<Text>().text = "RB";
+            //get textmeshpro text
+            triggerText.GetComponent<TextMeshProUGUI>().text = "Press X to open shop";
+            
+
             if (eventSystem.currentSelectedGameObject == null)
             {
                 EventSystem.current.SetSelectedGameObject(null);

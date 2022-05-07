@@ -211,14 +211,16 @@ public class TeaShopManager : MonoBehaviour
         {
             if (
                 Input.GetKeyDown(KeyCode.JoystickButton4) ||
-                Input.GetKeyDown(KeyCode.LeftArrow)
+                Input.GetKeyDown(KeyCode.LeftArrow)||
+                Input.GetKeyDown(KeyCode.A)
             )
             {
                 BackOption();
             }
             if (
                 Input.GetKeyDown(KeyCode.JoystickButton5) ||
-                Input.GetKeyDown(KeyCode.RightArrow)
+                Input.GetKeyDown(KeyCode.RightArrow)||
+                Input.GetKeyDown(KeyCode.D)
             )
             {
                 NextOption();
