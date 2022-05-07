@@ -121,6 +121,8 @@ public class TeaShop : MonoBehaviour
         // Cursor.lockState = CursorLockMode.None;
 
         //disable player controller
+        playerController.speed = 0;
+        playerController.animator.SetFloat("Speed", 0);
         playerController.enabled = false;
         teaMenu.SetActive(true);
 

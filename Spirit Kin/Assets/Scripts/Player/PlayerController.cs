@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public string State;
     public GameObject[] DashInvisibleObjects;
     private float input_x, input_y;
+    private int input_invert = 1;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
     public float Gravity = -30f;
@@ -38,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private CharacterController controller;
     private SwordCollision swordScript;
-    private Animator animator;
+    public Animator animator;
 	private GameObject mainCamera;
     
     public Transform A1RayCast, A2RayCast, A3RayCast, A4RayCast, A5RayCast;
@@ -75,8 +76,8 @@ public class PlayerController : MonoBehaviour
     // Input getter
     //===========================================================
     private void PlayerInput(){
-        input_x = Input.GetAxis("Horizontal");
-        input_y = Input.GetAxis("Vertical");
+        input_x = Input.GetAxis("Horizontal") * input_invert;
+        input_y = Input.GetAxis("Vertical") * input_invert;
         animator.SetFloat("X Direction Input", Mathf.Abs(input_x));
         animator.SetFloat("Z Direction Input", Mathf.Abs(input_y));
         if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0))
@@ -317,7 +318,7 @@ public class PlayerController : MonoBehaviour
         moveDirection = moveDirection.normalized * (speed * GetComponent<PlayerStats>().speed.GetValue());
         controller.Move(moveDirection * Time.deltaTime);
         //Animation
-        animationBlend = Mathf.Lerp(animationBlend, speed * GetComponent<PlayerStats>().speed.GetValue(), Time.deltaTime * 100f);
+        animationBlend = Mathf.Lerp(animationBlend, Mathf.Abs(speed) * GetComponent<PlayerStats>().speed.GetValue(), Time.deltaTime * 100f);
         animator.SetFloat("Speed", animationBlend);
         // adjusting the motion speed variable with the input magnitude allows
         // the player to slowly creep up to a full speed on their controller
@@ -382,5 +383,11 @@ public class PlayerController : MonoBehaviour
     }
      private void SpecialEnd() {
         animator.SetBool("Special End", true);
+    }
+    public void InvertControls(bool invert) {
+        if(invert) 
+            input_invert = -1;
+        else
+            input_invert = 1;
     }
 }

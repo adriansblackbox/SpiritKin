@@ -21,8 +21,10 @@ public class PlayerStats : CharacterStats
         //set player starting coins here
         coins = 1000;
         currentHealth = maxHealth;
+        for(int i = 0; i < BuffsUI.Count; i++) {
+            BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
+        }
     }
-
     // Update is called once per frame
     void Update()
     {  
@@ -96,6 +98,7 @@ public class PlayerStats : CharacterStats
                                 break;
                             }
                     }
+                    BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = true;
                     BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().enabled = true;
                 }
                 if (x.removeFlag)
@@ -135,7 +138,7 @@ public class PlayerStats : CharacterStats
                                 break;
                             }
                     }
-                    BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = Notch;
+                    BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
                 }
             });
             for(int i = 0; i < Buffs.Count; i ++){

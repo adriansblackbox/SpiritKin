@@ -20,4 +20,7 @@ public class LockOnArrow : MonoBehaviour
     public void SetPossibleArrow() {
         SR.sprite = PossibleArrow;
     }
+    public void DestoryArrow() {
+        Destroy(this.gameObject);
+    }
 }

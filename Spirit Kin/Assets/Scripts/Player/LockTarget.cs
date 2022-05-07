@@ -64,6 +64,7 @@ public class LockTarget : MonoBehaviour
     public void DelockTarget() {
         Target = null;
         LockOnCamera.SetActive(false);
+        PossibleTarget = null;
     }
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
