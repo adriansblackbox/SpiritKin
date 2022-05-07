@@ -38,6 +38,10 @@ public class blindCurse : Curse
 
     override public void removeCurse () 
     {
+        removeFlag = false;
+        isApplied = false;
+        active = false;
+        
         foreach (GameObject i in shrineUI) {
             i.SetActive(true);
         }
