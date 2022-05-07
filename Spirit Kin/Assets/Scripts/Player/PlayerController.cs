@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private CharacterController controller;
     private SwordCollision swordScript;
-    private Animator animator;
+    public Animator animator;
 	private GameObject mainCamera;
     
     public Transform A1RayCast, A2RayCast, A3RayCast, A4RayCast, A5RayCast;
