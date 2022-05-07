@@ -203,7 +203,7 @@ public class CurseMeter : MonoBehaviour
         pStats.damage.AddBaseValue(-5.0f);
         pStats.currentHealth += pStats.maxHealth * 0.17f;
 
-        FindObjectOfType<StatVFX>().removeCurseStat(activeCurses[i].type);
+        //FindObjectOfType<StatVFX>().removeCurseStat(activeCurses[i].type);
 
         activeCurses[i].active = true;
         activeCurses[i].isApplied = false;
@@ -250,7 +250,7 @@ public class CurseMeter : MonoBehaviour
                     cp.showCursePopup(x.type);
                     x.invokeCurse();
                     manageCurseUI();
-                    FindObjectOfType<StatVFX>().addCurseStat(x.type);
+                    //FindObjectOfType<StatVFX>().addCurseStat(x.type);
                     pStats.currentHealthCap -= 0.17f;
                     pStats.damage.AddBaseValue(5.0f);
                 }

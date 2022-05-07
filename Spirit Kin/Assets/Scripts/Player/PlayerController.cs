@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float WalkSpeed = 2.0f;
     [SerializeField] public float SprintSpeed = 5.0f;
     [SerializeField] public float DashSpeed = 20f;
+    [SerializeField] public float DashTime = 1f;
     [SerializeField] public float AttackDelay = 0.5f;
     [SerializeField] private float RotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
@@ -206,6 +207,15 @@ public class PlayerController : MonoBehaviour
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(false);
         }
+        StartCoroutine(DashInvisibleTime());
+        StartDashMovement();
+    }
+    IEnumerator DashInvisibleTime () {
+        animator.speed = 0;
+        yield return new WaitForSeconds(DashTime);
+        animator.speed = 1;
+        animator.SetBool("Dash Movement", false);
+        yield return null;
     }
     private void DashInvisiblityOff(){
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
