@@ -1276,7 +1276,7 @@ MonoBehaviour:
   st: {fileID: 1889668265}
   pc: {fileID: 881556155}
   tutorialFinished: 0
-  tutorialOn: 1
+  tutorialOn: 0
   showingNonPlayerCamera: 0
   shownShrine: 0
   shownPool: 0
@@ -5834,6 +5834,17 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5299334708804420200, guid: b19eaa90dbcbb00428bb090fa8a8c13e, type: 3}
+--- !u!114 &344019354 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 288909221725714110, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+  m_PrefabInstance: {fileID: 1561805603}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &345263602 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7100907181833725265, guid: b19eaa90dbcbb00428bb090fa8a8c13e, type: 3}
@@ -17517,6 +17528,17 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6851752233551798572, guid: 20c9ece6158e8554992a878cf6b539ac, type: 3}
+--- !u!114 &997734490 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 288909222268191649, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+  m_PrefabInstance: {fileID: 1561805603}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1003649835 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6487356692054705231, guid: 20c9ece6158e8554992a878cf6b539ac, type: 3}
@@ -21403,6 +21425,17 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1618651724453957149, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
+--- !u!114 &1235479593 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 288909222820196049, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+  m_PrefabInstance: {fileID: 1561805603}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1235548165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8009987137999418058, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
@@ -28276,6 +28309,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 288909221725714110, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 288909221725714110, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 1235479593}
+    - target: {fileID: 288909221725714110, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 997734490}
     - target: {fileID: 288909221935994116, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: m_SizeDelta.y
       value: 168.24
@@ -28331,6 +28376,26 @@ PrefabInstance:
     - target: {fileID: 288909222033478274, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: m_Color.a
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 288909222268191649, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 288909222268191649, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 344019354}
+    - target: {fileID: 288909222268191649, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 1235479593}
+    - target: {fileID: 288909222820196049, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 344019354}
+    - target: {fileID: 288909222820196049, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: pc

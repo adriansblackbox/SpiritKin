@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // using static Buff;
 public class TeaShopManager : MonoBehaviour
 {
-    [SerializeField] PlayerController playerController;
+    // [SerializeField] PlayerController playerController;
 
     public Sprite
 
@@ -115,7 +115,7 @@ public class TeaShopManager : MonoBehaviour
             playStats.addBuff (currentBuff);
             
         }
-        playerController.enabled = false;
+        // playerController.enabled = false;
     }
 
     public void Upgrade()
@@ -146,7 +146,7 @@ public class TeaShopManager : MonoBehaviour
                 description.text = "Maximum potency reached";
             }
         }
-        playerController.enabled = false;
+        // playerController.enabled = false;
     }
 
     public void Exit()
