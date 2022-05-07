@@ -136,11 +136,9 @@ public class TeaShop : MonoBehaviour
     public void CloseMenu()
     {
         //enable player controller
-        if(isOpen = false)
         
 
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
-        // Cursor.lockState = CursorLockMode.Locked;
         teaMenu.SetActive(false);
         teaCamera.SetActive(false);
         isOpen = false;
