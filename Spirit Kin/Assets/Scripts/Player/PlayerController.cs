@@ -400,4 +400,7 @@ public class PlayerController : MonoBehaviour
         else
             input_invert = 1;
     }
+    public bool getInverted () {
+        return input_invert < 0;
+    }
 }
