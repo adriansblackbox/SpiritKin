@@ -17,11 +17,11 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] bool shownPool;
     
     [Header("Cameras")]
-    [SerializeField] Camera playerCamera;
-    [SerializeField] Camera shrineCamera;
-    [SerializeField] Camera poolCamera1;
-    [SerializeField] Camera poolCamera2;
-    [SerializeField] Camera poolCamera3;
+    [SerializeField] GameObject playerCamera;
+    [SerializeField] GameObject shrineCamera;
+    [SerializeField] GameObject poolCamera1;
+    [SerializeField] GameObject poolCamera2;
+    [SerializeField] GameObject poolCamera3;
 
     [Header("Tutorial UI Elements")]
     [SerializeField] GameObject dialogueObject;
@@ -78,7 +78,7 @@ public class TutorialManager : MonoBehaviour
 
     private bool CheckForInput()
     {
-        if (Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Space))
             return true;
         else
             return false;
@@ -88,14 +88,16 @@ public class TutorialManager : MonoBehaviour
     {
         shownShrine = true;
         showingNonPlayerCamera = true;
-        playerCamera.enabled = false;
-        shrineCamera.enabled = true;
+        playerCamera.GetComponent<Camera>().enabled = false;
+        shrineCamera.GetComponent<Camera>().enabled = true;
+        shrineCamera.GetComponent<CameraFade>().Reset();
         es.curseShrine(true); //curse the tutorial shrine
         es.spawnEnemy(es.shrineForTutorial);
         st.ActivateText();
-        yield return new WaitForSeconds(8f);
-        playerCamera.enabled = true;
-        shrineCamera.enabled = false;
+        yield return new WaitForSeconds(5f);
+        playerCamera.GetComponent<Camera>().enabled = true;
+        playerCamera.GetComponent<CameraFade>().Reset();
+        shrineCamera.GetComponent<Camera>().enabled = false;
         showingNonPlayerCamera = false;
     }
 
@@ -103,12 +105,14 @@ public class TutorialManager : MonoBehaviour
     {
         shownPool = true;
         showingNonPlayerCamera = true;
-        playerCamera.enabled = false;
-        poolCamera1.enabled = true;
+        playerCamera.GetComponent<Camera>().enabled = false;
+        poolCamera1.GetComponent<Camera>().enabled = true;
+        poolCamera1.GetComponent<CameraFade>().Reset();
         st.ActivateText();
-        yield return new WaitForSeconds(5f);
-        playerCamera.enabled = true;
-        poolCamera1.enabled = false;
+        yield return new WaitForSeconds(3f);
+        playerCamera.GetComponent<Camera>().enabled = true;
+        playerCamera.GetComponent<CameraFade>().Reset();
+        poolCamera1.GetComponent<Camera>().enabled = false;
         showingNonPlayerCamera = false;
     }
 }

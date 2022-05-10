@@ -64,7 +64,7 @@ public class CharacterStats : MonoBehaviour
         if (gameObject.tag == "Enemy" && currentHealth > 0)
         {
             Enemy_Controller enemyController = gameObject.GetComponent<Enemy_Controller>();
-            if (enemyController.EnemyAttack != Enemy_Controller.AttackState.Attacking)
+            if (!enemyController.immuneToStun)
             {
                 enemyController.GenerateKnockBack(knockBackStrength);
                 if (enemyController.EnemyMotion == Enemy_Controller.MotionState.Stunned)

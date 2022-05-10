@@ -62,6 +62,7 @@ public class Enemy_Controller : MonoBehaviour
 
     public Transform[] rightSwipeOriginPoints;
     public Transform[] leftSwipeOriginPoints;
+    public Transform[] chargeOriginPoints;
     public LayerMask swipeLayerMask;
 
     public GameObject leftSwipeTrail;
@@ -72,6 +73,7 @@ public class Enemy_Controller : MonoBehaviour
     public AttackState EnemyAttack;
 
     public bool stunned = false;
+    public bool immuneToStun = false;
 
     private string[] stunAnimTriggers = { "Stun 1L", "Stun 1R", "Stun 2L", "Stun 2R"};
 
@@ -132,6 +134,7 @@ public class Enemy_Controller : MonoBehaviour
 ///////////////////////////////////////////////// STATE BOX FOR TESTING
     [Header("Debugging")]
     public bool showLogs = true;
+    public bool showPlayerDetection = true;
 
     public Material alertedMat;
     public Material chasingMat;
@@ -524,11 +527,13 @@ public class Enemy_Controller : MonoBehaviour
     {
         hitEnabled = true;
         tracking = false;
+        immuneToStun = true;
     }
 
     private void DisableHit()
     {
         hitEnabled = false;
+        immuneToStun = false;
     }
 
     private void attackPlayer()
@@ -663,15 +668,20 @@ public class Enemy_Controller : MonoBehaviour
         transform.position = Vector3.Lerp(startPosition, endPosition, timeCharging/durationOfCharge);
 
         RaycastHit hit;
-        if (Physics.SphereCast(transform.position, 2f, dirVec, out hit, 1f, swipeLayerMask)) //might need detection to be more robust
+        foreach (Transform originPoint in chargeOriginPoints)
         {
-            if (!hasHitPlayer)
+            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * 1.5f, Color.red);
+            if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hit, 1.5f, swipeLayerMask)) //might need detection to be more robust
             {
-                hasHitPlayer = true;
-                Log("Hit Player with Charge Attack");
-                player.GetComponent<PlayerStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue(), 0);
-            } 
+                if (!hasHitPlayer)
+                {
+                    hasHitPlayer = true;
+                    Log("Hit Player with Charge Attack");
+                    player.GetComponent<PlayerStats>().TakeDamage(GetComponent<CharacterStats>().damage.GetValue(), 0);
+                } 
+            }
         }
+
     }
 
     private void rightSwipeAttack()
@@ -831,7 +841,8 @@ public class Enemy_Controller : MonoBehaviour
     {
         foreach (Transform originPoint in visionFanOrigins)
         {
-            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange, Color.red);
+            if (showPlayerDetection)
+                Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange, Color.red);
             if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hitInfo, targetDetectionRange, swipeLayerMask))
             {
                 if (EnemyMotion == MotionState.Idling)
@@ -845,7 +856,8 @@ public class Enemy_Controller : MonoBehaviour
 
         foreach (Transform originPoint in sideAndBackDetectionOrigins)
         {
-            Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange / 2.5f, Color.red);
+            if (showPlayerDetection)
+                Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * targetDetectionRange / 2.5f, Color.red);
             if (Physics.SphereCast(originPoint.position, 1f, originPoint.TransformDirection(Vector3.forward), out hitInfo, targetDetectionRange / 2.5f, swipeLayerMask))
             {
                 if (EnemyMotion == MotionState.Idling)

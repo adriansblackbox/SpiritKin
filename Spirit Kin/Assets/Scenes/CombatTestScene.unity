@@ -1280,9 +1280,9 @@ MonoBehaviour:
   showingNonPlayerCamera: 0
   shownShrine: 0
   shownPool: 0
-  playerCamera: {fileID: 4931512991430563516}
-  shrineCamera: {fileID: 690845061}
-  poolCamera1: {fileID: 649912849}
+  playerCamera: {fileID: 4931512991430563514}
+  shrineCamera: {fileID: 690845058}
+  poolCamera1: {fileID: 649912846}
   poolCamera2: {fileID: 0}
   poolCamera3: {fileID: 0}
   dialogueObject: {fileID: 1889668263}
@@ -10582,6 +10582,7 @@ GameObject:
   - component: {fileID: 649912850}
   - component: {fileID: 649912849}
   - component: {fileID: 649912847}
+  - component: {fileID: 649912848}
   m_Layer: 0
   m_Name: PoolCamera
   m_TagString: Untagged
@@ -10621,6 +10622,52 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &649912848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649912846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13acc41eba5d98b48a9122a53bbf0558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6
+      value: 0.7
+      inSlope: -1.8
+      outSlope: -1.2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fadeColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!20 &649912849
 Camera:
   m_ObjectHideFlags: 0
@@ -11211,6 +11258,7 @@ GameObject:
   - component: {fileID: 690845062}
   - component: {fileID: 690845061}
   - component: {fileID: 690845059}
+  - component: {fileID: 690845060}
   m_Layer: 0
   m_Name: ShrineCamera
   m_TagString: Untagged
@@ -11250,6 +11298,52 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &690845060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690845058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13acc41eba5d98b48a9122a53bbf0558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6
+      value: 0.7
+      inSlope: -1.8
+      outSlope: -1.2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fadeColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!20 &690845061
 Camera:
   m_ObjectHideFlags: 0
@@ -39454,6 +39548,7 @@ GameObject:
   - component: {fileID: 4931512991430563518}
   - component: {fileID: 4931512991430563519}
   - component: {fileID: 4931512991430563515}
+  - component: {fileID: 4931512991430563520}
   m_Layer: 3
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -39590,6 +39685,52 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4931512991430563520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4931512991430563514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13acc41eba5d98b48a9122a53bbf0558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6
+      value: 0.7
+      inSlope: -1.8
+      outSlope: -1.2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fadeColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1001 &8669201217155251026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39597,6 +39738,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 881556158, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: RaycastOn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 981010646, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_LocalPosition.y
       value: 2.36
