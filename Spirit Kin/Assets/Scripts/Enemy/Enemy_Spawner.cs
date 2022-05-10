@@ -45,7 +45,7 @@ public class Enemy_Spawner : MonoBehaviour
     //ensure that timers aren't running when timeScale = 0
     public void FixedUpdate()
     {
-        if (!FindObjectOfType<MainHub>().playerInHub && tm.tutorialFinished)
+        if (!FindObjectOfType<MainHub>().playerInHub && (tm.tutorialFinished || !tm.tutorialOn) )
         {
             myTime += Time.deltaTime;
             difficultyTimer += Time.deltaTime;
