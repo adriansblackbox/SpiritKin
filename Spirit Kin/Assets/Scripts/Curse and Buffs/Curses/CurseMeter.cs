@@ -20,7 +20,7 @@ public class CurseMeter : MonoBehaviour
     public GameObject[] cursesUI;
     public GameObject Sword1, Sword2, Sword3;
     private GameObject curCurseUI;
-    public Sprite Notch, weakImage, slowImage, frailImage, blindImage;
+    public Sprite Notch, weakImage, slowImage, frailImage, blindImage, invertImage;
     public GameObject ActiveSword;
     public GameObject[] shrines;
     public GameObject blindVignette;
@@ -29,10 +29,6 @@ public class CurseMeter : MonoBehaviour
     // Needed Curse Obtained Popup
     public GameObject cursePopup;
     private CursePopup cp;
-
-    // Bonus sword damage & current health capping?
-    public float[] bonusDamages;
-    public bool[] bonusDamagesActive;
 
     public bool debugbool = false;
 
@@ -46,11 +42,13 @@ public class CurseMeter : MonoBehaviour
         slowCurse slow = new slowCurse(slowImage, gameObject.GetComponent<PlayerStats>(), this);
         armorCurse frail = new armorCurse(frailImage, gameObject.GetComponent<PlayerStats>(), this);
         blindCurse blind = new blindCurse(blindImage, this, shrines, blindVignette, healthBar);
+        invertCurse invert = new invertCurse(invertImage, gameObject);
 
         curseArray.Add(weak);
         curseArray.Add(slow);
         curseArray.Add(frail);
         curseArray.Add(blind);
+        curseArray.Add(invert);
 
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
@@ -121,24 +119,6 @@ public class CurseMeter : MonoBehaviour
                 //pStats.damage.AddBaseValue(bonusDamages[3]);
                 //bonusDamagesActive[3] = true;
                 break;
-        }
-    }
-
-    private void handleSwordDamage () {
-        if (ActiveSword == Sword1) {
-            pStats.damage.AddBaseValue(-bonusDamages[1]);
-            bonusDamagesActive[1] = false;
-            // currentHealthCap = 75%
-        }
-        else if (ActiveSword == Sword2) {
-            pStats.damage.AddBaseValue(-bonusDamages[2]);
-            bonusDamagesActive[2] = false;
-            // currentHealthCap = 50%
-        }
-        else { 
-            pStats.damage.AddBaseValue(-bonusDamages[3]);
-            bonusDamagesActive[3] = false;
-            // currentHealthCap = 25%
         }
     }
 
