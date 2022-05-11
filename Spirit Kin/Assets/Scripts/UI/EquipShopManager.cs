@@ -91,12 +91,16 @@ public class EquipShopManager : MonoBehaviour
         if (
             playStats.coins >= currentEquip.Cost &&
             !currentEquip.isEquipped &&
-            playStats.Equipment.Count < 3
+            playStats.Equipment.Count < 3 &&
+            GameObject
+                .FindGameObjectWithTag("TeaShop")
+                .GetComponent<TeaShop>()
+                .isOpen
         )
         {
             //update coins
             playStats.coins -= currentEquip.Cost;
-            menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
+            // menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
 
             //add Equipment to player
@@ -175,14 +179,16 @@ public class EquipShopManager : MonoBehaviour
         {
             if (
                 Input.GetKeyDown(KeyCode.JoystickButton4) ||
-                Input.GetKeyDown(KeyCode.LeftArrow)
+                Input.GetKeyDown(KeyCode.LeftArrow) ||
+                Input.GetKeyDown(KeyCode.A)
             )
             {
                 BackOption();
             }
             if (
                 Input.GetKeyDown(KeyCode.JoystickButton5) ||
-                Input.GetKeyDown(KeyCode.RightArrow)
+                Input.GetKeyDown(KeyCode.RightArrow) ||
+                Input.GetKeyDown(KeyCode.D)
             )
             {
                 NextOption();
