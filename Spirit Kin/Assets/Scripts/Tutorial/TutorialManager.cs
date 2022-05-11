@@ -44,18 +44,6 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialOn)
         {
-            //show shrine
-            if (!shownShrine && st.GetCurrentDisplayingText() == 1 && CheckForInput())
-            {
-                StartCoroutine("ShowShrine");
-            }
-
-            //show purification pool
-            if (!shownPool && st.GetCurrentDisplayingText() == 4 && CheckForInput())
-            {
-                StartCoroutine("ShowPool");
-            }
-
             //All dialogue has been shown and they give input
             if (st.CheckIfDialogueCompleted() && CheckForInput())
             {
@@ -72,6 +60,18 @@ public class TutorialManager : MonoBehaviour
             else if (!tutorialFinished && !showingNonPlayerCamera && !st.typing && CheckForInput())
             {
                 st.ActivateText();
+            }
+
+            //show shrine
+            if (!shownShrine && st.GetCurrentDisplayingText() == 1 && !st.typing && CheckForInput())
+            {
+                StartCoroutine("ShowShrine");
+            }
+
+            //show purification pool
+            if (!shownPool && st.GetCurrentDisplayingText() == 4 && !st.typing && CheckForInput())
+            {
+                StartCoroutine("ShowPool");
             }
         }
     }

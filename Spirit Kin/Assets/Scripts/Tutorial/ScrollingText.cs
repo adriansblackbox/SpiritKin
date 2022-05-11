@@ -74,6 +74,5 @@ public class ScrollingText : MonoBehaviour
         }
         typing = false;
         currentDisplayingText++;
-        yield return null;
     }
 }
