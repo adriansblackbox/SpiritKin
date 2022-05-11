@@ -56,22 +56,15 @@ public class TutorialManager : MonoBehaviour
             {
                 st.DeactivateText();
             }
-            //Move onto the next NPC line
+            //Move onto the next NPC line or coroutine that explains next part
             else if (!tutorialFinished && !showingNonPlayerCamera && !st.typing && CheckForInput())
             {
-                st.ActivateText();
-            }
-
-            //show shrine
-            if (!shownShrine && st.GetCurrentDisplayingText() == 1 && !st.typing && CheckForInput())
-            {
-                StartCoroutine("ShowShrine");
-            }
-
-            //show purification pool
-            if (!shownPool && st.GetCurrentDisplayingText() == 4 && !st.typing && CheckForInput())
-            {
-                StartCoroutine("ShowPool");
+                if (!shownShrine && st.GetCurrentDisplayingText() == 1)
+                    StartCoroutine("ShowShrine");
+                else if (!shownPool && st.GetCurrentDisplayingText() == 4)
+                    StartCoroutine("ShowPool");
+                else
+                    st.ActivateText();
             }
         }
     }
@@ -86,6 +79,7 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator ShowShrine()
     {
+        st.ActivateText();
         shownShrine = true;
         showingNonPlayerCamera = true;
         playerCamera.GetComponent<Camera>().enabled = false;
@@ -93,7 +87,6 @@ public class TutorialManager : MonoBehaviour
         shrineCamera.GetComponent<CameraFade>().Reset();
         es.curseShrine(true); //curse the tutorial shrine
         es.spawnEnemy(es.shrineForTutorial);
-        st.ActivateText();
         yield return new WaitForSeconds(5f);
         playerCamera.GetComponent<Camera>().enabled = true;
         playerCamera.GetComponent<CameraFade>().Reset();
@@ -103,12 +96,12 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator ShowPool()
     {
+        st.ActivateText();
         shownPool = true;
         showingNonPlayerCamera = true;
         playerCamera.GetComponent<Camera>().enabled = false;
         poolCamera1.GetComponent<Camera>().enabled = true;
         poolCamera1.GetComponent<CameraFade>().Reset();
-        st.ActivateText();
         yield return new WaitForSeconds(3f);
         playerCamera.GetComponent<Camera>().enabled = true;
         playerCamera.GetComponent<CameraFade>().Reset();

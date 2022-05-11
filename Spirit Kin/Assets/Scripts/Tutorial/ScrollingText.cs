@@ -52,6 +52,7 @@ public class ScrollingText : MonoBehaviour
 
     public void ActivateText()
     {
+        Debug.Log("Activating Text");
         StartCoroutine("AnimateText");
     }
 
@@ -67,11 +68,13 @@ public class ScrollingText : MonoBehaviour
     IEnumerator AnimateText()
     {
         typing = true;
+
         for (int i = 0; i < dialogueLines[currentDisplayingText].Length + 1; i++)
         {
             dialogueText.text = dialogueLines[currentDisplayingText].Substring(0,i);
             yield return new WaitForSeconds(textSpeed);
         }
+
         typing = false;
         currentDisplayingText++;
     }
