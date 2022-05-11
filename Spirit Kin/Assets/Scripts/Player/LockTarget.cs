@@ -80,14 +80,14 @@ public class LockTarget : MonoBehaviour
             if(Physics.SphereCast(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, out hit, rayLength, EnemyLayer)) {
                 if(PossibleTarget == null) {
                     PossibleTarget = hit.transform;
-                    PossibleTarget.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(true);
+                    EnableArrow(true, PossibleTarget);
                 } else {
-                    PossibleTarget.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
+                    EnableArrow(false, PossibleTarget);
                     PossibleTarget = hit.transform;
-                    PossibleTarget.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(true);
+                    EnableArrow(true, PossibleTarget);
                 }
             }else if(PossibleTarget != null) {
-                PossibleTarget.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
+                EnableArrow(false, PossibleTarget);
                 PossibleTarget = null;
             }
         }
@@ -103,5 +103,9 @@ public class LockTarget : MonoBehaviour
                 LockOnCamera.SetActive(true);
             }
         }
+    }
+    private void EnableArrow(bool enable, Transform enemy) {
+        if(!enemy.GetComponent<CharacterStats>().isDying)
+            enemy.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(enable);
     }
 }
