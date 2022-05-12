@@ -73,6 +73,9 @@ public class PlayerController : MonoBehaviour
             AttackMovement();
         else if(animator.GetBool("Dash Movement"))
             DashMovement();
+        if (animator.GetFloat("Dash Cooldown") >= 0) {
+            animator.SetFloat("Dash Cooldown", animator.GetFloat("Dash Cooldown") - Time.deltaTime);
+        }
     }
     //===========================================================
     // Input getter
@@ -192,7 +195,6 @@ public class PlayerController : MonoBehaviour
     private void DashEnd(){
         animator.SetBool("Dash End", true);
         animator.SetBool("Dash Movement", false);
-        animator.SetFloat("Dash Cooldown", 0.2f);
         speed = 0.0f;
     }
     //====================================================
@@ -220,6 +222,7 @@ public class PlayerController : MonoBehaviour
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(true);
         }
+        animator.SetFloat("Dash Cooldown", 0.2f);
         animator.SetBool("Dash Movement", false);
     }
     
@@ -348,9 +351,6 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("Attack Delay", animator.GetFloat("Attack Delay") - Time.deltaTime);
         } else if (animator.GetInteger("Attack Number") != 1) {
             animator.SetInteger("Attack Number", 1);
-        }
-        if (animator.GetFloat("Dash Cooldown") >= 0) {
-            animator.SetFloat("Dash Cooldown", animator.GetFloat("Dash Cooldown") - Time.deltaTime);
         }
     }
     private void RotateCamera(){

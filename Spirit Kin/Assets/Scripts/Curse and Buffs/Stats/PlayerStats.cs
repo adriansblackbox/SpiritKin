@@ -148,7 +148,6 @@ public class PlayerStats : CharacterStats
             });
             for(int i = 0; i < Buffs.Count; i ++){
                 if(Buffs[i].removeFlag){
-                    FindObjectOfType<StatVFX>().removeBuffStat(Buffs[i].teaName);
                     Buffs.RemoveAt(i);
                     BuffsUI.Add(BuffsUI[0]);
                     BuffsUI.RemoveAt(0);
@@ -164,7 +163,6 @@ public class PlayerStats : CharacterStats
             x.removeFlag = false;
             Buffs.Add (x);
             Debug.Log(x.teaName);
-            FindObjectOfType<StatVFX>().addBuffStat(x.teaName);
         }
     }
 
