@@ -26,6 +26,11 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial UI Elements")]
     [SerializeField] GameObject dialogueObject;
 
+    [Header("Sounds")]
+    [SerializeField] AudioSource NPCAudio;
+    [SerializeField] AudioClip heyAudio;
+    [SerializeField] AudioClip[] dialogueAudio;
+
 
     void Start()
     {
@@ -33,6 +38,8 @@ public class TutorialManager : MonoBehaviour
         {
             pc.enabled = false;
             st.ActivateText();
+            NPCAudio.clip = heyAudio;
+            NPCAudio.Play();
         }
         else
         {
