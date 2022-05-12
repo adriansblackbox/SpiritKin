@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using static blindCurse;
 using static invertCurse;
 using static slowCurse;
+using static blindCurse;
+using static invertCurse;
 
 public class CurseMeter : MonoBehaviour
 {
@@ -20,17 +22,22 @@ public class CurseMeter : MonoBehaviour
     public GameObject[] cursesUI;
     public GameObject Sword1, Sword2, Sword3;
     private GameObject curCurseUI;
-    public Sprite Notch, weakImage, slowImage, frailImage, blindImage, invertImage;
+    public Sprite Notch, weakImage, slowImage, frailImage, blindImage, invertImage, moneyImage, vampImage, teaImage, rangeImage;
     public GameObject ActiveSword;
     public GameObject[] shrines;
     public GameObject blindVignette;
     public GameObject healthBar;
+    public SwordCollision swordLength;
+
+    // Curses that need to talk to other scripts and functions easier
+    public moneyCurse kromer;
+    public rangeBlessing swordRangeBlessing;
 
     // Needed Curse Obtained Popup
     public GameObject cursePopup;
     private CursePopup cp;
 
-    public bool debugbool = false;
+    public bool deathWipe = false;
 
     // Start is called before the first frame update
     private void Start() {
@@ -38,17 +45,21 @@ public class CurseMeter : MonoBehaviour
         curseMeter = 0f;
         pStats = gameObject.GetComponent<PlayerStats>();
 
-        damageCurse weak = new damageCurse(weakImage, gameObject.GetComponent<PlayerStats>(), this);
-        slowCurse slow = new slowCurse(slowImage, gameObject.GetComponent<PlayerStats>(), this);
-        armorCurse frail = new armorCurse(frailImage, gameObject.GetComponent<PlayerStats>(), this);
+        damageCurse weak = new damageCurse(weakImage, pStats, this);
+        slowCurse slow = new slowCurse(slowImage, pStats, this);
+        armorCurse frail = new armorCurse(frailImage, pStats, this);
         blindCurse blind = new blindCurse(blindImage, this, shrines, blindVignette, healthBar);
         invertCurse invert = new invertCurse(invertImage, gameObject);
+        kromer = new moneyCurse(moneyImage, pStats, this);
+        swordRangeBlessing = new rangeBlessing(rangeImage, swordLength, gameObject, this);
 
         curseArray.Add(weak);
         curseArray.Add(slow);
         curseArray.Add(frail);
         curseArray.Add(blind);
         curseArray.Add(invert);
+        curseArray.Add(kromer);
+        curseArray.Add(swordRangeBlessing);
 
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
@@ -67,9 +78,8 @@ public class CurseMeter : MonoBehaviour
             }
         }
 
-        if (debugbool) { // Debug to remove all curses
+        if (deathWipe) { // Debug to remove all curses
             removeCurse();
-            //debugbool = !debugbool;
         }
 
         if (newCurse) { // If this is flipped, we need to update something about curses
@@ -179,9 +189,12 @@ public class CurseMeter : MonoBehaviour
         }
         int i = Random.Range(0, activeCurses.Count - 1);
 
+        
         pStats.currentHealthCap += 0.17f;
-        pStats.damage.AddBaseValue(-5.0f);
-        pStats.currentHealth += pStats.maxHealth * 0.17f;
+        // pStats.damage.AddBaseValue(-5.0f);
+        swordRangeBlessing.baseValue -= 2.0f;
+        swordRangeBlessing.updateCurse();
+        if (!deathWipe) pStats.currentHealth += pStats.maxHealth * 0.17f;
 
         //FindObjectOfType<StatVFX>().removeCurseStat(activeCurses[i].type);
 
@@ -232,7 +245,9 @@ public class CurseMeter : MonoBehaviour
                     manageCurseUI();
                     //FindObjectOfType<StatVFX>().addCurseStat(x.type);
                     pStats.currentHealthCap -= 0.17f;
-                    pStats.damage.AddBaseValue(5.0f);
+                    //pStats.damage.AddBaseValue(5.0f);
+                    swordRangeBlessing.baseValue += 2.0f;
+                    swordRangeBlessing.updateCurse();
                 }
             }
         );

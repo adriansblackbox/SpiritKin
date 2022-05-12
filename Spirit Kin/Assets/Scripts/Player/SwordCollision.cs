@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class SwordCollision : MonoBehaviour
 {
-
-    public float BladeLength = 10f;
+    public float BladeLength;
     public LayerMask layerMask;
     public List<GameObject> immuneEnemies;
     public bool RaycastOn;
     public Transform AttackOriginPoints;
+
     private void Start() {
     }
+
     private void Update() {
         RaycastHit hit;
         //checking to see if we hit an enemy
