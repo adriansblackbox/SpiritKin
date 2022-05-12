@@ -12,7 +12,6 @@ public class PlayerStats : CharacterStats
 
     public List<GameObject> BuffsUI = new List<GameObject>();
     public Sprite Notch, damageBuff, speedBuff, armorBuff, healthBuff;
-    private bool isDaed = false;
     public Transform[] SpringTransforms;
     public float currentHealthCap = 1.0f;
     public bool noCoindens = false;
@@ -205,12 +204,13 @@ public class PlayerStats : CharacterStats
         if(!gameObject.GetComponent<Animator>().GetBool("Death")) gameObject.GetComponent<PlayerController>().Stun();
     }
 
-    override public void Die () {
+    override public async void Die () {
         Debug.Log("Player died!");
         StartCoroutine(PlayerDeath(this.gameObject));
     }
 
     public IEnumerator PlayerDeath(GameObject player) {
+        isDying = true;
         curseMeter.deathWipe = true;
         foreach(Buff x in Buffs) removeBuff(x);
         // turning the lockon camera off in the case that it's on while dying
@@ -237,6 +237,7 @@ public class PlayerStats : CharacterStats
         player.GetComponent<CharacterController>().enabled = true;
         player.GetComponent<PlayerStats>().currentHealth = player.GetComponent<PlayerStats>().maxHealth;
         curseMeter.deathWipe = false;
+        isDying = false;
         yield return null;
     }
 }
