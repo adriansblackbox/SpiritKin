@@ -396,10 +396,11 @@ public class PlayerController : MonoBehaviour
         GameObject[] enemies =  GameObject.FindGameObjectsWithTag("Enemy");
         Debug.Log(enemies.Length);
         for(int i = 0; i < enemies.Length; i++) {
-            //if(Mathf.Abs((enemies[i].transform.position - transform.position).magnitude) <= GravityPullRange) {
+            //Vector3.Distance(other.position, transform.position);
+            if(Vector3.Distance(transform.position, enemies[i].transform.position) <= GravityPullRange) {
                 if(enemies[i].GetComponent<CharacterStats>())
                     enemies[i].GetComponent<CharacterStats>().TakeDamage(0, -10f);
-            //}
+            }
         }
     }
      private void SpecialEnd() {
