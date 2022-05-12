@@ -205,23 +205,22 @@ public class PlayerController : MonoBehaviour
     }
 
     private void DashInvisiblityOn(){
-        for(int i = 0; i < DashInvisibleObjects.Length; i++){
-            DashInvisibleObjects[i].SetActive(false);
-        }
-        StartCoroutine(DashInvisibleTime());
         StartDashMovement();
+        for(int i = 0; i < DashInvisibleObjects.Length; i++)
+            DashInvisibleObjects[i].SetActive(false);
+        StartCoroutine(DashInvisibleTime());
     }
     IEnumerator DashInvisibleTime () {
         animator.speed = 0;
         yield return new WaitForSeconds(DashTime);
         animator.speed = 1;
-        animator.SetBool("Dash Movement", false);
         yield return null;
     }
     private void DashInvisiblityOff(){
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(true);
         }
+        animator.SetBool("Dash Movement", false);
     }
     
     private void AttackMovement(){
@@ -390,6 +389,7 @@ public class PlayerController : MonoBehaviour
     }
     private void SpecialStart() {
         AnimationStart();
+        DashInvisiblityOff();
         animator.SetBool("Special End", false);
     }
     private void PullEnemies() {
