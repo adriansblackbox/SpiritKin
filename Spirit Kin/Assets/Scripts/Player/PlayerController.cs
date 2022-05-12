@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
     public float Gravity = -30f;
+    public float GravityPullRange = 5f;
     private float animationBlend;
     private Vector3 moveDirection;
     private CharacterController controller;
@@ -390,6 +391,16 @@ public class PlayerController : MonoBehaviour
     private void SpecialStart() {
         AnimationStart();
         animator.SetBool("Special End", false);
+    }
+    private void PullEnemies() {
+        GameObject[] enemies =  GameObject.FindGameObjectsWithTag("Enemy");
+        Debug.Log(enemies.Length);
+        for(int i = 0; i < enemies.Length; i++) {
+            //if(Mathf.Abs((enemies[i].transform.position - transform.position).magnitude) <= GravityPullRange) {
+                if(enemies[i].GetComponent<CharacterStats>())
+                    enemies[i].GetComponent<CharacterStats>().TakeDamage(0, -10f);
+            //}
+        }
     }
      private void SpecialEnd() {
         animator.SetBool("Special End", true);
