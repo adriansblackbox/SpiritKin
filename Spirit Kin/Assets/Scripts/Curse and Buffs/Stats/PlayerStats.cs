@@ -15,6 +15,8 @@ public class PlayerStats : CharacterStats
     private bool isDaed = false;
     public Transform[] SpringTransforms;
     public float currentHealthCap = 1.0f;
+    public bool noCoindens = false;
+    public int moneyCurseLock = 0;
 
     void Start()
     {
@@ -25,6 +27,7 @@ public class PlayerStats : CharacterStats
             BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
         }
     }
+
     // Update is called once per frame
     void Update()
     {  
@@ -37,6 +40,8 @@ public class PlayerStats : CharacterStats
         if(currentHealth<=0){
             Die();
         }
+        if (moneyCurseLock > coins) moneyCurseLock = coins;
+        if (noCoindens) coins = moneyCurseLock;
         SoulsUI.text = "" + coins;
         if (Buffs.Count != 0)
         {
@@ -150,6 +155,7 @@ public class PlayerStats : CharacterStats
                 }
             }
     }
+
     public void addBuff(Buff x)
     {
         if(Buffs.Count < 3){
@@ -184,5 +190,53 @@ public class PlayerStats : CharacterStats
         int i = Equipment.FindIndex(y => y.equipName == x.equipName);
         Equipment.RemoveAt(i);
         Debug.Log(x.equipName);
+    }
+
+    override public void TakeDamage (float damage, float knockBackStrength) {
+        hitVFX.Play();
+        //armor system
+        damage -= armor.GetValue();
+        damage = Mathf.Clamp(damage, 0, maxHealth * 0.9f);
+
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, float.MaxValue);
+
+        if(noCoindens) coins -= (int)((float)coins * curseMeter.kromer.GetValue());
+        if(!gameObject.GetComponent<Animator>().GetBool("Death")) gameObject.GetComponent<PlayerController>().Stun();
+    }
+
+    override public void Die () {
+        Debug.Log("Player died!");
+        StartCoroutine(PlayerDeath(this.gameObject));
+    }
+
+    public IEnumerator PlayerDeath(GameObject player) {
+        curseMeter.deathWipe = true;
+        foreach(Buff x in Buffs) removeBuff(x);
+        // turning the lockon camera off in the case that it's on while dying
+        GetComponent<LockTarget>().LockOnCamera.SetActive(false);
+        // disable player move script
+        // play death animation
+        deathUI.SetActive(true);
+        player.GetComponent<Animator>().SetBool("Death", true);
+        player.GetComponent<CharacterController>().enabled = false;
+        Transform[] springTransforms = FindObjectOfType<PlayerStats>().SpringTransforms;
+        Vector3 respawnPosition = Vector3.zero;
+        float minMagnitude = float.MaxValue;
+        for(int i = 0; i < springTransforms.Length; i ++){
+            float mag = (player.transform.position - springTransforms[i].transform.position).magnitude;
+            if(mag < minMagnitude){
+                minMagnitude = mag;
+                respawnPosition = springTransforms[i].position;
+            }
+        }
+        yield return new WaitForSeconds(3f);
+        player.GetComponent<PlayerController>().AnimationStart();
+        player.GetComponent<Animator>().SetBool("Death", false);
+        player.transform.position = respawnPosition;
+        player.GetComponent<CharacterController>().enabled = true;
+        player.GetComponent<PlayerStats>().currentHealth = player.GetComponent<PlayerStats>().maxHealth;
+        curseMeter.deathWipe = false;
+        yield return null;
     }
 }

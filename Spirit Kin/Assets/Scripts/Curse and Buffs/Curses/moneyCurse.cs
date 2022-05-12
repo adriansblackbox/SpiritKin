@@ -1,24 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using static Buff;
 
-public class damageCurse : Curse
+public class moneyCurse : Curse
 {
-    private CharacterStats pStats;
+    private PlayerStats pStats;
     private CurseMeter cMeter;
     
-    public damageCurse (Sprite _image, CharacterStats _pStats, CurseMeter _cMeter)
+    public moneyCurse (Sprite _image, PlayerStats _pStats, CurseMeter _cMeter)
     {
         pStats = _pStats;
-        type = "Damage Curse";
+        type = "Money Drought";
         isApplied = false;
         removeFlag = false;
         image = _image;
         cMeter = _cMeter;
-        penaltyValue = -5;
+        penaltyValue = 0.1f;
     }
 
     override public void invokeCurse () 
@@ -26,12 +23,16 @@ public class damageCurse : Curse
         isApplied = true;
         cMeter.activeCurses.Add(this);
 
-        pStats.damage.AddBaseValue(penaltyValue);
+        pStats.noCoindens = true;
+        pStats.moneyCurseLock = pStats.coins;
     }
 
     override public void updateCurse (float newValue) {
-        pStats.damage.AddBaseValue(newValue - penaltyValue);
         penaltyValue = newValue;
+    }
+
+    public float GetValue () {
+        return penaltyValue;
     }
 
     override public void removeCurse () 
@@ -39,6 +40,6 @@ public class damageCurse : Curse
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.damage.AddBaseValue(-penaltyValue);
+        pStats.noCoindens = false;
     } 
 }
