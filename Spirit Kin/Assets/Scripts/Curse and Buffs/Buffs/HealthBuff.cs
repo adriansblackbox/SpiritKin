@@ -22,7 +22,7 @@ public class HealthBuff : Buff
 
         duration = baseDuration;
         timeActive = baseTimeActive;
-        power = 0;
+        power = basePower;
         investCost = baseInvestCost;
         level = baseLevel;
 

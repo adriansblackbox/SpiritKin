@@ -28,6 +28,7 @@ public class CurseMeter : MonoBehaviour
     public GameObject blindVignette;
     public GameObject healthBar;
     public SwordCollision swordLength;
+    public TeaShopManager teaList;
 
     // Curses that need to talk to other scripts and functions easier
     public moneyCurse kromer;
@@ -52,14 +53,18 @@ public class CurseMeter : MonoBehaviour
         invertCurse invert = new invertCurse(invertImage, gameObject);
         kromer = new moneyCurse(moneyImage, pStats, this);
         swordRangeBlessing = new rangeBlessing(rangeImage, swordLength, gameObject, this);
+        teaBlessing tea = new teaBlessing(teaImage, teaList, pStats, this);
+        vampBlessing vamp = new vampBlessing(vampImage, swordLength, gameObject, this);
 
         curseArray.Add(weak);
         curseArray.Add(slow);
-        curseArray.Add(frail);
-        curseArray.Add(blind);
-        curseArray.Add(invert);
-        curseArray.Add(kromer);
-        curseArray.Add(swordRangeBlessing);
+        //curseArray.Add(frail);
+        //curseArray.Add(blind);
+        //curseArray.Add(invert);
+        //curseArray.Add(kromer);
+        //curseArray.Add(swordRangeBlessing);
+        //curseArray.Add(tea);
+        curseArray.Add(vamp);
 
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
@@ -92,42 +97,23 @@ public class CurseMeter : MonoBehaviour
     private void HandleSword () {
         switch (activeCurses.Count) {
             case 0:
-                // Sword0.SetActive(true);
                 Sword1.SetActive(false);
-                Sword2.SetActive(false);
-                Sword3.SetActive(false);
-                //handleSwordDamage();
-                // ActiveSword = Sword0;
                 break;
             case 1:
                 Sword1.SetActive(true);
-                // Sword0.SetActive(false);
                 Sword2.SetActive(false);
-                Sword3.SetActive(false);
-                //handleSwordDamage();
                 ActiveSword = Sword1;
-                //pStats.damage.AddBaseValue(bonusDamages[1]);
-                //bonusDamagesActive[1] = true;
                 break;
             case 2:
                 Sword2.SetActive(true);
                 Sword1.SetActive(false);
-                // Sword0.SetActive(false);
                 Sword3.SetActive(false);
-                //handleSwordDamage();
                 ActiveSword = Sword2;
-                //pStats.damage.AddBaseValue(bonusDamages[2]);
-                //bonusDamagesActive[2] = true;
                 break;
             case 3:
                 Sword3.SetActive(true);
-                Sword1.SetActive(false);
                 Sword2.SetActive(false);
-                // Sword0.SetActive(false);
-                //handleSwordDamage();
                 ActiveSword = Sword3;
-                //pStats.damage.AddBaseValue(bonusDamages[3]);
-                //bonusDamagesActive[3] = true;
                 break;
         }
     }
@@ -221,7 +207,7 @@ public class CurseMeter : MonoBehaviour
     }
 
     public void difficultyUpdateCurse (float difficulty) {
-        activeCurses.ForEach(x => x.updateCurse(x.penaltyValue * difficulty));
+        activeCurses.ForEach(x => x.updateCurse(difficulty));
         Debug.Log("Curse difficulty updated!");
     }
 
@@ -245,7 +231,6 @@ public class CurseMeter : MonoBehaviour
                     manageCurseUI();
                     //FindObjectOfType<StatVFX>().addCurseStat(x.type);
                     pStats.currentHealthCap -= 0.17f;
-                    //pStats.damage.AddBaseValue(5.0f);
                     swordRangeBlessing.baseValue += 2.0f;
                     swordRangeBlessing.updateCurse();
                 }

@@ -27,7 +27,9 @@ public class moneyCurse : Curse
         pStats.moneyCurseLock = pStats.coins;
     }
 
-    override public void updateCurse (float newValue) {
+    override public void updateCurse (float difficulty) {
+        float newValue = difficulty * penaltyValue;
+        if(newValue > 0.85f) newValue = 0.85f;
         penaltyValue = newValue;
     }
 

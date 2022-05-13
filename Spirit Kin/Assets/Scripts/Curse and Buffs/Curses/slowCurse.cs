@@ -37,7 +37,8 @@ public class slowCurse : Curse
         pStats.speed.AddBaseValue(pSpeed * penaltyValue);
     }
 
-    override public void updateCurse (float newValue) {
+    override public void updateCurse (float difficulty) {
+        float newValue = difficulty * penaltyValue;
         pStats.speed.AddBaseValue(pSpeed * -penaltyValue);
         penaltyValue = newValue;
         if(pSpeed + (pSpeed * penaltyValue) < 0.15f) {

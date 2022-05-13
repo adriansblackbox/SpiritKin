@@ -8,9 +8,13 @@ public class SwordCollision : MonoBehaviour
     public LayerMask layerMask;
     public List<GameObject> immuneEnemies;
     public bool RaycastOn;
+    public bool vampBlessingOn = false;
+    public float vampAmount = 0f;
     public Transform AttackOriginPoints;
+    private PlayerStats pStats;
 
     private void Start() {
+        pStats = FindObjectOfType<PlayerStats>();
     }
 
     private void Update() {
@@ -23,7 +27,10 @@ public class SwordCollision : MonoBehaviour
                 Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.red);
                 if(!immuneEnemies.Contains(hit.transform.gameObject)){
                     immuneEnemies.Add(hit.transform.gameObject);
-                    hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<PlayerStats>().damage.GetValue(), 5f);
+                    hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(pStats.damage.GetValue(), 5f);
+                    if(vampBlessingOn) {
+                        pStats.currentHealth = Mathf.Clamp(pStats.currentHealth + vampAmount * pStats.damage.GetValue(), -0.1f, pStats.maxHealth * pStats.currentHealthCap);
+                    }
                 }
             }
             else if(RaycastOn)

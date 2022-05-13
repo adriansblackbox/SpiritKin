@@ -66,6 +66,7 @@ public class PlayerStats : CharacterStats
                 int i = Buffs.FindIndex(y => y.teaName == x.teaName);
                 if (!x.isApplied)
                 {
+                    if (x.power < (x.level + 1) * x.basePower) x.power = (x.level + 1) * x.basePower;
                     switch (x.stat)
                     {
                         case (Buff.statType.health):
@@ -146,10 +147,12 @@ public class PlayerStats : CharacterStats
                     BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
                 }
             });
-            for(int i = 0; i < Buffs.Count; i ++){
+            int j = Buffs.Count;
+            for(int i = 0; i < j; i ++) {
                 if(Buffs[i].removeFlag){
-                    FindObjectOfType<StatVFX>().removeBuffStat(Buffs[i].teaName);
+                    //FindObjectOfType<StatVFX>().removeBuffStat(Buffs[i].teaName);
                     Buffs.RemoveAt(i);
+                    --j;
                     BuffsUI.Add(BuffsUI[0]);
                     BuffsUI.RemoveAt(0);
                 }
