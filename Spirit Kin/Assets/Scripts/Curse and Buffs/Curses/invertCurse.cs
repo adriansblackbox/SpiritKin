@@ -2,25 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-using System.Timers;
+
+public class CoroutineHandler : MonoBehaviour {
+    public float timerTime;
+    public bool active;
+    public GameObject player;
+    public PlayerController pControl;
+
+    private IEnumerator curseFlipFlop () {
+        Debug.Log("Woooo!");
+        while (active) {
+            Debug.Log("Woooo2!");
+            if (pControl.getInverted()) player.SendMessage("InvertControls", false); // Ternary statement seems to be very angry with this.
+            else player.SendMessage("InvertControls", true);
+            yield return new WaitForSeconds (timerTime);
+            Debug.Log("Woooo3!");
+        }
+
+        player.SendMessage("InvertControls", false);
+    }
+
+    public void StartCurseCoroutine(){
+        //Debug.Log("Woooo0!");
+        //StartCoroutine(curseFlipFlop());
+    }
+
+    public void StopCurseCoroutine(){
+        //StopCoroutine(curseFlipFlop());
+    }
+
+    void Update(){}
+}
 
 public class invertCurse : Curse
 {
-    private static GameObject player;
-    private static PlayerController pControl;
-    private System.Timers.Timer timer;
-    private int timerTime;
+    private GameObject player;
+    private PlayerController pControl;
+    private float timerTime;
+    private CoroutineHandler recurser;
 
     public invertCurse (Sprite _image, GameObject _player) {
+        recurser = new CoroutineHandler();
         type = "invert_Curse";
         isApplied = false;
         removeFlag = false;
         image = _image;
-        player = _player;
-        pControl = player.GetComponent<PlayerController>();
+        player = recurser.player = _player;
+        pControl = recurser.pControl = player.GetComponent<PlayerController>();
 
-        timerTime = 1000;
+        timerTime = 1000.0f;
     }
 
     override public void invokeCurse () {
@@ -29,25 +59,19 @@ public class invertCurse : Curse
         player.GetComponent<CurseMeter>().activeCurses.Add(this);
 
         player.SendMessage("InvertControls", true);
-
-        timer = new System.Timers.Timer(timerTime);
-        timer.Elapsed += c_ThresholdReached;
-        timer.AutoReset = true;
-        timer.Enabled = true;
+        recurser.active = active;
+        recurser.timerTime = timerTime;
+        
+        recurser.StartCurseCoroutine();
     } 
-
-    private static void c_ThresholdReached(object sender, EventArgs e) {
-        if(pControl.getInverted()) player.SendMessage("InvertControls", false);
-        else player.SendMessage("InvertControls", true);
-
-        Debug.Log("Calling!");
-    }
 
     override public void removeCurse () {
         removeFlag = false;
         isApplied = false;
         active = false;
 
+        recurser.active = active;
+        recurser.StopCurseCoroutine();
 
         player.SendMessage("InvertControls", false);
     } 

@@ -21,7 +21,7 @@ public class ArmorBuff : Buff
         isApplied = false;
         removeFlag = false;
 
-        power = 0;
+        power = basePower;
         investCost = baseInvestCost;
         duration = baseDuration;
         timeActive = baseTimeActive;

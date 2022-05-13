@@ -13,7 +13,7 @@ public class damageCurse : Curse
     public damageCurse (Sprite _image, CharacterStats _pStats, CurseMeter _cMeter)
     {
         pStats = _pStats;
-        type = "Damage_Curse";
+        type = "Damage Curse";
         isApplied = false;
         removeFlag = false;
         image = _image;
@@ -29,7 +29,8 @@ public class damageCurse : Curse
         pStats.damage.AddBaseValue(penaltyValue);
     }
 
-    override public void updateCurse (float newValue) {
+    override public void updateCurse (float difficulty) {
+        float newValue = difficulty * penaltyValue;
         pStats.damage.AddBaseValue(newValue - penaltyValue);
         penaltyValue = newValue;
     }
