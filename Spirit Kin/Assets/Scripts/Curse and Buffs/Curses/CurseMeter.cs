@@ -58,12 +58,12 @@ public class CurseMeter : MonoBehaviour
 
         curseArray.Add(weak);
         curseArray.Add(slow);
-        //curseArray.Add(frail);
-        //curseArray.Add(blind);
-        //curseArray.Add(invert);
-        //curseArray.Add(kromer);
-        //curseArray.Add(swordRangeBlessing);
-        //curseArray.Add(tea);
+        curseArray.Add(frail);
+        curseArray.Add(blind);
+        curseArray.Add(invert);
+        curseArray.Add(kromer);
+        curseArray.Add(swordRangeBlessing);
+        curseArray.Add(tea);
         curseArray.Add(vamp);
 
         curCurseUI = cursesUI[0];
