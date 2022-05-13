@@ -30,8 +30,14 @@ public class rangeBlessing : Curse
     }
 
     override public void updateCurse () {
-        if (active) swordLength.BladeLength = baseValue * penaltyValue;
-        else swordLength.BladeLength = baseValue;
+        if (active) {
+            swordLength.BladeLength = baseValue * penaltyValue;
+            swordLength.ScaleVFXToBlade();
+        }
+        else { 
+            swordLength.BladeLength = baseValue;
+            swordLength.ScaleVFXToBlade();
+        }
     }
 
     override public void removeCurse () 
@@ -41,5 +47,6 @@ public class rangeBlessing : Curse
         active = false;
 
         swordLength.BladeLength = baseValue;
+        swordLength.ScaleVFXToBlade();
     } 
 }

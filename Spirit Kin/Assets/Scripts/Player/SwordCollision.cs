@@ -9,8 +9,13 @@ public class SwordCollision : MonoBehaviour
     public List<GameObject> immuneEnemies;
     public bool RaycastOn;
     public Transform AttackOriginPoints;
+    public GameObject[] SwordVFX;
+    private float baseLength;
 
     private void Start() {
+        // x = 2.5/bladelength
+        baseLength = BladeLength;
+        ScaleVFXToBlade();
     }
 
     private void Update() {
@@ -30,6 +35,11 @@ public class SwordCollision : MonoBehaviour
             {
                 Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.yellow);
             }
+        }
+    }
+    public void ScaleVFXToBlade() {
+        foreach(GameObject vfx in SwordVFX) {
+            vfx.transform.localScale =   new Vector3(BladeLength, BladeLength, BladeLength) * (2.25f/baseLength);
         }
     }
 }
