@@ -137,25 +137,25 @@ public class PlayerController : MonoBehaviour
             break;
             case "Attack2_K":
                 animator.SetInteger("Attack Number", 3);
-                swordScript.AttackOriginPoints = A1RayCast;
+                swordScript.AttackOriginPoints = A2RayCast;
                 AttackVFX[1].Play();
                 //sound play
             break;
             case "Attack3_K":
                 animator.SetInteger("Attack Number", 4);
-                swordScript.AttackOriginPoints = A1RayCast;
+                swordScript.AttackOriginPoints = A3RayCast;
                 AttackVFX[2].Play();
                 //sound play
             break;
             case "Attack4_K":
                 animator.SetInteger("Attack Number", 5);
-                swordScript.AttackOriginPoints = A1RayCast;
+                swordScript.AttackOriginPoints = A4RayCast;
                 AttackVFX[3].Play();
                 //sound play
             break;
             case "Attack5_K":
                 animator.SetInteger("Attack Number", 1);
-                swordScript.AttackOriginPoints = A1RayCast;
+                swordScript.AttackOriginPoints = A5RayCast;
                 AttackVFX[4].Play();
                 //sound play
                 speed = 80f;
