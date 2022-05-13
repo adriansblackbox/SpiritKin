@@ -29,7 +29,7 @@ public class TutorialManager : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] AudioSource NPCAudio;
     [SerializeField] AudioClip heyAudio;
-    [SerializeField] AudioClip[] dialogueAudio;
+    [SerializeField] AudioClip[] loopingDialogueAudio;
 
 
     void Start()
