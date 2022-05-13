@@ -18,6 +18,8 @@ public class AI_Manager : MonoBehaviour
     public List<GameObject> enemiesReadyToAttack = new List<GameObject>();
     public List<GameObject> enemiesIdling = new List<GameObject>();
 
+    [SerializeField] CombatMusicManager cmm;
+
     private void Start() 
     {
         enemiesContainer = transform.GetChild(0);
@@ -32,6 +34,13 @@ public class AI_Manager : MonoBehaviour
 
     private void Update()
     {
+
+        if (Player.GetComponent<PlayerStats>().isDying)
+        {
+            Debug.Log("Player is dying, time to relocate");
+            foreach (Transform e in enemiesContainer) { e.GetComponent<Enemy_Controller>().changeState(Enemy_Controller.MotionState.Relocating); }
+            cmm.changeMusicState(CombatMusicManager.MusicState.End); //end the bgm
+        }
 
         if (selectAttackerTimer > 0.75f)
         {
@@ -57,6 +66,11 @@ public class AI_Manager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void relocateAllEnemies()
+    {
+
     }
 
     public List<GameObject> getNearbyEnemies(GameObject enemy)

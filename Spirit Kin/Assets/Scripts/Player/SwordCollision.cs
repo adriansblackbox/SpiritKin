@@ -15,17 +15,21 @@ public class SwordCollision : MonoBehaviour
 
     private void Start() {
         pStats = FindObjectOfType<PlayerStats>();
+        public GameObject[] SwordVFX;
+        private float baseLength;
+        // x = 2.5/bladelength
+        baseLength = BladeLength;
+        ScaleVFXToBlade();
     }
 
     private void Update() {
         RaycastHit hit;
+        
         //checking to see if we hit an enemy
         foreach(Transform child in AttackOriginPoints) {
-
-            if (Physics.SphereCast(child.position, 1f,  child.TransformDirection(Vector3.forward), out hit, BladeLength, layerMask) && RaycastOn)
-            {
+            if (Physics.SphereCast(child.position, 1f,  child.TransformDirection(Vector3.forward), out hit, BladeLength, layerMask) && RaycastOn) {
                 Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.red);
-                if(!immuneEnemies.Contains(hit.transform.gameObject)){
+                if(!immuneEnemies.Contains(hit.transform.gameObject)) {
                     immuneEnemies.Add(hit.transform.gameObject);
                     hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(pStats.damage.GetValue(), 5f);
                     if(vampBlessingOn) {
@@ -33,10 +37,15 @@ public class SwordCollision : MonoBehaviour
                     }
                 }
             }
-            else if(RaycastOn)
-            {
+            else if(RaycastOn) {
                 Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.yellow);
             }
+        }
+    }
+
+    public void ScaleVFXToBlade() {
+        foreach(GameObject vfx in SwordVFX) {
+            vfx.transform.localScale =   new Vector3(BladeLength, BladeLength, BladeLength) * (2.25f/baseLength);
         }
     }
 }
