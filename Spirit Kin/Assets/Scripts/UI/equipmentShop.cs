@@ -1,77 +1,163 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
 public class equipmentShop : MonoBehaviour
 {
+    [SerializeField]
+    PlayerController playerController;
+
     public GameObject triggerText;
+
     public GameObject Player;
-    public GameObject equipmentMenu;
-    public GameObject equipmentCamera;
-    public Buff theBuff;
+
+    public GameObject equipMenu;
+
+    public GameObject equipCamera;
+
+    public PauseMenu pauseMenu;
+
     private bool isInteractable;
-    private bool isOpen;
+
+    public bool isOpen;
+
+    public GameObject ShopFirstButton;
+
+    public GameObject UI;
+
+    public EventSystem eventSystem;
+
+    public GameObject Instruct1;
+    public GameObject Instruct2;
+
     // Start is called before the first frame update
     void Start()
     {
         isInteractable = false;
-        isOpen = false;
-        equipmentCamera.SetActive(false);
+
+        equipCamera.SetActive(false);
+        pauseMenu = GameObject.Find("PauseCanvas").GetComponent<PauseMenu>();
 
         //load buttons:
         //find position
         // GameObject.Find("Items").GetComponent
-        
     }
-    private void OnTriggerStay(Collider other){
-        if(other.gameObject.tag =="Player"){
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
             isInteractable = true;
-            if(!isOpen){
+            if (!isOpen)
+            {
                 triggerText.SetActive(true);
-            } else {
+            }
+            else
+            {
                 triggerText.SetActive(false);
             }
         }
     }
+
     // Update is called once per frame
     void Update()
     {
-        //need condition to check if interactable
-        // if()isInteractable = false;
-        if(Input.GetKeyDown(KeyCode.F) && isInteractable &&!isOpen){
-            //do something;
-            // if(!theBuff.isApplied){
-            //     GameObject.Find("Player").GetComponent<PlayerStats>().Buffs.Add(theBuff);
-            // }
+        if (UI.GetComponent<ControlOverlayHandler>().keyboard)
+        {   
+            //disable texts
+            Instruct1.GetComponent<Text>().text = "A";
+            Instruct2.GetComponent<Text>().text = "D";
             
-            Cursor.lockState = CursorLockMode.None;
-            equipmentMenu.SetActive(true);
-            equipmentCamera.SetActive(true);
-            isOpen = true;
-            //disable player's script here
-            Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
-            Player.GetComponent<PlayerController>().enabled = false;
-            Player.GetComponent<PlayerCombat>().enabled = false;
-            //disable UI
-            GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
-            Debug.Log(isOpen);
+            triggerText.GetComponent<Text>().text = "Press F to open shop";
+            
+            if(eventSystem.currentSelectedGameObject != null){
+                // ShopFirstButton = eventSystem.currentSelectedGameObject;
+                EventSystem.current.SetSelectedGameObject(null);
+            }
         }
-        else if(Input.GetKeyDown(KeyCode.F) && isOpen){
-            Player.GetComponent<PlayerController>().enabled = true;
-            Player.GetComponent<PlayerCombat>().enabled = true;
-            GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
-            Cursor.lockState = CursorLockMode.Locked;
-            equipmentMenu.SetActive(false);
-            equipmentCamera.SetActive(false);
-            isOpen = false;
-            Debug.Log(isOpen);
-        }
-        
+        else
+        {
 
+            //enable texts
+            Instruct1.GetComponent<Text>().text = "LB";
+            Instruct2.GetComponent<Text>().text = "RB";
+            //get textmeshpro text
+            triggerText.GetComponent<Text>().text = "Press X to open shop";
+            
+
+            if (eventSystem.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject (ShopFirstButton);
+            }
+        }
+
+        if (
+            (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("X Button")) &&
+            isInteractable &&
+            !isOpen &&
+            !pauseMenu.GameIsPaused
+        )
+        {
+            OpenMenu();
+        }
+        else if (
+            Input.GetKeyDown(KeyCode.F) && isOpen && !pauseMenu.GameIsPaused
+        )
+        {
+            CloseMenu();
+        }
     }
 
-    private void OnTriggerExit(Collider other){
+    public void reFresh()
+    {
+        // EventSystem.current.selectedGameObject = null;
+    }
+    public void OpenMenu()
+    {
+        // Cursor.lockState = CursorLockMode.None;
+
+        //disable player controller
+        playerController.speed = 0;
+        playerController.animator.SetFloat("Speed", 0);
+        playerController.enabled = false;
+        equipMenu.SetActive(true);
+
+        //preload
+        // equipMenu.GetComponent<NewShopManager>().Initial();
+        equipCamera.SetActive(true);
+
+        //clear selected button
+        EventSystem.current.SetSelectedGameObject(null);
+
+        //reassign
+        EventSystem.current.SetSelectedGameObject (ShopFirstButton);
+
+        //disable UI
+        //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
+        //shop is now open
+        isOpen = true;
+        Debug.Log ("opened menu");
+    }
+
+    public void CloseMenu()
+    {
+        //enable player controller
+        
+
+        //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
+        equipMenu.SetActive(false);
+        equipCamera.SetActive(false);
+        isOpen = false;
+        playerController.enabled = true;
+        Debug.Log ("closed menu");
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
         isInteractable = false;
         triggerText.SetActive(false);
     }

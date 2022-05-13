@@ -2,16 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Enemy_Spawner : MonoBehaviour
 {
+    [SerializeField] TutorialManager tm;
+
+    public float difficulty = 0f;
+
     [SerializeField] int totalShrinesCursed = 0;
     [SerializeField] int lowerLimitEnemyCount = 1;
     [SerializeField] int upperLimitEnemyCount = 4;
 
+    public GameObject shrineForTutorial;
+
     public GameObject nonCursedContainer;
     public GameObject cursedContainer;
     public GameObject enemyPrefab;
+    public CurseMeter curseMeter;
 
     public int totalShrines;
 
@@ -19,18 +27,40 @@ public class Enemy_Spawner : MonoBehaviour
     public int currentCursedShrines; //how many shrines are currently cursed
 
     private float myTime;
+    private float difficultyTimer;
     public float shrineInterval = 45f;
-    private bool firstSpawn = true;
+    public bool firstSpawn; //if the player isn't doing the tutorial curse the first shrine at 5 seconds
+
+    public GameObject difficultyText;
 
     public void Start()
     {
-        scaleDifficulty();
+        scaleNumberOfEnemiesToSpawn();
+        if (tm.tutorialOn)
+            firstSpawn = false;
+        else
+            firstSpawn = true;
+    }
+
+    //ensure that timers aren't running when timeScale = 0
+    public void FixedUpdate()
+    {
+        if (!FindObjectOfType<MainHub>().playerInHub && (tm.tutorialFinished || !tm.tutorialOn) )
+        {
+            myTime += Time.deltaTime;
+            difficultyTimer += Time.deltaTime;
+        }
     }
 
     public void Update()
     {
-        if(!FindObjectOfType<MainHub>().playerInHub)
-            myTime += Time.deltaTime;
+        //comment back in to get difficulty to auto scale
+
+        // if (difficultyTimer >= 30f)
+        // {
+        //     scaleDifficulty();
+        //     difficultyTimer = 0f;
+        // }
 
         if (firstSpawn)
         {
@@ -38,38 +68,51 @@ public class Enemy_Spawner : MonoBehaviour
             {
                 firstSpawn = false;
                 myTime = 0;
-                if (nonCursedContainer.transform.childCount > 0) //every 15 seconds -> actually 45 to 60 seconds is probably better
+                if (nonCursedContainer.transform.childCount > 0)
                 {
-                    int temp = Random.Range(0, nonCursedContainer.transform.childCount);
-                    Transform shrine = nonCursedContainer.transform.GetChild(temp);
-                    shrine.parent = cursedContainer.transform;
-                    shrine.GetComponent<Shrine>().cursed = true;
-                    shrine.GetComponent<Shrine>().CurCurseTime = 0f;
-                    currentCursedShrines++;
-                    scaleDifficulty();
-                    shrine.GetComponent<Shrine>().setEnemiesToSpawn();
+                    curseShrine(false);
                 }
             }
         }
         else if (myTime > shrineInterval) 
         {
             myTime = 0;
-            if (nonCursedContainer.transform.childCount > 0) //every 15 seconds -> actually 45 to 60 seconds is probably better
+            if (nonCursedContainer.transform.childCount > 0)
             {
-                int temp = Random.Range(0, nonCursedContainer.transform.childCount);
-                Transform shrine = nonCursedContainer.transform.GetChild(temp);
-                shrine.parent = cursedContainer.transform;
-                shrine.GetComponent<Shrine>().cursed = true;
-                shrine.GetComponent<Shrine>().CurCurseTime = 0f;
-                currentCursedShrines++;
-                scaleDifficulty();
-                shrine.GetComponent<Shrine>().setEnemiesToSpawn();
+                curseShrine(false);
             }
         }
     }
 
-    //increments limits to help in scaling difficulty
-    private void scaleDifficulty() 
+    //If the tutorial is on then curse the chosen shrine
+    //If the tutorial is off then curse a random shrine
+    public void curseShrine(bool tutorial)
+    {
+        if (tutorial)
+        {
+            Transform tutShrine = shrineForTutorial.transform;
+            tutShrine.parent = cursedContainer.transform;
+            tutShrine.GetComponent<Shrine>().cursed = true;
+            currentCursedShrines++;
+            scaleNumberOfEnemiesToSpawn();
+            tutShrine.GetComponent<Shrine>().setEnemiesToSpawn();
+        }
+        else
+        {
+            int temp = Random.Range(0, nonCursedContainer.transform.childCount);
+            Transform shrine = nonCursedContainer.transform.GetChild(temp);
+            shrine.parent = cursedContainer.transform;
+            shrine.GetComponent<Shrine>().cursed = true;
+            shrine.GetComponent<Shrine>().CurCurseTime = 0f;
+            currentCursedShrines++;
+            scaleNumberOfEnemiesToSpawn();
+            shrine.GetComponent<Shrine>().setEnemiesToSpawn();
+        }
+
+    }
+
+    //increments limits to help in scaling NumberOfEnemiesToSpawn
+    private void scaleNumberOfEnemiesToSpawn() 
     {
         totalShrinesCursed++;
         if (totalShrinesCursed % 2 == 1) //lower limit increments every other round
@@ -77,6 +120,20 @@ public class Enemy_Spawner : MonoBehaviour
         else if (totalShrinesCursed != 2 && totalShrinesCursed % 2 == 0 && upperLimitEnemyCount - lowerLimitEnemyCount == 1) //upper limit increments every round after the lower limit increments
             upperLimitEnemyCount++;
         selectShrineEnemyCount();
+    }
+
+    public void scaleDifficulty()
+    {
+        // soft cap for difficulty at 10
+        if (difficulty < 10)
+            difficulty += 0.334f;
+        else
+            difficulty += 0.0834f;
+        Debug.Log("Difficulty is: " + difficulty);
+        curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
+
+        //debugging
+        difficultyText.GetComponent<Text>().text = "Difficulty: " + difficulty;
     }
 
     private void selectShrineEnemyCount()
@@ -103,6 +160,16 @@ public class Enemy_Spawner : MonoBehaviour
         enemy.GetComponent<Enemy_Controller>().ai = shrineToSpawnAt.GetComponent<AI_Manager>();
         enemy.GetComponent<Enemy_Controller>().shrine = shrineToSpawnAt.transform;
         enemy.GetComponent<Enemy_Controller>().shrineSpawnRange = shrineToSpawnAt.GetComponent<Shrine>().shrineSpawnRange;
+        shrineToSpawnAt.GetComponent<AI_Manager>().enemiesIdling.Add(enemy);
+
+        //set their stats to scale with difficulty
+        float tmp = Random.Range(5,15);
+        CharacterStats enemyStats = enemy.GetComponent<CharacterStats>();
+        enemyStats.coins = (int) (tmp + tmp * difficulty);
+        enemyStats.fillAmount = (int) (tmp + tmp * difficulty / 7.5);
+        enemyStats.maxHealth = Mathf.Round(enemyStats.maxHealth + enemyStats.maxHealth * difficulty);
+        enemyStats.currentHealth = enemyStats.maxHealth;
+        enemyStats.damage.AddBaseValue(Mathf.Round(25 * (difficulty/4))); //The 25 should be an adjustable value linked to the damage stat, but works for now
         
         //put in enemy container
         enemy.transform.parent = shrineToSpawnAt.transform.GetChild(0);
@@ -145,4 +212,21 @@ public class Enemy_Spawner : MonoBehaviour
         NavMesh.SamplePosition(spawnPoint, out hit, 100.0f, NavMesh.AllAreas);
         return (hit);
     }
+
+    //DIFFICULTY TESTING
+    public void descaleDifficulty()
+    {
+        // soft cap for difficulty at 10
+        if (difficulty < 10)
+            difficulty = Mathf.Clamp(difficulty - 0.334f, 0, Mathf.Infinity);
+        else
+            difficulty = Mathf.Clamp(difficulty - 0.0834f, 0, Mathf.Infinity);
+        Debug.Log("Difficulty is: " + difficulty);
+        curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
+
+        //debugging
+        difficultyText.GetComponent<Text>().text = "Difficulty: " + difficulty;
+    }
+
+
 }

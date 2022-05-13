@@ -18,20 +18,25 @@ public class armorCurse : Curse
         removeFlag = false;
         image = _image;
         cMeter = _cMeter;
+        penaltyValue = -10.0f;
     }
 
-    override public void invokeCurse () 
-    {
+    override public void invokeCurse () {
         isApplied = true;
         cMeter.activeCurses.Add(this);
-        pStats.armor.AddBaseValue(-40);
-    } 
+        pStats.armor.AddBaseValue(penaltyValue);
+    }
 
-    override public void removeCurse () 
-    {
+    override public void updateCurse (float difficulty) {
+        float newValue = difficulty * penaltyValue;
+        pStats.armor.AddBaseValue(newValue - penaltyValue);
+        penaltyValue = newValue;
+    }
+
+    override public void removeCurse () {
         removeFlag = false;
         isApplied = false;
         active = false;
-        pStats.armor.AddBaseValue(40);
+        pStats.armor.AddBaseValue(-penaltyValue);
     } 
 }

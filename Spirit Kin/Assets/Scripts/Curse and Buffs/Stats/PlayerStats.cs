@@ -7,18 +7,24 @@ public class PlayerStats : CharacterStats
 {
     [SerializeField]
     public List<Buff> Buffs = new List<Buff>();
+    public List<Equipment> Equipment = new List<Equipment>();
+    public CurseMeter curseMeter;
 
     public List<GameObject> BuffsUI = new List<GameObject>();
     public Sprite Notch, damageBuff, speedBuff, armorBuff, healthBuff;
-    private bool isDaed = false;
     public Transform[] SpringTransforms;
+    public float currentHealthCap = 1.0f;
+    public bool noCoindens = false;
+    public int moneyCurseLock = 0;
 
     void Start()
     {
+        //set player starting coins here
+        coins = 1000;
         currentHealth = maxHealth;
-        //reset buffs
-        
-
+        for(int i = 0; i < BuffsUI.Count; i++) {
+            BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -26,11 +32,15 @@ public class PlayerStats : CharacterStats
     {  
         //debug:
         if(Input.GetKeyDown(KeyCode.T)) Die();
-        
+
+        currentHealth = Mathf.Clamp(currentHealth, -0.1f, maxHealth * currentHealthCap); // Keep HP between -0.1 so death checking is ok, and the current health cap
+
         //death check
         if(currentHealth<=0){
             Die();
         }
+        if (moneyCurseLock > coins) moneyCurseLock = coins;
+        if (noCoindens) coins = moneyCurseLock;
         SoulsUI.text = "" + coins;
         if (Buffs.Count != 0)
         {
@@ -55,12 +65,13 @@ public class PlayerStats : CharacterStats
                 int i = Buffs.FindIndex(y => y.teaName == x.teaName);
                 if (!x.isApplied)
                 {
+                    if (x.power < (x.level + 1) * x.basePower) x.power = (x.level + 1) * x.basePower;
                     switch (x.stat)
                     {
                         case (Buff.statType.health):
                             {
-                                this.maxHealth += x.basePower;
-                                this.currentHealth += x.basePower;
+                                this.maxHealth += x.power;
+                                this.currentHealth += x.power;
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = healthBuff;
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
@@ -68,7 +79,7 @@ public class PlayerStats : CharacterStats
                             }
                         case (Buff.statType.armor):
                             {
-                                this.armor.AddBaseValue(x.basePower);
+                                this.armor.AddBaseValue(x.power);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = armorBuff;
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
@@ -76,7 +87,7 @@ public class PlayerStats : CharacterStats
                             }
                         case (Buff.statType.damage):
                             {
-                                this.damage.AddBaseValue(x.basePower);
+                                this.damage.AddBaseValue(x.power);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = damageBuff;
                                 x.isApplied = true;
                                 Debug.Log(Buffs.Count);
@@ -84,13 +95,15 @@ public class PlayerStats : CharacterStats
                             }
                         case (Buff.statType.speed):
                             {
-                                this.speed.AddBaseValue(x.basePower);
+                                this.speed.AddBaseValue(x.power);
                                 BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = speedBuff;
                                 x.isApplied = true;
+                                curseMeter.SendMessage("updateCurses");
                                 Debug.Log(Buffs.Count);
                                 break;
                             }
                     }
+                    BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = true;
                     BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().enabled = true;
                 }
                 if (x.removeFlag)
@@ -99,7 +112,7 @@ public class PlayerStats : CharacterStats
                     {
                         case (Buff.statType.health):
                             {
-                                this.maxHealth -= x.basePower;
+                                this.maxHealth -= x.power;
                                 if (this.currentHealth > this.maxHealth)
                                 {
                                     this.currentHealth = this.maxHealth;
@@ -110,38 +123,41 @@ public class PlayerStats : CharacterStats
                             }
                         case (Buff.statType.armor):
                             {
-                                this.armor.AddBaseValue(-x.basePower);
+                                this.armor.AddBaseValue(-x.power);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.damage):
                             {
-                                this.damage.AddBaseValue(-x.basePower);
+                                this.damage.AddBaseValue(-x.power);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.speed):
                             {
-                                this.speed.AddBaseValue(-x.basePower);
+                                this.speed.AddBaseValue(-x.power);
                                 x.isApplied = false;
                                 Debug.Log(Buffs.Count);
                                 break;
                             }
                     }
-                    BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().sprite = Notch;
+                    BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
                 }
             });
-            for(int i = 0; i < Buffs.Count; i ++){
+            int j = Buffs.Count;
+            for(int i = 0; i < j; i ++) {
                 if(Buffs[i].removeFlag){
-                    FindObjectOfType<StatVFX>().removeBuffStat(Buffs[i].teaName);
+                    //FindObjectOfType<StatVFX>().removeBuffStat(Buffs[i].teaName);
                     Buffs.RemoveAt(i);
+                    --j;
                     BuffsUI.Add(BuffsUI[0]);
                     BuffsUI.RemoveAt(0);
                 }
             }
     }
+
     public void addBuff(Buff x)
     {
         if(Buffs.Count < 3){
@@ -150,7 +166,6 @@ public class PlayerStats : CharacterStats
             x.removeFlag = false;
             Buffs.Add (x);
             Debug.Log(x.teaName);
-            FindObjectOfType<StatVFX>().addBuffStat(x.teaName);
         }
     }
 
@@ -160,5 +175,71 @@ public class PlayerStats : CharacterStats
         Buffs[i].removeFlag = true;
         // make sure that shop buff is purchasable
         Buffs[i].isApplied = false;
+    }
+
+    //todo: add equipment handler
+    public void addEquip(Equipment x)
+    {
+        if(Equipment.Count < 3){
+            Equipment.Add(x);
+            Debug.Log(x.equipName);
+        }
+    }
+
+    public void removeEquip(Equipment x)
+    {
+        int i = Equipment.FindIndex(y => y.equipName == x.equipName);
+        Equipment.RemoveAt(i);
+        Debug.Log(x.equipName);
+    }
+
+    override public void TakeDamage (float damage, float knockBackStrength) {
+        hitVFX.Play();
+        //armor system
+        damage -= armor.GetValue();
+        damage = Mathf.Clamp(damage, 0, maxHealth * 0.9f);
+
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, float.MaxValue);
+
+        if(noCoindens) coins -= (int)((float)coins * curseMeter.kromer.GetValue());
+        if(!gameObject.GetComponent<Animator>().GetBool("Death")) gameObject.GetComponent<PlayerController>().Stun();
+    }
+
+    override public async void Die () {
+        Debug.Log("Player died!");
+        StartCoroutine(PlayerDeath(this.gameObject));
+    }
+
+    public IEnumerator PlayerDeath(GameObject player) {
+        isDying = true;
+        curseMeter.deathWipe = true;
+        foreach(Buff x in Buffs) removeBuff(x);
+        // turning the lockon camera off in the case that it's on while dying
+        GetComponent<LockTarget>().LockOnCamera.SetActive(false);
+        // disable player move script
+        // play death animation
+        deathUI.SetActive(true);
+        player.GetComponent<Animator>().SetBool("Death", true);
+        player.GetComponent<CharacterController>().enabled = false;
+        Transform[] springTransforms = FindObjectOfType<PlayerStats>().SpringTransforms;
+        Vector3 respawnPosition = Vector3.zero;
+        float minMagnitude = float.MaxValue;
+        for(int i = 0; i < springTransforms.Length; i ++){
+            float mag = (player.transform.position - springTransforms[i].transform.position).magnitude;
+            if(mag < minMagnitude){
+                minMagnitude = mag;
+                respawnPosition = springTransforms[i].position;
+            }
+        }
+        yield return new WaitForSeconds(3f);
+        player.GetComponent<PlayerController>().AnimationStart();
+        player.GetComponent<Animator>().SetBool("Death", false);
+        player.transform.position = respawnPosition;
+        player.GetComponent<CharacterController>().enabled = true;
+        player.GetComponent<PlayerStats>().currentHealth = player.GetComponent<PlayerStats>().maxHealth;
+        curseMeter.deathWipe = false;
+        isDying = false;
+        yield return null;
     }
 }

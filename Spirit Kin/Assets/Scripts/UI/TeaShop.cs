@@ -3,27 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class TeaShop : MonoBehaviour
 {
+    [SerializeField]
+    PlayerController playerController;
+
     public GameObject triggerText;
+
     public GameObject Player;
+
     public GameObject teaMenu;
+
     public GameObject teaCamera;
+
     public PauseMenu pauseMenu;
-    public Buff theBuff;
-    
 
     private bool isInteractable;
 
     public bool isOpen;
+
     public GameObject ShopFirstButton;
+
+    public GameObject UI;
+
+    public EventSystem eventSystem;
+
+    public GameObject Instruct1;
+    public GameObject Instruct2;
 
     // Start is called before the first frame update
     void Start()
     {
         isInteractable = false;
-        isOpen = false;
+
         teaCamera.SetActive(false);
         pauseMenu = GameObject.Find("PauseCanvas").GetComponent<PauseMenu>();
 
@@ -51,56 +65,95 @@ public class TeaShop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //need condition to check if interactable
-        // if()isInteractable = false;
-        if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("A Button"))&& isInteractable && !isOpen && !pauseMenu.GameIsPaused)
+        if (UI.GetComponent<ControlOverlayHandler>().keyboard)
+        {   
+            //disable texts
+            Instruct1.GetComponent<Text>().text = "A";
+            Instruct2.GetComponent<Text>().text = "D";
+            
+            triggerText.GetComponent<TextMeshProUGUI>().text = "Press F to open shop";
+            
+            if(eventSystem.currentSelectedGameObject != null){
+                // ShopFirstButton = eventSystem.currentSelectedGameObject;
+                EventSystem.current.SetSelectedGameObject(null);
+            }
+        }
+        else
         {
-            //do something;
-            // if(!theBuff.isApplied){
-            //     GameObject.Find("Player").GetComponent<PlayerStats>().Buffs.Add(theBuff);
-            // }
+
+            //enable texts
+            Instruct1.GetComponent<Text>().text = "LB";
+            Instruct2.GetComponent<Text>().text = "RB";
+            //get textmeshpro text
+            triggerText.GetComponent<TextMeshProUGUI>().text = "Press X to open shop";
+            
+
+            if (eventSystem.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject (ShopFirstButton);
+            }
+        }
+
+        if (
+            (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("X Button")) &&
+            isInteractable &&
+            !isOpen &&
+            !pauseMenu.GameIsPaused
+        )
+        {
             OpenMenu();
         }
-        else if (Input.GetKeyDown(KeyCode.F) && isOpen && !pauseMenu.GameIsPaused)
+        else if (
+            Input.GetKeyDown(KeyCode.F) && isOpen && !pauseMenu.GameIsPaused
+        )
         {
             CloseMenu();
         }
     }
 
+    public void reFresh()
+    {
+        // EventSystem.current.selectedGameObject = null;
+    }
     public void OpenMenu()
     {
-        Cursor.lockState = CursorLockMode.None;
+        // Cursor.lockState = CursorLockMode.None;
+
+        //disable player controller
+        playerController.speed = 0;
+        playerController.animator.SetFloat("Speed", 0);
+        playerController.enabled = false;
         teaMenu.SetActive(true);
+
         //preload
         // teaMenu.GetComponent<NewShopManager>().Initial();
         teaCamera.SetActive(true);
-        isOpen = true;
 
         //clear selected button
         EventSystem.current.SetSelectedGameObject(null);
-        //reassign
-        EventSystem.current.SetSelectedGameObject(ShopFirstButton);
 
-        //disable player's script here
-        Player.GetComponent<Animator>().SetFloat("Speed", 0.0f);
-        Player.GetComponent<PlayerController>().enabled = false;
-        Player.GetComponent<PlayerCombat>().enabled = false;
+        //reassign
+        EventSystem.current.SetSelectedGameObject (ShopFirstButton);
 
         //disable UI
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
-        Debug.Log (isOpen);
+        //shop is now open
+        isOpen = true;
+        Debug.Log ("opened menu");
     }
 
     public void CloseMenu()
     {
-        Player.GetComponent<PlayerController>().enabled = true;
-        Player.GetComponent<PlayerCombat>().enabled = true;
+        //enable player controller
+        
+
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
-        Cursor.lockState = CursorLockMode.Locked;
         teaMenu.SetActive(false);
         teaCamera.SetActive(false);
         isOpen = false;
-        Debug.Log (isOpen);
+        playerController.enabled = true;
+        Debug.Log ("closed menu");
     }
 
     private void OnTriggerExit(Collider other)

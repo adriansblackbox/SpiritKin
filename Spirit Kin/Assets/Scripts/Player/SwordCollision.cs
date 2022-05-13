@@ -4,42 +4,49 @@ using UnityEngine;
 
 public class SwordCollision : MonoBehaviour
 {
-    public Transform BladeRayOrigin;
-    public float BladeLength = 10f;
+    public float BladeLength;
     public LayerMask layerMask;
     public List<GameObject> immuneEnemies;
-    public GameObject SwordTrail;
-    public Transform[] AttackOriginPoints;
-    PlayerCombat combatScript;
+    public bool RaycastOn;
+    public bool vampBlessingOn = false;
+    public float vampAmount = 0f;
+    public Transform AttackOriginPoints;
+    public GameObject[] SwordVFX;
+
+    private PlayerStats pStats;
+    private float baseLength;
+
     private void Start() {
-       SwordTrail.SetActive(false);
-       combatScript = FindObjectOfType<PlayerCombat>();
-       AttackOriginPoints = FindObjectOfType<PlayerCombat>().AttackOriginPoints;
-       immuneEnemies = FindObjectOfType<PlayerCombat>().immuneEnemies;
+        pStats = FindObjectOfType<PlayerStats>();
+        // x = 2.5/bladelength
+        baseLength = BladeLength;
+        ScaleVFXToBlade();
     }
+
     private void Update() {
         RaycastHit hit;
+        
         //checking to see if we hit an enemy
-        foreach(Transform originPoint in AttackOriginPoints){
-
-            if (Physics.SphereCast(originPoint.position, 1f,  originPoint.TransformDirection(Vector3.forward), out hit, BladeLength, layerMask) && SwordTrail.activeSelf)
-            {
-                Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * BladeLength, Color.red);
-                if(!immuneEnemies.Contains(hit.transform.gameObject)){
+        foreach(Transform child in AttackOriginPoints) {
+            if (Physics.SphereCast(child.position, 1f,  child.TransformDirection(Vector3.forward), out hit, BladeLength, layerMask) && RaycastOn) {
+                Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.red);
+                if(!immuneEnemies.Contains(hit.transform.gameObject)) {
                     immuneEnemies.Add(hit.transform.gameObject);
-                    hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(FindObjectOfType<PlayerStats>().damage.GetValue());
+                    hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(pStats.damage.GetValue(), 5f);
+                    if(vampBlessingOn) {
+                        pStats.currentHealth = Mathf.Clamp(pStats.currentHealth + vampAmount * pStats.damage.GetValue(), -0.1f, pStats.maxHealth * pStats.currentHealthCap);
+                    }
                 }
             }
-            else if(SwordTrail.activeSelf)
-            {
-                Debug.DrawRay(originPoint.position, originPoint.TransformDirection(Vector3.forward) * BladeLength, Color.yellow);
+            else if(RaycastOn) {
+                Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.yellow);
             }
         }
     }
-    public void activateSword(){
-        SwordTrail.SetActive(true);
-    }
-    public void deactivateSword(){
-        SwordTrail.SetActive(false);
+
+    public void ScaleVFXToBlade() {
+        foreach(GameObject vfx in SwordVFX) {
+            vfx.transform.localScale =   new Vector3(BladeLength, BladeLength, BladeLength) * (2.25f/baseLength);
+        }
     }
 }

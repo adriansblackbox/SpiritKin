@@ -17,75 +17,95 @@ public class LockTarget : MonoBehaviour
     [SerializeField] private Transform LookAtRoot;
     [SerializeField] float LetGoDistance = 10f;
     [SerializeField] private CinemachineVirtualCamera FollowCamera;
-    [HideInInspector] public Transform Target = null;
+    [HideInInspector] public Transform Target, PossibleTarget = null;
     private PlayerController controller;
-    private PlayerCombat combatScript;
     private float inputX;
     private float inputY;
     private Transform playerBody;
-    private Animator animator;
+    public LayerMask EnemyLayer;
+    public GameObject LockOnCamera;
     private void Start() {
         controller = GetComponent<PlayerController>();
-        combatScript = GetComponent<PlayerCombat>();
-        animator = GetComponent<Animator>();
         playerBody = transform.GetChild(0).gameObject.transform;
+        LockOnCamera.SetActive(false);
     }
 
     private void Update(){
         FindTarget();
         if(Target != null){
             LockOnTarget();
-        }else{
-            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
         }
-        // updates the plaeyr's aniamtion according to input direction. Lerping is
-        // used for smooth and organic transitioning between animations
-        inputX = Mathf.Lerp(inputX, Input.GetAxis("Horizontal"), Time.deltaTime*10f);
-        inputY = Mathf.Lerp(inputY, Input.GetAxis("Vertical"), Time.deltaTime*10f);
-        animator.SetFloat("X Direction", inputX * 2f);
-        animator.SetFloat("Z Direction", inputY * 2f);
     }
     
     private void LockOnTarget(){
         Vector3 aimTarget = Target.position;
         aimTarget.y = transform.position.y;
         Vector3 focusDirection = (aimTarget - transform.position).normalized;
-        controller.RotateOnMoveDirection = false;
-        // rotates the player to the target at adjustable speeds
-        if((Input.GetKey(KeyCode.Space) || Input.GetButton("A Button")) && controller.inputDirection != Vector2.zero && !combatScript.isAttacking){
-            playerBody.forward = Vector3.Lerp(playerBody.forward, controller.targetMoveDirection, Time.deltaTime * 20f);
-            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * NormToCombatSpeed));
-        }else {//if(combatScript.CombatSpeedDropoff != combatScript.CombatRunSpeedDropoff){
-            playerBody.forward = Vector3.Lerp(playerBody.forward, focusDirection, Time.deltaTime * RotateToTargetSpeed);
-            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * NormToCombatSpeed));
-        }
         // posiotions the camera slightly above the player's body, and rotates to face the target at adjustable speeds
         Vector3 focusTarget = (Target.position -controller.CinemachineCameraTarget.transform.position).normalized;
         focusTarget = new Vector3(focusTarget.x, focusTarget.y - 0.15f, focusTarget.z);
         controller.CinemachineCameraTarget.transform.forward =
         Vector3.Lerp(GetComponent<PlayerController>().CinemachineCameraTarget.transform.forward, focusTarget, Time.deltaTime * CamRotateToTargetSpeed);
+        controller.CinemachineCameraTarget.transform.eulerAngles = new Vector3(
+            ClampAngle(controller.CinemachineCameraTarget.transform.eulerAngles.x, -40f, 20f),
+            controller.CinemachineCameraTarget.transform.eulerAngles.y,
+            controller.CinemachineCameraTarget.transform.eulerAngles.z
+            );
         // makes sure that the camera will be consistent with the locked rotation when delocked
         controller.CinemachineTargetPitch =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.x;
         controller.CinemachineTargetYaw =controller.CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         // Cancel lock
         if((this.transform.position - Target.transform.position).magnitude > LetGoDistance){
+            Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
+            Target.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().SetPossibleArrow();
             DelockTarget();
         }
     }
-    public void DelockTarget(){
-        controller.RotateOnMoveDirection = true;
+    public void DelockTarget() {
         Target = null;
-        FindObjectOfType<LockableTargets>().ClearTargetList();
-        transform.forward =  playerBody.forward;
-        playerBody.forward = transform.forward;
+        LockOnCamera.SetActive(false);
+        PossibleTarget = null;
+    }
+    private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+    {
+        if (lfAngle < -360f) lfAngle += 360f;
+        if (lfAngle > 360f) lfAngle -= 360f;
+        return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
     private void FindTarget(){
-        if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
-            if(Target != null)
-                DelockTarget();
-            else
-                Target = FindObjectOfType<LockableTargets>().AssessTarget();
+        RaycastHit hit;
+        float rayLength = 200f;
+        if(Target == null) {
+            if(Physics.SphereCast(this.transform.position, 20f, FindObjectOfType<PlayerController>().CinemachineCameraTarget.transform.forward, out hit, rayLength, EnemyLayer)) {
+                if(PossibleTarget == null) {
+                    PossibleTarget = hit.transform;
+                    EnableArrow(true, PossibleTarget);
+                } else {
+                    EnableArrow(false, PossibleTarget);
+                    PossibleTarget = hit.transform;
+                    EnableArrow(true, PossibleTarget);
+                }
+            }else if(PossibleTarget != null) {
+                EnableArrow(false, PossibleTarget);
+                PossibleTarget = null;
+            }
         }
+        if(Input.GetButtonDown("Right Stick Button") || Input.GetKeyDown(KeyCode.Mouse2)){
+            if(Target != null) {
+                Target.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(false);
+                Target.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().SetPossibleArrow();
+                DelockTarget();
+                Target = null;
+            }else if(PossibleTarget != null){    
+                Target = PossibleTarget;
+                Target.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().SetLockArrow();
+                LockOnCamera.SetActive(true);
+            }
+        }
+    }
+    private void EnableArrow(bool enable, Transform enemy) {
+        if(!enemy.GetComponent<CharacterStats>().isDying)
+            enemy.GetComponent<Enemy_Controller>().LockOnArrow.SetActive(enable);
     }
 }
