@@ -31,7 +31,6 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] AudioClip heyAudio;
     [SerializeField] AudioClip[] loopingDialogueAudio;
 
-
     void Start()
     {
         if (tutorialOn)
@@ -39,7 +38,7 @@ public class TutorialManager : MonoBehaviour
             pc.enabled = false;
             st.ActivateText();
             NPCAudio.clip = heyAudio;
-            NPCAudio.Play();
+            StartCoroutine("Hey");
         }
         else
         {
@@ -82,6 +81,12 @@ public class TutorialManager : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    IEnumerator Hey()
+    {
+        yield return new WaitForSeconds(0.5f);
+        NPCAudio.Play();
     }
 
     IEnumerator ShowShrine()
