@@ -11,12 +11,13 @@ public class SwordCollision : MonoBehaviour
     public bool vampBlessingOn = false;
     public float vampAmount = 0f;
     public Transform AttackOriginPoints;
+    public GameObject[] SwordVFX;
+
     private PlayerStats pStats;
+    private float baseLength;
 
     private void Start() {
         pStats = FindObjectOfType<PlayerStats>();
-        public GameObject[] SwordVFX;
-        private float baseLength;
         // x = 2.5/bladelength
         baseLength = BladeLength;
         ScaleVFXToBlade();
