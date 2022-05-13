@@ -360,6 +360,11 @@ public class Enemy_Controller : MonoBehaviour
         else
             ai.enemiesIdling.Remove(gameObject);
 
+        if ((targetState == MotionState.Chasing && EnemyMotion != MotionState.Surrounding) || (targetState == MotionState.Surrounding && EnemyMotion != MotionState.Chasing))
+            ai.enemiesInCombat.Add(gameObject);
+        else if (targetState == MotionState.Relocating || targetState == MotionState.Idling)
+            ai.enemiesInCombat.Remove(gameObject);
+
         if (targetState == MotionState.Stunned && EnemyMotion == MotionState.Surrounding) resetSurround();
 
         if (EnemyMotion == MotionState.Stunned) resetKnockback();
