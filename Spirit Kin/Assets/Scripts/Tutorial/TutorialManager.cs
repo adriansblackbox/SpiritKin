@@ -26,10 +26,6 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial UI Elements")]
     [SerializeField] GameObject dialogueObject;
 
-    [Header("Sounds")]
-    [SerializeField] AudioSource NPCAudio;
-    [SerializeField] AudioClip heyAudio;
-    [SerializeField] AudioClip[] loopingDialogueAudio;
 
     void Start()
     {
@@ -37,8 +33,6 @@ public class TutorialManager : MonoBehaviour
         {
             pc.enabled = false;
             st.ActivateText();
-            NPCAudio.clip = heyAudio;
-            StartCoroutine("Hey");
         }
         else
         {
@@ -81,12 +75,6 @@ public class TutorialManager : MonoBehaviour
             return true;
         else
             return false;
-    }
-
-    IEnumerator Hey()
-    {
-        yield return new WaitForSeconds(0.5f);
-        NPCAudio.Play();
     }
 
     IEnumerator ShowShrine()

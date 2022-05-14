@@ -653,15 +653,11 @@ public class Enemy_Controller : MonoBehaviour
 
     //first time through will be a consistent speed the entire time, but polish would have deccelaration
     public void GenerateKnockBack(float strength) {
-        startPosition = transform.position;
         dirVec = transform.position - player.transform.position;
-        if(strength > 0) {
-            endPosition = transform.position + (dirVec.normalized * strength);
-        } else {
-            // calculate different end position here
-            endPosition = player.transform.position + dirVec.normalized * 10f;
-        }
+        startPosition = transform.position;
+        endPosition = transform.position + (dirVec.normalized * strength);
         endPosition.y = transform.position.y;
+        knockBackStrength = strength;
     }
 
     
