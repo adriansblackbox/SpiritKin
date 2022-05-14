@@ -105,19 +105,16 @@ public class TutorialManager : MonoBehaviour
     {
         //pop coin up in the middle of the screen
           // -> move it to its designated spot
-        return null;
     }
 
     IEnumerator ShowTeas()
     {
         //pop up tea buff backgrounds and one at a time slot them up top
-        return null;
     }
 
     IEnumerator ShowCurses()
     {
         //pop up curse backgrounds and one at a time slot them up top (just like with the Teas)
-        return null;
     }
 
     IEnumerator ShowShrine()
