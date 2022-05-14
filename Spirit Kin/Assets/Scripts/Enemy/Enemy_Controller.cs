@@ -360,7 +360,7 @@ public class Enemy_Controller : MonoBehaviour
         else
             ai.enemiesIdling.Remove(gameObject);
 
-        if (EnemyMotion == MotionState.Idling && targetState == MotionState.Chasing)
+        if ((targetState == MotionState.Chasing && EnemyMotion != MotionState.Surrounding) || (targetState == MotionState.Surrounding && EnemyMotion != MotionState.Chasing))
             ai.enemiesInCombat.Add(gameObject);
         else if (targetState == MotionState.Relocating || targetState == MotionState.Idling)
             ai.enemiesInCombat.Remove(gameObject);
@@ -508,7 +508,7 @@ public class Enemy_Controller : MonoBehaviour
         }
         else
         {
-            changeState(MotionState.Chasing);
+            changeState(MotionState.Surrounding);
         }
 
         EnemyAttack = AttackState.Waiting;

@@ -7201,10 +7201,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3049579998511603871, guid: 8375e5afaedab1b40987186873ea692a, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8375e5afaedab1b40987186873ea692a, type: 3}
 --- !u!1 &437961136 stripped
@@ -17393,7 +17389,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   combatBGMPlayer: {fileID: 970795893}
   combatBGM: 0
-  playerBeingChased: 0
   beginCombatBGM: {fileID: 8300000, guid: 5fc1073f7b47a8947bc49273ac845558, type: 3}
   loopCombatBGM: {fileID: 8300000, guid: 83c9e62ab788a624a96c5e002f7c9675, type: 3}
   endCombatBGM: {fileID: 8300000, guid: 0cf4ef779db978444a64247efe8223fd, type: 3}
@@ -23973,34 +23968,6 @@ PrefabInstance:
       propertyPath: tm
       value: 
       objectReference: {fileID: 521493945}
-    - target: {fileID: 1321919434, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: dialogueLines.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1321919434, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: dialogueLines.Array.data[2]
-      value: Here are some coins to start you off. Defeating spirits will earn you
-        more coins.
-      objectReference: {fileID: 0}
-    - target: {fileID: 1321919434, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: dialogueLines.Array.data[3]
-      value: Spend coins at my shop on powerful tea or at monkey's shop for versatile
-        equipment.
-      objectReference: {fileID: 0}
-    - target: {fileID: 1321919434, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: dialogueLines.Array.data[4]
-      value: Be careful though Kin, when you defeat a spirit your sword will absorb
-        the spirit's evil energy and cause you to gain curses.
-      objectReference: {fileID: 0}
-    - target: {fileID: 1321919434, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: dialogueLines.Array.data[5]
-      value: If you want to rid of your curses you will need to visit one of the
-        village's purification springs.
-      objectReference: {fileID: 0}
-    - target: {fileID: 1321919434, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: dialogueLines.Array.data[6]
-      value: Good luck Kin. Our village is depending on you.
-      objectReference: {fileID: 0}
     - target: {fileID: 1990875692, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: m_SizeDelta.x
       value: 150
@@ -24024,18 +23991,6 @@ PrefabInstance:
     - target: {fileID: 1990875693, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: m_Color.r
       value: 0.6226415
-      objectReference: {fileID: 0}
-    - target: {fileID: 5503858656529429817, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 83
-      objectReference: {fileID: 0}
-    - target: {fileID: 5503858656529429817, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5503858656529429818, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: m_FontData.m_FontSize
-      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 5503858656820795682, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: Shrine
@@ -33323,7 +33278,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7589674058870114743, guid: 8d426f0f0d7cafd4c8c69e4570cfeb2c, type: 3}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

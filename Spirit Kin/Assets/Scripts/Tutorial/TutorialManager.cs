@@ -9,18 +9,12 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] ScrollingText st;
     [SerializeField] PlayerController pc;
 
-    [Header("Conditionals For World")]
+    [Header("Conditionals")]
     public bool tutorialFinished;
     public bool tutorialOn;
     public bool showingNonPlayerCamera;
     [SerializeField] bool shownShrine;
     [SerializeField] bool shownPool;
-
-    [Header("Conditionals For UI")]
-    [SerializeField] bool movingUIElement;
-    [SerializeField] bool shownCoins;
-    [SerializeField] bool shownTeas;
-    [SerializeField] bool shownCurses;
     
     [Header("Cameras")]
     [SerializeField] GameObject playerCamera;
@@ -69,17 +63,11 @@ public class TutorialManager : MonoBehaviour
                 st.DeactivateText();
             }
             //Move onto the next NPC line or coroutine that explains next part
-            else if (!tutorialFinished && !showingNonPlayerCamera && !st.typing && !movingUIElement && CheckForInput())
+            else if (!tutorialFinished && !showingNonPlayerCamera && !st.typing && CheckForInput())
             {
                 if (!shownShrine && st.GetCurrentDisplayingText() == 1)
                     StartCoroutine("ShowShrine");
-                else if (!shownCoins && st.GetCurrentDisplayingText() == 2)
-                    StartCoroutine("ShowCoins");
-                else if (!shownTeas && st.GetCurrentDisplayingText() == 3)
-                    StartCoroutine("ShowTeas");
-                else if (!shownCurses && st.GetCurrentDisplayingText() == 4)
-                    StartCoroutine("ShowCurses");
-                else if (!shownPool && st.GetCurrentDisplayingText() == 5)
+                else if (!shownPool && st.GetCurrentDisplayingText() == 4)
                     StartCoroutine("ShowPool");
                 else
                     st.ActivateText();
@@ -99,22 +87,6 @@ public class TutorialManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         NPCAudio.Play();
-    }
-
-    IEnumerator ShowCoins()
-    {
-        //pop coin up in the middle of the screen
-          // -> move it to its designated spot
-    }
-
-    IEnumerator ShowTeas()
-    {
-        //pop up tea buff backgrounds and one at a time slot them up top
-    }
-
-    IEnumerator ShowCurses()
-    {
-        //pop up curse backgrounds and one at a time slot them up top (just like with the Teas)
     }
 
     IEnumerator ShowShrine()
