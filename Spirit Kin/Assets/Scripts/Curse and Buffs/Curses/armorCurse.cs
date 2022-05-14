@@ -27,8 +27,7 @@ public class armorCurse : Curse
         pStats.armor.AddBaseValue(penaltyValue);
     }
 
-    override public void updateCurse (float difficulty) {
-        float newValue = difficulty * penaltyValue;
+    override public void updateCurse (float newValue) {
         pStats.armor.AddBaseValue(newValue - penaltyValue);
         penaltyValue = newValue;
     }

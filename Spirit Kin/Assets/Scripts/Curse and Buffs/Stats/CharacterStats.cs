@@ -25,6 +25,8 @@ public class CharacterStats : MonoBehaviour
 
     public GameObject player;
     
+    
+    
     void Start ()
     {
         
@@ -45,21 +47,21 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage (float damage, float knockBackStrength) {
+    public void TakeDamage (float damage, float knockBackStrength) {
         hitVFX.Play();
         //armor system
         damage -= armor.GetValue();
-        damage = Mathf.Clamp(damage, 0.05f * currentHealth, float.MaxValue);
+        damage = Mathf.Clamp(damage, 0, float.MaxValue);
 
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, float.MaxValue);
         
-        if (currentHealth != maxHealth && currentHealth > 0) healthBarCanvas.SetActive(true);
-        healthBar.transform.localScale = new Vector3 (40 * (currentHealth / maxHealth), 0.3f, 1f);
+        if (gameObject.tag != "Player" && currentHealth != maxHealth && currentHealth > 0) healthBarCanvas.SetActive(true);
+        if (gameObject.tag != "Player") healthBar.transform.localScale = new Vector3 (40 * (currentHealth / maxHealth), 0.3f, 1f);
         //healthBarCanvas.GetComponent<EnemyHealthBar>().takeDamageUI(currentHealth / maxHealth); // Lerp health bar aint doin it rn. Swap out one-line logic with this.
 
         //vvv will reimplement once its cleaner
-        if (currentHealth > 0)
+        if (gameObject.tag == "Enemy" && currentHealth > 0)
         {
             Enemy_Controller enemyController = gameObject.GetComponent<Enemy_Controller>();
             if (!enemyController.immuneToStun)
@@ -77,25 +79,66 @@ public class CharacterStats : MonoBehaviour
                 }
             }         
         }
+        if (gameObject.tag == "Player") 
+        {
+            if(!gameObject.GetComponent<Animator>().GetBool("Death"))
+            gameObject.GetComponent<PlayerController>().Stun();
+        }
     }
 
+    
     public virtual void Die () {
         isDying = true;
-        Debug.Log("Enemy died!");
-        gameObject.layer = 12;
-        if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject))
-            FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
-        if (FindObjectOfType<LockTarget>().Target = this.gameObject.transform)
-            FindObjectOfType<LockTarget>().DelockTarget();
+        Debug.Log("I died!");
 
-        Enemy_Controller eco = gameObject.GetComponent<Enemy_Controller>();
-        eco.LockOnArrow.GetComponent<LockOnArrow>().DestoryArrow();    
-        eco.enemyAnimator.SetBool("Dead", isDying);
-        eco.shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
-        eco.enemyCollider.isTrigger = true;
-        eco.changeState(Enemy_Controller.MotionState.Waiting);
-        eco.EnemyAttack = Enemy_Controller.AttackState.Waiting;
-        eco.resetSurround();
-        healthBarCanvas.SetActive(false);
+        if (gameObject.tag == "Enemy") {
+            gameObject.layer = 12;
+            if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject))
+                FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);
+            if (FindObjectOfType<LockTarget>().Target = this.gameObject.transform)
+                FindObjectOfType<LockTarget>().DelockTarget();
+            gameObject.GetComponent<Enemy_Controller>().LockOnArrow.GetComponent<LockOnArrow>().DestoryArrow();    
+            gameObject.GetComponent<Enemy_Controller>().enemyAnimator.SetBool("Dead", isDying);
+            gameObject.GetComponent<Enemy_Controller>().shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
+            gameObject.GetComponent<Enemy_Controller>().enemyCollider.isTrigger = true;
+            gameObject.GetComponent<Enemy_Controller>().changeState(Enemy_Controller.MotionState.Waiting);
+            gameObject.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Waiting;
+            gameObject.GetComponent<Enemy_Controller>().resetSurround();
+            if (currentHealth != maxHealth) healthBarCanvas.SetActive(false);
+        }
+        
+        if (this.gameObject.tag == "Player") {
+            
+            StartCoroutine(PlayerDeath(this.gameObject));
+        }
+        
+    }
+
+
+    public IEnumerator PlayerDeath(GameObject player) {
+        // turning the lockon camera off in the case that it's on while dying
+        GetComponent<LockTarget>().LockOnCamera.SetActive(false);
+        // disable player move script
+        // play death animation
+        deathUI.SetActive(true);
+        player.GetComponent<Animator>().SetBool("Death", true);
+        player.GetComponent<CharacterController>().enabled = false;
+        Transform[] springTransforms = FindObjectOfType<PlayerStats>().SpringTransforms;
+        Vector3 respawnPosition = Vector3.zero;
+        float minMagnitude = float.MaxValue;
+        for(int i = 0; i < springTransforms.Length; i ++){
+            float mag = (player.transform.position - springTransforms[i].transform.position).magnitude;
+            if(mag < minMagnitude){
+                minMagnitude = mag;
+                respawnPosition = springTransforms[i].position;
+            }
+        }
+        yield return new WaitForSeconds(3f);
+        player.GetComponent<PlayerController>().AnimationStart();
+        player.GetComponent<Animator>().SetBool("Death", false);
+        player.transform.position = respawnPosition;
+        player.GetComponent<CharacterController>().enabled = true;
+        player.GetComponent<PlayerStats>().currentHealth = player.GetComponent<PlayerStats>().maxHealth;
+        yield return null;
     }
 }

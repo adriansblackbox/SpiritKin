@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
     public float Gravity = -30f;
-    public float GravityPullRange = 5f;
     private float animationBlend;
     private Vector3 moveDirection;
     private CharacterController controller;
@@ -73,9 +72,6 @@ public class PlayerController : MonoBehaviour
             AttackMovement();
         else if(animator.GetBool("Dash Movement"))
             DashMovement();
-        if (animator.GetFloat("Dash Cooldown") >= 0) {
-            animator.SetFloat("Dash Cooldown", animator.GetFloat("Dash Cooldown") - Time.deltaTime);
-        }
     }
     //===========================================================
     // Input getter
@@ -137,25 +133,25 @@ public class PlayerController : MonoBehaviour
             break;
             case "Attack2_K":
                 animator.SetInteger("Attack Number", 3);
-                swordScript.AttackOriginPoints = A2RayCast;
+                swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[1].Play();
                 //sound play
             break;
             case "Attack3_K":
                 animator.SetInteger("Attack Number", 4);
-                swordScript.AttackOriginPoints = A3RayCast;
+                swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[2].Play();
                 //sound play
             break;
             case "Attack4_K":
                 animator.SetInteger("Attack Number", 5);
-                swordScript.AttackOriginPoints = A4RayCast;
+                swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[3].Play();
                 //sound play
             break;
             case "Attack5_K":
                 animator.SetInteger("Attack Number", 1);
-                swordScript.AttackOriginPoints = A5RayCast;
+                swordScript.AttackOriginPoints = A1RayCast;
                 AttackVFX[4].Play();
                 //sound play
                 speed = 80f;
@@ -195,6 +191,7 @@ public class PlayerController : MonoBehaviour
     private void DashEnd(){
         animator.SetBool("Dash End", true);
         animator.SetBool("Dash Movement", false);
+        animator.SetFloat("Dash Cooldown", 0.2f);
         speed = 0.0f;
     }
     //====================================================
@@ -207,23 +204,23 @@ public class PlayerController : MonoBehaviour
     }
 
     private void DashInvisiblityOn(){
-        StartDashMovement();
-        for(int i = 0; i < DashInvisibleObjects.Length; i++)
+        for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(false);
+        }
         StartCoroutine(DashInvisibleTime());
+        StartDashMovement();
     }
     IEnumerator DashInvisibleTime () {
         animator.speed = 0;
         yield return new WaitForSeconds(DashTime);
         animator.speed = 1;
+        animator.SetBool("Dash Movement", false);
         yield return null;
     }
     private void DashInvisiblityOff(){
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(true);
         }
-        animator.SetFloat("Dash Cooldown", 0.2f);
-        animator.SetBool("Dash Movement", false);
     }
     
     private void AttackMovement(){
@@ -352,6 +349,9 @@ public class PlayerController : MonoBehaviour
         } else if (animator.GetInteger("Attack Number") != 1) {
             animator.SetInteger("Attack Number", 1);
         }
+        if (animator.GetFloat("Dash Cooldown") >= 0) {
+            animator.SetFloat("Dash Cooldown", animator.GetFloat("Dash Cooldown") - Time.deltaTime);
+        }
     }
     private void RotateCamera(){
         if(GetComponent<LockTarget>().Target == null){
@@ -389,19 +389,7 @@ public class PlayerController : MonoBehaviour
     }
     private void SpecialStart() {
         AnimationStart();
-        DashInvisiblityOff();
         animator.SetBool("Special End", false);
-    }
-    private void PullEnemies() {
-        GameObject[] enemies =  GameObject.FindGameObjectsWithTag("Enemy");
-        Debug.Log(enemies.Length);
-        for(int i = 0; i < enemies.Length; i++) {
-            //Vector3.Distance(other.position, transform.position);
-            if(Vector3.Distance(transform.position, enemies[i].transform.position) <= GravityPullRange) {
-                if(enemies[i].GetComponent<CharacterStats>())
-                    enemies[i].GetComponent<CharacterStats>().TakeDamage(0, -10f);
-            }
-        }
     }
      private void SpecialEnd() {
         animator.SetBool("Special End", true);

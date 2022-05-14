@@ -22,7 +22,7 @@ public class DamageBuff : Buff
 
         duration = baseDuration;
         timeActive = baseTimeActive;
-        power = basePower;
+        power = 0;
         investCost = baseInvestCost;
         level = baseLevel;
 
