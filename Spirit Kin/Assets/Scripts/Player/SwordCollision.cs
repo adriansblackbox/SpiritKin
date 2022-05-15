@@ -39,7 +39,6 @@ public class SwordCollision : MonoBehaviour
                 }
             }
             if(GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.name == "StompFollow_K") {
-                Debug.Log("360 Raycast!!");
                 if (Physics.SphereCast(child.position, 1f,  child.TransformDirection(Vector3.forward * -1), out hit, BladeLength, layerMask) && RaycastOn) {
                     Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.red);
                     if(!immuneEnemies.Contains(hit.transform.gameObject)) {
