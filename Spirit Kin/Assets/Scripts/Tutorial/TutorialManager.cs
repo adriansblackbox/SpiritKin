@@ -33,6 +33,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] GameObject dialogueObject;
 
     [Header("Sounds")]
+    public bool introduced;
     [SerializeField] AudioSource NPCAudio;
     [SerializeField] AudioClip heyAudio;
     [SerializeField] AudioClip[] loopingDialogueAudio;
@@ -43,7 +44,6 @@ public class TutorialManager : MonoBehaviour
         {
             pc.enabled = false;
             st.ActivateText();
-            NPCAudio.clip = heyAudio;
             StartCoroutine("Hey");
         }
         else
@@ -56,6 +56,16 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialOn)
         {
+            if (NPCAudio.clip == heyAudio && !introduced)
+            {
+                if (!NPCAudio.isPlaying)
+                    introduced = true;
+            }
+            else if (st.typing && !NPCAudio.isPlaying && introduced)
+            {
+                chooseAndPlayDialogueSound();
+            }
+
             //All dialogue has been shown and they give input
             if (st.CheckIfDialogueCompleted() && CheckForInput())
             {
@@ -71,6 +81,8 @@ public class TutorialManager : MonoBehaviour
             //Move onto the next NPC line or coroutine that explains next part
             else if (!tutorialFinished && !showingNonPlayerCamera && !st.typing && !movingUIElement && CheckForInput())
             {
+                st.ActivateText();
+
                 if (!shownShrine && st.GetCurrentDisplayingText() == 1)
                     StartCoroutine("ShowShrine");
                 else if (!shownCoins && st.GetCurrentDisplayingText() == 2)
@@ -81,8 +93,6 @@ public class TutorialManager : MonoBehaviour
                     StartCoroutine("ShowCurses");
                 else if (!shownPool && st.GetCurrentDisplayingText() == 5)
                     StartCoroutine("ShowPool");
-                else
-                    st.ActivateText();
             }
         }
     }
@@ -95,9 +105,17 @@ public class TutorialManager : MonoBehaviour
             return false;
     }
 
+    private void chooseAndPlayDialogueSound()
+    {
+        int rand = Random.Range(0, loopingDialogueAudio.Length);
+        NPCAudio.clip = loopingDialogueAudio[rand];
+        NPCAudio.Play();
+    }
+
     IEnumerator Hey()
     {
         yield return new WaitForSeconds(0.5f);
+        NPCAudio.clip = heyAudio;
         NPCAudio.Play();
     }
 
@@ -105,22 +123,24 @@ public class TutorialManager : MonoBehaviour
     {
         //pop coin up in the middle of the screen
           // -> move it to its designated spot
+        yield return null;
     }
 
     IEnumerator ShowTeas()
     {
         //pop up tea buff backgrounds and one at a time slot them up top
+        yield return null;
     }
 
     IEnumerator ShowCurses()
     {
         //pop up curse backgrounds and one at a time slot them up top (just like with the Teas)
+        yield return null;
     }
 
 
     IEnumerator ShowShrine()
     {
-        st.ActivateText();
         shownShrine = true;
         showingNonPlayerCamera = true;
         playerCamera.GetComponent<Camera>().enabled = false;
@@ -137,7 +157,6 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator ShowPool()
     {
-        st.ActivateText();
         shownPool = true;
         showingNonPlayerCamera = true;
         playerCamera.GetComponent<Camera>().enabled = false;
