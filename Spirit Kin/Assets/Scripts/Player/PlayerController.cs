@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Move Cancel", false);
         animator.SetBool("Combo Reset", false);
         animator.SetBool("Attack End", false);
+        animator.SetBool("Special In Motion", false);
         DisableHitRay();
     }
     private void AttackStart(){
@@ -160,8 +161,10 @@ public class PlayerController : MonoBehaviour
                 //sound play
                 speed = 80f;
             break;
-             case "Dash Attack":
+             case "StompFollow_K":
                 animator.SetFloat("Attack Number", 1);
+                swordScript.AttackOriginPoints = A1RayCast;
+                 AttackVFX[5].Play();
             break;
         }
         swordScript.immuneEnemies.Clear();
@@ -352,6 +355,7 @@ public class PlayerController : MonoBehaviour
         } else if (animator.GetInteger("Attack Number") != 1) {
             animator.SetInteger("Attack Number", 1);
         }
+        animator.SetBool("Special In Motion", false);
     }
     private void RotateCamera(){
         if(GetComponent<LockTarget>().Target == null){
@@ -389,6 +393,7 @@ public class PlayerController : MonoBehaviour
     }
     private void SpecialStart() {
         AnimationStart();
+        animator.SetBool("Special In Motion", true);
         DashInvisiblityOff();
         animator.SetBool("Special End", false);
     }
@@ -403,8 +408,9 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-     private void SpecialEnd() {
+    private void SpecialEnd() {
         animator.SetBool("Special End", true);
+        animator.SetBool("Special In Motion", false);
     }
     public void InvertControls(bool invert) {
         if(invert) 

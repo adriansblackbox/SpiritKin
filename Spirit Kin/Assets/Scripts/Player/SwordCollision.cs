@@ -38,8 +38,23 @@ public class SwordCollision : MonoBehaviour
                     }
                 }
             }
-            else if(RaycastOn) {
+            if(GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.name == "StompFollow_K") {
+                Debug.Log("360 Raycast!!");
+                if (Physics.SphereCast(child.position, 1f,  child.TransformDirection(Vector3.forward * -1), out hit, BladeLength, layerMask) && RaycastOn) {
+                    Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.red);
+                    if(!immuneEnemies.Contains(hit.transform.gameObject)) {
+                        immuneEnemies.Add(hit.transform.gameObject);
+                        hit.transform.gameObject.GetComponent<CharacterStats>().TakeDamage(pStats.damage.GetValue(), 5f);
+                        if(vampBlessingOn) {
+                            pStats.currentHealth = Mathf.Clamp(pStats.currentHealth + vampAmount * pStats.damage.GetValue(), -0.1f, pStats.maxHealth * pStats.currentHealthCap);
+                        }
+                    }
+                }
+            }
+            if(RaycastOn) {
                 Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.yellow);
+                if(GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.name == "StompFollow_K")
+                    Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward * -1) * BladeLength, Color.yellow);
             }
         }
     }
