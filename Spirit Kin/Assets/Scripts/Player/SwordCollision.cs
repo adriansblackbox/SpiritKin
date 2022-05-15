@@ -38,7 +38,7 @@ public class SwordCollision : MonoBehaviour
                     }
                 }
             }
-            if(GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.name == "StompFollow_K") {
+            if(GetComponent<Animator>().GetBool("Special In Motion")) {
                 if (Physics.SphereCast(child.position, 1f,  child.TransformDirection(Vector3.forward * -1), out hit, BladeLength, layerMask) && RaycastOn) {
                     Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.red);
                     if(!immuneEnemies.Contains(hit.transform.gameObject)) {
@@ -52,7 +52,7 @@ public class SwordCollision : MonoBehaviour
             }
             if(RaycastOn) {
                 Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward) * BladeLength, Color.yellow);
-                if(GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.name == "StompFollow_K")
+                if(GetComponent<Animator>().GetBool("Special In Motion"))
                     Debug.DrawRay(child.position, child.TransformDirection(Vector3.forward * -1) * BladeLength, Color.yellow);
             }
         }
