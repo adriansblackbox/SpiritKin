@@ -32,8 +32,30 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial UI Elements")]
     [SerializeField] GameObject dialogueObject;
 
+    [SerializeField] float moveTime;
+    public float durationOfMove;
+
+    public Vector2 startPositionForCoin;
+    [SerializeField] GameObject coinObject;
+    public Vector2 coinIntendedPosition;
+
+    public Vector2 startPositionForBuffs;
+    [SerializeField] GameObject firstBuff;
+    public Vector2 firstBuffIntendedPosition;
+    [SerializeField] GameObject secondBuff;
+    public Vector2 secondBuffIntendedPosition;
+    [SerializeField] GameObject thirdBuff;
+    public Vector2 thirdBuffIntendedPosition;
+
+    public Vector2 startPositionForCurses;
+    [SerializeField] GameObject firstCurse;
+    public Vector2 firstCurseIntendedPosition;
+    [SerializeField] GameObject secondCurse;
+    public Vector2 secondCurseIntendedPosition;
+    [SerializeField] GameObject thirdCurse;
+    public Vector2 thirdCurseIntendedPosition;
+
     [Header("Sounds")]
-    public bool introduced;
     [SerializeField] AudioSource NPCAudio;
     [SerializeField] AudioClip heyAudio;
     [SerializeField] AudioClip[] loopingDialogueAudio;
@@ -56,15 +78,6 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialOn)
         {
-            if (NPCAudio.clip == heyAudio && !introduced)
-            {
-                if (!NPCAudio.isPlaying)
-                    introduced = true;
-            }
-            else if (st.typing && !NPCAudio.isPlaying && introduced)
-            {
-                chooseAndPlayDialogueSound();
-            }
 
             //All dialogue has been shown and they give input
             if (st.CheckIfDialogueCompleted() && CheckForInput())
@@ -82,7 +95,7 @@ public class TutorialManager : MonoBehaviour
             else if (!tutorialFinished && !showingNonPlayerCamera && !st.typing && !movingUIElement && CheckForInput())
             {
                 st.ActivateText();
-
+                chooseAndPlayDialogueSound();
                 if (!shownShrine && st.GetCurrentDisplayingText() == 1)
                     StartCoroutine("ShowShrine");
                 else if (!shownCoins && st.GetCurrentDisplayingText() == 2)
@@ -121,21 +134,110 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator ShowCoins()
     {
-        //pop coin up in the middle of the screen
-          // -> move it to its designated spot
-        yield return null;
+        //would be really cool to have a bunch of coins go into the top left like lego star wars bits and increment the money amount
+
+        movingUIElement = true;
+        coinObject.SetActive(true);
+        coinObject.transform.GetChild(1).gameObject.SetActive(false);
+        coinObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForCoin.x, startPositionForCoin.y, 0f);
+
+        yield return new WaitForSeconds(1);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            coinObject.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForCoin, new Vector3(coinIntendedPosition.x, coinIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+        coinObject.transform.GetChild(1).gameObject.SetActive(true);
+        movingUIElement = false;
     }
 
     IEnumerator ShowTeas()
     {
-        //pop up tea buff backgrounds and one at a time slot them up top
-        yield return null;
+        movingUIElement = true;
+        
+        firstBuff.SetActive(true);
+        firstBuff.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForBuffs.x, startPositionForBuffs.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            firstBuff.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForBuffs, new Vector3(firstBuffIntendedPosition.x, firstBuffIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+        
+        secondBuff.SetActive(true);
+        secondBuff.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForBuffs.x, startPositionForBuffs.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            secondBuff.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForBuffs, new Vector3(secondBuffIntendedPosition.x, secondBuffIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+
+        thirdBuff.SetActive(true);
+        thirdBuff.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForBuffs.x, startPositionForBuffs.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            thirdBuff.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForBuffs, new Vector3(thirdBuffIntendedPosition.x, thirdBuffIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+        
+        movingUIElement = false;
     }
 
     IEnumerator ShowCurses()
     {
-        //pop up curse backgrounds and one at a time slot them up top (just like with the Teas)
-        yield return null;
+        movingUIElement = true;
+
+        firstCurse.SetActive(true);
+        firstCurse.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForCurses.x, startPositionForCurses.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            firstCurse.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForCurses, new Vector3(firstCurseIntendedPosition.x, firstCurseIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+        
+        secondCurse.SetActive(true);
+        secondCurse.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForCurses.x, startPositionForCurses.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            secondCurse.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForCurses, new Vector3(secondCurseIntendedPosition.x, secondCurseIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+
+        thirdCurse.SetActive(true);
+        thirdCurse.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForCurses.x, startPositionForCurses.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            thirdCurse.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForCurses, new Vector3(thirdCurseIntendedPosition.x, thirdCurseIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+
+        movingUIElement = false;
     }
 
 
