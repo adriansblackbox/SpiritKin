@@ -7744,56 +7744,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b605067a031de44fb63d7c79b5c3118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  es: {fileID: 1964309313}
-  st: {fileID: 1889668265}
-  pc: {fileID: 881556155}
-  tutorialFinished: 0
-  tutorialOn: 1
-  showingNonPlayerCamera: 0
-  shownShrine: 0
-  shownPool: 0
-  movingUIElement: 0
-  shownCoins: 0
-  shownTeas: 0
-  shownCurses: 0
-  playerCamera: {fileID: 4931512991430563514}
-  shrineCamera: {fileID: 690845058}
-  poolCamera1: {fileID: 649912846}
-  poolCamera2: {fileID: 0}
-  poolCamera3: {fileID: 0}
-  dialogueObject: {fileID: 1889668263}
-  moveTime: 0
-  durationOfMove: 0.75
-  startPositionForCoin: {x: 950, y: -550}
-  coinObject: {fileID: 863229715}
-  coinIntendedPosition: {x: 60, y: -75}
-  startPositionForBuffs: {x: 245, y: -400}
-  firstBuff: {fileID: 1130861096}
-  firstBuffIntendedPosition: {x: -80, y: -7}
-  secondBuff: {fileID: 789186170}
-  secondBuffIntendedPosition: {x: 15, y: -7}
-  thirdBuff: {fileID: 114648653}
-  thirdBuffIntendedPosition: {x: 110, y: -7}
-  startPositionForCurses: {x: -210, y: -400}
-  firstCurse: {fileID: 2089189444}
-  firstCurseIntendedPosition: {x: -80, y: -7}
-  secondCurse: {fileID: 52559214}
-  secondCurseIntendedPosition: {x: 15, y: -7}
-  thirdCurse: {fileID: 1163744195}
-  thirdCurseIntendedPosition: {x: 110, y: -7}
-  NPCAudio: {fileID: 521493944}
-  heyAudio: {fileID: 8300000, guid: fccbb2e3cc07315438b1ae33869c6c5c, type: 3}
-  loopingDialogueAudio:
-  - {fileID: 8300000, guid: 6647472438da3e741861c3e7ae9a0b77, type: 3}
-  - {fileID: 8300000, guid: 862eaf3eef6acd64cbc64fb3e32008d6, type: 3}
-  - {fileID: 8300000, guid: 969fd83a5404b5f4b972cc64c40ea45e, type: 3}
-  - {fileID: 8300000, guid: 6e100b51f618c3f4b80e99fa68bd1ebd, type: 3}
-=======
->>>>>>> 04cd0b492280c06b7a6a6bede86ea24b4c7e9cd3
-=======
->>>>>>> 04cd0b492280c06b7a6a6bede86ea24b4c7e9cd3
 --- !u!1 &533901762 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3455292422214010178, guid: 20c9ece6158e8554992a878cf6b539ac, type: 3}
@@ -21154,26 +21104,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1151595214, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 75
-      objectReference: {fileID: 0}
-    - target: {fileID: 1151595214, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 75
-      objectReference: {fileID: 0}
-    - target: {fileID: 1151595214, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 209.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1151595214, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -9.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1151595215, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: de71eaaf63c492f41a7669719d0efc63, type: 3}
     - target: {fileID: 1321919434, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: tm
       value: 
@@ -21270,18 +21200,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5503858657430298936, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: keyboardIndicator
-      value: 
-      objectReference: {fileID: 21300000, guid: 4cc136d699660af4d8fde9ae156aa10f, type: 3}
-    - target: {fileID: 5503858657430298936, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: nextLineIndicator
-      value: 
-      objectReference: {fileID: 1334573959}
-    - target: {fileID: 5503858657430298936, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-      propertyPath: controllerIndicator
-      value: 
-      objectReference: {fileID: 21300000, guid: de71eaaf63c492f41a7669719d0efc63, type: 3}
     - target: {fileID: 5503858657871384692, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: Shrine
       value: 
@@ -21303,11 +21221,6 @@ PrefabInstance:
 --- !u!1 &1334573958 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5046282402189308105, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
-  m_PrefabInstance: {fileID: 1334573957}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1334573959 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1151595213, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
   m_PrefabInstance: {fileID: 1334573957}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1336662036 stripped
