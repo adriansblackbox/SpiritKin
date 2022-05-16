@@ -31,8 +31,6 @@ public class Enemy_Spawner : MonoBehaviour
     public float shrineInterval = 45f;
     public bool firstSpawn; //if the player isn't doing the tutorial curse the first shrine at 5 seconds
 
-    public GameObject difficultyText;
-
     public void Start()
     {
         scaleNumberOfEnemiesToSpawn();

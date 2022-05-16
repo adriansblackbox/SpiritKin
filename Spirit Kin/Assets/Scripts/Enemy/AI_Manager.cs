@@ -25,6 +25,7 @@ public class AI_Manager : MonoBehaviour
     {
         enemiesContainer = transform.GetChild(0);
         Player = GameObject.Find("Player").transform;
+        cmm = FindObjectOfType<CombatMusicManager>();
     }
     
     //ensure that timers aren't running when timeScale = 0
