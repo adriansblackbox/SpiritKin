@@ -2086,7 +2086,7 @@ RectTransform:
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 5503858657966348273}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -4923,6 +4923,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MouseKeyboardOverlay: {fileID: 5503858657144343177}
   XboxControllerOverlay: {fileID: 5503858657105811716}
+  controllerIndicator: {fileID: 0}
+  keyboardIndicator: {fileID: 0}
+  nextLineIndicator: {fileID: 0}
   keyboard: 0
 --- !u!1 &5503858657431108040
 GameObject:
@@ -6212,8 +6215,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: -0.16064}
   m_LocalScale: {x: 1.0430298, y: 1.0430298, z: 1.0430298}
   m_Children:
-  - {fileID: 1857981864043755422}
   - {fileID: 504717935769552512}
+  - {fileID: 1857981864043755422}
   - {fileID: 7112044751069961694}
   - {fileID: 339601009837988048}
   m_Father: {fileID: 5503858657430298886}
@@ -7972,7 +7975,7 @@ RectTransform:
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 5503858657966348273}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
