@@ -131,9 +131,6 @@ public class Enemy_Spawner : MonoBehaviour
             difficulty += 0.0834f;
         Debug.Log("Difficulty is: " + difficulty);
         curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
-
-        //debugging
-        difficultyText.GetComponent<Text>().text = "Difficulty: " + difficulty;
     }
 
     private void selectShrineEnemyCount()
