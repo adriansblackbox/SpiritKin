@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ControlOverlayHandler : MonoBehaviour
 {
     public GameObject MouseKeyboardOverlay;
     public GameObject XboxControllerOverlay;
     
+    public Sprite controllerIndicator;
+    public Sprite keyboardIndicator;
+
+    public GameObject nextLineIndicator;
+
     public bool keyboard = false;
-    // Update is called once per frame
     void Update()
     {
         if (
@@ -37,12 +42,14 @@ public class ControlOverlayHandler : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             MouseKeyboardOverlay.SetActive(true);
             XboxControllerOverlay.SetActive(false);
+            nextLineIndicator.GetComponent<Image>().sprite = keyboardIndicator;
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             MouseKeyboardOverlay.SetActive(false);
-            XboxControllerOverlay.SetActive(true);           
+            XboxControllerOverlay.SetActive(true);
+            nextLineIndicator.GetComponent<Image>().sprite = controllerIndicator;
         }
     }
 }

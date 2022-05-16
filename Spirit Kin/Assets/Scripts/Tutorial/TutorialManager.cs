@@ -71,6 +71,13 @@ public class TutorialManager : MonoBehaviour
         else
         {
             dialogueObject.SetActive(false);
+            coinObject.SetActive(true);
+            firstBuff.SetActive(true);
+            secondBuff.SetActive(true);
+            thirdBuff.SetActive(true);
+            firstCurse.SetActive(true);
+            secondCurse.SetActive(true);
+            thirdCurse.SetActive(true);
         }
     }
 
