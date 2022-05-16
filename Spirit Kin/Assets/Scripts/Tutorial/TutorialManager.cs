@@ -270,11 +270,18 @@ public class TutorialManager : MonoBehaviour
         showingNonPlayerCamera = true;
         playerCamera.GetComponent<Camera>().enabled = false;
         poolCamera1.GetComponent<Camera>().enabled = true;
-        poolCamera1.GetComponent<CameraFade>().Reset();
+
+        yield return new WaitForSeconds(3f);
+        poolCamera2.GetComponent<Camera>().enabled = true;
+        poolCamera1.GetComponent<Camera>().enabled = false;
+
+        yield return new WaitForSeconds(3f);
+        poolCamera3.GetComponent<Camera>().enabled = true;
+        poolCamera2.GetComponent<Camera>().enabled = false;
+
         yield return new WaitForSeconds(3f);
         playerCamera.GetComponent<Camera>().enabled = true;
-        playerCamera.GetComponent<CameraFade>().Reset();
-        poolCamera1.GetComponent<Camera>().enabled = false;
+        poolCamera3.GetComponent<Camera>().enabled = false;
         showingNonPlayerCamera = false;
     }
 }
