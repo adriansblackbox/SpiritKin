@@ -10,7 +10,7 @@ public class CombatMusicManager : MonoBehaviour
 
     public MusicState combatBGM;
 
-    public bool playerBeingChased;
+    MusicState lastMusicState;
 
     [Header("Parts of BGM")]
     [SerializeField] AudioClip beginCombatBGM;
@@ -23,6 +23,8 @@ public class CombatMusicManager : MonoBehaviour
     void Start()
     {
         combatBGM = MusicState.Off;
+        lastMusicState = MusicState.Off;
+        changeMusicState(MusicState.Begin);
     }
 
     // Update is called once per frame
@@ -31,25 +33,21 @@ public class CombatMusicManager : MonoBehaviour
         switch (combatBGM)
         {
             case MusicState.Off:
-                if (playerBeingChased)
-                {
-                    changeMusicState(MusicState.Begin);
-                    break;
-                }
                 if (combatBGMPlayer.isPlaying)
                     combatBGMPlayer.Stop(); //should fade out and then stop -> thats a polish step
                 break;
             case MusicState.Begin:
                 if (!combatBGMPlayer.isPlaying)
+                {
                     changeMusicState(MusicState.Loop);
-                break;
-            case MusicState.Loop:
-                if (!playerBeingChased)
-                    changeMusicState(MusicState.End);
+                    break;
+                }
                 break;
             case MusicState.End:
                 if (!combatBGMPlayer.isPlaying)
+                {
                     changeMusicState(MusicState.Off);
+                }
                 break;
             default:
                 break;                                            
@@ -64,6 +62,7 @@ public class CombatMusicManager : MonoBehaviour
         else if (newState == MusicState.Loop) { combatBGMPlayer.clip = loopCombatBGM; combatBGMPlayer.loop = true; combatBGMPlayer.Play();}
         else if (newState == MusicState.End) { combatBGMPlayer.clip = endCombatBGM; combatBGMPlayer.loop = false; combatBGMPlayer.Play();}
 
+        lastMusicState = combatBGM;
         combatBGM = newState;
     }
 }
