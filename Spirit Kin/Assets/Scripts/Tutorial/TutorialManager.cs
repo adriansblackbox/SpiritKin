@@ -35,19 +35,20 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] float moveTime;
     public float durationOfMove;
 
-    public Vector2 startPositionForCoin;
+    private Vector2 startPositionForCoin;
+    private Vector2 startPositionForBuffs;
+    private Vector2 startPositionForCurses;
+
     [SerializeField] GameObject coinObject;
     public Vector2 coinIntendedPosition;
-
-    public Vector2 startPositionForBuffs;
+    
     [SerializeField] GameObject firstBuff;
     public Vector2 firstBuffIntendedPosition;
     [SerializeField] GameObject secondBuff;
     public Vector2 secondBuffIntendedPosition;
     [SerializeField] GameObject thirdBuff;
     public Vector2 thirdBuffIntendedPosition;
-
-    public Vector2 startPositionForCurses;
+    
     [SerializeField] GameObject firstCurse;
     public Vector2 firstCurseIntendedPosition;
     [SerializeField] GameObject secondCurse;
@@ -64,6 +65,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialOn)
         {
+            calculateMiddlePoints();
             pc.enabled = false;
             st.ActivateText();
             StartCoroutine("Hey");
@@ -85,7 +87,6 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialOn)
         {
-
             //All dialogue has been shown and they give input
             if (st.CheckIfDialogueCompleted() && CheckForInput())
             {
@@ -115,6 +116,27 @@ public class TutorialManager : MonoBehaviour
                     StartCoroutine("ShowPool");
             }
         }
+    }
+
+    private void calculateMiddlePoints()
+    {
+        float canvasX = coinObject.transform.parent.GetComponent<RectTransform>().sizeDelta.x;
+        float canvasY = coinObject.transform.parent.GetComponent<RectTransform>().anchoredPosition.y;
+
+        //coins 0,0 is top left so I need to get there and then do canvasX / 2 canvasY / 2
+
+        float coinX = coinObject.GetComponent<RectTransform>().anchoredPosition.x;
+        float coinY = coinObject.GetComponent<RectTransform>().anchoredPosition.y;
+        
+        startPositionForCoin = new Vector2(canvasX/2, -canvasY / 2 + coinY * 1.5f);
+
+        //Get X value for one of the containers (will be used as negative for buffs & positive for curses)
+        float buffAndCurseContainerX = firstBuff.transform.parent.GetComponent<RectTransform>().anchoredPosition.x;
+        //get 1/4 of the icon size so its centered (not 1/2 because the icons are circular and only take up about half of the overarching container)
+        float iconSize = firstBuff.GetComponent<RectTransform>().sizeDelta.x / 4;
+
+        startPositionForBuffs = new Vector2(-buffAndCurseContainerX - iconSize, -canvasY / 2);
+        startPositionForCurses = new Vector2(buffAndCurseContainerX + iconSize, -canvasY / 2);
     }
 
     private bool CheckForInput()
@@ -148,12 +170,12 @@ public class TutorialManager : MonoBehaviour
         coinObject.transform.GetChild(1).gameObject.SetActive(false);
         coinObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForCoin.x, startPositionForCoin.y, 0f);
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.25f);
 
-        while (moveTime < durationOfMove)
+        while (moveTime < durationOfMove + 0.5f)
         {
             moveTime += Time.deltaTime;
-            coinObject.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForCoin, new Vector3(coinIntendedPosition.x, coinIntendedPosition.y, 0f), moveTime/durationOfMove);
+            coinObject.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForCoin, new Vector3(coinIntendedPosition.x, coinIntendedPosition.y, 0f), moveTime/(durationOfMove + 0.5f));
             yield return new WaitForSeconds(0.001f);
         }
         moveTime = 0f;
