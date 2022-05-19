@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-8669426080100904562
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 1c617135ed8e0734d9d25d5f400e6916
+  m_EffectName: Attenuation
+  m_MixLevel: cdc699e6415a614428d81afdbfd3c1aa
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-4795418467222175381
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -33,6 +47,25 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!243 &-2629598111373851751
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MusicVolume
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 3da60bdf53bd6b44b877eebacedc3bfd
+  m_Children: []
+  m_Volume: 21098427899caab418d962c2050f8fa6
+  m_Pitch: ce7752456e5fb384eb3a550621501a81
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -8669426080100904562}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -51,12 +84,15 @@ AudioMixerController:
   m_ExposedParameters:
   - guid: 461f98c60b9f10346bca7690662564f8
     name: MasterVolume
+  - guid: 21098427899caab418d962c2050f8fa6
+    name: MusicVolume
   - guid: 571a4d5c21f37c74198d4d2be0600831
     name: SFXVolume
   m_AudioMixerGroupViews:
   - guids:
     - 4fb673ec2da5ae8449459681240d4397
     - 021bbc184eb6bb54bacd26a7e8257fac
+    - 3da60bdf53bd6b44b877eebacedc3bfd
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -71,6 +107,7 @@ AudioMixerGroupController:
   m_GroupID: 4fb673ec2da5ae8449459681240d4397
   m_Children:
   - {fileID: -2835955961270170878}
+  - {fileID: -2629598111373851751}
   m_Volume: 461f98c60b9f10346bca7690662564f8
   m_Pitch: bba2e5d1323bf3b4399eba9d95068cd7
   m_Send: 00000000000000000000000000000000
