@@ -31,6 +31,10 @@ public class TutorialManager : MonoBehaviour
 
     [Header("Tutorial UI Elements")]
     [SerializeField] GameObject dialogueObject;
+    [SerializeField] GameObject coinDescriptor;
+    [SerializeField] GameObject curseDescriptor;
+    [SerializeField] GameObject buffDescriptor;
+
 
     [SerializeField] float moveTime;
     public float durationOfMove;
@@ -91,6 +95,9 @@ public class TutorialManager : MonoBehaviour
             if (st.CheckIfDialogueCompleted() && CheckForInput())
             {
                 tutorialFinished = true;
+                coinDescriptor.SetActive(false);
+                buffDescriptor.SetActive(false);
+                curseDescriptor.SetActive(false);
                 dialogueObject.SetActive(false);
                 pc.enabled = true;
             }
@@ -181,6 +188,7 @@ public class TutorialManager : MonoBehaviour
         moveTime = 0f;
         coinObject.transform.GetChild(1).gameObject.SetActive(true);
         movingUIElement = false;
+        coinDescriptor.SetActive(true);
     }
 
     IEnumerator ShowTeas()
@@ -224,6 +232,7 @@ public class TutorialManager : MonoBehaviour
         moveTime = 0f;
         
         movingUIElement = false;
+        buffDescriptor.SetActive(true);
     }
 
     IEnumerator ShowCurses()
@@ -267,6 +276,7 @@ public class TutorialManager : MonoBehaviour
         moveTime = 0f;
 
         movingUIElement = false;
+        curseDescriptor.SetActive(true);
     }
 
 
