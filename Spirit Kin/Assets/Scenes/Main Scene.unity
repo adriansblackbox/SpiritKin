@@ -4897,6 +4897,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b57f92a28b9ae6444a5e503df2d1adce, type: 3}
+--- !u!114 &137311413 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 706956128619470179, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
+  m_PrefabInstance: {fileID: 1380435798}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c83175bcdb74646be0d8a97f27c29d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &138170081 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6074490739962192316, guid: 6d3630b85f2a06041868bfa4d54465c4, type: 3}
@@ -16206,6 +16217,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: cmm
+      value: 
+      objectReference: {fileID: 137311413}
     - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: surroundRadius
       value: 15
@@ -40790,6 +40805,10 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: cmm
+      value: 
+      objectReference: {fileID: 137311413}
+    - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: surroundRadius
       value: 15
       objectReference: {fileID: 0}
@@ -46388,6 +46407,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: cmm
+      value: 
+      objectReference: {fileID: 137311413}
     - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: surroundRadius
       value: 15
@@ -52955,6 +52978,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+      propertyPath: cmm
+      value: 
+      objectReference: {fileID: 137311413}
     - target: {fileID: 9136508747187929969, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: surroundRadius
       value: 15
@@ -64551,6 +64578,7 @@ MonoBehaviour:
   totalShrines: 0
   spawnInterval: 3
   currentCursedShrines: 0
+  cmm: {fileID: 137311413}
   shrineInterval: 25
   firstSpawn: 0
 --- !u!1001 &1964834504

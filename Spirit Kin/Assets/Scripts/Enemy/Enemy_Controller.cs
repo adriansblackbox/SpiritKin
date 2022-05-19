@@ -205,7 +205,7 @@ public class Enemy_Controller : MonoBehaviour
                 }
 
                 //If enemy has reached destination set EnemyMotion -> MotionState.Idling
-                if (path.status == NavMeshPathStatus.PathComplete && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance)
+                if (path.status == NavMeshPathStatus.PathComplete && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && relocateSpot != Vector3.zero)
                 {
                     ThisEnemy.ResetPath();
                     changeState(MotionState.Idling);
@@ -360,9 +360,12 @@ public class Enemy_Controller : MonoBehaviour
         else
             ai.enemiesIdling.Remove(gameObject);
 
-        if (EnemyMotion == MotionState.Idling && targetState == MotionState.Chasing)
+        if (targetState == MotionState.Chasing)
+        {
             ai.enemiesInCombat.Add(gameObject);
-        else if (targetState == MotionState.Relocating || targetState == MotionState.Idling)
+            FindObjectOfType<CombatMusicManager>().playerBeingChased = true;
+        }  
+        else
             ai.enemiesInCombat.Remove(gameObject);
 
         if (targetState == MotionState.Stunned && EnemyMotion == MotionState.Surrounding) resetSurround();
