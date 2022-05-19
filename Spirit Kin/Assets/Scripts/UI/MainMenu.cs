@@ -89,4 +89,8 @@ public class MainMenu : MonoBehaviour
     {
         mixer.SetFloat("SFXVolume", value);
     }
+    public void SetMusicVolume(float value)
+    {
+        mixer.SetFloat("MusicVolume", value);
+    }
 }
