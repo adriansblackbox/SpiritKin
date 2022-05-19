@@ -31,8 +31,6 @@ public class Enemy_Spawner : MonoBehaviour
     public float shrineInterval = 45f;
     public bool firstSpawn; //if the player isn't doing the tutorial curse the first shrine at 5 seconds
 
-    public GameObject difficultyText;
-
     public void Start()
     {
         scaleNumberOfEnemiesToSpawn();
@@ -56,11 +54,11 @@ public class Enemy_Spawner : MonoBehaviour
     {
         //comment back in to get difficulty to auto scale
 
-        // if (difficultyTimer >= 30f)
-        // {
-        //     scaleDifficulty();
-        //     difficultyTimer = 0f;
-        // }
+        if (difficultyTimer >= 30f)
+        {
+            scaleDifficulty();
+            difficultyTimer = 0f;
+        }
 
         if (firstSpawn)
         {
@@ -131,9 +129,6 @@ public class Enemy_Spawner : MonoBehaviour
             difficulty += 0.0834f;
         Debug.Log("Difficulty is: " + difficulty);
         curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
-
-        //debugging
-        difficultyText.GetComponent<Text>().text = "Difficulty: " + difficulty;
     }
 
     private void selectShrineEnemyCount()
@@ -212,21 +207,5 @@ public class Enemy_Spawner : MonoBehaviour
         NavMesh.SamplePosition(spawnPoint, out hit, 100.0f, NavMesh.AllAreas);
         return (hit);
     }
-
-    //DIFFICULTY TESTING
-    public void descaleDifficulty()
-    {
-        // soft cap for difficulty at 10
-        if (difficulty < 10)
-            difficulty = Mathf.Clamp(difficulty - 0.334f, 0, Mathf.Infinity);
-        else
-            difficulty = Mathf.Clamp(difficulty - 0.0834f, 0, Mathf.Infinity);
-        Debug.Log("Difficulty is: " + difficulty);
-        curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
-
-        //debugging
-        difficultyText.GetComponent<Text>().text = "Difficulty: " + difficulty;
-    }
-
 
 }

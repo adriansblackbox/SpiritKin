@@ -17,6 +17,7 @@ public class AI_Manager : MonoBehaviour
     public GameObject attackingEnemy;
     public List<GameObject> enemiesReadyToAttack = new List<GameObject>();
     public List<GameObject> enemiesIdling = new List<GameObject>();
+    public List<GameObject> enemiesInCombat = new List<GameObject>();
 
     [SerializeField] CombatMusicManager cmm;
 
@@ -24,6 +25,7 @@ public class AI_Manager : MonoBehaviour
     {
         enemiesContainer = transform.GetChild(0);
         Player = GameObject.Find("Player").transform;
+        cmm = FindObjectOfType<CombatMusicManager>();
     }
     
     //ensure that timers aren't running when timeScale = 0
@@ -34,6 +36,7 @@ public class AI_Manager : MonoBehaviour
 
     private void Update()
     {
+        cmm.playerBeingChased = enemiesInCombat.Count > 0 ? true : false;
 
         if (Player.GetComponent<PlayerStats>().isDying)
         {

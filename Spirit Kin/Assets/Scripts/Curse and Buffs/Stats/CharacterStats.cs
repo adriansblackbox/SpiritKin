@@ -91,7 +91,9 @@ public class CharacterStats : MonoBehaviour
         Enemy_Controller eco = gameObject.GetComponent<Enemy_Controller>();
         eco.LockOnArrow.GetComponent<LockOnArrow>().DestoryArrow();    
         eco.enemyAnimator.SetBool("Dead", isDying);
-        eco.shrine.GetComponent<AI_Manager>().enemiesReadyToAttack.Remove(gameObject);
+        eco.ai.enemiesReadyToAttack.Remove(gameObject);
+        eco.ai.enemiesIdling.Remove(gameObject);
+        eco.ai.enemiesInCombat.Remove(gameObject);
         eco.enemyCollider.isTrigger = true;
         eco.changeState(Enemy_Controller.MotionState.Waiting);
         eco.EnemyAttack = Enemy_Controller.AttackState.Waiting;

@@ -16,6 +16,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject ControlOverlay;
     public GameObject ToggleIndicatorOn;
     public GameObject ToggleIndicatorOff;
+
+    [SerializeField] GameManager gm;
     void Start()
     {
         teaShopMenu = GameObject.Find("TeaShop").GetComponent<TeaShop>();
@@ -35,7 +37,8 @@ public class PauseMenu : MonoBehaviour
                 // Player.GetComponent<PlayerController>().enabled = false;
                 // Player.GetComponent<PlayerCombat>().enabled = false;
             }else{
-                Pause();
+                if (!gm.gameOver)
+                    Pause();
             }
         }
     }

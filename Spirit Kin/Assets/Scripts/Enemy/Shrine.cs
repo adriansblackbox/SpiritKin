@@ -7,6 +7,7 @@ public class Shrine : MonoBehaviour
 {
     private Enemy_Spawner es;
     private AI_Manager ai;
+    private GameManager gm;
 
     public bool cursed;
     public float shrineSpawnRange;
@@ -39,6 +40,7 @@ public class Shrine : MonoBehaviour
     {
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
         ai = GetComponent<AI_Manager>();
+        gm = FindObjectOfType<GameManager>();
         Beacon.SetActive(false);
         ai.generateSurroundLocations();
     }
@@ -63,12 +65,9 @@ public class Shrine : MonoBehaviour
         if (CurCurseTime < TotalCurseTime && cursed && !FindObjectOfType<MainHub>().playerInHub) {
             CurCurseTime += Time.deltaTime;
         } else if (cursed && CurCurseTime >= TotalCurseTime) {
-            Cursor.lockState = CursorLockMode.None;
-            /* Game Over Code is commented out right now for testing */
-            //SceneManager.LoadScene("MainMenu");
-            //load game over screen
-            //gameOverScreen.GetComponent<GameOver>().LoadGameOver();
-            //cursed = false;
+            gm.gameOver = true;
+            gameOverScreen.GetComponent<GameOver>().LoadGameOver();
+            cursed = false;
         }
 
         if (cursed) {

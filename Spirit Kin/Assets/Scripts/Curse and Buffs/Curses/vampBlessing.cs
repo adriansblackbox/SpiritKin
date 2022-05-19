@@ -11,7 +11,7 @@ public class vampBlessing : Curse
     public vampBlessing (Sprite _image, SwordCollision _swordLength, GameObject _player, CurseMeter _cMeter)
     {
         player = _player;
-        type = "Range Blessing";
+        type = "Vamp Blessing";
         isApplied = false;
         removeFlag = false;
         image = _image;

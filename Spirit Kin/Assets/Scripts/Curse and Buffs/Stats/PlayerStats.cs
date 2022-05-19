@@ -20,7 +20,7 @@ public class PlayerStats : CharacterStats
     void Start()
     {
         //set player starting coins here
-        coins = 1000;
+        //coins = 1000;
         currentHealth = maxHealth;
         for(int i = 0; i < BuffsUI.Count; i++) {
             BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
