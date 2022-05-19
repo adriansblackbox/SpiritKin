@@ -26,6 +26,8 @@ public class Enemy_Spawner : MonoBehaviour
     public float spawnInterval; //enemies will spawn in at intervals at shrines to show that they are slowly drawing in ghosts & to make feel more natural
     public int currentCursedShrines; //how many shrines are currently cursed
 
+    [SerializeField] CombatMusicManager cmm;
+
     private float myTime;
     private float difficultyTimer;
     public float shrineInterval = 45f;
@@ -52,7 +54,6 @@ public class Enemy_Spawner : MonoBehaviour
 
     public void Update()
     {
-        //comment back in to get difficulty to auto scale
 
         if (difficultyTimer >= 30f)
         {
@@ -79,6 +80,17 @@ public class Enemy_Spawner : MonoBehaviour
             {
                 curseShrine(false);
             }
+        }
+    }
+
+    public void checkIfInCombat()
+    {
+        if (cursedContainer.transform.childCount > 0)
+        {
+            cmm.playerBeingChased = false;
+            for (int i = 0; i < cursedContainer.transform.childCount; i++)
+                if (cursedContainer.transform.GetChild(i).GetComponent<AI_Manager>().enemiesInCombat.Count > 0)
+                    cmm.playerBeingChased = true;
         }
     }
 

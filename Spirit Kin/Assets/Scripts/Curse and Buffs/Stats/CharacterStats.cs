@@ -99,5 +99,8 @@ public class CharacterStats : MonoBehaviour
         eco.EnemyAttack = Enemy_Controller.AttackState.Waiting;
         eco.resetSurround();
         healthBarCanvas.SetActive(false);
+
+        Enemy_Spawner es = FindObjectOfType<Enemy_Spawner>();
+        es.checkIfInCombat();
     }
 }

@@ -41,7 +41,16 @@ public class CombatMusicManager : MonoBehaviour
                 break;
             case MusicState.Begin:
                 if (!combatBGMPlayer.isPlaying)
+                {
                     changeMusicState(MusicState.Loop);
+                    break;
+                }
+                    
+                if (!playerBeingChased)
+                {
+                    changeMusicState(MusicState.End);
+                    break;
+                }
                 break;
             case MusicState.Loop:
                 if (!playerBeingChased)
