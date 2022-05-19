@@ -20,7 +20,6 @@ public class CurseMeter : MonoBehaviour
     public List<Curse> curseArray = new List<Curse>();
     public List<Curse> activeCurses = new List<Curse>();
     public GameObject[] cursesUI;
-    public GameObject Sword1, Sword2, Sword3;
     private GameObject curCurseUI;
     public Sprite Notch, weakImage, slowImage, frailImage, blindImage, invertImage, moneyImage, vampImage, teaImage, rangeImage;
     public GameObject ActiveSword;
@@ -68,8 +67,6 @@ public class CurseMeter : MonoBehaviour
 
         curCurseUI = cursesUI[0];
         curCurseUI.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = curseMeter;
-        // ActiveSword = Sword0;
-        Sword1.SetActive(false); Sword2.SetActive(false); Sword3.SetActive(false);
 
         cp = cursePopup.GetComponent<CursePopup>();
     }
@@ -90,33 +87,9 @@ public class CurseMeter : MonoBehaviour
         if (newCurse) { // If this is flipped, we need to update something about curses
             CurseHandler();
             newCurse = false;
-            HandleSword();
         }
     }
 
-    private void HandleSword () {
-        switch (activeCurses.Count) {
-            case 0:
-                Sword1.SetActive(false);
-                break;
-            case 1:
-                Sword1.SetActive(true);
-                Sword2.SetActive(false);
-                ActiveSword = Sword1;
-                break;
-            case 2:
-                Sword2.SetActive(true);
-                Sword1.SetActive(false);
-                Sword3.SetActive(false);
-                ActiveSword = Sword2;
-                break;
-            case 3:
-                Sword3.SetActive(true);
-                Sword2.SetActive(false);
-                ActiveSword = Sword3;
-                break;
-        }
-    }
 
     public void addCurse() {
         List<Curse> unactiveCurses = curseArray.Except(activeCurses).ToList();

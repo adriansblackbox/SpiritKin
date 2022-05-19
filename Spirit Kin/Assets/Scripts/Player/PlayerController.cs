@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
     [SerializeField] private float StickLookSensitivity = 200f;
+    [SerializeField] private GameObject GravitySword;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
 	[HideInInspector] public float CinemachineTargetPitch;
@@ -414,5 +415,11 @@ public class PlayerController : MonoBehaviour
     }
     public bool getInverted () {
         return input_invert < 0;
+    }
+    public void TurnGravitySwordOn() {
+        GravitySword.SetActive(true);
+    }
+    public void TurnGravitySwordOff() {
+        GravitySword.SetActive(false);
     }
 }
