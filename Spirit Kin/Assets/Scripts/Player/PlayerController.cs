@@ -265,15 +265,6 @@ public class PlayerController : MonoBehaviour
         moveDirection = moveDirection.normalized * (speed * GetComponent<PlayerStats>().speed.GetValue());
         controller.Move(moveDirection * Time.deltaTime);
     }
-    private void AttackTwoMovement(){
-        
-    }
-    private void AttackThreeMovement(){
-        
-    }
-    private void AttackFourMovement(){
-        
-    }
     private void AttackFiveMovement(){
         speed =  Mathf.Lerp(speed, 0f, Time.deltaTime * 3f);
         moveDirection = transform.GetChild(0).gameObject.transform.forward;
@@ -351,6 +342,8 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("Attack Number", 1);
         }
         animator.SetBool("Special In Motion", false);
+        if(GravitySword.activeSelf)
+            TurnGravitySwordOff();
     }
     private void RotateCamera(){
         if(GetComponent<LockTarget>().Target == null){
