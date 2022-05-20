@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class Purification : MonoBehaviour
 {
@@ -20,13 +21,15 @@ public class Purification : MonoBehaviour
     public PState PurificationState;
     public float PurificationTime = 5.0f;
     public Image PurificationMeter;
-    public GameObject VFX;
+    public VisualEffect[] VFX;
     public float HealingRate = 5f;
 
     // Start is called before the first frame update
     void Start()
     {
-        VFX.SetActive(false);
+        foreach(VisualEffect vfx in VFX) {
+            vfx.enabled = false;
+        }
         PurificationState = PState.None;
         isCursed = false;
         isPurifying = false;
@@ -39,11 +42,15 @@ public class Purification : MonoBehaviour
         //Temp VFX
         if(FindObjectOfType<CurseMeter>().activeCurses.Count > 0)
         {
-            VFX.SetActive(true);
+            foreach(VisualEffect vfx in VFX) {
+            vfx.enabled = true;
+        }
         }
         else
         {
-            VFX.SetActive(false);
+            foreach(VisualEffect vfx in VFX) {
+            vfx.enabled = false;
+        }
         }
 
         if(isPurifying){
