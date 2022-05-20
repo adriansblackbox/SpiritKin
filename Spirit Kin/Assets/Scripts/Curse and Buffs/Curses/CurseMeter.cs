@@ -114,6 +114,7 @@ public class CurseMeter : MonoBehaviour
                 curCurseUI = cursesUI[activeCurses.Count];
                 break;
             case 1:
+                cursesUI[2].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
                 cursesUI[1].transform.Find("Curse").gameObject.SetActive(false);
                 cursesUI[1].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
                 cursesUI[0].transform.Find("Curse").gameObject.SetActive(true);
@@ -121,6 +122,8 @@ public class CurseMeter : MonoBehaviour
                 curCurseUI = cursesUI[activeCurses.Count];
                 break;
             case 0:
+                cursesUI[2].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
+                cursesUI[1].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
                 cursesUI[0].transform.Find("Curse").gameObject.SetActive(false);
                 cursesUI[0].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
                 curCurseUI = cursesUI[activeCurses.Count];
