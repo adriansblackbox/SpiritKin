@@ -39,7 +39,7 @@ public class Player_sfx : MonoBehaviour
     {
         dodgeSoundPlaying = true;
         AudioClip clip = GetRandomClip(Dodgeclips);
-        audioSource.pitch = Random.Range(1f, 2f);
+        //audioSource.pitch = Random.Range(1f, 1.5f);
         audioSource.PlayOneShot(clip);
     }
 
