@@ -207,6 +207,7 @@ public class PlayerController : MonoBehaviour
     //====================================================
     private void DashMovement(){
         moveDirection = transform.GetChild(0).transform.forward.normalized;
+        moveDirection.y = Gravity;
         controller.Move(moveDirection * DashSpeed * Time.deltaTime);
     }
 
