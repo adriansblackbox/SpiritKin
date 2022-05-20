@@ -211,7 +211,6 @@ public class PlayerController : MonoBehaviour
     }
 
     private void DashInvisiblityOn(){
-        StartDashMovement();
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(false);
         }
@@ -376,6 +375,7 @@ public class PlayerController : MonoBehaviour
     //===========================================================
     public void Stun() {
         AnimationStart();
+        DashInvisiblityOff();
         animator.SetBool("Stunned", true);
         animator.SetLayerWeight(1, 1);
         animator.SetLayerWeight(0, 0);
