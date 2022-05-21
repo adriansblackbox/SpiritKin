@@ -75,6 +75,8 @@ public class Enemy_Controller : MonoBehaviour
     public bool stunned = false;
     public bool immuneToStun = false;
 
+    private bool inCombat;
+
     private string[] stunAnimTriggers = { "Stun 1L", "Stun 1R", "Stun 2L", "Stun 2R"};
 
     private Vector3 lastLooking = Vector3.zero;
@@ -360,19 +362,24 @@ public class Enemy_Controller : MonoBehaviour
         else
             ai.enemiesIdling.Remove(gameObject);
 
-        if (targetState == MotionState.Chasing)
+        if (targetState == MotionState.Chasing && !inCombat)
         {
             ai.enemiesInCombat.Add(gameObject);
-            FindObjectOfType<CombatMusicManager>().playerBeingChased = true;
-        }  
-        else
+            inCombat = true;
+        }
+
+        if (targetState == MotionState.Relocating && inCombat)
+        {
             ai.enemiesInCombat.Remove(gameObject);
+        }
 
         if (targetState == MotionState.Stunned && EnemyMotion == MotionState.Surrounding) resetSurround();
 
         if (EnemyMotion == MotionState.Stunned) resetKnockback();
 
         EnemyMotion = targetState;
+        
+        es.checkIfInCombat();
 
         Log("Changed Motion State -> " + targetState);
     }
@@ -861,7 +868,7 @@ public class Enemy_Controller : MonoBehaviour
                 {
                     Log("Player Detected!");
                     ThisEnemy.ResetPath();
-                    EnemyMotion = MotionState.Chasing;
+                    changeState(MotionState.Chasing);
                 }
             }
         }
@@ -876,7 +883,7 @@ public class Enemy_Controller : MonoBehaviour
                 {
                     Log("Player Detected!");
                     ThisEnemy.ResetPath();
-                    EnemyMotion = MotionState.Chasing;
+                    changeState(MotionState.Chasing);
                 }
             }
         }

@@ -73,7 +73,7 @@ public class Enemy_Spawner : MonoBehaviour
                 }
             }
         }
-        else if (myTime > shrineInterval) 
+        else if (myTime > shrineInterval)
         {
             myTime = 0;
             if (nonCursedContainer.transform.childCount > 0)
@@ -91,6 +91,10 @@ public class Enemy_Spawner : MonoBehaviour
             for (int i = 0; i < cursedContainer.transform.childCount; i++)
                 if (cursedContainer.transform.GetChild(i).GetComponent<AI_Manager>().enemiesInCombat.Count > 0)
                     cmm.playerBeingChased = true;
+        }
+        else
+        {
+            cmm.playerBeingChased = false;
         }
     }
 
