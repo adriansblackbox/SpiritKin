@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float SpeedChangeRate = 10.0f;
     [SerializeField] private float MouseSensitivity = 200f;
     [SerializeField] private float StickLookSensitivity = 200f;
+    [SerializeField] private GameObject GravitySword;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
 	[HideInInspector] public float CinemachineTargetPitch;
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
     public GameObject[] DashInvisibleObjects;
     private float input_x, input_y;
     private int input_invert = 1;
+    private float dashTimeIter;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
     public float Gravity = -30f;
@@ -69,9 +71,9 @@ public class PlayerController : MonoBehaviour
         // else, base movement off of attack when attack allows movement
         if(Animator.StringToHash("Base.Move Tree") == animator.GetCurrentAnimatorStateInfo(0).fullPathHash && animator.GetLayerWeight(1) != 1)
             Movement();
-        else if(animator.GetBool("Attack Movement"))
+        if(animator.GetBool("Attack Movement"))
             AttackMovement();
-        else if(animator.GetBool("Dash Movement"))
+        if(animator.GetBool("Dash Movement"))
             DashMovement();
         if (animator.GetFloat("Dash Cooldown") >= 0) {
             animator.SetFloat("Dash Cooldown", animator.GetFloat("Dash Cooldown") - Time.deltaTime);
@@ -185,7 +187,6 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Dash Attack", true);
     }
     private void StartDashMovement(){
-        animator.SetBool("Dash Movement", true);
         // resets attack delay in the case that the player dashes before the delay window closes
         animator.SetFloat("Attack Delay", 0);
         animator.SetInteger("Attack Number", 1);
@@ -194,6 +195,7 @@ public class PlayerController : MonoBehaviour
             targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
             transform.GetChild(0).transform.rotation = Quaternion.Euler(0.0f, targetRotation, 0.0f);
         }
+        animator.SetBool("Dash Movement", true);
     }
     private void DashEnd(){
         animator.SetBool("Dash End", true);
@@ -205,21 +207,14 @@ public class PlayerController : MonoBehaviour
     //====================================================
     private void DashMovement(){
         moveDirection = transform.GetChild(0).transform.forward.normalized;
-        speed = DashSpeed;
-        controller.Move(moveDirection * speed * Time.deltaTime);
+        moveDirection.y = Gravity;
+        controller.Move(moveDirection * DashSpeed * Time.deltaTime);
     }
 
     private void DashInvisiblityOn(){
-        StartDashMovement();
-        for(int i = 0; i < DashInvisibleObjects.Length; i++)
+        for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(false);
-        StartCoroutine(DashInvisibleTime());
-    }
-    IEnumerator DashInvisibleTime () {
-        animator.speed = 0;
-        yield return new WaitForSeconds(DashTime);
-        animator.speed = 1;
-        yield return null;
+        }
     }
     private void DashInvisiblityOff(){
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
@@ -269,15 +264,6 @@ public class PlayerController : MonoBehaviour
         moveDirection.y = Gravity;
         moveDirection = moveDirection.normalized * (speed * GetComponent<PlayerStats>().speed.GetValue());
         controller.Move(moveDirection * Time.deltaTime);
-    }
-    private void AttackTwoMovement(){
-        
-    }
-    private void AttackThreeMovement(){
-        
-    }
-    private void AttackFourMovement(){
-        
     }
     private void AttackFiveMovement(){
         speed =  Mathf.Lerp(speed, 0f, Time.deltaTime * 3f);
@@ -356,6 +342,8 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("Attack Number", 1);
         }
         animator.SetBool("Special In Motion", false);
+        if(GravitySword.activeSelf)
+            TurnGravitySwordOff();
     }
     private void RotateCamera(){
         if(GetComponent<LockTarget>().Target == null){
@@ -381,6 +369,7 @@ public class PlayerController : MonoBehaviour
     //===========================================================
     public void Stun() {
         AnimationStart();
+        DashInvisiblityOff();
         animator.SetBool("Stunned", true);
         animator.SetLayerWeight(1, 1);
         animator.SetLayerWeight(0, 0);
@@ -420,5 +409,11 @@ public class PlayerController : MonoBehaviour
     }
     public bool getInverted () {
         return input_invert < 0;
+    }
+    public void TurnGravitySwordOn() {
+        GravitySword.SetActive(true);
+    }
+    public void TurnGravitySwordOff() {
+        GravitySword.SetActive(false);
     }
 }

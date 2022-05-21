@@ -85,7 +85,7 @@ public class TeaShop : MonoBehaviour
             Instruct1.GetComponent<Text>().text = "LB";
             Instruct2.GetComponent<Text>().text = "RB";
             //get textmeshpro text
-            triggerText.GetComponent<TextMeshProUGUI>().text = "Press X to open shop";
+            triggerText.GetComponent<TextMeshProUGUI>().text = "Press Y to open shop";
             
 
             if (eventSystem.currentSelectedGameObject == null)
@@ -96,7 +96,7 @@ public class TeaShop : MonoBehaviour
         }
 
         if (
-            (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("X Button")) &&
+            (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("Y Button")) &&
             isInteractable &&
             !isOpen &&
             !pauseMenu.GameIsPaused
