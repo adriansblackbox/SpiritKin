@@ -4,49 +4,57 @@ using UnityEngine;
 
 public class follow : MonoBehaviour
 {
-    public Transform Target;
+    private Vector3 velocity = Vector3.up;
+    private Rigidbody rb;
+    private Vector3 startPosition;
+    private bool isFollowing = false;
 
-    Vector3 _velocity = Vector3.zero;
-
-    public float speed;
-
-    public float MinModifier = 7;
-
-    public float MaxModifier = 11;
-
-    public bool _isFollowing = false;
-
-    // private void OnTriggerStay(Collider other){
-    //     if (other.CompareTag("Player")){
-    //         _isFollowing = true;
-    //     }
-    // }
-
-    // Start is called before the first frame update
     void Start()
     {
         
+        startPosition = this.transform.position;
+        velocity *= Random.Range(4f, 6f);//random upward velocity
+        velocity += new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));//random outward velocity
+
+        rb = this.GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.isKinematic = true;
     }
 
-    public void StartFollowing()
-    {
-        // GetComponent<Animator>().
-        _isFollowing = true;
-    }
+    void Update(){
+        rb.position += velocity * Time.deltaTime;//update position
 
-    // Update is called once per frame
-    async void Update()
-    {
-        if (_isFollowing)
+        Quaternion deltaRotation = Quaternion.Euler(new Vector3(Random.Range(-150f, 150f), Random.Range(150f, 250f), Random.Range(-150f, 150f)) * Time.deltaTime);//random rotation
+        rb.MoveRotation(rb.rotation * deltaRotation);//slight rotation
+
+        if(velocity.y <-4f){
+            velocity.y = -4f;
+        }else
         {
-            float step = speed * Time.deltaTime;
-            transform.position =
-                Vector3
-                    .MoveTowards(transform.position,
-                    new Vector3(Target.position.x,
-                        Target.position.y + 10,
-                        Target.position.z),
-                    step);
+            velocity -= Vector3.up * 5 * Time.deltaTime;//gravity
+        }
+
+        if(Mathf.Abs(rb.position.y - startPosition.y) < 0.25f && velocity.y < 0f){
+            //remove all forces
+            rb.velocity = Vector3.zero;
+            //make the collider is trigger
+            this.GetComponent<Collider>().isTrigger = true;
+
+            isFollowing = true;
+            
+
+        }
+        if(isFollowing){
+            //fly to player
+            
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(GameObject.Find("Player").transform.position.x, GameObject.Find("Player").transform.position.y+2, GameObject.Find("Player").transform.position.z), 10f * Time.deltaTime);
+        }
+    }
+
+    //destroy the object when colliding with the player
+    void OnTriggerEnter(Collider collision){
+        if(collision.gameObject.tag == "Player"){
+            Destroy(this.gameObject);
         }
     }
 }

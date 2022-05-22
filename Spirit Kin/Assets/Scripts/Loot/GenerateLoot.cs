@@ -4,22 +4,70 @@ using UnityEngine;
 
 public class GenerateLoot : MonoBehaviour
 {
-    public GameObject thisObj;
-    public GameObject myPrefab;
-    public GameObject thePlayer;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private List<GameObject> loot = new List<GameObject>();
+
+    [SerializeField]
+    [Range(1, 99)]
+    private int minNumber = 7;
+
+    [Range(2, 100)]
+    private int maxNumber = 20;
+
+    [SerializeField]
+    private Transform spawnPoint;
+
+    private bool hasBeenCollected = false;
+
+    [SerializeField]
+    private bool spawnLoot = false;
+
+    private GameObject[] totalCoins;
+
+    private void OnValidate()
     {
-       thePlayer = GameObject.FindGameObjectWithTag("Player");
+        if (minNumber > maxNumber)
+        {
+            maxNumber = minNumber + 1;
+        }
     }
 
-    // Update is called once per frame
+    void Awake(){
+
+    }
+
     void Update()
     {
+        
         if(Input.GetKeyDown(KeyCode.E)){
-            GameObject newOne = Instantiate(myPrefab, transform.position, Quaternion.identity);
-            newOne.GetComponent<follow>().Target = thePlayer.transform;
-            Destroy(thisObj);
+            spawnLoot = true;
         }
+
+        if (spawnLoot && !hasBeenCollected)
+        {
+            spawnLoot = false;
+
+            Loot();
+        }
+    }
+
+    private void Loot()
+    {
+        hasBeenCollected = true;
+        int numberOfLoot = Random.Range(minNumber, maxNumber);
+        StartCoroutine(CreateLoot(numberOfLoot));
+        
+    }
+
+    IEnumerator CreateLoot(int numberOfLoot)
+    {
+        for (int i = 0; i < numberOfLoot; i++)
+        {
+            GameObject tempLoot =
+                Instantiate(loot[Random.Range(0, loot.Count)],
+                spawnPoint.position,
+                Quaternion.identity);
+        }
+        yield return new WaitForSeconds(0.15f);
     }
 }
