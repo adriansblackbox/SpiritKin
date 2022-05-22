@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.63
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1159954109}
-  m_IndirectSpecularColor: {r: 0.35871217, g: 0.39981827, b: 0.46450818, a: 0.63}
+  m_IndirectSpecularColor: {r: 0.35871235, g: 0.39981884, b: 0.46450913, a: 0.63}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -47828,6 +47828,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5503858658224013209}
     - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
+      propertyPath: heyAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: e73dad4b8497a15488b15b083f435f56, type: 3}
+    - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
       propertyPath: firstBuff
       value: 
       objectReference: {fileID: 1299848957}
@@ -47955,6 +47959,22 @@ PrefabInstance:
       propertyPath: secondCurseIntendedPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
+      propertyPath: loopingDialogueAudio.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: b27a10b895002f342800c1cee1274a5b, type: 3}
+    - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
+      propertyPath: loopingDialogueAudio.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: d04f92eba3e29d945a512bc2b14305bb, type: 3}
+    - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
+      propertyPath: loopingDialogueAudio.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 9d44d8fc890dbe24997a19f8eefdb37f, type: 3}
+    - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
+      propertyPath: loopingDialogueAudio.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: e73dad4b8497a15488b15b083f435f56, type: 3}
     - target: {fileID: 706956127995063213, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
       propertyPath: OutputAudioMixerGroup
       value: 
