@@ -51,11 +51,14 @@ public class TeaShopManager : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private PlayerData pd;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
+        pd = FindObjectOfType<PlayerData>();
     }
 
     void Awake()
@@ -110,6 +113,7 @@ public class TeaShopManager : MonoBehaviour
             //update coins
             playStats.coins -= currentBuff.Cost;
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
+            pd.addBuffsPurchased(1);
 
             //add buffs to player
             playStats.addBuff (currentBuff);

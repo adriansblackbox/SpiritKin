@@ -24,10 +24,13 @@ public class CharacterStats : MonoBehaviour
     public GameObject healthBar;
 
     public GameObject player;
+
+    private PlayerData pd;
     
-    void Start ()
+    void Start()
     {
-        
+        pd = FindObjectOfType<PlayerData>();
+
         if (gameObject.tag == "Player")
         {
             player = gameObject;
@@ -52,6 +55,7 @@ public class CharacterStats : MonoBehaviour
         damage = Mathf.Clamp(damage, 0.05f * currentHealth, float.MaxValue);
 
         currentHealth -= damage;
+        pd.addDamageDealt((int)damage); //add damage dealt to stats
         currentHealth = Mathf.Clamp(currentHealth, 0, float.MaxValue);
         
         if (currentHealth != maxHealth && currentHealth > 0) healthBarCanvas.SetActive(true);
@@ -81,7 +85,7 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void Die () {
         isDying = true;
-        Debug.Log("Enemy died!");
+        pd.addSpiritDefeated(1);
         gameObject.layer = 12;
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject))
             FindObjectOfType<SwordCollision>().immuneEnemies.Remove(this.gameObject);

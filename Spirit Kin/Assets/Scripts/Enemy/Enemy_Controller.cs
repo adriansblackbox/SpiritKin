@@ -75,6 +75,8 @@ public class Enemy_Controller : MonoBehaviour
     public bool stunned = false;
     public bool immuneToStun = false;
 
+    private bool setRelocateSpot;
+
     private bool inCombat;
 
     private string[] stunAnimTriggers = { "Stun 1L", "Stun 1R", "Stun 2L", "Stun 2R"};
@@ -189,58 +191,66 @@ public class Enemy_Controller : MonoBehaviour
         switch (EnemyMotion)
         {
             case MotionState.Idling:
-                ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 2.5f;
                 //If enemy has reached destination find next waypoint
-                if (ThisEnemy.remainingDistance <= ThisEnemy.stoppingDistance) {
+                if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance) {
                     ThisEnemy.SetDestination(findNextWaypoint());
                 }
                 break;
 
             case MotionState.Relocating:
-                ThisEnemy.speed = chaseSpeed + 5f;
-                ThisEnemy.stoppingDistance = 5f;
-
                 //Debugging
                 if (unstuckingCheck == Vector3.zero) {
                     StartCoroutine(unstuckTimer());
                 }
 
-                //If enemy has reached destination set EnemyMotion -> MotionState.Idling
-                if (path.status == NavMeshPathStatus.PathComplete && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && relocateSpot != Vector3.zero)
+                if (relocateSpot == Vector3.zero) //Choose a spot && calculate the path
                 {
-                    ThisEnemy.ResetPath();
-                    changeState(MotionState.Idling);
-                    break;
-                }
-
-                //If relocate spot is invalid select another
-                if (relocateSpot == Vector3.zero)
+                    Log("Chose a Relocate Spot");
                     relocateSpot = es.chooseLocation(shrine).position;
-                else
                     ThisEnemy.CalculatePath(relocateSpot, path);
-
-                if (path.status == NavMeshPathStatus.PathComplete)
-                    ThisEnemy.SetDestination(relocateSpot);
+                }
+                else //If the enemy already has a spot
+                {
+                    if (path.status == NavMeshPathStatus.PathComplete && !ThisEnemy.pathPending) //Path calculation to the chosen spot has been completed
+                    {
+                        if (!setRelocateSpot) //set destination to the chosen spot
+                        {
+                            Log("Set Destination to Relocate Spot");
+                            ThisEnemy.SetDestination(relocateSpot);
+                            setRelocateSpot = true;
+                        } 
+                        else if (ThisEnemy.remainingDistance != 0 && ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance) //if reached the chosen spot then changeStates to idling
+                        {
+                            Log("Reached Relocate Spot");
+                            relocateSpot = Vector3.zero;
+                            setRelocateSpot = false;
+                            changeState(MotionState.Idling);
+                            Log("EnemyMotion: Relocating -> Idling");
+                            break;
+                        }
+                    }
+                    else if (path.status != NavMeshPathStatus.PathComplete && !ThisEnemy.pathPending)
+                    {
+                        Log("Chose New Relocate Spot");
+                        relocateSpot = es.chooseLocation(shrine).position; 
+                    }
+                }
                 break;
 
             case MotionState.Chasing:
-                ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 10f;
-
+                //If enemy has left the arena set EnemyMotion -> MotionState.Relocating
+                if (exitedArena)
+                {
+                    exitedArena = false;
+                    changeState(MotionState.Relocating);
+                    Log("EnemyMotion: Chasing -> Relocating");
+                    break;
+                }
+                
                 List<GameObject> nearbyEnemies = ai.getNearbyEnemies(gameObject);
                 foreach (GameObject gameObj in nearbyEnemies)
                 {
                     gameObj.SendMessage("changeState", MotionState.Chasing);
-                }
-
-                //If enemy has left the arena set EnemyMotion -> MotionState.Relocating
-                if (exitedArena)
-                {
-                    ThisEnemy.ResetPath();
-                    exitedArena = false;
-                    changeState(MotionState.Relocating);
-                    break;
                 }
 
                 //If the enemy's distance to the player is less than breakDist EnemyMotion -> MotionState.Surrounding
@@ -259,11 +269,8 @@ public class Enemy_Controller : MonoBehaviour
                 break;
 
             case MotionState.Surrounding:
-                ThisEnemy.speed = chaseSpeed;
-                ThisEnemy.stoppingDistance = 5f;
 
-                //replace with slerp
-                if (timeSlerping < durationOfSlerp / 2)
+                if (timeSlerping < durationOfSlerp / 2) //turn the enemy to look at the player when entering surrounding (specifically for after attacking)
                 {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirVec), timeSlerping);
                     transform.rotation = Quaternion.Euler(new Vector3(0f, transform.eulerAngles.y, 0f));
@@ -330,8 +337,6 @@ public class Enemy_Controller : MonoBehaviour
                 break;
             
             case MotionState.Stunned:
-                
-                Log("Stunned");
                 transform.LookAt(lastLooking);
                 transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 
@@ -351,6 +356,8 @@ public class Enemy_Controller : MonoBehaviour
     {
         if (EnemyMotion == targetState) return;
 
+        if (targetState == MotionState.Chasing && EnemyMotion == MotionState.Relocating) return;
+
         if (EnemyMotion == MotionState.Surrounding) 
         {
             ai.enemiesReadyToAttack.Remove(gameObject);
@@ -361,6 +368,8 @@ public class Enemy_Controller : MonoBehaviour
             ai.enemiesIdling.Add(gameObject);
         else
             ai.enemiesIdling.Remove(gameObject);
+
+
 
         if (targetState == MotionState.Chasing && !inCombat)
         {
@@ -377,11 +386,16 @@ public class Enemy_Controller : MonoBehaviour
 
         if (EnemyMotion == MotionState.Stunned) resetKnockback();
 
+        if (targetState == MotionState.Relocating)
+            ThisEnemy.speed = chaseSpeed + 5f;
+        else
+            ThisEnemy.speed = chaseSpeed;
+
+        ThisEnemy.ResetPath();
+
         EnemyMotion = targetState;
         
         es.checkIfInCombat();
-
-        Log("Changed Motion State -> " + targetState);
     }
 
     public void beginStun()
@@ -591,7 +605,6 @@ public class Enemy_Controller : MonoBehaviour
         
     private void getAttack()
     {
-        Log("Entered getAttack()");
         ai.enemiesReadyToAttack.Remove(gameObject);
 
         Vector3 dirToPlayer = player.transform.position - transform.position;
@@ -842,12 +855,25 @@ public class Enemy_Controller : MonoBehaviour
     {
         unstuckingCheck = transform.position;
         yield return new WaitForSeconds(0.5f);
-        if(Vector3.Distance(unstuckingCheck, transform.position) < 1.0f)
+        if (Vector3.Distance(unstuckingCheck, transform.position) < 1.0f)
         {
-            // Move enemy towards the shrine in some way
+            
             Log("Help, I'm stuck!");
             unstuckingCheck = Vector3.zero;
             Log(path.status);
+
+            ThisEnemy.ResetPath();
+            relocateSpot = Vector3.zero;
+            // Move enemy towards shrine to help them get unstuck
+            Vector3 tempDirVec = shrine.position - transform.position;
+            float timer = 0.1f;
+            float currTime = 0.0f;
+            while (currTime < timer)
+            {
+                currTime += Time.deltaTime;
+                transform.position = Vector3.Lerp(transform.position, transform.position + tempDirVec.normalized * 0.05f, currTime/timer);
+                yield return new WaitForSeconds(0.01f);
+            }   
         }
         else
         {

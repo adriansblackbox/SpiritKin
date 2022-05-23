@@ -39,8 +39,11 @@ public class CurseMeter : MonoBehaviour
 
     public bool deathWipe = false;
 
+    private PlayerData pd;
+
     // Start is called before the first frame update
     private void Start() {
+        pd = FindObjectOfType<PlayerData>();
         newCurse = false;
         curseMeter = 0f;
         pStats = gameObject.GetComponent<PlayerStats>();
@@ -151,7 +154,7 @@ public class CurseMeter : MonoBehaviour
         }
         int i = Random.Range(0, activeCurses.Count - 1);
 
-        
+        pd.addCursesPurified(1);
         pStats.currentHealthCap += 0.17f;
         // pStats.damage.AddBaseValue(-5.0f);
         swordRangeBlessing.baseValue -= 2.0f;

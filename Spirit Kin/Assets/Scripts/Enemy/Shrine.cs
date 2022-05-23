@@ -8,6 +8,7 @@ public class Shrine : MonoBehaviour
     private Enemy_Spawner es;
     private AI_Manager ai;
     private GameManager gm;
+    private PlayerData pd;
 
     public bool cursed;
     public float shrineSpawnRange;
@@ -41,6 +42,7 @@ public class Shrine : MonoBehaviour
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
         ai = GetComponent<AI_Manager>();
         gm = FindObjectOfType<GameManager>();
+        pd = FindObjectOfType<PlayerData>();
         Beacon.SetActive(false);
         ai.generateSurroundLocations();
     }
@@ -60,6 +62,7 @@ public class Shrine : MonoBehaviour
             amountAlreadySpawned = 0;
             transform.parent = nonCursedContainer.transform;
             es.currentCursedShrines--;
+            pd.addShrinePurified(1);
         }
 
         if (CurCurseTime < TotalCurseTime && cursed && !FindObjectOfType<MainHub>().playerInHub) {

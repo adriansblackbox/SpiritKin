@@ -59,7 +59,6 @@ public class AI_Manager : MonoBehaviour
                     attackingEnemy.GetComponent<Enemy_Controller>().ThisEnemy.ResetPath();
                     attackingEnemy.GetComponent<Enemy_Controller>().movementQueue.Clear();
                     attackingEnemy.GetComponent<Enemy_Controller>().EnemyAttack = Enemy_Controller.AttackState.Attacking;
-                    Debug.Log("Selected Enemy");
                 }
                 else
                 {

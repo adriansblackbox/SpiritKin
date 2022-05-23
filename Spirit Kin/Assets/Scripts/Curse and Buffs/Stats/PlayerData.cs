@@ -29,6 +29,23 @@ public class PlayerData : MonoBehaviour
     public GameObject WeaponPurchasedUI;
     public GameObject DistanceTraveledUI;
 
+    private GameManager gm;
+    private float myTime;
+
+    void Start()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
+
+    void FixedUpdate()
+    {
+        myTime += Time.deltaTime;
+        if (myTime > 1.0f)
+        {
+            addTimeSurvived(1);
+            myTime = 0f;
+        }    
+    }
 
     //PlayerData Constructor
     public PlayerData()
@@ -46,43 +63,43 @@ public class PlayerData : MonoBehaviour
     }
 
     //setters
-    public void addGoldEarned(long gold)
+    public void addGoldEarned(int gold)
     {
         GoldEarned += gold;
     }
-    public void addDamageDealt(long damage)
+    public void addDamageDealt(int damage) //implemented
     {
         DamageDealt += damage;
     }
-    public void addDamageTaken(long damage)
+    public void addDamageTaken(int damage) //implemented
     {
         DamageTaken += damage;
     }
-    public void addTimeSurvived(long time)
+    public void addTimeSurvived(int time) //implemented
     {
         TimeSurvived += time;
     }
-    public void addSpiritDefeated(long spirit)
+    public void addSpiritDefeated(int spirit) //implemented
     {
         SpiritDefeated += spirit;
     }
-    public void addShrinePurified(long shrine)
+    public void addShrinePurified(int shrine) //implemented
     {
         ShrinePurified += shrine;
     }
-    public void addCursesPurified(long curse)
+    public void addCursesPurified(int curse) //implemented
     {
         CursesPurified += curse;
     }
-    public void addBuffsPurchased(long buff)
+    public void addBuffsPurchased(int buff) //implemented
     {
         BuffsPurchased += buff;
     }
-    public void addWeaponPurchased(long weapon)
+    public void addWeaponPurchased(int weapon)
     {
         WeaponPurchased += weapon;
     }
-    public void addDistanceTraveled(long distance)
+    public void addDistanceTraveled(int distance)
     {
         DistanceTraveled += distance;
     }
@@ -93,7 +110,7 @@ public class PlayerData : MonoBehaviour
         GoldEarnedUI.GetComponent<Text>().text = "Gold Earned: " + GoldEarned;
         DamageDealtUI.GetComponent<Text>().text = "Damage Dealt: " + DamageDealt;
         DamageTakenUI.GetComponent<Text>().text = "Damage Taken: " + DamageTaken;
-        TimeSurvivedUI.GetComponent<Text>().text = "Time Survived: " + TimeSurvived;
+        TimeSurvivedUI.GetComponent<Text>().text = "Time Survived: " + TimeSurvived/60 + ":" + TimeSurvived%60;
         SpiritDefeatedUI.GetComponent<Text>().text = "Spirit Defeated: " + SpiritDefeated;
         ShrinePurifiedUI.GetComponent<Text>().text = "Shrine Purified: " + ShrinePurified;
         CursesPurifiedUI.GetComponent<Text>().text = "Curses Purified: " + CursesPurified;

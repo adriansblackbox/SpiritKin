@@ -83,7 +83,7 @@ public class Enemy_Spawner : MonoBehaviour
         }
     }
 
-    public void checkIfInCombat()
+    public void checkIfInCombat() //need to add another layer that ensures all of the enemies have been spawned before setting to false
     {
         if (cursedContainer.transform.childCount > 0)
         {
@@ -220,7 +220,7 @@ public class Enemy_Spawner : MonoBehaviour
             spawnPoint.z += Random.Range(shrineScript.posLower, shrineScript.posUpperZ);
         }
         //Navmesh.SamplePosition on the random position
-        NavMesh.SamplePosition(spawnPoint, out hit, 100.0f, NavMesh.AllAreas);
+        NavMesh.SamplePosition(spawnPoint, out hit, 50.0f, NavMesh.AllAreas);
         return (hit);
     }
 

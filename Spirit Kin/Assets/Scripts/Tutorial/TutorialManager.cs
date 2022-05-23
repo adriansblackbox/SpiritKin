@@ -17,7 +17,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] bool shownPool;
 
     [Header("Conditionals For UI")]
-    [SerializeField] bool movingUIElement;
+    public bool movingUIElement;
     [SerializeField] bool shownCoins;
     [SerializeField] bool shownTeas;
     [SerializeField] bool shownCurses;
@@ -191,7 +191,11 @@ public class TutorialManager : MonoBehaviour
         }
         moveTime = 0f;
         coinObject.transform.GetChild(1).gameObject.SetActive(true);
+        
+        yield return new WaitForSeconds(0.25f);
         movingUIElement = false;
+        //fade in coin descriptor
+            //lerp from 0 alpha to 1 on text color + background sprite color
         coinDescriptor.SetActive(true);
     }
 
@@ -234,8 +238,10 @@ public class TutorialManager : MonoBehaviour
             yield return new WaitForSeconds(0.001f);
         }
         moveTime = 0f;
-        
+        yield return new WaitForSeconds(0.25f);
         movingUIElement = false;
+        //fade in buff descriptor
+            //lerp from 0 alpha to 1 on text color + background sprite color
         buffDescriptor.SetActive(true);
     }
 
@@ -278,8 +284,10 @@ public class TutorialManager : MonoBehaviour
             yield return new WaitForSeconds(0.001f);
         }
         moveTime = 0f;
-
+        yield return new WaitForSeconds(0.25f);
         movingUIElement = false;
+        //fade in curse descriptor
+            //lerp from 0 alpha to 1 on text color + background sprite color
         curseDescriptor.SetActive(true);
     }
 

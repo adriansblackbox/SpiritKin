@@ -25,7 +25,7 @@ public class ScrollingText : MonoBehaviour
     private void Update()
     {
         //flicker arrow
-        if (!typing && !tm.showingNonPlayerCamera)
+        if (!typing && !tm.showingNonPlayerCamera && !tm.movingUIElement)
         {
             myTime += Time.deltaTime;
             if (myTime > 0.5f)
@@ -52,13 +52,11 @@ public class ScrollingText : MonoBehaviour
 
     public void ActivateText()
     {
-        Debug.Log("Activating Text");
         StartCoroutine("AnimateText");
     }
 
     public void DeactivateText()
     {
-        Debug.Log("Deactivating Text");
         StopCoroutine("AnimateText");
         typing = false;
         dialogueText.text = dialogueLines[currentDisplayingText];

@@ -17,10 +17,14 @@ public class PlayerStats : CharacterStats
     public bool noCoindens = false;
     public int moneyCurseLock = 0;
 
+    private PlayerData pd;
+
     void Start()
     {
         //set player starting coins here
         //coins = 1000;
+
+        pd = FindObjectOfType<PlayerData>();
         currentHealth = maxHealth;
         for(int i = 0; i < BuffsUI.Count; i++) {
             BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
@@ -200,6 +204,7 @@ public class PlayerStats : CharacterStats
         damage = Mathf.Clamp(damage, 0, maxHealth * 0.9f);
 
         currentHealth -= damage;
+        pd.addDamageTaken((int)damage); //add damage taken to stats
         currentHealth = Mathf.Clamp(currentHealth, 0, float.MaxValue);
 
         if(noCoindens) coins -= (int)((float)coins * curseMeter.kromer.GetValue());
