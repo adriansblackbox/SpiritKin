@@ -84,6 +84,7 @@ public class CurseMeter : MonoBehaviour
         }
 
         if (deathWipe) { // Debug to remove all curses
+            curseMeter = 0f;
             removeCurse();
         }
 
