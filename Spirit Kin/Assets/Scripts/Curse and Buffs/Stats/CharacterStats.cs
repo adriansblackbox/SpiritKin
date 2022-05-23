@@ -25,7 +25,7 @@ public class CharacterStats : MonoBehaviour
 
     public GameObject player;
 
-    private PlayerData pd;
+    public PlayerData pd;
     
     void Start()
     {

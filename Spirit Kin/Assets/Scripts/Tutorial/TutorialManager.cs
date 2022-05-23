@@ -84,10 +84,6 @@ public class TutorialManager : MonoBehaviour
             firstCurse.SetActive(true);
             secondCurse.SetActive(true);
             thirdCurse.SetActive(true);
-            poolCamera1.GetComponent<Camera>().enabled = false;
-            poolCamera2.GetComponent<Camera>().enabled = false;
-            poolCamera3.GetComponent<Camera>().enabled = false;
-            shrineCamera.GetComponent<Camera>().enabled = false;
         }
     }
 

@@ -10035,7 +10035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25.7
+      value: 24.77
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 16298503ed1f1fe4db7ca3f1b7ada05b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17483,7 +17483,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 516629384}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -36364,7 +36364,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1041161305}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -47946,7 +47946,7 @@ PrefabInstance:
       objectReference: {fileID: 986522611}
     - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
       propertyPath: tutorialOn
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
       propertyPath: poolCamera1
@@ -48063,7 +48063,7 @@ PrefabInstance:
     - target: {fileID: 706956127995063212, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
       propertyPath: loopingDialogueAudio.Array.data[3]
       value: 
-      objectReference: {fileID: 8300000, guid: e73dad4b8497a15488b15b083f435f56, type: 3}
+      objectReference: {fileID: 8300000, guid: 736650a88fa47c74c994ad3b7789a807, type: 3}
     - target: {fileID: 706956127995063213, guid: 0c0117b61ae5e69459b834e584db9139, type: 3}
       propertyPath: OutputAudioMixerGroup
       value: 
@@ -48257,7 +48257,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1390684327}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -53176,7 +53176,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1550955663}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -83082,6 +83082,10 @@ PrefabInstance:
       propertyPath: tm
       value: 
       objectReference: {fileID: 1380435799}
+    - target: {fileID: 1321919434, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+      propertyPath: textSpeed
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 4957946771616478774, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
       propertyPath: moneyCurseImage
       value: 

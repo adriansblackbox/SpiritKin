@@ -17,8 +17,6 @@ public class PlayerStats : CharacterStats
     public bool noCoindens = false;
     public int moneyCurseLock = 0;
 
-    private PlayerData pd;
-
     void Start()
     {
         //set player starting coins here
