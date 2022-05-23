@@ -22,7 +22,7 @@ public class PlayerStats : CharacterStats
         //set player starting coins here
         //coins = 1000;
 
-        pd = FindObjectOfType<PlayerData>();
+        pd = FindObjectOfType<PlayerData>(); 
         currentHealth = maxHealth;
         for(int i = 0; i < BuffsUI.Count; i++) {
             BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
