@@ -66974,6 +66974,10 @@ PrefabInstance:
       propertyPath: m_Lens.FarClipPlane
       value: 5000
       objectReference: {fileID: 0}
+    - target: {fileID: 3983889503392381751, guid: 856421f51f173334db8869436d22e256, type: 3}
+      propertyPath: m_Lens.NearClipPlane
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 3983889503560304385, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_Follow
       value: 
@@ -66981,6 +66985,10 @@ PrefabInstance:
     - target: {fileID: 3983889503560304385, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_Lens.FarClipPlane
       value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983889503560304385, guid: 856421f51f173334db8869436d22e256, type: 3}
+      propertyPath: m_Lens.NearClipPlane
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8302912074825007496, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_Name
@@ -66992,7 +67000,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8302912074825007502, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: near clip plane
-      value: 0.001
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8302912074825007505, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_RootOrder
@@ -67069,6 +67077,10 @@ PrefabInstance:
     - target: {fileID: 8302912075276437619, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_Lens.FarClipPlane
       value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302912075276437619, guid: 856421f51f173334db8869436d22e256, type: 3}
+      propertyPath: m_Lens.NearClipPlane
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 856421f51f173334db8869436d22e256, type: 3}
