@@ -24,7 +24,6 @@ public class Shrine : MonoBehaviour
     private float myTime = 3f;
     public float TotalCurseTime = 90f;
     public float CurCurseTime = 0f;
-    public GameObject Beacon;
     public GameObject nonCursedContainer;
 
     //bounds for choosing spawning/patroling spots for the shrine
@@ -46,7 +45,6 @@ public class Shrine : MonoBehaviour
         ai = GetComponent<AI_Manager>();
         gm = FindObjectOfType<GameManager>();
         pd = FindObjectOfType<PlayerData>();
-        Beacon.SetActive(false);
         ai.generateSurroundLocations();
     }
 
@@ -75,12 +73,6 @@ public class Shrine : MonoBehaviour
             gm.gameOver = true;
             gameOverScreen.GetComponent<GameOver>().LoadGameOver();
             cursed = false;
-        }
-
-        if (cursed) {
-            //Beacon.SetActive(true);
-        } else {
-           // Beacon.SetActive(false);
         }
 
         //spawn an enemy at a shrine if there are 3 conditions met
