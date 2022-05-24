@@ -107,6 +107,7 @@ public class Enemy_Spawner : MonoBehaviour
             Transform tutShrine = shrineForTutorial.transform;
             tutShrine.parent = cursedContainer.transform;
             tutShrine.GetComponent<Shrine>().cursed = true;
+            tutShrine.GetComponent<Shrine>().PlayCurseVFX();
             currentCursedShrines++;
             scaleNumberOfEnemiesToSpawn();
             tutShrine.GetComponent<Shrine>().setEnemiesToSpawn();
@@ -118,6 +119,7 @@ public class Enemy_Spawner : MonoBehaviour
             shrine.parent = cursedContainer.transform;
             shrine.GetComponent<Shrine>().cursed = true;
             shrine.GetComponent<Shrine>().CurCurseTime = 0f;
+             shrine.GetComponent<Shrine>().PlayCurseVFX();
             currentCursedShrines++;
             scaleNumberOfEnemiesToSpawn();
             shrine.GetComponent<Shrine>().setEnemiesToSpawn();

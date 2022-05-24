@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6738803524394422914}
   - component: {fileID: 6799075702819248385}
   - component: {fileID: 9136508747187929969}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shrine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34,6 +34,7 @@ Transform:
   m_Children:
   - {fileID: 2670040156660248802}
   - {fileID: 4037383272742298527}
+  - {fileID: 49536778}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -112,20 +113,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursed: 0
-  shrineSpawnRange: 200
-  enemiesToSpawnWhenCursed: 0
+  shrineSpawnRange: 20
+  enemiesToSpawnWhenCursed: 2
   amountAlreadySpawned: 0
-  TotalCurseTime: 3
+  TotalCurseTime: 90
   CurCurseTime: 0
   Beacon: {fileID: 8556313218440299332}
   nonCursedContainer: {fileID: 0}
-  posUpperX: 0
-  negUpperX: 0
-  posUpperZ: 0
-  negUpperZ: 0
+  posUpperX: 50
+  negUpperX: -50
+  posUpperZ: 50
+  negUpperZ: -50
   posLower: 10
   negLower: -10
   gameOverScreen: {fileID: 0}
+  CurseBecon: {fileID: 49536781}
 --- !u!114 &9136508747187929969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,7 +143,7 @@ MonoBehaviour:
   surroundSpots: []
   surroundSpotAvailability: 
   Player: {fileID: 0}
-  surroundRadius: 0
+  surroundRadius: 15
   selectAttackerTimer: 0
   attackingEnemy: {fileID: 0}
   enemiesReadyToAttack: []
@@ -157,7 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2670040156660248802}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,8 +191,8 @@ GameObject:
   - component: {fileID: 4037383272742298527}
   - component: {fileID: 1647607464902151422}
   - component: {fileID: 1121736257554189080}
-  m_Layer: 0
-  m_Name: Becon
+  m_Layer: 9
+  m_Name: Beacon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -259,3 +261,106 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1001 &9067107443329368481
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6738803524394422917}
+    m_Modifications:
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.14312145
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.20618081
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.14312145
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.28779215
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.1815385
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9774299
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.21126013
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010924, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010924, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[1].m_Name
+      value: Duration
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010924, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[1].m_Value
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010924, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[1].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010925, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010925, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067107443280010926, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+      propertyPath: m_Name
+      value: ShrineCurse_VFX
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+--- !u!4 &49536778 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9067107443280010923, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+  m_PrefabInstance: {fileID: 9067107443329368481}
+  m_PrefabAsset: {fileID: 0}
+--- !u!2083052967 &49536781 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 9067107443280010924, guid: c77cc14ed3feed547a46b5f7bbdd37a6, type: 3}
+  m_PrefabInstance: {fileID: 9067107443329368481}
+  m_PrefabAsset: {fileID: 0}

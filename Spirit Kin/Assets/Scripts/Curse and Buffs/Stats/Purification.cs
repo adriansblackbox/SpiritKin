@@ -39,19 +39,18 @@ public class Purification : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Temp VFX -> trying it with always running
-        // if(FindObjectOfType<CurseMeter>().activeCurses.Count > 0)
-        // {
-        //     foreach(VisualEffect vfx in VFX) {
-        //         vfx.enabled = true;
-        //     }
-        // }
-        // else
-        // {
-        //     foreach(VisualEffect vfx in VFX) {
-        //         vfx.enabled = false;
-        //     }
-        // }
+         if(FindObjectOfType<CurseMeter>().activeCurses.Count > 0)
+         {
+            foreach(VisualEffect vfx in VFX) {
+                vfx.enabled = true;
+            }
+        }
+        else
+        {
+             foreach(VisualEffect vfx in VFX) {
+                vfx.enabled = false;
+             }
+        }
 
         if(isPurifying){
             player.GetComponent<CurseMeter>().curseMeter -= Time.deltaTime/2f;

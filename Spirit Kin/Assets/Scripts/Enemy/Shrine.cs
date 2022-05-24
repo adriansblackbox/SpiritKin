@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.VFX;
 
 public class Shrine : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class Shrine : MonoBehaviour
 
     //game over scene
     public GameObject gameOverScreen;
+    public VisualEffect CurseBecon;
+
     public void Start()
     {
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
@@ -63,6 +66,7 @@ public class Shrine : MonoBehaviour
             transform.parent = nonCursedContainer.transform;
             es.currentCursedShrines--;
             pd.addShrinePurified(1);
+            StopCurseVFX();
         }
 
         if (CurCurseTime < TotalCurseTime && cursed && !FindObjectOfType<MainHub>().playerInHub) {
@@ -74,9 +78,9 @@ public class Shrine : MonoBehaviour
         }
 
         if (cursed) {
-            Beacon.SetActive(true);
+            //Beacon.SetActive(true);
         } else {
-            Beacon.SetActive(false);
+           // Beacon.SetActive(false);
         }
 
         //spawn an enemy at a shrine if there are 3 conditions met
@@ -98,5 +102,15 @@ public class Shrine : MonoBehaviour
 
     public void setEnemiesToSpawn() {
         enemiesToSpawn = enemiesToSpawnWhenCursed;
+    }
+    public void PlayCurseVFX() {
+        //sets CurseBecon (and other vfx) duration parameter to duration, and plays effect
+        CurseBecon.playRate = 1;
+        CurseBecon.SetFloat("Duration", TotalCurseTime);
+        CurseBecon.Play();
+    }
+    public void StopCurseVFX() {
+        // manually stops CurseBecon (and other vfx) from playing
+        CurseBecon.playRate = 100;
     }
 }
