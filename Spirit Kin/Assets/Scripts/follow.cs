@@ -47,7 +47,7 @@ public class follow : MonoBehaviour
         if(isFollowing){
             //fly to player
             
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(GameObject.Find("Player").transform.position.x, GameObject.Find("Player").transform.position.y+2, GameObject.Find("Player").transform.position.z), 10f * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(GameObject.Find("Player").transform.position.x, GameObject.Find("Player").transform.position.y+2, GameObject.Find("Player").transform.position.z), 50f * Time.deltaTime);
         }
     }
 
