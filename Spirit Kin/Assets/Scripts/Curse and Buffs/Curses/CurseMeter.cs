@@ -28,6 +28,7 @@ public class CurseMeter : MonoBehaviour
     public GameObject healthBar;
     public SwordCollision swordLength;
     public TeaShopManager teaList;
+    public Inverter inv;
 
     // Curses that need to talk to other scripts and functions easier
     public moneyCurse kromer;
@@ -52,7 +53,7 @@ public class CurseMeter : MonoBehaviour
         slowCurse slow = new slowCurse(slowImage, pStats, this);
         armorCurse frail = new armorCurse(frailImage, pStats, this);
         blindCurse blind = new blindCurse(blindImage, this, shrines, blindVignette, healthBar);
-        invertCurse invert = new invertCurse(invertImage, gameObject);
+        invertCurse invert = new invertCurse(invertImage, gameObject, inv);
         kromer = new moneyCurse(moneyImage, pStats, this);
         swordRangeBlessing = new rangeBlessing(rangeImage, swordLength, gameObject, this);
         teaBlessing tea = new teaBlessing(teaImage, teaList, pStats, this);
