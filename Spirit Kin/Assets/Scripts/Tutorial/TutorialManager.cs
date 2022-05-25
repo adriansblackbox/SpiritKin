@@ -135,7 +135,7 @@ public class TutorialManager : MonoBehaviour
         float coinX = coinObject.GetComponent<RectTransform>().anchoredPosition.x;
         float coinY = coinObject.GetComponent<RectTransform>().anchoredPosition.y;
         
-        startPositionForCoin = new Vector2(canvasX/2, -canvasY / 2 + coinY * 1.5f);
+        startPositionForCoin = new Vector2(canvasX / 2, -canvasY / 2 + coinY * 1.5f);
 
         //Get X value for one of the containers (will be used as negative for buffs & positive for curses)
         float buffAndCurseContainerX = firstBuff.transform.parent.GetComponent<RectTransform>().anchoredPosition.x;

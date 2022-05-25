@@ -768,7 +768,7 @@ public class Enemy_Controller : MonoBehaviour
 
     private void DieAndDestroy()
     {
-        player.GetComponent<PlayerStats>().coins += GetComponent<CharacterStats>().coins;
+        player.GetComponent<PlayerStats>().addCoins(GetComponent<CharacterStats>().coins);
         player.GetComponent<CurseMeter>().curseMeter += (float) GetComponent<CharacterStats>().fillAmount / player.GetComponent<CurseMeter>().fillRate;
         Destroy(this.gameObject);
     }

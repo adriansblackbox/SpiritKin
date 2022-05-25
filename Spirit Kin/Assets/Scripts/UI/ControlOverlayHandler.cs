@@ -43,6 +43,7 @@ public class ControlOverlayHandler : MonoBehaviour
             MouseKeyboardOverlay.SetActive(true);
             XboxControllerOverlay.SetActive(false);
             nextLineIndicator.GetComponent<Image>().sprite = keyboardIndicator;
+            nextLineIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(50, 65);
         }
         else
         {
@@ -50,6 +51,7 @@ public class ControlOverlayHandler : MonoBehaviour
             MouseKeyboardOverlay.SetActive(false);
             XboxControllerOverlay.SetActive(true);
             nextLineIndicator.GetComponent<Image>().sprite = controllerIndicator;
+            nextLineIndicator.GetComponent<RectTransform>().sizeDelta= new Vector2(50, 50);
         }
     }
 }

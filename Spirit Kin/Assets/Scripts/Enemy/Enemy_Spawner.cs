@@ -21,6 +21,8 @@ public class Enemy_Spawner : MonoBehaviour
     public GameObject enemyPrefab;
     public CurseMeter curseMeter;
 
+    public Shrine shrinePlayerIsAt;
+
     public int totalShrines;
 
     public float spawnInterval; //enemies will spawn in at intervals at shrines to show that they are slowly drawing in ghosts & to make feel more natural
@@ -92,7 +94,7 @@ public class Enemy_Spawner : MonoBehaviour
                 if (cursedContainer.transform.GetChild(i).GetComponent<AI_Manager>().enemiesInCombat.Count > 0)
                     cmm.playerBeingChased = true;
         }
-        else
+        else if (shrinePlayerIsAt.amountAlreadySpawned >= shrinePlayerIsAt.enemiesToSpawn)
         {
             cmm.playerBeingChased = false;
         }

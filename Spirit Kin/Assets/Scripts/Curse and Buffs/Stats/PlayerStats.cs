@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerStats : CharacterStats
 {
-    [SerializeField]
     public List<Buff> Buffs = new List<Buff>();
     public List<Equipment> Equipment = new List<Equipment>();
     public CurseMeter curseMeter;
@@ -212,6 +211,13 @@ public class PlayerStats : CharacterStats
     override public async void Die () {
         Debug.Log("Player died!");
         StartCoroutine(PlayerDeath(this.gameObject));
+    }
+
+    public void addCoins(int coinage) 
+    {
+        coins += coinage; 
+        pd.addGoldEarned(coinage);
+        //update UI
     }
 
     public IEnumerator PlayerDeath(GameObject player) {

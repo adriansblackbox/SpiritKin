@@ -6,11 +6,15 @@ using System;
 public class AI_Manager : MonoBehaviour
 {
 
+    [SerializeField] Enemy_Spawner es;
+
     private Transform enemiesContainer;
     public List<Vector3> surroundSpots = new List<Vector3>();
     public List<bool> surroundSpotAvailability = new List<bool>();
     private List<Vector3> surroundTrackingSpots = new List<Vector3>();
+    
     public Transform Player;
+
     public float surroundRadius;
     public float selectAttackerTimer;
 
@@ -25,6 +29,7 @@ public class AI_Manager : MonoBehaviour
     {
         enemiesContainer = transform.GetChild(0);
         Player = GameObject.Find("Player").transform;
+        es = FindObjectOfType<Enemy_Spawner>();
     }
     
     //ensure that timers aren't running when timeScale = 0
@@ -35,6 +40,9 @@ public class AI_Manager : MonoBehaviour
 
     private void Update()
     {
+
+        if (enemiesInCombat.Count > 0)
+            es.shrinePlayerIsAt = GetComponent<Shrine>();
 
         if (Player.GetComponent<PlayerStats>().isDying)
         {
