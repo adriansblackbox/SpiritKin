@@ -30,8 +30,14 @@ public class TeaShop : MonoBehaviour
 
     public EventSystem eventSystem;
 
-    public GameObject Instruct1;
-    public GameObject Instruct2;
+    public GameObject LeftInstruct;
+    public GameObject RightInstruct;
+
+    public Sprite AButton;
+    public Sprite DButton;
+
+    public Sprite LeftBumperButton;
+    public Sprite RightBumperButton;
 
     // Start is called before the first frame update
     void Start()
@@ -68,8 +74,10 @@ public class TeaShop : MonoBehaviour
         if (UI.GetComponent<ControlOverlayHandler>().keyboard)
         {   
             //disable texts
-            Instruct1.GetComponent<Text>().text = "A";
-            Instruct2.GetComponent<Text>().text = "D";
+            LeftInstruct.GetComponent<Image>().sprite = AButton;
+            LeftInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 60);
+            RightInstruct.GetComponent<Image>().sprite = DButton;
+            RightInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 60);
             
             triggerText.GetComponent<TextMeshProUGUI>().text = "Press F to open shop";
             
@@ -82,8 +90,10 @@ public class TeaShop : MonoBehaviour
         {
 
             //enable texts
-            Instruct1.GetComponent<Text>().text = "LB";
-            Instruct2.GetComponent<Text>().text = "RB";
+            LeftInstruct.GetComponent<Image>().sprite = LeftBumperButton;
+            LeftInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 60);
+            RightInstruct.GetComponent<Image>().sprite = RightBumperButton;
+            RightInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 60);
             //get textmeshpro text
             triggerText.GetComponent<TextMeshProUGUI>().text = "Press Y to open shop";
             

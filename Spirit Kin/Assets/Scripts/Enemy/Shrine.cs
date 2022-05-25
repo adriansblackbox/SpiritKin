@@ -14,7 +14,7 @@ public class Shrine : MonoBehaviour
     public bool cursed;
     public float shrineSpawnRange;
 
-    private int enemiesToSpawn; //actual value of enemies to spawn
+    public int enemiesToSpawn; //actual value of enemies to spawn
 
     public int enemiesToSpawnWhenCursed; //tracking the value to be used when the shrine gets crused
     public int amountAlreadySpawned; //how many enemies have been spawned on this current cursing
