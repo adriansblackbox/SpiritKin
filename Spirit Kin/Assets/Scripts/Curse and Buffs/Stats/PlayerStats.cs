@@ -224,6 +224,7 @@ public class PlayerStats : CharacterStats
         isDying = true;
         curseMeter.deathWipe = true;
         foreach(Buff x in Buffs) removeBuff(x);
+        foreach(GameObject UIPart in BuffsUI) UIPart.transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 0;
         // turning the lockon camera off in the case that it's on while dying
         GetComponent<LockTarget>().LockOnCamera.SetActive(false);
         // disable player move script

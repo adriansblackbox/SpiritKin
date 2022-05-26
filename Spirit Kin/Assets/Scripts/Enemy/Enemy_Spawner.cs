@@ -33,6 +33,7 @@ public class Enemy_Spawner : MonoBehaviour
     private float myTime;
     private float difficultyTimer;
     public float shrineInterval = 45f;
+    public bool hardMode;
     public bool firstSpawn; //if the player isn't doing the tutorial curse the first shrine at 5 seconds
 
     public void Start()
@@ -143,12 +144,22 @@ public class Enemy_Spawner : MonoBehaviour
     public void scaleDifficulty()
     {
         // soft cap for difficulty at 10
-        if (difficulty < 10)
+        if (hardMode) 
+        {
+            if (difficulty < 15)
+            {
+                difficulty += 0.5f;
+            }
+            else{
+                difficulty += 0.1f;
+            }
+            curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
+        }
+        else if (difficulty < 10)
             difficulty += 0.334f;
         else
             difficulty += 0.0834f;
         Debug.Log("Difficulty is: " + difficulty);
-        curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
     }
 
     private void selectShrineEnemyCount()
