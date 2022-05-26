@@ -10,6 +10,7 @@ public class Shrine : MonoBehaviour
     private AI_Manager ai;
     private GameManager gm;
     private PlayerData pd;
+    private MainHub mh;
 
     public bool cursed;
     public float shrineSpawnRange;
@@ -45,6 +46,7 @@ public class Shrine : MonoBehaviour
         ai = GetComponent<AI_Manager>();
         gm = FindObjectOfType<GameManager>();
         pd = FindObjectOfType<PlayerData>();
+        mh = FindObjectOfType<MainHub>();
         ai.generateSurroundLocations();
     }
 
@@ -74,6 +76,10 @@ public class Shrine : MonoBehaviour
             gameOverScreen.GetComponent<GameOver>().LoadGameOver();
             cursed = false;
         }
+        if(FindObjectOfType<MainHub>().playerInHub)
+            CurseBecon.pause = true;
+        else
+            CurseBecon.pause = false;
 
         //spawn an enemy at a shrine if there are 3 conditions met
             //1: The shrine must be cursed
