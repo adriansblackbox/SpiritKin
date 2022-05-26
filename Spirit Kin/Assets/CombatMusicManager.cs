@@ -5,6 +5,7 @@ using UnityEngine;
 public class CombatMusicManager : MonoBehaviour
 {
     [SerializeField] AudioSource combatBGMPlayer;
+    [SerializeField] GameManager gm;
 
     public enum MusicState {Off, Begin, Loop, End};
 
@@ -46,14 +47,14 @@ public class CombatMusicManager : MonoBehaviour
                     break;
                 }
                     
-                if (!playerBeingChased)
+                if (!playerBeingChased || gm.gameOver)
                 {
                     changeMusicState(MusicState.End);
                     break;
                 }
                 break;
             case MusicState.Loop:
-                if (!playerBeingChased)
+                if (!playerBeingChased || gm.gameOver)
                     changeMusicState(MusicState.End);
                 break;
             case MusicState.End:

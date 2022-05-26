@@ -103,7 +103,7 @@ public class Enemy_Spawner : MonoBehaviour
                 if (cursedContainer.transform.GetChild(i).GetComponent<AI_Manager>().enemiesInCombat.Count > 0)
                     cmm.playerBeingChased = true;
         }
-        else if (shrinePlayerIsAt.amountAlreadySpawned >= shrinePlayerIsAt.enemiesToSpawn)
+        else if (shrinePlayerIsAt.amountAlreadySpawned >= shrinePlayerIsAt.enemiesToSpawn && shrinePlayerIsAt.transform.GetChild(0).childCount == 0)
         {
             cmm.playerBeingChased = false;
         }

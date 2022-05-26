@@ -22,6 +22,12 @@ public class Enemy_Controller : MonoBehaviour
         Waiting
     }
 
+    public AudioSource enemyAudio;
+
+    public AudioClip chargeAudio;
+    public AudioClip hurtAudio;
+    public AudioClip swipeAudio;
+
     public Animator enemyAnimator;
     private string selectedStunAnim;
 
@@ -402,6 +408,11 @@ public class Enemy_Controller : MonoBehaviour
     {
         changeState(MotionState.Stunned);
         enemyAnimator.SetBool("Stunned", true);
+        //finishAttack();
+
+        enemyAudio.Stop();
+        enemyAudio.clip = hurtAudio;
+        enemyAudio.Play();
 
         //select which stun animation will be played
         int temp = Random.Range(0, stunAnimTriggers.Length);
@@ -424,6 +435,7 @@ public class Enemy_Controller : MonoBehaviour
     public void startOfStun()
     {
         enemyAnimator.SetBool("InStun", true);
+        playHurtAudio();
     }
 
     public void endStun()
@@ -765,6 +777,24 @@ public class Enemy_Controller : MonoBehaviour
     }
 
     #endregion
+
+    private void playChargeAudio()
+    {
+        enemyAudio.clip = chargeAudio;
+        enemyAudio.Play();
+    }
+
+    private void playSwipeAudio()
+    {
+        enemyAudio.clip = swipeAudio;
+        enemyAudio.Play();
+    }
+
+    private void playHurtAudio()
+    {
+        enemyAudio.clip = hurtAudio;
+        enemyAudio.Play();
+    }
 
     private void DieAndDestroy()
     {
