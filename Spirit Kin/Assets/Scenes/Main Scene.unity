@@ -872,7 +872,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &18694686
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3748,7 +3748,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 135
+  m_RootOrder: 108
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &101935729
 PrefabInstance:
@@ -14665,7 +14665,7 @@ Transform:
   - {fileID: 1499412790}
   - {fileID: 944793512}
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 66
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &449162571 stripped
 Transform:
@@ -20614,7 +20614,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 96
+  m_RootOrder: 74
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &686391557 stripped
 Transform:
@@ -32979,7 +32979,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1088456357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33811,6 +33811,7 @@ Transform:
   - {fileID: 1590368592}
   - {fileID: 369979358}
   - {fileID: 201756178}
+  - {fileID: 1178167297}
   - {fileID: 1465553616}
   - {fileID: 727648534}
   - {fileID: 78454712}
@@ -33826,9 +33827,9 @@ Transform:
   - {fileID: 1024684241}
   - {fileID: 1034120929}
   - {fileID: 171648427}
-  - {fileID: 1178167297}
   - {fileID: 1123308456}
   - {fileID: 2125952106}
+  - {fileID: 448243308}
   - {fileID: 316391369}
   - {fileID: 194108175}
   - {fileID: 420436472}
@@ -33874,13 +33875,14 @@ Transform:
   - {fileID: 1490317158}
   - {fileID: 1110947051}
   - {fileID: 468700036}
-  - {fileID: 448243308}
   - {fileID: 800049151}
+  - {fileID: 543450652020203986}
   - {fileID: 835773338}
   - {fileID: 1490260708}
   - {fileID: 1060261019}
   - {fileID: 408218710}
   - {fileID: 1280184268}
+  - {fileID: 685793618}
   - {fileID: 597505557}
   - {fileID: 1135864372}
   - {fileID: 432570988}
@@ -33897,14 +33899,13 @@ Transform:
   - {fileID: 859148390}
   - {fileID: 1292469603}
   - {fileID: 1353499619}
-  - {fileID: 543450652020203986}
   - {fileID: 51726106}
   - {fileID: 1533326671}
   - {fileID: 850293406}
   - {fileID: 1140170149}
   - {fileID: 1120900004}
   - {fileID: 194517731}
-  - {fileID: 685793618}
+  - {fileID: 1638574579}
   - {fileID: 1905525623}
   - {fileID: 688924363}
   - {fileID: 1306997984}
@@ -33915,9 +33916,11 @@ Transform:
   - {fileID: 109386687}
   - {fileID: 810721500}
   - {fileID: 1565482456}
+  - {fileID: 100976805}
   - {fileID: 1919636187}
   - {fileID: 1031213429}
   - {fileID: 100790454}
+  - {fileID: 1517140163}
   - {fileID: 2024344082}
   - {fileID: 855305854}
   - {fileID: 147666725}
@@ -33929,7 +33932,6 @@ Transform:
   - {fileID: 1924946516}
   - {fileID: 2020529168}
   - {fileID: 2119708071}
-  - {fileID: 1638574579}
   - {fileID: 1761277691}
   - {fileID: 2068304769}
   - {fileID: 1020655755}
@@ -33943,7 +33945,6 @@ Transform:
   - {fileID: 1576398704}
   - {fileID: 449162571}
   - {fileID: 1877737099}
-  - {fileID: 100976805}
   - {fileID: 498120052}
   - {fileID: 824098545}
   - {fileID: 1756477550}
@@ -33955,21 +33956,21 @@ Transform:
   - {fileID: 1379465475}
   - {fileID: 496159375}
   - {fileID: 58245040}
-  - {fileID: 1517140163}
   - {fileID: 1994839772}
   - {fileID: 97723059}
+  - {fileID: 2095741005}
   - {fileID: 337797327}
-  - {fileID: 441073833}
   - {fileID: 89066602}
-  - {fileID: 751674553}
+  - {fileID: 441073833}
   - {fileID: 583678759}
   - {fileID: 677230680}
   - {fileID: 1279530733}
   - {fileID: 1139227401}
   - {fileID: 2011174827}
   - {fileID: 2074228878}
-  - {fileID: 802681531}
+  - {fileID: 751674553}
   - {fileID: 1361261508}
+  - {fileID: 802681531}
   - {fileID: 708409408}
   - {fileID: 1990870618}
   - {fileID: 593705542}
@@ -33985,7 +33986,6 @@ Transform:
   - {fileID: 506604141}
   - {fileID: 531797088}
   - {fileID: 1518554880}
-  - {fileID: 2095741005}
   - {fileID: 2021066292}
   - {fileID: 1091570991}
   - {fileID: 1261714280}
@@ -33993,9 +33993,9 @@ Transform:
   - {fileID: 1047230319}
   - {fileID: 1482281529}
   - {fileID: 420740272}
+  - {fileID: 1152640848}
   - {fileID: 1282731828}
   - {fileID: 360145927}
-  - {fileID: 1152640848}
   - {fileID: 1708678778}
   - {fileID: 1398826516}
   - {fileID: 2001970763}
@@ -34006,9 +34006,9 @@ Transform:
   - {fileID: 1344662509}
   - {fileID: 2112198976}
   - {fileID: 730022060}
+  - {fileID: 1183662745}
   - {fileID: 999936334}
   - {fileID: 1935516229}
-  - {fileID: 1183662745}
   - {fileID: 1814045779}
   - {fileID: 948150319}
   - {fileID: 1130801070}
@@ -35781,7 +35781,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 187
+  m_RootOrder: 185
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1154604243 stripped
 GameObject:
@@ -36541,7 +36541,7 @@ Transform:
   - {fileID: 1693566637}
   - {fileID: 487480474}
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 18
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1181725625
 PrefabInstance:
@@ -36751,7 +36751,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 200
+  m_RootOrder: 198
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1183777210 stripped
 Transform:
@@ -45998,7 +45998,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 147
+  m_RootOrder: 112
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1518554880 stripped
 Transform:
@@ -47916,7 +47916,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1576184553
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -49582,7 +49582,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 121
+  m_RootOrder: 97
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1639727706 stripped
 GameObject:
@@ -60582,7 +60582,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 177
+  m_RootOrder: 150
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2100402315
 GameObject:
@@ -63614,7 +63614,7 @@ Transform:
   - {fileID: 6738450968717776104}
   - {fileID: 3316992658933764501}
   m_Father: {fileID: 1105819100}
-  m_RootOrder: 89
+  m_RootOrder: 68
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &551518763536140050
 Transform:
