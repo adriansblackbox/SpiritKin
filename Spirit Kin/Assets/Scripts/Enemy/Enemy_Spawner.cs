@@ -86,6 +86,14 @@ public class Enemy_Spawner : MonoBehaviour
         }
     }
 
+    public void setHardMode() {
+        this.hardMode = true;
+    }
+
+    public void setEasyMode() {
+        this.hardMode = false;
+    }
+
     public void checkIfInCombat() //need to add another layer that ensures all of the enemies have been spawned before setting to false
     {
         if (cursedContainer.transform.childCount > 0)
