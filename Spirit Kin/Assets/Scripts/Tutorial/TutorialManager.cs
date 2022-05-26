@@ -69,6 +69,8 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialOn)
         {
+            es.curseShrine(true); //curse the tutorial shrine
+            es.spawnEnemy(es.shrineForTutorial);
             calculateMiddlePoints();
             pc.enabled = false;
             st.ActivateText();
@@ -295,8 +297,6 @@ public class TutorialManager : MonoBehaviour
         playerCamera.GetComponent<Camera>().enabled = false;
         shrineCamera.GetComponent<Camera>().enabled = true;
         shrineCamera.GetComponent<CameraFade>().Reset();
-        es.curseShrine(true); //curse the tutorial shrine
-        es.spawnEnemy(es.shrineForTutorial);
         yield return new WaitForSeconds(5f);
         playerCamera.GetComponent<Camera>().enabled = true;
         playerCamera.GetComponent<CameraFade>().Reset();
