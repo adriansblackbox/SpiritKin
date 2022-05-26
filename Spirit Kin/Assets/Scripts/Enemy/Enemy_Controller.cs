@@ -319,7 +319,7 @@ public class Enemy_Controller : MonoBehaviour
                     else if (ThisEnemy.remainingDistance < ThisEnemy.stoppingDistance && movementQueue.Count == 0 && !ai.enemiesReadyToAttack.Contains(gameObject))
                     {
                         ai.enemiesReadyToAttack.Add(gameObject);
-                        ThisEnemy.speed = surroundSpeed / 1.4f;
+                        ThisEnemy.speed = surroundSpeed;
                     }
                 }
                 else 
