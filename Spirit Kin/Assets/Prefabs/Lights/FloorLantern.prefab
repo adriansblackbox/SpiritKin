@@ -104,7 +104,6 @@ GameObject:
   - component: {fileID: 1046620594876464816}
   - component: {fileID: 4118977779120681237}
   - component: {fileID: 2219565699329148383}
-  - component: {fileID: 6308097652640050611}
   m_Layer: 0
   m_Name: FloorLantern
   m_TagString: Untagged
@@ -157,7 +156,7 @@ MeshRenderer:
   - {fileID: -6629797300637803691, guid: 4d58122f9d6b1ce47a8de5a205666b1b, type: 3}
   - {fileID: -2813467912831258332, guid: 4d58122f9d6b1ce47a8de5a205666b1b, type: 3}
   - {fileID: -3846018093981099296, guid: 4d58122f9d6b1ce47a8de5a205666b1b, type: 3}
-  - {fileID: 2100000, guid: c32a431638ab3d34f9da001fa2a86d84, type: 2}
+  - {fileID: 2100000, guid: b89572e118395ed4bbc6a93616039903, type: 2}
   - {fileID: 5561349426305759274, guid: 4d58122f9d6b1ce47a8de5a205666b1b, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -180,16 +179,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6308097652640050611
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 418139111078519818}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.30693546, y: 0.30946216, z: 5.7396483}
-  m_Center: {x: -0.0048420453, y: 0.0068105487, z: 2.7720346}

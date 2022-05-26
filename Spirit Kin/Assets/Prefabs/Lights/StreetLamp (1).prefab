@@ -91,7 +91,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5356114138479177121}
-  - component: {fileID: 4791862428416921264}
   m_Layer: 0
   m_Name: StreetLamp (1)
   m_TagString: Untagged
@@ -117,19 +116,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4791862428416921264
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4692590020002838299}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.55990225, y: 8.494486, z: 0.54439276}
-  m_Center: {x: -0.015325176, y: 3.7472425, z: -0.0495738}
 --- !u!1 &5610926666075311373
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +347,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: d0ad52ca3944e3c448fae94d196d107c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: c32a431638ab3d34f9da001fa2a86d84, type: 2}
+      objectReference: {fileID: 2100000, guid: b89572e118395ed4bbc6a93616039903, type: 2}
     - target: {fileID: 919132149155446097, guid: d0ad52ca3944e3c448fae94d196d107c, type: 3}
       propertyPath: m_Name
       value: StreetLampNoString
