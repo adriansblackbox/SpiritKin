@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.63
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1159954109}
-  m_IndirectSpecularColor: {r: 0.15172845, g: 0.16171807, b: 0.2929785, a: 0.63}
+  m_IndirectSpecularColor: {r: 0.15167141, g: 0.16167074, b: 0.29302448, a: 0.63}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -76237,6 +76237,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.AudioClip, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1731670506, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
+      propertyPath: UICoinTXT
+      value: 
+      objectReference: {fileID: 1828932258}
+    - target: {fileID: 1731670506, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
+      propertyPath: playStats
+      value: 
+      objectReference: {fileID: 675881052296231848}
     - target: {fileID: 1021861493747015469, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -76270,9 +76278,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: e65dea1c9e8bf9e4c93026c23189fd44, type: 2}
     - target: {fileID: 5195490469583328442, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
+      propertyPath: UI
+      value: 
+      objectReference: {fileID: 1065150857}
+    - target: {fileID: 5195490469583328442, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
       propertyPath: Player
       value: 
       objectReference: {fileID: 7969240397504004763}
+    - target: {fileID: 5195490469583328442, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
+      propertyPath: pauseMenu
+      value: 
+      objectReference: {fileID: 1113205476}
+    - target: {fileID: 5195490469583328442, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 2007740196}
+    - target: {fileID: 5195490469583328442, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 7969240397504004769}
     - target: {fileID: 5195490469583328443, guid: 2cc0d02af97e0b4419019713eaaa40ce, type: 3}
       propertyPath: m_Name
       value: EquipmentShop

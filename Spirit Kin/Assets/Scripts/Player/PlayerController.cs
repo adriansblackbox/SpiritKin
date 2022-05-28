@@ -89,8 +89,10 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("Z Direction Input", Mathf.Abs(input_y));
         if(Input.GetButtonDown("X Button") || Input.GetKeyDown(KeyCode.Mouse0))
             animator.SetBool("X Pressed", true);
-        if(Input.GetButtonDown("Y Button") || Input.GetKeyDown(KeyCode.Mouse1))
+            if(GetComponent<PlayerStats>().equipOn){
+                if(Input.GetButtonDown("Y Button") || Input.GetKeyDown(KeyCode.Mouse1))
            animator.SetBool("Y Pressed", true);
+            }
         if(Input.GetButtonDown("A Button") || Input.GetKeyDown(KeyCode.Space) && !animator.GetBool("Dash Movement"))
             animator.SetBool("A Pressed", true);
     }

@@ -9,9 +9,9 @@ public class testWeapon : Equipment
         equipName = "testWeapon";
         description = "testWeapon";
         equipSprite = sprite;
-        duration = 60f;
-        Cost = 1;
-        InvestCost = 5;
+        duration = 100f;
+        Cost = 25;
+        InvestCost = 100;
         isEquipped = false;
     }
 }

@@ -93,8 +93,8 @@ public class EquipShopManager : MonoBehaviour
             !currentEquip.isEquipped &&
             playStats.Equipment.Count < 3 &&
             GameObject
-                .FindGameObjectWithTag("TeaShop")
-                .GetComponent<TeaShop>()
+                .FindGameObjectWithTag("EquipmentShop")
+                .GetComponent<equipmentShop>()
                 .isOpen
         )
         {
@@ -105,7 +105,7 @@ public class EquipShopManager : MonoBehaviour
 
             //add Equipment to player
             //Todo: add to player
-            playStats.addEquip (currentEquip);
+            playStats.addEquip(currentEquip);
         }
     }
 
