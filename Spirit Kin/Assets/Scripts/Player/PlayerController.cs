@@ -255,7 +255,7 @@ public class PlayerController : MonoBehaviour
         inputDirection.Normalize();
         if (inputDirection != Vector2.zero){
             targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.y) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-            float rotationSpeed = RotationSmoothTime * 100f;
+            float rotationSpeed = RotationSmoothTime * 50f;
             float rotation = Mathf.SmoothDampAngle(transform.GetChild(0).transform.eulerAngles.y, targetRotation, ref rotationVelocity, rotationSpeed);
             // rotate to face input direction relative to camera position
             transform.GetChild(0).transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
