@@ -8,27 +8,16 @@ public class GenKongming : MonoBehaviour
     /// 孔明灯预设
     /// </summary>
     public GameObject lanternObj;
-    /// <summary>
-    /// 高空摄像机
-    /// </summary>
-    public GameObject cam2;
 
+    private Transform trans;
     private Transform selfTrans;
-    /// <summary>
-    /// 主摄像机的Transform
-    /// </summary>
-    private Transform camTrans;
-    /// <summary>
-    /// 主摄像机
-    /// </summary>
-    private Camera cam;
+
     
 
     void Start()
     {
         selfTrans = transform;
-        cam = Camera.main;
-        camTrans = cam.transform;
+
 
         //初始创建n个孔明灯
         for (int i = 0; i < 5; ++i)
@@ -50,14 +39,12 @@ public class GenKongming : MonoBehaviour
             var go = Instantiate(lanternObj);
             go.transform.position = new Vector3(Random.Range(-30, 30), 0, Random.Range(-30, 30));
             go.transform.SetParent(selfTrans, false);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(5);
         }
     }
 
     private void Update()
     {
-
-
-       
+        
     }
 }
