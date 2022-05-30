@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     // Start is called before the first frame update
+    public MainMenu MainMenu;
     public bool GameIsPaused = false;
     public TeaShop teaShopMenu;
     public equipmentShop equipMenu;
@@ -84,5 +85,8 @@ public class PauseMenu : MonoBehaviour
         ToggleIndicatorOn.SetActive(!ToggleIndicatorOn.activeSelf);
         ToggleIndicatorOff.SetActive(!ToggleIndicatorOff.activeSelf);
         ControlOverlay.SetActive(!ControlOverlay.activeSelf);
+    }
+    public void GraphicsApply(){
+        MainMenu.GraphicsApply();
     }
 }
