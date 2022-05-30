@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     // Start is called before the first frame update
     public bool GameIsPaused = false;
     public TeaShop teaShopMenu;
+    public equipmentShop equipMenu;
     public GameObject pauseMenuUI;
     public GameObject Player;
 
@@ -21,6 +22,7 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         teaShopMenu = GameObject.Find("TeaShop").GetComponent<TeaShop>();
+        equipMenu = GameObject.Find("EquipmentShop").GetComponent<equipmentShop>();
     }
 
     // Update is called once per frame
@@ -32,8 +34,9 @@ public class PauseMenu : MonoBehaviour
                 // Player.GetComponent<PlayerCombat>().enabled = true;
                 
                 Resume();
-            }else if(teaShopMenu.isOpen){
+            }else if(teaShopMenu.isOpen || equipMenu.isOpen){
                 teaShopMenu.CloseMenu();
+                equipMenu.CloseMenu();
                 // Player.GetComponent<PlayerController>().enabled = false;
                 // Player.GetComponent<PlayerCombat>().enabled = false;
             }else{

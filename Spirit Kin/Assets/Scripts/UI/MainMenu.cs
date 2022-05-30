@@ -61,9 +61,9 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        // resolutionDropdown.AddOptions(options);
-        // resolutionDropdown.value = currentResolutionIndex;
-        // resolutionDropdown.RefreshShownValue();
+        resolutionDropdown.AddOptions(options);
+        resolutionDropdown.value = currentResolutionIndex;
+        resolutionDropdown.RefreshShownValue();
     }
 
     public void SetResolution(int resolutionIndex){
