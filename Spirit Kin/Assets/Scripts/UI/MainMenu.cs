@@ -43,7 +43,11 @@ public class MainMenu : MonoBehaviour
     public TMP_Dropdown resolutionDropdown;
     private Resolution[] resolutions;
 
+    [Header("First Buttons")]
+    [SerializeField] private GameObject playButton;
+
     private void Start(){
+        SetFirstButton(playButton);
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
 
@@ -69,6 +73,13 @@ public class MainMenu : MonoBehaviour
     public void SetResolution(int resolutionIndex){
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    }
+
+    public void SetFirstButton(GameObject button){
+        //clear selected button
+        EventSystem.current.SetSelectedGameObject(null);
+        //reassign
+        EventSystem.current.SetSelectedGameObject(button);
     }
 
     public AudioMixer mixer;
