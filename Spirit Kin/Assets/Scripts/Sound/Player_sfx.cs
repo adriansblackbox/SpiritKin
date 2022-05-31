@@ -25,7 +25,7 @@ public class Player_sfx : MonoBehaviour
     private void Step()
     {
         AudioClip clip = GetRandomClip(Stepclips);
-        audioSource.pitch = Random.Range(1f, 2f);
+        //audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.PlayOneShot(clip);
     }
 
