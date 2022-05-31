@@ -212,7 +212,7 @@ public class EquipShopManager : MonoBehaviour
     //Ethan's code:
     public void Purchase()
     {
-        audioSource.pitch = Random.Range(1f, 2f);
+        audioSource.pitch = Random.Range(1f, 1.1f);
         audioSource.PlayOneShot(purchase);
     }
 
