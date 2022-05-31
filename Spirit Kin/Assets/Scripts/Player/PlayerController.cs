@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float SprintSpeed = 5.0f;
     [SerializeField] public float DashSpeed = 20f;
     [SerializeField] public float DashTime = 1f;
+    [SerializeField] private float DashCoolDownTime = 0.5f;
     [SerializeField] public float AttackDelay = 0.5f;
     [SerializeField] private float RotationSmoothTime = 1f;
     [SerializeField] private float SpeedChangeRate = 10.0f;
@@ -222,7 +223,7 @@ public class PlayerController : MonoBehaviour
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(true);
         }
-        animator.SetFloat("Dash Cooldown", 0.2f);
+        animator.SetFloat("Dash Cooldown", DashCoolDownTime);
         animator.SetBool("Dash Movement", false);
     }
     
