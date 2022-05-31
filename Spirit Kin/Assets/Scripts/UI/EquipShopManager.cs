@@ -42,12 +42,11 @@ public class EquipShopManager : MonoBehaviour
     // public SpriteRenderer currentSprite;
     public int selectedOption = 0;
 
-    [SerializeField]
-    private AudioClip[] Purchaseclips;
+    public AudioClip purchase;
 
-    public AudioClip ButtonHoversfx;
+    public AudioClip cantafford;
 
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -106,6 +105,11 @@ public class EquipShopManager : MonoBehaviour
             //add Equipment to player
             //Todo: add to player
             playStats.addEquip(currentEquip);
+            Purchase();
+        }
+        else
+        {
+            Cantafford();
         }
     }
 
@@ -123,6 +127,11 @@ public class EquipShopManager : MonoBehaviour
 
             //add duration to Equips
             currentEquip.duration += 100;
+            Purchase();
+        }
+        else
+        {
+            Cantafford();
         }
     }
 
@@ -201,9 +210,15 @@ public class EquipShopManager : MonoBehaviour
     }
 
     //Ethan's code:
-    private void Hover()
+    public void Purchase()
     {
-        audioSource.PlayOneShot (ButtonHoversfx);
+        audioSource.pitch = Random.Range(1f, 2f);
+        audioSource.PlayOneShot(purchase);
+    }
+
+    public void Cantafford()
+    {
+        audioSource.PlayOneShot(cantafford);
     }
 
     private AudioClip GetRandomClip(AudioClip[] cliparray)

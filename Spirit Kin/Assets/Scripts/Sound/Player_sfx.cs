@@ -11,6 +11,7 @@ public class Player_sfx : MonoBehaviour
     [SerializeField]
     private AudioClip[] Dodgeclips;
     private AudioSource audioSource;
+    public AudioClip charge, release;
     private bool dodgeSoundPlaying = false;
 
     private void Awake()
@@ -31,7 +32,7 @@ public class Player_sfx : MonoBehaviour
     private void Slash()
     {
         AudioClip clip = GetRandomClip(Slashclips);
-        audioSource.pitch = Random.Range(1f, 2f);
+        //audioSource.pitch = Random.Range(1f, 2f);
         audioSource.PlayOneShot(clip);
     }
 
@@ -43,6 +44,15 @@ public class Player_sfx : MonoBehaviour
         audioSource.PlayOneShot(clip);
     }
 
+    private void Charge()
+    {
+        audioSource.PlayOneShot(charge);
+    }
+
+    private void Release()
+    {
+        audioSource.PlayOneShot(release);
+    }
     private AudioClip GetRandomClip(AudioClip[] cliparray)
     {
         return cliparray[Random.Range(0, cliparray.Length)];

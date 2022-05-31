@@ -44,12 +44,11 @@ public class TeaShopManager : MonoBehaviour
     // public SpriteRenderer currentSprite;
     public int selectedOption = 0;
 
-    [SerializeField]
-    private AudioClip[] Purchaseclips;
+    public AudioClip purchase;
 
-    public AudioClip ButtonHoversfx;
+    public AudioClip cantafford;
 
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
     private PlayerData pd;
 
@@ -110,6 +109,7 @@ public class TeaShopManager : MonoBehaviour
                 .isOpen
         )
         {
+            Purchase();
             //update coins
             playStats.coins -= currentBuff.Cost;
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
@@ -118,6 +118,10 @@ public class TeaShopManager : MonoBehaviour
             //add buffs to player
             playStats.addBuff (currentBuff);
             
+        }
+        else
+        {
+            Cantafford();
         }
         // playerController.enabled = false;
     }
@@ -133,9 +137,10 @@ public class TeaShopManager : MonoBehaviour
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
 
             //make buff stronger
-            currentBuff.level += 1; //level gets increased by 1
+            currentBuff.level += 1; //level gets increased by 1s
             currentBuff.duration += 60; //duration gets increased by a minute
             currentBuff.power += currentBuff.basePower * currentBuff.level;
+            Purchase();
             if (currentBuff.level < 3)
             {
                 currentBuff.investCost += 150;
@@ -149,6 +154,10 @@ public class TeaShopManager : MonoBehaviour
                 investCostTXT.text = "Max";
                 description.text = "Maximum potency reached";
             }
+        }
+        else
+        {
+            Cantafford();
         }
         // playerController.enabled = false;
     }
@@ -237,13 +246,16 @@ public class TeaShopManager : MonoBehaviour
     }
 
     //Ethan's code:
-    private void Hover()
+    public void Purchase()
     {
-        audioSource.PlayOneShot (ButtonHoversfx);
+        audioSource.pitch = Random.Range(1f, 2f);
+        audioSource.PlayOneShot(purchase);
     }
 
-    private AudioClip GetRandomClip(AudioClip[] cliparray)
+    public void Cantafford()
     {
-        return cliparray[Random.Range(0, cliparray.Length)];
+        audioSource.PlayOneShot(cantafford);
     }
+   
 }
+    
