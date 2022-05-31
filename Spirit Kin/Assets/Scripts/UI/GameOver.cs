@@ -37,6 +37,8 @@ public class GameOver : MonoBehaviour
 
         sounds.PlayOneShot (gameOverSound);
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         GameOverUI.SetActive(true);
         Time.timeScale = 0f;
         EventSystem.current.SetSelectedGameObject(null);
@@ -48,6 +50,7 @@ public class GameOver : MonoBehaviour
     public void Restart()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         GameOverUI.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
