@@ -64380,7 +64380,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3983889503392381744, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.260012
+      value: 18.100008
       objectReference: {fileID: 0}
     - target: {fileID: 3983889503392381744, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_LocalRotation.w
@@ -64436,7 +64436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8302912074825007505, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 137.5
+      value: 133.66
       objectReference: {fileID: 0}
     - target: {fileID: 8302912074825007505, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_LocalPosition.y
@@ -64509,6 +64509,10 @@ PrefabInstance:
     - target: {fileID: 8302912075276437619, guid: 856421f51f173334db8869436d22e256, type: 3}
       propertyPath: m_Lens.NearClipPlane
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302912075325268521, guid: 856421f51f173334db8869436d22e256, type: 3}
+      propertyPath: CameraDistance
+      value: 35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 856421f51f173334db8869436d22e256, type: 3}
@@ -79018,6 +79022,18 @@ PrefabInstance:
       propertyPath: SwordVFX.Array.data[5]
       value: 
       objectReference: {fileID: 1479144711}
+    - target: {fileID: 1947582348, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.9716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947582348, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.33459416
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947582348, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.51389873
+      objectReference: {fileID: 0}
     - target: {fileID: 900573756270652450, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: m_LocalScale.x
       value: 2.1699722

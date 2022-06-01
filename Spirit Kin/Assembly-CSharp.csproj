@@ -89,7 +89,7 @@
      <Compile Include="Assets\Scripts\Curse and Buffs\Curses\Curse.cs" />
      <Compile Include="Assets\Scripts\Enemy\EnemyPathfinding.cs" />
      <Compile Include="Assets\Scripts\Curse and Buffs\Curses\rangeBlessing.cs" />
-     <Compile Include="Assets\Inverter.cs" />
+     <Compile Include="Assets\Scripts\Player\Inverter.cs" />
      <Compile Include="Assets\Scripts\Curse and Buffs\Stats\PlayerStats.cs" />
      <Compile Include="Assets\Scripts\UI\ControlOverlayHandler.cs" />
      <Compile Include="Assets\Scripts\OnlineLeaderboard\PlayfabManager.cs" />
@@ -833,32 +833,26 @@
     <ProjectReference Include="AmplifyShaderEditor.csproj">
       <Project>{57a0205d-4c57-e87d-a0c0-a280c60d05fa}</Project>
       <Name>AmplifyShaderEditor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="PlayFabSDKEditor.csproj">
       <Project>{9461a5dd-4051-7408-3540-099d26c11d9e}</Project>
       <Name>PlayFabSDKEditor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="PlayFabEditorExtensions.csproj">
       <Project>{d32c07df-af48-330c-6986-4629ebef35b6}</Project>
       <Name>PlayFabEditorExtensions</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="PlayFab.csproj">
       <Project>{4dcf9658-1f89-8c83-1501-0591d77fe414}</Project>
       <Name>PlayFab</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="StylizedWaterForURP.csproj">
       <Project>{7b1de49a-635e-9bd5-3faa-bdfb92347257}</Project>
       <Name>StylizedWaterForURP</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="StylizedWaterForURPEditor.csproj">
       <Project>{d1f453e9-29af-82ee-3798-43b6833b2002}</Project>
       <Name>StylizedWaterForURPEditor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
