@@ -10,13 +10,13 @@ public class Player_sfx : MonoBehaviour
     private AudioClip[] Slashclips;
     [SerializeField]
     private AudioClip[] Dodgeclips;
-    private AudioSource audioSource;
+    public AudioSource audioSource;
+    public AudioSource footstepAudioSource;
     public AudioClip charge, release;
     private bool dodgeSoundPlaying = false;
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
     }
     private void Update() {
 
@@ -26,7 +26,8 @@ public class Player_sfx : MonoBehaviour
     {
         AudioClip clip = GetRandomClip(Stepclips);
         //audioSource.pitch = Random.Range(0.9f, 1.1f);
-        audioSource.PlayOneShot(clip);
+        footstepAudioSource.volume = 0.2f;
+        footstepAudioSource.PlayOneShot(clip);
     }
 
     private void Slash()

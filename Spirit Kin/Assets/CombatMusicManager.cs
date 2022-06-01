@@ -14,7 +14,6 @@ public class CombatMusicManager : MonoBehaviour
     public bool playerBeingChased;
 
     [Header("Parts of BGM")]
-    [SerializeField] AudioClip beginCombatBGM;
     [SerializeField] AudioClip loopCombatBGM;
     [SerializeField] AudioClip endCombatBGM;
 
@@ -70,7 +69,7 @@ public class CombatMusicManager : MonoBehaviour
     {
         if (newState == combatBGM) return;
 
-        if (newState == MusicState.Begin) { combatBGMPlayer.clip = beginCombatBGM; combatBGMPlayer.loop = false; combatBGMPlayer.Play();}
+        if (newState == MusicState.Begin) { combatBGMPlayer.clip = loopCombatBGM; combatBGMPlayer.loop = false; combatBGMPlayer.Play();}
         else if (newState == MusicState.Loop) { combatBGMPlayer.clip = loopCombatBGM; combatBGMPlayer.loop = true; combatBGMPlayer.Play();}
         else if (newState == MusicState.End) { combatBGMPlayer.clip = endCombatBGM; combatBGMPlayer.loop = false; combatBGMPlayer.Play();}
 
