@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class CharacterStats : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class CharacterStats : MonoBehaviour
     public Stat speed;
 
     public Text SoulsUI;
+    public VisualEffect impactVFX;
     public ParticleSystem hitVFX;
 
     public GameObject deathUI;
@@ -49,7 +51,8 @@ public class CharacterStats : MonoBehaviour
     }
 
     public virtual void TakeDamage (float damage, float knockBackStrength) {
-        hitVFX.Play();
+        //hitVFX.Play();
+        impactVFX.Play();
         //armor system
         damage -= armor.GetValue();
         damage = Mathf.Clamp(damage, 0.05f * currentHealth, float.MaxValue);

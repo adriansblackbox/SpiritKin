@@ -77813,6 +77813,18 @@ PrefabInstance:
       propertyPath: SwordVFX.Array.data[5]
       value: 
       objectReference: {fileID: 1479144711}
+    - target: {fileID: 900573756270652450, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.1699722
+      objectReference: {fileID: 0}
+    - target: {fileID: 900573756270652450, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.1699722
+      objectReference: {fileID: 0}
+    - target: {fileID: 900573756270652450, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.1699722
+      objectReference: {fileID: 0}
     - target: {fileID: 1195756069521063408, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: FollowCamera
       value: 
@@ -78030,6 +78042,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1510128432}
     - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: impactVFX
+      value: 
+      objectReference: {fileID: 5236670065889087052}
+    - target: {fileID: 4741540070320059872, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: healthBarCanvas
       value: 
       objectReference: {fileID: 0}
@@ -78136,6 +78152,11 @@ ParticleSystem:
 --- !u!1 &5236670065889087051 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3522750856141052614, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+  m_PrefabInstance: {fileID: 5236670065889087048}
+  m_PrefabAsset: {fileID: 0}
+--- !u!2083052967 &5236670065889087052 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 1074815873044383571, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
   m_PrefabInstance: {fileID: 5236670065889087048}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &5237998687442335436
