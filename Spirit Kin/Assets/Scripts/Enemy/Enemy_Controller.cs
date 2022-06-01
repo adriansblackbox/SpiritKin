@@ -130,7 +130,6 @@ public class Enemy_Controller : MonoBehaviour
     public NavMeshAgent ThisEnemy;
     public NavMeshPath path;
     public GameObject player;
-    public GameObject alertBox;
 
 ///////////////////////////////////////////////// SPHERECASTING
     [Header("Spherecasting")]
@@ -141,19 +140,10 @@ public class Enemy_Controller : MonoBehaviour
 
     private RaycastHit hitInfo;
 
-///////////////////////////////////////////////// STATE BOX FOR TESTING
+///////////////////////////////////////////////// DEBUGGING
     [Header("Debugging")]
     public bool showLogs = true;
     public bool showPlayerDetection = true;
-
-    public Material alertedMat;
-    public Material chasingMat;
-    public Material idleMat;
-    public Material patrolMat;
-    public Material relocateMat;
-    public Material surroundMat;
-    public Material attackMat;
-    public Material recoverMat;
 
     // Start is called before the first frame update
     public GameObject LockOnArrow;
@@ -165,7 +155,6 @@ public class Enemy_Controller : MonoBehaviour
         player = GameObject.Find("Player");
         es = GameObject.Find("ShrineManager").GetComponent<Enemy_Spawner>();
         ai = shrine.GetComponent<AI_Manager>();
-        enemyAnimator = GetComponent<Animator>();
         determineQuadrant();
         movementQueue = new List<Vector3>();
         LockOnArrow.SetActive(false);
@@ -408,11 +397,12 @@ public class Enemy_Controller : MonoBehaviour
     {
         changeState(MotionState.Stunned);
         enemyAnimator.SetBool("Stunned", true);
-        //finishAttack();
 
         enemyAudio.Stop();
         enemyAudio.clip = hurtAudio;
         enemyAudio.Play();
+
+        currentAttack = null;
 
         //select which stun animation will be played
         int temp = Random.Range(0, stunAnimTriggers.Length);
