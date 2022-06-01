@@ -3478,7 +3478,7 @@ MonoBehaviour:
   chargeAudio: {fileID: 8300000, guid: c15018347257b1044bddb7bb4652d144, type: 3}
   hurtAudio: {fileID: 8300000, guid: 848221c2d12b2924ea516e168741732b, type: 3}
   swipeAudio: {fileID: 0}
-  enemyAnimator: {fileID: 0}
+  enemyAnimator: {fileID: 7815490150938240165}
   recoveryTimer: 0
   combo: 0
   currentAttack: {fileID: 0}
@@ -3570,7 +3570,6 @@ MonoBehaviour:
   breakDist: 30
   ThisEnemy: {fileID: 657498701014188137}
   player: {fileID: 919132149155446097, guid: b7e359ffce63eed41a9894d702058559, type: 3}
-  alertBox: {fileID: 3479692116232897869}
   visionFanOrigins:
   - {fileID: 6616837186878803663}
   - {fileID: 2300758927241362961}
@@ -3629,14 +3628,6 @@ MonoBehaviour:
   targetDetectionRange: 45
   showLogs: 1
   showPlayerDetection: 0
-  alertedMat: {fileID: 2100000, guid: 353a2592ff3736b4dac2eb8104fbcc65, type: 2}
-  chasingMat: {fileID: 2100000, guid: 8a14e898cff323941a4cdf2ce999739c, type: 2}
-  idleMat: {fileID: 2100000, guid: f334dd398f7a6c04699e93fd64a7b1a3, type: 2}
-  patrolMat: {fileID: 2100000, guid: 7bd3dedd35a04954d9f52e80319ba0d1, type: 2}
-  relocateMat: {fileID: 2100000, guid: 675a00490b51fc444b1ef4484fefc6fa, type: 2}
-  surroundMat: {fileID: 2100000, guid: 204045e4779574a4bbb89d75e026cec7, type: 2}
-  attackMat: {fileID: 2100000, guid: f17027f96abdc724c8feeb447ee3d0d7, type: 2}
-  recoverMat: {fileID: 2100000, guid: 518f7a53f518aff478bc6c0e910acd91, type: 2}
   LockOnArrow: {fileID: 4441244539805809482}
 --- !u!195 &657498701014188137
 NavMeshAgent:

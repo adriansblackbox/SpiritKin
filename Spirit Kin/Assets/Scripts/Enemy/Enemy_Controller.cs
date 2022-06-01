@@ -515,13 +515,16 @@ public class Enemy_Controller : MonoBehaviour
 
     private void attackRecovery()
     {
-        if (recoveryTimer < currentAttack.recoveryTime)
+        if (currentAttack != null)
         {
-            recoveryTimer += Time.deltaTime;
-        }
-        else
-        {
-            finishAttack();
+            if (recoveryTimer < currentAttack.recoveryTime)
+            {
+                recoveryTimer += Time.deltaTime;
+            }
+            else
+            {
+                finishAttack();
+            }           
         }
     }
 
