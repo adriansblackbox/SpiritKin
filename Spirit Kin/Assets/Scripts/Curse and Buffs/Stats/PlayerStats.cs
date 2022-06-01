@@ -301,7 +301,7 @@ public class PlayerStats : CharacterStats
 
     public override void TakeDamage(float damage, float knockBackStrength)
     {
-        hitVFX.Play();
+        impactVFX.Play();
 
         //armor system
         damage -= armor.GetValue();
