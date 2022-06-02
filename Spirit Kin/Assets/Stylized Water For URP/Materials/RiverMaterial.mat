@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: RiverMaterial
   m_Shader: {fileID: -6465566751694194690, guid: a9aea49e19495174f80f910ddb189a37, type: 3}
-  m_ShaderKeywords: FOAM_SHADOWS_ON INTERSECTION_EFFECTS_ON SURFACE_FOAM_ON WATER_LIGHTING_ON
-    WORLD_SPACE_UV_ON
+  m_ShaderKeywords: FOAM_SHADOWS_ON INTERSECTION_EFFECTS_ON REFRACTION_ON SURFACE_FOAM_ON
+    WATER_LIGHTING_ON WORLD_SPACE_UV_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -42,7 +42,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - INTERSECTION_EFFECTS: 1
-    - REFRACTION: 0
+    - REFRACTION: 1
     - SURFACE_FOAM: 1
     - WORLD_SPACE_UV: 1
     - _IntersectionFoamBlend: 1
@@ -64,15 +64,15 @@ Material:
     - _ShoreColor: {r: 1, g: 1, b: 1, a: 0}
     - _SurfaceFoamColor1: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 0.3215686}
     - _SurfaceFoamColor2: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 0.7294118}
-    - _SurfaceFoamMovement: {r: 0.817, g: 0, b: 0.47, a: 0.34}
+    - _SurfaceFoamMovement: {r: 7.51, g: 0.71, b: 0.47, a: 0.34}
     - _SurfaceFoamSampling: {r: 0.598, g: 1.5, b: 0, a: 0}
-    - _SurfaceFoamTilingAndOffset: {r: -1, g: -1, b: 0.97, a: 2}
+    - _SurfaceFoamTilingAndOffset: {r: -1, g: -1, b: 0.97, a: 1.08}
     - _WaterColorDeep: {r: 0.07289071, g: 0.24528301, b: 0.23067346, a: 1}
     - _WaterColorHorizon: {r: 0.4528302, g: 0.42147008, b: 0.31399074, a: 1}
     - _WaterColorShallow: {r: 0.19686721, g: 0.5283019, b: 0.5037512, a: 1}
     - _WaveColor: {r: 0, g: 0, b: 0, a: 0}
     - _WaveDirections: {r: 0, g: 1, b: 0, a: 0}
-    - _WaveVisuals: {r: 0, g: 20, b: 3, a: 0}
+    - _WaveVisuals: {r: 0.07, g: 20, b: 3, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &3884871068361501984
 MonoBehaviour:
