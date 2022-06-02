@@ -488,28 +488,35 @@ public class Enemy_Controller : MonoBehaviour
         startPosition = Vector3.zero;
         dirVec = Vector3.zero;
 
-        if (currentAttack.attackNumber == 3)
+        if (currentAttack != null) 
         {
-            EnemyAttack = AttackState.Recovering;
-            return;
+            if (currentAttack.attackNumber == 3)
+            {
+                EnemyAttack = AttackState.Recovering;
+                return;
+            }
+            else if (Vector3.Distance(player.transform.position, transform.position) < 15f && !combo)
+            {
+                enemyAnimator.SetBool("PlayerInRange", true);
+                combo = true;
+                hasHitPlayer = false;
+                
+                //if comboing need to change the attack
+                if (currentAttack.attackNumber == 1)
+                    currentAttack = enemyAttacks[2];
+                else
+                    currentAttack = enemyAttacks[1];
+            }
+            else 
+            {
+                enemyAnimator.SetBool("PlayerInRange", false);
+                combo = false;
+                EnemyAttack = AttackState.Recovering;
+            }
         }
-        else if (Vector3.Distance(player.transform.position, transform.position) < 15f && !combo)
+        else
         {
-            enemyAnimator.SetBool("PlayerInRange", true);
-            combo = true;
-            hasHitPlayer = false;
-            
-            //if comboing need to change the attack
-            if (currentAttack.attackNumber == 1)
-                currentAttack = enemyAttacks[2];
-            else
-                currentAttack = enemyAttacks[1];
-        }
-        else 
-        {
-            enemyAnimator.SetBool("PlayerInRange", false);
-            combo = false;
-            EnemyAttack = AttackState.Recovering;
+            finishAttack();
         }
     }
 
