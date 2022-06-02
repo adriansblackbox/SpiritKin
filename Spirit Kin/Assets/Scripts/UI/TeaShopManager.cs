@@ -48,6 +48,8 @@ public class TeaShopManager : MonoBehaviour
 
     public AudioClip cantafford;
 
+    public AudioClip hover;
+
     public AudioSource audioSource;
 
     private PlayerData pd;
@@ -252,8 +254,15 @@ public class TeaShopManager : MonoBehaviour
         audioSource.PlayOneShot(purchase);
     }
 
+    public void Hover()
+    {
+        audioSource.pitch = 1f;
+        audioSource.PlayOneShot(hover);
+    }
+
     public void Cantafford()
     {
+        audioSource.pitch = 1f;
         audioSource.PlayOneShot(cantafford);
     }
    
