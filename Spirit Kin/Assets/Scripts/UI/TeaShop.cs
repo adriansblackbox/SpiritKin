@@ -35,6 +35,8 @@ public class TeaShop : MonoBehaviour
 
     public Sprite AButton;
     public Sprite DButton;
+    public AudioClip shopenter;
+    public AudioSource audioSource;
 
     public Sprite LeftBumperButton;
     public Sprite RightBumperButton;
@@ -150,7 +152,13 @@ public class TeaShop : MonoBehaviour
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 0;
         //shop is now open
         isOpen = true;
+        Enter();
         Debug.Log ("opened menu");
+    }
+
+    public void Enter()
+    {
+        audioSource.PlayOneShot(shopenter);
     }
 
     public void CloseMenu()
