@@ -44,11 +44,13 @@ public class TeaShopManager : MonoBehaviour
     // public SpriteRenderer currentSprite;
     public int selectedOption = 0;
 
-    public AudioClip purchase;
+    public AudioClip purchase, cantafford, hover;
 
-    public AudioClip cantafford;
+    [SerializeField]
+    private AudioClip[] shopexits;
 
-    public AudioClip hover;
+    [SerializeField]
+    private AudioClip[] shopchanges;
 
     public AudioSource audioSource;
 
@@ -73,7 +75,6 @@ public class TeaShopManager : MonoBehaviour
         shopBuffList.Add (damageBuff);
         shopBuffList.Add (speedBuff);
         shopBuffList.Add (healthBuff);
-
         UpdateDisplay(0);
     }
 
@@ -84,7 +85,7 @@ public class TeaShopManager : MonoBehaviour
         {
             selectedOption = 0;
         }
-
+        Change();
         UpdateDisplay (selectedOption);
     }
 
@@ -95,7 +96,7 @@ public class TeaShopManager : MonoBehaviour
         {
             selectedOption = shopBuffList.Count - 1;
         }
-
+        Change();
         UpdateDisplay (selectedOption);
     }
 
@@ -166,6 +167,7 @@ public class TeaShopManager : MonoBehaviour
 
     public void Exit()
     {
+        Shopexit();
         GameObject
             .FindGameObjectWithTag("TeaShop")
             .GetComponent<TeaShop>()
@@ -250,7 +252,7 @@ public class TeaShopManager : MonoBehaviour
     //Ethan's code:
     public void Purchase()
     {
-        audioSource.pitch = Random.Range(1f, 2f);
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.PlayOneShot(purchase);
     }
 
@@ -265,6 +267,22 @@ public class TeaShopManager : MonoBehaviour
         audioSource.pitch = 1f;
         audioSource.PlayOneShot(cantafford);
     }
-   
+
+    
+    public void Change()
+    {
+        AudioClip clip = GetRandomClip(shopchanges);
+        audioSource.PlayOneShot(clip);
+    }
+    public void Shopexit()
+    {
+        AudioClip clip = GetRandomClip(shopexits);
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.PlayOneShot(clip);
+    }
+    private AudioClip GetRandomClip(AudioClip[] cliparray)
+    {
+        return cliparray[Random.Range(0, cliparray.Length)];
+    }
 }
     
