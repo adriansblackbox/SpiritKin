@@ -113,11 +113,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursed: 0
   shrineSpawnRange: 20
+  enemiesToSpawn: 0
   enemiesToSpawnWhenCursed: 2
   amountAlreadySpawned: 0
-  TotalCurseTime: 90
+  TotalCurseTime: 100
   CurCurseTime: 0
-  Beacon: {fileID: 0}
   nonCursedContainer: {fileID: 0}
   posUpperX: 50
   negUpperX: -50
@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86b3daad9ef627645b983df8e5d28bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  es: {fileID: 0}
   surroundSpots: []
   surroundSpotAvailability: 
   Player: {fileID: 0}

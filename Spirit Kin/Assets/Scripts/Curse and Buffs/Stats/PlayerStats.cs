@@ -71,26 +71,29 @@ public class PlayerStats : CharacterStats
             BuffHandler (Buffs);
             for (int i = 0; i < Buffs.Count; i++)
             {
-                if (Buffs[i].timeActive < Buffs[i].duration)
+                if (!FindObjectOfType<MainHub>().playerInHub)
                 {
-                    Buffs[i].timeActive += Time.deltaTime;
-                    BuffsUI[i]
-                        .transform
-                        .Find("Bar")
-                        .gameObject
-                        .GetComponent<Image>()
-                        .fillAmount =
-                        1 - Buffs[i].timeActive / Buffs[i].duration;
-                }
-                else
-                {
-                    BuffsUI[i]
-                        .transform
-                        .Find("Bar")
-                        .gameObject
-                        .GetComponent<Image>()
-                        .enabled = false;
-                    Buffs[i].removeFlag = true;
+                    if (Buffs[i].timeActive < Buffs[i].duration)
+                    {
+                        Buffs[i].timeActive += Time.deltaTime;
+                        BuffsUI[i]
+                            .transform
+                            .Find("Bar")
+                            .gameObject
+                            .GetComponent<Image>()
+                            .fillAmount =
+                            1 - Buffs[i].timeActive / Buffs[i].duration;
+                    }
+                    else
+                    {
+                        BuffsUI[i]
+                            .transform
+                            .Find("Bar")
+                            .gameObject
+                            .GetComponent<Image>()
+                            .enabled = false;
+                        Buffs[i].removeFlag = true;
+                    }
                 }
             }
         }
