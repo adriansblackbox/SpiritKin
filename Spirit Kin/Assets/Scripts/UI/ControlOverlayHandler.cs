@@ -39,7 +39,6 @@ public class ControlOverlayHandler : MonoBehaviour
 
         if (keyboard)
         {
-            Cursor.lockState = CursorLockMode.None;
             MouseKeyboardOverlay.SetActive(true);
             XboxControllerOverlay.SetActive(false);
             nextLineIndicator.GetComponent<Image>().sprite = keyboardIndicator;
@@ -47,7 +46,6 @@ public class ControlOverlayHandler : MonoBehaviour
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
             MouseKeyboardOverlay.SetActive(false);
             XboxControllerOverlay.SetActive(true);
             nextLineIndicator.GetComponent<Image>().sprite = controllerIndicator;

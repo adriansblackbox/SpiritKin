@@ -34,6 +34,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] GameObject coinDescriptor;
     [SerializeField] GameObject curseDescriptor;
     [SerializeField] GameObject buffDescriptor;
+    [SerializeField] GameObject controlsLayout;
 
 
     [SerializeField] float moveTime;
@@ -42,6 +43,8 @@ public class TutorialManager : MonoBehaviour
     private Vector2 startPositionForCoin;
     private Vector2 startPositionForBuffs;
     private Vector2 startPositionForCurses;
+
+    [SerializeField] GameObject healthCircle;
 
     [SerializeField] GameObject coinObject;
     public Vector2 coinIntendedPosition;
@@ -60,6 +63,15 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] GameObject thirdCurse;
     public Vector2 thirdCurseIntendedPosition;
 
+    [SerializeField] GameObject firstShrine;
+    public Vector2 firstShrineIntendedPosition;
+    [SerializeField] GameObject secondShrine;
+    public Vector2 secondShrineIntendedPosition;
+    [SerializeField] GameObject thirdShrine;
+    public Vector2 thirdShrineIntendedPosition;
+    [SerializeField] GameObject fourthShrine;
+    public Vector2 fourthShrineIntendedPosition;
+
     [Header("Sounds")]
     [SerializeField] AudioSource NPCAudio;
     [SerializeField] AudioClip heyAudio;
@@ -74,6 +86,7 @@ public class TutorialManager : MonoBehaviour
             calculateMiddlePoints();
             pc.enabled = false;
             st.ActivateText();
+            controlsLayout.SetActive(false);
             StartCoroutine("Hey");
         }
         else
@@ -86,6 +99,12 @@ public class TutorialManager : MonoBehaviour
             firstCurse.SetActive(true);
             secondCurse.SetActive(true);
             thirdCurse.SetActive(true);
+            controlsLayout.SetActive(true);
+            healthCircle.SetActive(true);
+            firstShrine.SetActive(true);
+            secondShrine.SetActive(true);
+            thirdShrine.SetActive(true);
+            fourthShrine.SetActive(true);
         }
     }
 
@@ -97,10 +116,20 @@ public class TutorialManager : MonoBehaviour
             if (st.CheckIfDialogueCompleted() && CheckForInput())
             {
                 tutorialFinished = true;
+                tutorialOn = false;
                 coinDescriptor.SetActive(false);
                 buffDescriptor.SetActive(false);
                 curseDescriptor.SetActive(false);
                 dialogueObject.SetActive(false);
+
+                
+                controlsLayout.SetActive(true);
+                healthCircle.SetActive(true);
+                firstShrine.SetActive(true);
+                secondShrine.SetActive(true);
+                thirdShrine.SetActive(true);
+                fourthShrine.SetActive(true);
+                
                 pc.enabled = true;
             }
             //Stop typing and show entirety of NPC's line

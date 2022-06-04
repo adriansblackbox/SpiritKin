@@ -19,8 +19,6 @@ public class Shrine : MonoBehaviour
 
     public int enemiesToSpawnWhenCursed; //tracking the value to be used when the shrine gets crused
     public int amountAlreadySpawned; //how many enemies have been spawned on this current cursing
-
-    //TRACK HOW MANY ENEMIES THE PLAYER HAS BEATEN
     
     private float myTime = 3f;
     public float TotalCurseTime = 90f;

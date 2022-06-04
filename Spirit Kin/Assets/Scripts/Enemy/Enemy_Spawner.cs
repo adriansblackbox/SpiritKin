@@ -22,6 +22,7 @@ public class Enemy_Spawner : MonoBehaviour
     public CurseMeter curseMeter;
 
     public Shrine shrinePlayerIsAt;
+    private Transform lastCursedShrine;
 
     public int totalShrines;
 
@@ -50,7 +51,8 @@ public class Enemy_Spawner : MonoBehaviour
     {
         if (!FindObjectOfType<MainHub>().playerInHub && (tm.tutorialFinished || !tm.tutorialOn) )
         {
-            myTime += Time.deltaTime;
+            if (nonCursedContainer.transform.childCount > 0)
+                myTime += Time.deltaTime;
             difficultyTimer += Time.deltaTime;
         }
     }
@@ -96,16 +98,15 @@ public class Enemy_Spawner : MonoBehaviour
 
     public void checkIfInCombat() //need to add another layer that ensures all of the enemies have been spawned before setting to false
     {
-        if (cursedContainer.transform.childCount > 0)
+        if (cursedContainer.transform.childCount > 0 && !cmm.playerInCombat)
         {
-            cmm.playerBeingChased = false;
             for (int i = 0; i < cursedContainer.transform.childCount; i++)
                 if (cursedContainer.transform.GetChild(i).GetComponent<AI_Manager>().enemiesInCombat.Count > 0)
-                    cmm.playerBeingChased = true;
+                    cmm.playerInCombat = true;
         }
         else if (shrinePlayerIsAt.amountAlreadySpawned >= shrinePlayerIsAt.enemiesToSpawn && shrinePlayerIsAt.transform.GetChild(0).childCount == 0)
         {
-            cmm.playerBeingChased = false;
+            cmm.playerInCombat = false;
         }
     }
 
@@ -125,17 +126,25 @@ public class Enemy_Spawner : MonoBehaviour
         }
         else
         {
-            int temp = Random.Range(0, nonCursedContainer.transform.childCount);
+            int temp = Random.Range(0, nonCursedContainer.transform.childCount); 
             Transform shrine = nonCursedContainer.transform.GetChild(temp);
-            shrine.parent = cursedContainer.transform;
-            shrine.GetComponent<Shrine>().cursed = true;
-            shrine.GetComponent<Shrine>().CurCurseTime = 0f;
-             shrine.GetComponent<Shrine>().PlayCurseVFX();
-            currentCursedShrines++;
-            scaleNumberOfEnemiesToSpawn();
-            shrine.GetComponent<Shrine>().setEnemiesToSpawn();
+            if (shrine == lastCursedShrine) 
+            {
+                curseShrine(false);
+                return;
+            }
+            else
+            {
+                lastCursedShrine = shrine;
+                shrine.parent = cursedContainer.transform;
+                shrine.GetComponent<Shrine>().cursed = true;
+                shrine.GetComponent<Shrine>().CurCurseTime = 0f;
+                shrine.GetComponent<Shrine>().PlayCurseVFX();
+                currentCursedShrines++;
+                scaleNumberOfEnemiesToSpawn();
+                shrine.GetComponent<Shrine>().setEnemiesToSpawn();
+            }
         }
-
     }
 
     //increments limits to help in scaling NumberOfEnemiesToSpawn
@@ -158,8 +167,9 @@ public class Enemy_Spawner : MonoBehaviour
             {
                 difficulty += 0.5f;
             }
-            else{
-                difficulty += 0.1f;
+            else
+            {
+                difficulty += 0.125f;
             }
             curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
         }

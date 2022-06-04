@@ -11,7 +11,7 @@ public class CombatMusicManager : MonoBehaviour
 
     public MusicState combatBGM;
 
-    public bool playerBeingChased;
+    public bool playerInCombat;
 
     [Header("Parts of BGM")]
     [SerializeField] AudioClip BeginCombatBGM;
@@ -32,7 +32,7 @@ public class CombatMusicManager : MonoBehaviour
         switch (combatBGM)
         {
             case MusicState.Off:
-                if (playerBeingChased)
+                if (playerInCombat)
                 {
                     changeMusicState(MusicState.Begin);
                     break;
@@ -47,14 +47,14 @@ public class CombatMusicManager : MonoBehaviour
                     break;
                 }
                     
-                if (!playerBeingChased || gm.gameOver)
+                if (!playerInCombat || gm.gameOver)
                 {
                     changeMusicState(MusicState.End);
                     break;
                 }
                 break;
             case MusicState.Loop:
-                if (!playerBeingChased || gm.gameOver)
+                if (!playerInCombat || gm.gameOver)
                     changeMusicState(MusicState.End);
                 break;
             case MusicState.End:

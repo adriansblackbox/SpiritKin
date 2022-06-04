@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class ExitedArena : MonoBehaviour
 {
-    private void OnTriggerExit(Collider col) {
-        Debug.Log("OnTriggerExit Triggered " + gameObject.name + ": (" + col.name + ")");
+    private void OnTriggerExit(Collider col) 
+    {
         if (col.tag == "Enemy")
         {
-            Debug.Log("Set Enemy's exitedArena bool to true");
             col.transform.parent.GetComponent<Enemy_Controller>().exitedArena = true;
+        }
+    }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.tag == "Player")
+        {
+            FindObjectOfType<Enemy_Spawner>().shrinePlayerIsAt = GetComponent<Shrine>();
         }
     }
 }

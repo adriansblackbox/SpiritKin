@@ -128,7 +128,14 @@ public class equipmentShop : MonoBehaviour
     }
     public void OpenMenu()
     {
-        // Cursor.lockState = CursorLockMode.None;
+        if (FindObjectOfType<ControlOverlayHandler>().keyboard)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
         //disable player controller
         playerController.speed = 0;
@@ -155,8 +162,10 @@ public class equipmentShop : MonoBehaviour
 
     public void CloseMenu()
     {
-        //enable player controller
-        
+        if (FindObjectOfType<ControlOverlayHandler>().keyboard)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
         //GameObject.FindWithTag("UI").GetComponent<CanvasGroup>().alpha = 1;
         equipMenu.SetActive(false);
