@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class follow : MonoBehaviour
+public class Coin : MonoBehaviour
 {
     private Vector3 velocity = Vector3.up;
     private Rigidbody rb;
     private Vector3 startPosition;
     private bool isFollowing = false;
 
+    private int coinValue;
+
     void Start()
     {
+        coinValue = Random.Range(1, 3);
         
         startPosition = this.transform.position;
         velocity *= Random.Range(4f, 6f);//random upward velocity
@@ -56,6 +59,7 @@ public class follow : MonoBehaviour
     //destroy the object when colliding with the player
     void OnTriggerEnter(Collider collision){
         if(collision.gameObject.tag == "Player"){
+            collision.gameObject.GetComponent<PlayerStats>().addCoins(coinValue);
             Destroy(this.gameObject);
         }
     }

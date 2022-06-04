@@ -5,7 +5,7 @@ using UnityEngine;
 public class GenerateLoot : MonoBehaviour
 {
     [SerializeField]
-    private List<GameObject> loot = new List<GameObject>();
+    private GameObject loot;
 
     [SerializeField]
     [Range(1, 99)]
@@ -22,8 +22,6 @@ public class GenerateLoot : MonoBehaviour
     [SerializeField]
     private bool spawnLoot = false;
 
-    private GameObject[] totalCoins;
-
     private void OnValidate()
     {
         if (minNumber > maxNumber)
@@ -39,7 +37,8 @@ public class GenerateLoot : MonoBehaviour
     void Update()
     {
         
-        if(Input.GetKeyDown(KeyCode.E)){
+        if (Input.GetKeyDown(KeyCode.E))
+        {
             spawnLoot = true;
         }
 
@@ -55,6 +54,7 @@ public class GenerateLoot : MonoBehaviour
     {
         hasBeenCollected = true;
         int numberOfLoot = Random.Range(minNumber, maxNumber);
+        Debug.Log(numberOfLoot);
         StartCoroutine(CreateLoot(numberOfLoot));
         
     }
@@ -64,10 +64,11 @@ public class GenerateLoot : MonoBehaviour
         for (int i = 0; i < numberOfLoot; i++)
         {
             GameObject tempLoot =
-                Instantiate(loot[Random.Range(0, loot.Count)],
+                Instantiate(loot,
                 spawnPoint.position,
                 Quaternion.identity);
+            
+            yield return new WaitForSeconds(0.05f);
         }
-        yield return new WaitForSeconds(0.15f);
     }
 }
