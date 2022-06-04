@@ -29,12 +29,14 @@ public class follow : MonoBehaviour
 
         if(velocity.y <-4f){
             velocity.y = -4f;
+            Debug.Log("1");
         }else
         {
             velocity -= Vector3.up * 5 * Time.deltaTime;//gravity
+            Debug.Log("2");
         }
 
-        if(Mathf.Abs(rb.position.y - startPosition.y) < 0.25f && velocity.y < 0f){
+        if(Mathf.Abs(rb.position.y - startPosition.y) < 0.25f ){
             //remove all forces
             rb.velocity = Vector3.zero;
             //make the collider is trigger
