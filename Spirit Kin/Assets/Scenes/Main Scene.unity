@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.63
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1159954109}
-  m_IndirectSpecularColor: {r: 0.15167141, g: 0.16167074, b: 0.29302448, a: 0.63}
+  m_IndirectSpecularColor: {r: 0.15172845, g: 0.16171807, b: 0.2929785, a: 0.63}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -71413,9 +71413,33 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 420366550}
     - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: shopexits.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: shopchanges.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: shopexits.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 39bb8ea2b8176b0409c636e5eae4d766, type: 3}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: shopexits.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 12625928766211145895bacc8259fa4b, type: 3}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: Purchaseclips.Array.size
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: shopchanges.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: a1a4eab113743d94583dd6c182ee41d6, type: 3}
+    - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
+      propertyPath: shopchanges.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: c2edb5568449568478811f1b61393d2c, type: 3}
     - target: {fileID: 288909223101647875, guid: ea393493a37e4cf4e8ab90a07383a1c9, type: 3}
       propertyPath: Purchaseclips.Array.data[0]
       value: 

@@ -85,7 +85,7 @@ public class TeaShopManager : MonoBehaviour
         {
             selectedOption = 0;
         }
-        // Change();
+        Change();
         UpdateDisplay (selectedOption);
     }
 
@@ -96,7 +96,7 @@ public class TeaShopManager : MonoBehaviour
         {
             selectedOption = shopBuffList.Count - 1;
         }
-        // Change();
+        Change();
         UpdateDisplay (selectedOption);
     }
 
@@ -167,7 +167,7 @@ public class TeaShopManager : MonoBehaviour
 
     public void Exit()
     {
-        // Shopexit();
+        Shopexit();
         GameObject
             .FindGameObjectWithTag("TeaShop")
             .GetComponent<TeaShop>()
