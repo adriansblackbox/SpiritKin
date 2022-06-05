@@ -3954,6 +3954,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6738803524394422916, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
   m_PrefabInstance: {fileID: 1314138438}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &97374314 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+  m_PrefabInstance: {fileID: 1314138438}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97374312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &97592380
 GameObject:
   m_ObjectHideFlags: 0
@@ -65643,7 +65654,7 @@ MonoBehaviour:
   cursedContainer: {fileID: 255756218}
   enemyPrefab: {fileID: 6192531991054698248, guid: 0b818338e7b231644951c6508b80153d, type: 3}
   curseMeter: {fileID: 7969240397504004765}
-  shrinePlayerIsAt: {fileID: 0}
+  shrinePlayerIsAt: {fileID: 97374314}
   totalShrines: 0
   spawnInterval: 3
   currentCursedShrines: 0
