@@ -245,6 +245,10 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public void OpenLink(){
+        Application.OpenURL("https://yliu637.wixsite.com/spiritkin");
+    }
+
     public IEnumerator ConfirmationBox(){
         confirmationPrompt.SetActive(true);
         yield return new WaitForSeconds(2);
