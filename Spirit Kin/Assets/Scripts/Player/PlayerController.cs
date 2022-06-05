@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using Cinemachine;
 
 /*
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MouseSensitivity = 200f;
     [SerializeField] private float StickLookSensitivity = 200f;
     [SerializeField] private GameObject GravitySword;
+    [SerializeField] private VisualEffect SmokeBomb;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
 	[HideInInspector] public float CinemachineTargetPitch;
@@ -215,11 +217,15 @@ public class PlayerController : MonoBehaviour
     }
 
     private void DashInvisiblityOn(){
+        SmokeBomb.SetVector3("Player Position", new Vector3(this.transform.position.x, this.transform.position.y + 3f, this.transform.position.z));
+        SmokeBomb.Play();
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(false);
         }
     }
     private void DashInvisiblityOff(){
+        SmokeBomb.SetVector3("Player Position", new Vector3(this.transform.position.x, this.transform.position.y + 3f, this.transform.position.z));
+        SmokeBomb.Play();
         for(int i = 0; i < DashInvisibleObjects.Length; i++){
             DashInvisibleObjects[i].SetActive(true);
         }
