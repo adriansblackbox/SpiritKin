@@ -21,19 +21,29 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] bool shownCoins;
     [SerializeField] bool shownTeas;
     [SerializeField] bool shownCurses;
+    [SerializeField] bool shownHealth;
     
     [Header("Cameras")]
     [SerializeField] GameObject playerCamera;
     [SerializeField] GameObject shrineCamera;
+    [SerializeField] GameObject statueCamera;
+    [SerializeField] GameObject mountainCamera;
+    [SerializeField] GameObject bambooCamera;
     [SerializeField] GameObject poolCamera1;
     [SerializeField] GameObject poolCamera2;
     [SerializeField] GameObject poolCamera3;
+
+    [Header("Tutorial Canvases")]
+    [SerializeField] GameObject UICanvas;
+    [SerializeField] GameObject DialogueCanvas;
 
     [Header("Tutorial UI Elements")]
     [SerializeField] GameObject dialogueObject;
     [SerializeField] GameObject coinDescriptor;
     [SerializeField] GameObject curseDescriptor;
     [SerializeField] GameObject buffDescriptor;
+    [SerializeField] GameObject healthDescriptor;
+    [SerializeField] GameObject shrineDescriptor;
     [SerializeField] GameObject controlsLayout;
 
 
@@ -43,8 +53,11 @@ public class TutorialManager : MonoBehaviour
     private Vector2 startPositionForCoin;
     private Vector2 startPositionForBuffs;
     private Vector2 startPositionForCurses;
+    private Vector2 startPositionForShrines;
+    private Vector2 startPositionForHealth;
 
     [SerializeField] GameObject healthCircle;
+    public Vector2 healthIntendedPosition;
 
     [SerializeField] GameObject coinObject;
     public Vector2 coinIntendedPosition;
@@ -112,6 +125,11 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialOn)
         {
+
+            //special condition for a one of UI element
+            if (st.GetCurrentDisplayingText() == 4 && !st.typing)
+                shrineDescriptor.SetActive(true);
+
             //All dialogue has been shown and they give input
             if (st.CheckIfDialogueCompleted() && CheckForInput())
             {
@@ -142,15 +160,17 @@ public class TutorialManager : MonoBehaviour
             {
                 st.ActivateText();
                 chooseAndPlayDialogueSound();
-                if (!shownShrine && st.GetCurrentDisplayingText() == 1)
-                    StartCoroutine("ShowShrine");
-                else if (!shownCoins && st.GetCurrentDisplayingText() == 2)
-                    StartCoroutine("ShowCoins");
-                else if (!shownTeas && st.GetCurrentDisplayingText() == 3)
+                if (!shownShrine && st.GetCurrentDisplayingText() == 2)
+                    StartCoroutine("ShowShrines");
+                else if (!shownTeas && st.GetCurrentDisplayingText() == 5)
                     StartCoroutine("ShowTeas");
-                else if (!shownCurses && st.GetCurrentDisplayingText() == 4)
+                else if (!shownCoins && st.GetCurrentDisplayingText() == 6)
+                    StartCoroutine("ShowCoins");
+                else if (!shownCurses && st.GetCurrentDisplayingText() == 7)
                     StartCoroutine("ShowCurses");
-                else if (!shownPool && st.GetCurrentDisplayingText() == 5)
+                else if (!shownHealth && st.GetCurrentDisplayingText() == 8)
+                    StartCoroutine("ShowHealth");
+                else if (!shownPool && st.GetCurrentDisplayingText() == 9)
                     StartCoroutine("ShowPool");
             }
         }
@@ -159,7 +179,7 @@ public class TutorialManager : MonoBehaviour
     private void calculateMiddlePoints()
     {
         float canvasX = coinObject.transform.parent.GetComponent<RectTransform>().sizeDelta.x;
-        float canvasY = coinObject.transform.parent.GetComponent<RectTransform>().anchoredPosition.y;
+        float canvasY = coinObject.transform.parent.GetComponent<RectTransform>().sizeDelta.y;
 
         //coins 0,0 is top left so I need to get there and then do canvasX / 2 canvasY / 2
 
@@ -175,6 +195,10 @@ public class TutorialManager : MonoBehaviour
 
         startPositionForBuffs = new Vector2(-buffAndCurseContainerX - iconSize, -canvasY / 2);
         startPositionForCurses = new Vector2(buffAndCurseContainerX + iconSize, -canvasY / 2);
+        
+        startPositionForShrines = new Vector2(-iconSize, canvasY / 2);
+        startPositionForHealth = new Vector2(healthCircle.GetComponent<RectTransform>().anchoredPosition.x, 
+                                             -canvasY / 2 - healthCircle.GetComponent<RectTransform>().sizeDelta.y / 4);
     }
 
     private bool CheckForInput()
@@ -192,11 +216,113 @@ public class TutorialManager : MonoBehaviour
         NPCAudio.Play();
     }
 
+    private void showNonPlayerCamera()
+    {
+        showingNonPlayerCamera = true;
+        UICanvas.SetActive(false);
+    }
+
+    private void showPlayerCamera()
+    {
+        showingNonPlayerCamera = false;
+        UICanvas.SetActive(true);
+    }
+
     IEnumerator Hey()
     {
         yield return new WaitForSeconds(0.5f);
         NPCAudio.clip = heyAudio;
         NPCAudio.Play();
+    }
+
+    IEnumerator ShowShrine()
+    {
+        shownShrine = true;
+        showingNonPlayerCamera = true;
+        playerCamera.GetComponent<Camera>().enabled = false;
+        shrineCamera.GetComponent<Camera>().enabled = true;
+        shrineCamera.GetComponent<CameraFade>().Reset();
+        yield return new WaitForSeconds(5f);
+        playerCamera.GetComponent<Camera>().enabled = true;
+        playerCamera.GetComponent<CameraFade>().Reset();
+        shrineCamera.GetComponent<Camera>().enabled = false;
+        showingNonPlayerCamera = false;
+    }    
+
+    IEnumerator ShowShrines() //still needs shrine cameras (already one made for lantern shrine)
+    {
+        movingUIElement = true;
+        showingNonPlayerCamera = true;
+
+        playerCamera.GetComponent<Camera>().enabled = false;
+        shrineCamera.GetComponent<Camera>().enabled = true;
+        shrineCamera.GetComponent<CameraFade>().Reset();
+
+        yield return new WaitForSeconds(0.25f);
+        firstShrine.SetActive(true);
+        firstShrine.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForShrines.x, startPositionForShrines.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            firstShrine.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForShrines, new Vector3(firstShrineIntendedPosition.x, firstShrineIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+
+        yield return new WaitForSeconds(2f);
+        shrineCamera.GetComponent<Camera>().enabled = false;
+        statueCamera.GetComponent<Camera>().enabled = true;
+        secondShrine.SetActive(true);
+        secondShrine.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForShrines.x, startPositionForShrines.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            secondShrine.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForShrines, new Vector3(secondShrineIntendedPosition.x, secondShrineIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+
+        yield return new WaitForSeconds(1f);
+        statueCamera.GetComponent<Camera>().enabled = false;
+        mountainCamera.GetComponent<Camera>().enabled = true;
+        thirdShrine.SetActive(true);
+        thirdShrine.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForShrines.x, startPositionForShrines.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            thirdShrine.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForShrines, new Vector3(thirdShrineIntendedPosition.x, thirdShrineIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+
+        yield return new WaitForSeconds(1f);
+        mountainCamera.GetComponent<Camera>().enabled = false;
+        bambooCamera.GetComponent<Camera>().enabled = true;
+        fourthShrine.SetActive(true);
+        fourthShrine.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForShrines.x, startPositionForShrines.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            fourthShrine.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForShrines, new Vector3(fourthShrineIntendedPosition.x, fourthShrineIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+
+        yield return new WaitForSeconds(1f);
+        bambooCamera.GetComponent<Camera>().enabled = false;
+        playerCamera.GetComponent<Camera>().enabled = true;
+        playerCamera.GetComponent<CameraFade>().Reset();
+        shownShrine = true;
+        showingNonPlayerCamera = false;
+        movingUIElement = false;
     }
 
     IEnumerator ShowCoins()
@@ -224,12 +350,16 @@ public class TutorialManager : MonoBehaviour
         //fade in coin descriptor
             //lerp from 0 alpha to 1 on text color + background sprite color
         coinDescriptor.SetActive(true);
+
+        shownCoins = true;
     }
 
     IEnumerator ShowTeas()
     {
         movingUIElement = true;
-        
+
+        yield return new WaitForSeconds(0.5f);
+
         firstBuff.SetActive(true);
         firstBuff.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForBuffs.x, startPositionForBuffs.y, 0f);
         yield return new WaitForSeconds(0.25f);
@@ -270,6 +400,8 @@ public class TutorialManager : MonoBehaviour
         //fade in buff descriptor
             //lerp from 0 alpha to 1 on text color + background sprite color
         buffDescriptor.SetActive(true);
+
+        shownTeas = true;
     }
 
     IEnumerator ShowCurses()
@@ -316,27 +448,36 @@ public class TutorialManager : MonoBehaviour
         //fade in curse descriptor
             //lerp from 0 alpha to 1 on text color + background sprite color
         curseDescriptor.SetActive(true);
+
+        shownCurses = true;
     }
 
-
-    IEnumerator ShowShrine()
+    IEnumerator ShowHealth()
     {
-        shownShrine = true;
-        showingNonPlayerCamera = true;
-        playerCamera.GetComponent<Camera>().enabled = false;
-        shrineCamera.GetComponent<Camera>().enabled = true;
-        shrineCamera.GetComponent<CameraFade>().Reset();
-        yield return new WaitForSeconds(5f);
-        playerCamera.GetComponent<Camera>().enabled = true;
-        playerCamera.GetComponent<CameraFade>().Reset();
-        shrineCamera.GetComponent<Camera>().enabled = false;
-        showingNonPlayerCamera = false;
+        movingUIElement = true;
+
+        healthCircle.SetActive(true);
+        healthCircle.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForHealth.x, startPositionForHealth.y, 0f);
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            healthCircle.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForHealth, new Vector3(healthIntendedPosition.x, healthIntendedPosition.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+        
+        healthDescriptor.SetActive(true);
+        shownHealth = true;
+        movingUIElement = false;        
     }
 
     IEnumerator ShowPool()
     {
+        playerCamera.GetComponent<CameraFade>().Reset();
         shownPool = true;
-        showingNonPlayerCamera = true;
+        showNonPlayerCamera();
         playerCamera.GetComponent<Camera>().enabled = false;
         poolCamera1.GetComponent<Camera>().enabled = true;
 
@@ -351,6 +492,7 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         playerCamera.GetComponent<Camera>().enabled = true;
         poolCamera3.GetComponent<Camera>().enabled = false;
-        showingNonPlayerCamera = false;
+        playerCamera.GetComponent<CameraFade>().Reset();
+        showPlayerCamera();
     }
 }
