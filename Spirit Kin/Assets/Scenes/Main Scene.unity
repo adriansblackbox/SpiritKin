@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.63
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1159954109}
-  m_IndirectSpecularColor: {r: 0.15172845, g: 0.16171807, b: 0.2929785, a: 0.63}
+  m_IndirectSpecularColor: {r: 0.15167141, g: 0.16167074, b: 0.29302448, a: 0.63}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -53685,6 +53685,11 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4248901629901304854, guid: 5ab55cd20dca4f546be8c91c7403a34e, type: 3}
+--- !u!1 &1364198973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5810058020202823712, guid: 340c11d7cadea46438f228ea4114948b, type: 3}
+  m_PrefabInstance: {fileID: 3390130814995969327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1365532790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83266,6 +83271,10 @@ PrefabInstance:
       propertyPath: ControlOverlay
       value: 
       objectReference: {fileID: 1214857628}
+    - target: {fileID: 3390130816118139503, guid: 340c11d7cadea46438f228ea4114948b, type: 3}
+      propertyPath: PauseFirstButton
+      value: 
+      objectReference: {fileID: 1364198973}
     - target: {fileID: 6114356401530273657, guid: 340c11d7cadea46438f228ea4114948b, type: 3}
       propertyPath: m_IsActive
       value: 0
