@@ -423,6 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14d319b09d45ce4da0b9eb673a2a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shrine: {fileID: 1139327126}
 --- !u!65 &6789408
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15838,7 +15839,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 47111cc892b495a4591eccfe25f514fd, type: 2}
     - target: {fileID: 6738803524394422916, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Name
-      value: Shrine (1)
+      value: Bamboo Shrine
       objectReference: {fileID: 0}
     - target: {fileID: 6738803524394422916, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Layer
@@ -15958,6 +15959,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+--- !u!114 &469506150 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+  m_PrefabInstance: {fileID: 469506149}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838735808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &471613748 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 983a206e1a6997044a46d581f8e8b410, type: 3}
@@ -19320,6 +19332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14d319b09d45ce4da0b9eb673a2a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shrine: {fileID: 1530117978}
 --- !u!65 &596019464
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -34024,6 +34037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14d319b09d45ce4da0b9eb673a2a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shrine: {fileID: 469506150}
 --- !u!65 &932968011
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35644,6 +35658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14d319b09d45ce4da0b9eb673a2a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shrine: {fileID: 1314138439}
 --- !u!65 &987625315
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -40975,7 +40990,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 47111cc892b495a4591eccfe25f514fd, type: 2}
     - target: {fileID: 6738803524394422916, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Name
-      value: Shrine (2)
+      value: Mountain Shrine
       objectReference: {fileID: 0}
     - target: {fileID: 6738803524394422916, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Layer
@@ -41095,6 +41110,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+--- !u!114 &1139327126 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+  m_PrefabInstance: {fileID: 1139327125}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160681254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1140170149 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 835903929971c944fa0d6860d2067ed9, type: 3}
@@ -47249,7 +47275,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 47111cc892b495a4591eccfe25f514fd, type: 2}
     - target: {fileID: 6738803524394422916, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Name
-      value: Shrine
+      value: Lantern Shrine
       objectReference: {fileID: 0}
     - target: {fileID: 6738803524394422917, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_RootOrder
@@ -47309,6 +47335,17 @@ PrefabInstance:
       objectReference: {fileID: 137311413}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+--- !u!114 &1314138439 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+  m_PrefabInstance: {fileID: 1314138438}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97374312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1317516345
 GameObject:
   m_ObjectHideFlags: 0
@@ -53868,7 +53905,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 47111cc892b495a4591eccfe25f514fd, type: 2}
     - target: {fileID: 6738803524394422916, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Name
-      value: Shrine
+      value: Statue Shrine
       objectReference: {fileID: 0}
     - target: {fileID: 6738803524394422916, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
       propertyPath: m_Layer
@@ -53988,6 +54025,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+--- !u!114 &1530117978 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
+  m_PrefabInstance: {fileID: 1530117977}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030450228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1532224255 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2243010890388890517, guid: a30008ed51f1eae4382c59c94664b757, type: 3}

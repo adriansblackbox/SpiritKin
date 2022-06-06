@@ -139,6 +139,8 @@ public class TutorialManager : MonoBehaviour
                 buffDescriptor.SetActive(false);
                 curseDescriptor.SetActive(false);
                 dialogueObject.SetActive(false);
+                healthDescriptor.SetActive(false);
+                shrineDescriptor.SetActive(false);
 
                 
                 controlsLayout.SetActive(true);
