@@ -937,12 +937,19 @@ public class Enemy_Controller : MonoBehaviour
             {
                 if (EnemyMotion == MotionState.Idling)
                 {
+                    es.shrinePlayerIsAt = ai.gameObject.GetComponent<Shrine>();
                     Log("Player Detected!");
                     ThisEnemy.ResetPath();
                     changeState(MotionState.Chasing);
                 }
             }
         }
+    }
+
+    private void Log(string message)
+    {
+        if (showLogs)
+            Debug.Log(message);
     }
 
     private void Log(object message)

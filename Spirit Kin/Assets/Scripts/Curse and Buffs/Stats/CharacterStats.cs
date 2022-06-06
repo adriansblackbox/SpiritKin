@@ -88,6 +88,8 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void Die () {
         isDying = true;
+        //spawn loot
+        GetComponent<GenerateLoot>().spawnLoot = true;
         pd.addSpiritDefeated(1);
         gameObject.layer = 12;
         if (FindObjectOfType<SwordCollision>().immuneEnemies.Contains(this.gameObject))

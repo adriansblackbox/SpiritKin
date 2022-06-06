@@ -20,7 +20,7 @@ public class GenerateLoot : MonoBehaviour
     private bool hasBeenCollected = false;
 
     [SerializeField]
-    private bool spawnLoot = false;
+    public bool spawnLoot = false;
 
     private void OnValidate()
     {

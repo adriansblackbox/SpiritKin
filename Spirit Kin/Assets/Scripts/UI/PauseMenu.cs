@@ -31,17 +31,18 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("Start Button")){
             if(GameIsPaused){
-                // Player.GetComponent<PlayerController>().enabled = true;
-                // Player.GetComponent<PlayerCombat>().enabled = true;
+                Player.GetComponent<PlayerController>().enabled = true;
+                
                 
                 Resume();
             }else if(teaShopMenu.isOpen || equipMenu.isOpen){
                 teaShopMenu.CloseMenu();
                 equipMenu.CloseMenu();
-                // Player.GetComponent<PlayerController>().enabled = false;
-                // Player.GetComponent<PlayerCombat>().enabled = false;
+                
+                
             }else{
                 if (!gm.gameOver)
+                Player.GetComponent<PlayerController>().enabled = false;
                     Pause();
             }
         }
