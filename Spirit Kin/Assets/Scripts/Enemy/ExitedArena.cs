@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ExitedArena : MonoBehaviour
 {
+    [SerializeField] Shrine shrine;
+
     private void OnTriggerExit(Collider col) 
     {
         if (col.tag == "Enemy")
@@ -16,7 +18,7 @@ public class ExitedArena : MonoBehaviour
     {
         if (col.tag == "Player")
         {
-            FindObjectOfType<Enemy_Spawner>().shrinePlayerIsAt = GetComponent<Shrine>();
+            FindObjectOfType<Enemy_Spawner>().shrinePlayerIsAt = shrine;
         }
     }
 }
