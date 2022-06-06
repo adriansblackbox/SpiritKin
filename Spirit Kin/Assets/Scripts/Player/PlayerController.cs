@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float StickLookSensitivity = 200f;
     [SerializeField] private GameObject GravitySword;
     [SerializeField] private VisualEffect SmokeBomb;
+    [SerializeField] private ParticleSystem GravityPull;
     [HideInInspector] public float TempSpeed = 0f;
     [HideInInspector] public float CinemachineTargetYaw;
 	[HideInInspector] public float CinemachineTargetPitch;
@@ -378,7 +379,9 @@ public class PlayerController : MonoBehaviour
     //===========================================================
     public void Stun() {
         AnimationStart();
-        DashInvisiblityOff();
+        for(int i = 0; i < DashInvisibleObjects.Length; i++){
+            DashInvisibleObjects[i].SetActive(true);
+        }
         animator.SetBool("Stunned", true);
         animator.SetLayerWeight(1, 1);
         animator.SetLayerWeight(0, 0);
@@ -392,10 +395,13 @@ public class PlayerController : MonoBehaviour
     private void SpecialStart() {
         AnimationStart();
         animator.SetBool("Special In Motion", true);
-        DashInvisiblityOff();
+        for(int i = 0; i < DashInvisibleObjects.Length; i++){
+            DashInvisibleObjects[i].SetActive(true);
+        }
         animator.SetBool("Special End", false);
     }
     private void PullEnemies() {
+        GravityPull.Play();
         GameObject[] enemies =  GameObject.FindGameObjectsWithTag("Enemy");
         Debug.Log(enemies.Length);
         for(int i = 0; i < enemies.Length; i++) {
