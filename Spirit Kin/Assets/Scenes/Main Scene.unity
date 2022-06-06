@@ -35658,7 +35658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14d319b09d45ce4da0b9eb673a2a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shrine: {fileID: 1314138439}
+  shrine: {fileID: 0}
 --- !u!65 &987625315
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47335,17 +47335,6 @@ PrefabInstance:
       objectReference: {fileID: 137311413}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
---- !u!114 &1314138439 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6799075702819248385, guid: 819bd9c4028e45a4ebcf4f31ca55d378, type: 3}
-  m_PrefabInstance: {fileID: 1314138438}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 97374312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4fa8e21bd60aed42830e6375d5b76c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1317516345
 GameObject:
   m_ObjectHideFlags: 0
@@ -83049,6 +83038,18 @@ PrefabInstance:
     - target: {fileID: 2052108375, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: InitialModule.startColor.maxColor.a
       value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074815873044383571, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.x
+      value: 0.66230124
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074815873044383571, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
+      value: 0.04096709
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074815873044383571, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[1].m_Value.x
+      value: 0.5176471
       objectReference: {fileID: 0}
     - target: {fileID: 1195756069521063408, guid: bd9643ff0161f884bbaa2e7153c72534, type: 3}
       propertyPath: FollowCamera
