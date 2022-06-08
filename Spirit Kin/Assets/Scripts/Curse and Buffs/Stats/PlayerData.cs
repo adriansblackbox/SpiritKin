@@ -19,16 +19,7 @@ public class PlayerData : MonoBehaviour
     private long score;
 
     //create gameobject for each stat
-    public GameObject GoldEarnedUI;
-    public GameObject DamageDealtUI;
-    public GameObject DamageTakenUI;
-    public GameObject TimeSurvivedUI;
-    public GameObject SpiritDefeatedUI;
-    public GameObject ShrinePurifiedUI;
-    public GameObject CursesPurifiedUI;
-    public GameObject BuffsPurchasedUI;
-    public GameObject WeaponPurchasedUI;
-    public GameObject DistanceTraveledUI;
+    public GameObject GoldEarnedUI, DamageDealtUI, DamageTakenUI, TimeSurvivedUI, SpiritDefeatedUI, ShrinePurifiedUI, CursesPurifiedUI, BuffsPurchasedUI, WeaponPurchasedUI, DistanceTraveledUI, ScoreUI;
 
     private GameManager gm;
     private float myTime;
@@ -143,6 +134,8 @@ public class PlayerData : MonoBehaviour
         if (score < 0) {score = 0;}
         string bean = score.ToString();
         Debug.Log(bean);
+        ScoreUI.GetComponent<Text>().text = "SCORE\n" + score;
+        this.enabled = false;
     }
 
     //save data
