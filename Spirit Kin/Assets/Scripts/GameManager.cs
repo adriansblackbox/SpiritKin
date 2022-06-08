@@ -39,22 +39,22 @@ public class GameManager : MonoBehaviour
             case "Lantern Shrine":
                 lanternGameOverCamera.enabled = true;
                 lanternGameOverCamera.GetComponent<CameraFade>().Reset();
-                gameOverText.text = "Lantern Shrine Has Been Cursed";
+                gameOverText.text = "The Lantern Shrine Has Been Cursed";
                 break;
             case "Mountain Shrine":
                 mountainGameOverCamera.enabled = true;
                 mountainGameOverCamera.GetComponent<CameraFade>().Reset();
-                gameOverText.text = "Mountain Shrine Has Been Cursed";
+                gameOverText.text = "The Mountain Shrine Has Been Cursed";
                 break;
             case "Bamboo Shrine":
                 bambooGameOverCamera.enabled = true;
                 bambooGameOverCamera.GetComponent<CameraFade>().Reset();
-                gameOverText.text = "Bamboo Shrine Has Been Cursed";
+                gameOverText.text = "The Bamboo Shrine Has Been Cursed";
                 break;
             case "Statue Shrine":
                 statueGameOverCamera.enabled = true;
                 statueGameOverCamera.GetComponent<CameraFade>().Reset();
-                gameOverText.text = "Statue Shrine Has Been Cursed";
+                gameOverText.text = "The Statue Shrine Has Been Cursed";
                 break;
         }
 

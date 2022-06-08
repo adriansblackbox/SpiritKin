@@ -158,7 +158,7 @@ public class MainMenu : MonoBehaviour
     public void SetMasterVolume (float value){
         // mixer.SetFloat("MasterVolume", value);
         AudioListener.volume = value;
-        masterVolumeValue.text = value.ToString("0.0");
+        masterVolumeValue.text = value.ToString("0.00");
     }
 
     public void VolumeApply(){
@@ -212,7 +212,7 @@ public class MainMenu : MonoBehaviour
 
     public void ResetButton(string MenuType){
 
-        if(MenuType == "Graphics"){
+        if (MenuType == "Graphics"){
             //reset brightness value
             brightnessSlider.value = defaultBrightness;
             brightnessTextValue.text = defaultBrightness.ToString("0,0");
@@ -229,14 +229,14 @@ public class MainMenu : MonoBehaviour
             GraphicsApply();
         }
 
-        if(MenuType == "Audio"){
+        if (MenuType == "Audio"){
             AudioListener.volume = defaultVolume;
             masterVolumeSlider.value = defaultVolume;
             masterVolumeValue.text = defaultVolume.ToString("0.0");
             VolumeApply();
         }
 
-        if(MenuType == "Gameplay"){
+        if (MenuType == "Gameplay"){
             controllerSenTextValue.text = defaultSen.ToString("0");
             controllerSenSlider.value = defaultSen;
             mainControllerSen = defaultSen;
