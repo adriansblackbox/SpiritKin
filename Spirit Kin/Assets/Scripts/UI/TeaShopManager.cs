@@ -56,6 +56,7 @@ public class TeaShopManager : MonoBehaviour
 
     private PlayerData pd;
 
+    [SerializeField] private CurseMeter cm;
 
 
     // Start is called before the first frame update
@@ -120,7 +121,7 @@ public class TeaShopManager : MonoBehaviour
 
             //add buffs to player
             playStats.addBuff (currentBuff);
-            
+            cm.updateCurses();
         }
         else
         {
@@ -150,6 +151,7 @@ public class TeaShopManager : MonoBehaviour
                 investCostTXT.text = "$: " + currentBuff.investCost.ToString();
                 currentBuff.updateDescription();
                 description.text = currentBuff.description;
+                cm.updateCurses();
             }
             else
             {
