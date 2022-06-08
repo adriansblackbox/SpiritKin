@@ -71,10 +71,10 @@ public class Shrine : MonoBehaviour
             CurCurseTime += Time.deltaTime;
         } else if (cursed && CurCurseTime >= TotalCurseTime) {
             gm.gameOver = true;
-            gameOverScreen.GetComponent<GameOver>().LoadGameOver();
-            cursed = false;
+            gm.fullyCursedShrine = this;
+            //cursed = false;
         }
-        if(FindObjectOfType<MainHub>().playerInHub)
+        if (FindObjectOfType<MainHub>().playerInHub)
             CurseBecon.pause = true;
         else
             CurseBecon.pause = false;

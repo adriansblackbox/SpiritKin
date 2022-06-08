@@ -37,10 +37,10 @@ public class GenerateLoot : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            spawnLoot = true;
-        }
+        // if (Input.GetKeyDown(KeyCode.E))
+        // {
+        //     spawnLoot = true;
+        // }
 
         if (spawnLoot && !hasBeenCollected)
         {
