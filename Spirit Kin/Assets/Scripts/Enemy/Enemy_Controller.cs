@@ -147,6 +147,8 @@ public class Enemy_Controller : MonoBehaviour
 
     // Start is called before the first frame update
     public GameObject LockOnArrow;
+    public GameObject DeathEffect;
+    public GameObject Hat;
     void Start()
     {
         path = new UnityEngine.AI.NavMeshPath();
@@ -798,7 +800,8 @@ public class Enemy_Controller : MonoBehaviour
 
     private void DieAndDestroy()
     {
-        player.GetComponent<PlayerStats>().addCoins(GetComponent<CharacterStats>().coins);
+
+        Instantiate(DeathEffect, this.transform.position, Quaternion.identity);
         player.GetComponent<CurseMeter>().curseMeter += (float) GetComponent<CharacterStats>().fillAmount / player.GetComponent<CurseMeter>().fillRate;
         Destroy(this.gameObject);
     }
