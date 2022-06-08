@@ -16,6 +16,7 @@ public class PlayerData : MonoBehaviour
     public long BuffsPurchased;
     public long WeaponPurchased;
     public long DistanceTraveled;
+    private long score;
 
     //create gameobject for each stat
     public GameObject GoldEarnedUI;
@@ -31,20 +32,11 @@ public class PlayerData : MonoBehaviour
 
     private GameManager gm;
     private float myTime;
+    [SerializeField] private long goldMultiplier, purifiedMultiplier, damagePenalty, timeMultiplier, spiritMultiplier, shrineMultiplier, buffMultiplier, wepMultiplier;
 
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
-    }
-
-    void FixedUpdate()
-    {
-        myTime += Time.deltaTime;
-        if (myTime > 1.0f && !gm.gameOver)
-        {
-            addTimeSurvived(1);
-            myTime = 0f;
-        }    
     }
 
     //PlayerData Constructor
@@ -106,20 +98,51 @@ public class PlayerData : MonoBehaviour
 
     void Update()
     {
+        myTime += Time.deltaTime;
+        if (myTime > 1.0f && !gm.gameOver)
+        {
+            addTimeSurvived(1);
+            myTime = 0f;
+        }
+        else if (gm.gameOver)
+        {
+            Debug.Log("Game Over!");
+            gameOverUIUpdate();
+        }
+        //save data
+        // SaveData();
+    }
+
+    private void gameOverUIUpdate () 
+    {
         //update UI
+        string a = "0" + (TimeSurvived%60).ToString();
+        string b = (TimeSurvived%60).ToString();
+        string sec =  ((TimeSurvived%60) < 10) ? a : b;
         GoldEarnedUI.GetComponent<Text>().text = "Gold Earned: " + GoldEarned;
         DamageDealtUI.GetComponent<Text>().text = "Damage Dealt: " + DamageDealt;
         DamageTakenUI.GetComponent<Text>().text = "Damage Taken: " + DamageTaken;
-        TimeSurvivedUI.GetComponent<Text>().text = "Time Survived: " + TimeSurvived/60 + ":" + TimeSurvived%60;
+        TimeSurvivedUI.GetComponent<Text>().text = "Time Survived: " + TimeSurvived/60 + ":" + sec;
         SpiritDefeatedUI.GetComponent<Text>().text = "Spirit Defeated: " + SpiritDefeated;
         ShrinePurifiedUI.GetComponent<Text>().text = "Shrine Purified: " + ShrinePurified;
         CursesPurifiedUI.GetComponent<Text>().text = "Curses Purified: " + CursesPurified;
         BuffsPurchasedUI.GetComponent<Text>().text = "Buffs Purchased: " + BuffsPurchased;
         WeaponPurchasedUI.GetComponent<Text>().text = "Weapons Purchased: " + WeaponPurchased;
         DistanceTraveledUI.GetComponent<Text>().text = "Distance Traveled: " + DistanceTraveled;
-        //save data
-        // SaveData();
 
+        score = GoldEarned * goldMultiplier
+                    + DamageDealt 
+                    - damagePenalty * DamageTaken 
+                    + TimeSurvived * timeMultiplier
+                    + SpiritDefeated * spiritMultiplier
+                    + ShrinePurified * shrineMultiplier
+                    + BuffsPurchased * buffMultiplier
+                    + CursesPurified * purifiedMultiplier
+                    + WeaponPurchased * wepMultiplier
+                    + DistanceTraveled;
+        if (score < 0) {score = 0;}
+        string bean = score.ToString();
+        Debug.Log(bean);
     }
 
     //save data

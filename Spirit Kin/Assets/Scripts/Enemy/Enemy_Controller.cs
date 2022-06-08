@@ -106,6 +106,8 @@ public class Enemy_Controller : MonoBehaviour
 
 
     private float myTime = 0.0f;
+    private float walkTimer = 0.0f;
+    private Vector3 walkOrigin;
     private Vector3 startOfPath;
 
     public Transform shrine;
@@ -149,6 +151,7 @@ public class Enemy_Controller : MonoBehaviour
     public GameObject LockOnArrow;
     public GameObject DeathEffect;
     public GameObject Hat;
+
     void Start()
     {
         path = new UnityEngine.AI.NavMeshPath();
@@ -165,7 +168,6 @@ public class Enemy_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //spherecast to check for player
         checkForPlayer();
         myTime += Time.deltaTime;
@@ -800,10 +802,9 @@ public class Enemy_Controller : MonoBehaviour
 
     private void DieAndDestroy()
     {
-
         Instantiate(DeathEffect, this.transform.position, Quaternion.identity);
         player.GetComponent<CurseMeter>().curseMeter += (float) GetComponent<CharacterStats>().fillAmount / player.GetComponent<CurseMeter>().fillRate;
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 
 ///////////////////////////////////////////////////STATES    
