@@ -16,8 +16,6 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject PauseFirstButton;
     public GameObject ControlOverlay;
-    public GameObject ToggleIndicatorOn;
-    public GameObject ToggleIndicatorOff;
 
     [SerializeField] GameManager gm;
     void Start()
@@ -81,8 +79,6 @@ public class PauseMenu : MonoBehaviour
     }
     public void toggleControls()
     {
-        ToggleIndicatorOn.SetActive(!ToggleIndicatorOn.activeSelf);
-        ToggleIndicatorOff.SetActive(!ToggleIndicatorOff.activeSelf);
         ControlOverlay.SetActive(!ControlOverlay.activeSelf);
     }
     public void GraphicsApply(){
