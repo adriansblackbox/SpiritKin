@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public bool gameOver;
+    private bool showingGameOver;
     public Shrine fullyCursedShrine;
+    
+    [SerializeField] Text gameOverText;
 
     [SerializeField] Camera lanternGameOverCamera;
     [SerializeField] Camera mountainGameOverCamera;
@@ -14,9 +18,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (gameOver)
+        if (Input.GetKeyDown(KeyCode.E))
+            gameOver = true;
+
+        if (gameOver && !showingGameOver)
         {
-            gameOver = false;
+            showingGameOver = true;
             StartCoroutine(gameOverCutscene());
         }
     }
@@ -31,21 +38,31 @@ public class GameManager : MonoBehaviour
         {
             case "Lantern Shrine":
                 lanternGameOverCamera.enabled = true;
+                lanternGameOverCamera.GetComponent<CameraFade>().Reset();
+                gameOverText.text = "Lantern Shrine Has Been Cursed";
                 break;
             case "Mountain Shrine":
                 mountainGameOverCamera.enabled = true;
+                mountainGameOverCamera.GetComponent<CameraFade>().Reset();
+                gameOverText.text = "Mountain Shrine Has Been Cursed";
                 break;
             case "Bamboo Shrine":
                 bambooGameOverCamera.enabled = true;
+                bambooGameOverCamera.GetComponent<CameraFade>().Reset();
+                gameOverText.text = "Bamboo Shrine Has Been Cursed";
                 break;
             case "Statue Shrine":
                 statueGameOverCamera.enabled = true;
+                statueGameOverCamera.GetComponent<CameraFade>().Reset();
+                gameOverText.text = "Statue Shrine Has Been Cursed";
                 break;
         }
 
-        
-
-        yield return new WaitForSeconds(2f);
+        for (int i = 0; i < 10; i++)
+        {
+            FindObjectOfType<Enemy_Spawner>().spawnEnemy(fullyCursedShrine.gameObject);
+            yield return new WaitForSeconds(0.25f);
+        }
 
         FindObjectOfType<GameOver>().LoadGameOver();
 

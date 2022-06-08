@@ -165,18 +165,18 @@ public class Enemy_Spawner : MonoBehaviour
         {
             if (difficulty < 15)
             {
-                difficulty += 0.5f;
+                difficulty += 0.25f;
             }
             else
             {
-                difficulty += 0.125f;
+                difficulty += 0.0625f;
             }
             curseMeter.SendMessage("difficultyUpdateCurse", difficulty);
         }
         else if (difficulty < 10)
-            difficulty += 0.334f;
+            difficulty += 0.167f;
         else
-            difficulty += 0.0834f;
+            difficulty += 0.0417f;
         Debug.Log("Difficulty is: " + difficulty);
     }
 

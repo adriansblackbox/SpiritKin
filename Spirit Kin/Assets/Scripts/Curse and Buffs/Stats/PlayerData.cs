@@ -40,7 +40,7 @@ public class PlayerData : MonoBehaviour
     void FixedUpdate()
     {
         myTime += Time.deltaTime;
-        if (myTime > 1.0f)
+        if (myTime > 1.0f && !gm.gameOver)
         {
             addTimeSurvived(1);
             myTime = 0f;
