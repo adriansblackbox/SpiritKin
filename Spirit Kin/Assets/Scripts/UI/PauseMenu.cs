@@ -31,9 +31,6 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("Start Button")){
             if(GameIsPaused){
-                Player.GetComponent<PlayerController>().enabled = true;
-                
-                
                 Resume();
             }else if(teaShopMenu.isOpen || equipMenu.isOpen){
                 teaShopMenu.CloseMenu();
@@ -42,7 +39,6 @@ public class PauseMenu : MonoBehaviour
                 
             }else{
                 if (!gm.gameOver)
-                Player.GetComponent<PlayerController>().enabled = false;
                     Pause();
             }
         }
@@ -53,6 +49,7 @@ public class PauseMenu : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+        Player.GetComponent<PlayerController>().enabled = true;
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
@@ -60,6 +57,7 @@ public class PauseMenu : MonoBehaviour
     public void Pause (){
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        Player.GetComponent<PlayerController>().enabled = false;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
