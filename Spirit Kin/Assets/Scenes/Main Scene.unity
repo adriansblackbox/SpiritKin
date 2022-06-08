@@ -15623,6 +15623,7 @@ MonoBehaviour:
   BuffsPurchased: 0
   WeaponPurchased: 0
   DistanceTraveled: 0
+  score: 0
   GoldEarnedUI: {fileID: 402151064}
   DamageDealtUI: {fileID: 651128724}
   DamageTakenUI: {fileID: 1689762024}
@@ -15634,14 +15635,16 @@ MonoBehaviour:
   WeaponPurchasedUI: {fileID: 2010712764}
   DistanceTraveledUI: {fileID: 1978370176}
   ScoreUI: {fileID: 1795829425}
-  goldMultiplier: 7
-  purifiedMultiplier: 500
-  damagePenalty: 10
-  timeMultiplier: 3
-  spiritMultiplier: 200
+  gameSettings: {fileID: 1964309313}
+  goldMultiplier: 3
+  purifiedMultiplier: 200
+  damagePenalty: 20
+  timeMultiplier: 40
+  spiritMultiplier: 100
   shrineMultiplier: 3000
-  buffMultiplier: 100
+  buffMultiplier: 200
   wepMultiplier: 100
+  hardModeMult: 2
 --- !u!1001 &436197574
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59842,7 +59845,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1693571102
 RectTransform:
   m_ObjectHideFlags: 0

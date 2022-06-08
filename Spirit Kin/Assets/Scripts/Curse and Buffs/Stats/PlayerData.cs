@@ -6,28 +6,20 @@ using UnityEngine.UI;
 public class PlayerData : MonoBehaviour
 {
 
-    public long GoldEarned;
-    public long DamageDealt;
-    public long DamageTaken;
-    public long TimeSurvived;
-    public long SpiritDefeated;
-    public long ShrinePurified;
-    public long CursesPurified;
-    public long BuffsPurchased;
-    public long WeaponPurchased;
-    public long DistanceTraveled;
-    private long score;
+    public int GoldEarned, DamageDealt, DamageTaken, TimeSurvived, SpiritDefeated, ShrinePurified, CursesPurified, BuffsPurchased, WeaponPurchased, DistanceTraveled, score;
 
     //create gameobject for each stat
     public GameObject GoldEarnedUI, DamageDealtUI, DamageTakenUI, TimeSurvivedUI, SpiritDefeatedUI, ShrinePurifiedUI, CursesPurifiedUI, BuffsPurchasedUI, WeaponPurchasedUI, DistanceTraveledUI, ScoreUI;
-
+    [SerializeField] private Enemy_Spawner gameSettings;
     private GameManager gm;
     private float myTime;
-    [SerializeField] private long goldMultiplier, purifiedMultiplier, damagePenalty, timeMultiplier, spiritMultiplier, shrineMultiplier, buffMultiplier, wepMultiplier;
+    [SerializeField] private int goldMultiplier, purifiedMultiplier, damagePenalty, timeMultiplier, spiritMultiplier, shrineMultiplier, buffMultiplier, wepMultiplier, hardModeMult;
 
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
+        if (!PlayerPrefs.HasKey("highScoreEasy")) PlayerPrefs.SetInt("highScoreEasy", 0);
+        if (!PlayerPrefs.HasKey("highScoreHard")) PlayerPrefs.SetInt("highScoreHard", 0);
     }
 
     //PlayerData Constructor
@@ -84,13 +76,13 @@ public class PlayerData : MonoBehaviour
     }
     public void addDistanceTraveled(int distance)
     {
-        DistanceTraveled += distance;
+        if (!FindObjectOfType<MainHub>().playerInHub) DistanceTraveled += distance;
     }
 
     void Update()
     {
         myTime += Time.deltaTime;
-        if (myTime > 1.0f && !gm.gameOver)
+        if (myTime > 1.0f && !gm.gameOver && !FindObjectOfType<MainHub>().playerInHub)
         {
             addTimeSurvived(1);
             myTime = 0f;
@@ -131,10 +123,19 @@ public class PlayerData : MonoBehaviour
                     + CursesPurified * purifiedMultiplier
                     + WeaponPurchased * wepMultiplier
                     + DistanceTraveled;
-        if (score < 0) {score = 0;}
-        string bean = score.ToString();
-        Debug.Log(bean);
+        if (score < 0) score = 0;
+        
+        
+        if (gameSettings.hardMode) {
+            score *= hardModeMult;
+            if (PlayerPrefs.GetInt("highScoreHard") < score) PlayerPrefs.SetInt("highScoreHard", score);
+        }
+        else {
+            if (PlayerPrefs.GetInt("highScoreEasy") < score) PlayerPrefs.SetInt("highScoreEasy", score);
+        }
         ScoreUI.GetComponent<Text>().text = "SCORE\n" + score;
+
+        
         this.enabled = false;
     }
 
