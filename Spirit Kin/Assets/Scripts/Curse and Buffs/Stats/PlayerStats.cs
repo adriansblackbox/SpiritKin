@@ -308,10 +308,9 @@ public class PlayerStats : CharacterStats
     {
         for (int i = Equipment.Count-1; i >= 0; i--)
         {
-            //Debug.Log(i);
             Equipment[i].isEquipped = true;
-
-            Equipment[i].duration -= Time.deltaTime;
+            if (!FindObjectOfType<MainHub>().playerInHub)
+                Equipment[i].duration -= Time.deltaTime;
             Debug.Log(Equipment[i].duration);
             if (Equipment[i].duration <= 0)
             {

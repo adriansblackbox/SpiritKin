@@ -29,15 +29,9 @@ public class EquipShopManager : MonoBehaviour
 
     public Equipment currentEquip;
 
-    public Equipment prevEquip;
-
-    public Equipment nextEquip;
-
-    public GameObject displayPrev;
-
     public GameObject display;
 
-    public GameObject displayNext;
+    [SerializeField] Text playerCoins;
 
     // public SpriteRenderer currentSprite;
     public int selectedOption = 0;
@@ -56,7 +50,6 @@ public class EquipShopManager : MonoBehaviour
     void Awake()
     {
         testWeapon testEquip = new testWeapon(equipSprite);
-        
 
         shopEquipList.Add(testEquip);
 
@@ -99,11 +92,11 @@ public class EquipShopManager : MonoBehaviour
         {
             //update coins
             playStats.coins -= currentEquip.Cost;
-            // menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
-            UICoinTXT.text = "Coins:" + playStats.coins.ToString();
+            playerCoins.text = playStats.coins.ToString();
 
             //add Equipment to player
             //Todo: add to player
+            currentEquip.duration = currentEquip.baseDuration + currentEquip.baseDuration * currentEquip.level;
             playStats.addEquip(currentEquip);
             Purchase();
         }
@@ -116,18 +109,30 @@ public class EquipShopManager : MonoBehaviour
     public void Upgrade()
     {
         if (
-            playStats.coins >= currentEquip.InvestCost &&
-            currentEquip.duration <= 400
+            playStats.coins >= currentEquip.investCost &&
+            currentEquip.level < 3
         )
         {
             //update coins
-            playStats.coins -= currentEquip.InvestCost;
-            menuCoinTXT.text = "Coins:" + playStats.coins.ToString();
-            UICoinTXT.text = "Coins:" + playStats.coins.ToString();
+            playStats.coins -= currentEquip.investCost;
+            playerCoins.text = playStats.coins.ToString();
 
             //add duration to Equips
-            currentEquip.duration += 100;
+            currentEquip.level += 1;
+            currentEquip.duration += 90;
             Purchase();
+            if (currentEquip.level < 3)
+            {
+                currentEquip.investCost += 150;
+                investCostTXT.text = currentEquip.investCost.ToString();
+                currentEquip.updateDescription();
+                description.text = currentEquip.description;
+            }
+            else
+            {
+                investCostTXT.text = "Max";
+                description.text = "Maximum strength reached";
+            }
         }
         else
         {
@@ -148,32 +153,12 @@ public class EquipShopManager : MonoBehaviour
     {
         currentEquip = shopEquipList[selectedOption];
 
-        if (selectedOption == 0)
-        {
-            prevEquip = shopEquipList[shopEquipList.Count - 1];
-        }
-        else
-        {
-            prevEquip = shopEquipList[selectedOption - 1];
-        }
-
-        if (selectedOption == shopEquipList.Count - 1)
-        {
-            nextEquip = shopEquipList[0];
-        }
-        else
-        {
-            nextEquip = shopEquipList[selectedOption + 1];
-        }
-
         
         display.GetComponent<Image>().sprite = currentEquip.equipSprite;
-        displayPrev.GetComponent<Image>().sprite = prevEquip.equipSprite;
-        displayNext.GetComponent<Image>().sprite = nextEquip.equipSprite;
         equipName.text = currentEquip.equipName;
         description.text = currentEquip.description;
         costTXT.text = "$: " + currentEquip.Cost.ToString();
-        investCostTXT.text = "$: " + currentEquip.InvestCost.ToString();
+        investCostTXT.text = "$: " + currentEquip.investCost.ToString();
     }
 
     // Update is called once per frame

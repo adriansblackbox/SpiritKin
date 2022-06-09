@@ -30,14 +30,7 @@ public class equipmentShop : MonoBehaviour
 
     public EventSystem eventSystem;
 
-    public GameObject LeftInstruct;
-    public GameObject RightInstruct;
-
-    public Sprite AButton;
-    public Sprite DButton;
-
-    public Sprite LeftBumperButton;
-    public Sprite RightBumperButton;
+    public Text playerCoins;
 
     // Start is called before the first frame update
     void Start()
@@ -72,13 +65,7 @@ public class equipmentShop : MonoBehaviour
     void Update()
     {
         if (UI.GetComponent<ControlOverlayHandler>().keyboard)
-        {   
-            //disable texts
-            LeftInstruct.GetComponent<Image>().sprite = AButton;
-            LeftInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 60);
-            RightInstruct.GetComponent<Image>().sprite = DButton;
-            RightInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 60);
-            
+        {          
             triggerText.GetComponent<TextMeshProUGUI>().text = "Press F to open shop";
             
             if(eventSystem.currentSelectedGameObject != null){
@@ -88,12 +75,6 @@ public class equipmentShop : MonoBehaviour
         }
         else
         {
-
-            //enable texts
-            LeftInstruct.GetComponent<Image>().sprite = LeftBumperButton;
-            LeftInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 60);
-            RightInstruct.GetComponent<Image>().sprite = RightBumperButton;
-            RightInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 60);
             //get textmeshpro text
             triggerText.GetComponent<TextMeshProUGUI>().text = "Press Y to open shop";
             
@@ -128,6 +109,7 @@ public class equipmentShop : MonoBehaviour
     }
     public void OpenMenu()
     {
+        playerCoins.text = FindObjectOfType<PlayerStats>().coins.ToString();
         if (FindObjectOfType<ControlOverlayHandler>().keyboard)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -136,6 +118,8 @@ public class equipmentShop : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
+
+        UI.SetActive(false);
 
         //disable player controller
         playerController.speed = 0;
@@ -162,6 +146,7 @@ public class equipmentShop : MonoBehaviour
 
     public void CloseMenu()
     {
+        UI.SetActive(true);
         if (FindObjectOfType<ControlOverlayHandler>().keyboard)
         {
             Cursor.lockState = CursorLockMode.Locked;

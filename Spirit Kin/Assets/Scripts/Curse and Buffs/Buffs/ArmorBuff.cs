@@ -11,7 +11,7 @@ public class ArmorBuff : Buff
         baseTimeActive = 0f;
         baseLevel = 0;
 
-        teaName = "Armor Buff";
+        teaName = "Armor Tea";
         type = "armor";
         Cost = 25;
         baseInvestCost = 100;
@@ -27,7 +27,7 @@ public class ArmorBuff : Buff
         timeActive = baseTimeActive;
         level = baseLevel;
 
-        description = "Increases armor by " + basePower;
+        description = "Increases armor by " + basePower + "\n Lasts " + duration + "s";
 
     }
 }

@@ -9,11 +9,11 @@ public class GenerateLoot : MonoBehaviour
 
     [SerializeField]
     [Range(1, 99)]
-    private int minNumber = 7;
+    private int minNumber = 5;
 
     [SerializeField]
     [Range(2, 100)]
-    private int maxNumber = 20;
+    private int maxNumber = 9;
 
     [SerializeField]
     private Transform spawnPoint;

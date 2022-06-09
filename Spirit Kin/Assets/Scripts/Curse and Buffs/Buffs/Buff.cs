@@ -63,6 +63,6 @@ public class Buff
 
     public void updateDescription()
     {
-        description = "Increases " + type + " by " + (level+1) * basePower;
+        description = "Increases " + type + " by " + (level+1) * basePower + "\n Lasts " + duration + "s";
     }
 }

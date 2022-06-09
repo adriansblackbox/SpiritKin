@@ -56,6 +56,8 @@ public class TeaShopManager : MonoBehaviour
 
     private PlayerData pd;
 
+    [SerializeField] Text playerCoins;
+
     [SerializeField] private CurseMeter cm;
 
 
@@ -117,6 +119,7 @@ public class TeaShopManager : MonoBehaviour
             //update coins
             playStats.coins -= currentBuff.Cost;
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
+            playerCoins.text = playStats.coins.ToString();
             pd.addBuffsPurchased(1);
 
             //add buffs to player
@@ -158,6 +161,7 @@ public class TeaShopManager : MonoBehaviour
             //update coins
             playStats.coins -= currentBuff.investCost;
             UICoinTXT.text = "Coins:" + playStats.coins.ToString();
+            playerCoins.text = playStats.coins.ToString();
 
             //make buff stronger
             currentBuff.level += 1; //level gets increased by 1s
@@ -167,7 +171,7 @@ public class TeaShopManager : MonoBehaviour
             if (currentBuff.level < 3)
             {
                 currentBuff.investCost += 150;
-                investCostTXT.text = "$: " + currentBuff.investCost.ToString();
+                investCostTXT.text = currentBuff.investCost.ToString();
                 currentBuff.updateDescription();
                 description.text = currentBuff.description;
                 cm.updateCurses();
@@ -224,12 +228,12 @@ public class TeaShopManager : MonoBehaviour
         displayPrev.GetComponent<Image>().sprite = prevBuff.buffSprite;
         displayNext.GetComponent<Image>().sprite = nextBuff.buffSprite;
         buffName.text = currentBuff.teaName;
-        costTXT.text = "$: " + currentBuff.Cost.ToString();
+        costTXT.text = currentBuff.Cost.ToString();
 
         if (currentBuff.level < 3)
         {
             description.text = currentBuff.description;
-            investCostTXT.text = "$: " + currentBuff.investCost.ToString();
+            investCostTXT.text = currentBuff.investCost.ToString();
         }
         else
         {

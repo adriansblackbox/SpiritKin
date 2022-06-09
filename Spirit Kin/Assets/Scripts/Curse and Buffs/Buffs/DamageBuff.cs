@@ -10,7 +10,7 @@ public class DamageBuff : Buff
         baseTimeActive = 0f;
         baseLevel = 0;
 
-        teaName = "Damage Buff";
+        teaName = "Damage Tea";
         type = "damage";
         Cost = 25;
         baseInvestCost = 100;
@@ -26,6 +26,6 @@ public class DamageBuff : Buff
         investCost = baseInvestCost;
         level = baseLevel;
 
-        description = "Increases damage by " + basePower;
+        description = "Increases damage by " + basePower + "\n Lasts " + duration + "s";
     }
 }
