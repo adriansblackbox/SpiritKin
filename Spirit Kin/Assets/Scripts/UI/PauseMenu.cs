@@ -54,6 +54,9 @@ public class PauseMenu : MonoBehaviour
     private float _brightnessLevel;
 
     [SerializeField] GameManager gm;
+
+    [SerializeField] GameObject settingsMenu;
+    
     void Start()
     {
         teaShopMenu = GameObject.Find("TeaShop").GetComponent<TeaShop>();
@@ -86,7 +89,7 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("Start Button")){
-            if(GameIsPaused){
+            if(GameIsPaused && !settingsMenu.activeSelf){
                 Resume();
             }else if(teaShopMenu.isOpen || equipMenu.isOpen){
                 teaShopMenu.CloseMenu();
