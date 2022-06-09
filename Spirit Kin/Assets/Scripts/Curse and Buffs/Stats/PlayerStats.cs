@@ -63,7 +63,7 @@ public class PlayerStats : CharacterStats
         {
             Die();
         }
-        if (moneyCurseLock > coins) moneyCurseLock = coins;
+        if (noCoindens && moneyCurseLock > coins) moneyCurseLock = coins;
         if (noCoindens) coins = moneyCurseLock;
         SoulsUI.text = "" + coins;
         if (Buffs.Count != 0)
