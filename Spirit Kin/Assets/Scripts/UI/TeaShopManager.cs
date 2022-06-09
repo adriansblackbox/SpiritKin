@@ -58,6 +58,7 @@ public class TeaShopManager : MonoBehaviour
 
     [SerializeField] Text playerCoins;
 
+    [SerializeField] private CurseMeter cm;
 
 
     // Start is called before the first frame update
@@ -123,10 +124,29 @@ public class TeaShopManager : MonoBehaviour
 
             //add buffs to player
             playStats.addBuff (currentBuff);
+            cm.updateCurses();
+        }
+        // Allow the player to re-purchase a buff if they have expended more than 25% of its duration
+        else if (
+            playStats.coins >= currentBuff.Cost &&
+            currentBuff.isApplied &&
+            currentBuff.timeActive / currentBuff.duration > 0.25f
+        ) 
+        {
             
+            Purchase();
+            //update coins
+            playStats.coins -= currentBuff.Cost;
+            UICoinTXT.text = "Coins:" + playStats.coins.ToString();
+            pd.addBuffsPurchased(1);
+
+            //add buffs to player
+            playStats.refreshBuff(currentBuff);
+            cm.updateCurses();
         }
         else
         {
+            //Debug.Log(currentBuff.timeActive / currentBuff.duration);
             Cantafford();
         }
         // playerController.enabled = false;
@@ -154,6 +174,8 @@ public class TeaShopManager : MonoBehaviour
                 investCostTXT.text = currentBuff.investCost.ToString();
                 currentBuff.updateDescription();
                 description.text = currentBuff.description;
+                cm.updateCurses();
+                playStats.updateBuffStrength(currentBuff);
             }
             else
             {

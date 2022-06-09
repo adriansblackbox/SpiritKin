@@ -11,13 +11,15 @@ public class GenerateLoot : MonoBehaviour
     [Range(1, 99)]
     private int minNumber = 5;
 
+    [SerializeField]
     [Range(2, 100)]
     private int maxNumber = 9;
 
     [SerializeField]
     private Transform spawnPoint;
 
-    private bool hasBeenCollected = false;
+    [SerializeField]
+    public bool hasBeenCollected = false;
 
     [SerializeField]
     public bool spawnLoot = false;

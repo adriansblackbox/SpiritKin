@@ -131,7 +131,7 @@ public class PlayerStats : CharacterStats
                                     .GetComponent<Image>()
                                     .sprite = healthBuff;
                                 x.isApplied = true;
-                                Debug.Log(Buffs.Count);
+                                //Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.armor):
@@ -144,7 +144,7 @@ public class PlayerStats : CharacterStats
                                     .GetComponent<Image>()
                                     .sprite = armorBuff;
                                 x.isApplied = true;
-                                Debug.Log(Buffs.Count);
+                                //Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.damage):
@@ -157,7 +157,7 @@ public class PlayerStats : CharacterStats
                                     .GetComponent<Image>()
                                     .sprite = damageBuff;
                                 x.isApplied = true;
-                                Debug.Log(Buffs.Count);
+                                //Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.speed):
@@ -171,7 +171,7 @@ public class PlayerStats : CharacterStats
                                     .sprite = speedBuff;
                                 x.isApplied = true;
                                 curseMeter.SendMessage("updateCurses");
-                                Debug.Log(Buffs.Count);
+                                //Debug.Log(Buffs.Count);
                                 break;
                             }
                     }
@@ -200,37 +200,33 @@ public class PlayerStats : CharacterStats
                                     this.currentHealth = this.maxHealth;
                                 }
                                 x.isApplied = false;
-                                Debug.Log(Buffs.Count);
+                                //Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.armor):
                             {
                                 this.armor.AddBaseValue(-x.power);
                                 x.isApplied = false;
-                                Debug.Log(Buffs.Count);
+                                //Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.damage):
                             {
                                 this.damage.AddBaseValue(-x.power);
                                 x.isApplied = false;
-                                Debug.Log(Buffs.Count);
+                                //Debug.Log(Buffs.Count);
                                 break;
                             }
                         case (Buff.statType.speed):
                             {
                                 this.speed.AddBaseValue(-x.power);
                                 x.isApplied = false;
-                                Debug.Log(Buffs.Count);
+                                //Debug.Log(Buffs.Count);
                                 break;
                             }
                     }
-                    BuffsUI[i]
-                        .transform
-                        .Find("Buff")
-                        .gameObject
-                        .GetComponent<Image>()
-                        .enabled = false;
+                    BuffsUI[i].transform.Find("Buff").gameObject.GetComponent<Image>().enabled = false;
+                    BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
                 }
             });
         int j = Buffs.Count;
@@ -255,8 +251,47 @@ public class PlayerStats : CharacterStats
             x.isApplied = false;
             x.removeFlag = false;
             Buffs.Add (x);
-            Debug.Log(x.teaName);
+            //Debug.Log(x.teaName);
         }
+    }
+
+    public void refreshBuff(Buff x)
+    {
+        x.timeActive = 0;
+        int i = Buffs.FindIndex(y => y.teaName == x.teaName);
+        BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
+    }
+
+    public void updateBuffStrength(Buff x)
+    {
+        x.timeActive = 0;
+        int i = Buffs.FindIndex(y => y.teaName == x.teaName);
+        BuffsUI[i].transform.Find("Bar").gameObject.GetComponent<Image>().fillAmount = 1;
+        switch (x.stat)
+        {
+            case (Buff.statType.health):
+            {
+                this.maxHealth += x.basePower;
+                this.currentHealth += x.basePower;
+                break;
+            }
+            case (Buff.statType.armor):
+            {
+                this.armor.AddBaseValue(x.basePower);
+                break;
+            }
+            case (Buff.statType.damage):
+            {
+                this.damage.AddBaseValue(x.basePower);
+                break;
+            }
+            case (Buff.statType.speed):
+            {
+                this.speed.AddBaseValue(x.basePower);
+                break;
+            }
+        }
+        curseMeter.SendMessage("updateCurses");
     }
 
     public void removeBuff(Buff x)
@@ -289,7 +324,7 @@ public class PlayerStats : CharacterStats
         if (Equipment.Count < 3)
         {
             Equipment.Add (x);
-            Debug.Log(x.equipName);
+            //Debug.Log(x.equipName);
         }
     }
 
@@ -298,7 +333,7 @@ public class PlayerStats : CharacterStats
         int i = Equipment.FindIndex(y => y.equipName == x.equipName);
         Equipment.RemoveAt (i);
         x.isEquipped = false;
-        Debug.Log(x.equipName + "removed");
+        //Debug.Log(x.equipName + "removed");
     }
 
     public override void TakeDamage(float damage, float knockBackStrength)
@@ -321,7 +356,7 @@ public class PlayerStats : CharacterStats
 
     public override async void Die()
     {
-        Debug.Log("Player died!");
+        //Debug.Log("Player died!");
         StartCoroutine(PlayerDeath(this.gameObject));
     }
 

@@ -6,45 +6,20 @@ using UnityEngine.UI;
 public class PlayerData : MonoBehaviour
 {
 
-    public long GoldEarned;
-    public long DamageDealt;
-    public long DamageTaken;
-    public long TimeSurvived;
-    public long SpiritDefeated;
-    public long ShrinePurified;
-    public long CursesPurified;
-    public long BuffsPurchased;
-    public long WeaponPurchased;
-    public long DistanceTraveled;
+    public int GoldEarned, DamageDealt, DamageTaken, TimeSurvived, SpiritDefeated, ShrinePurified, CursesPurified, BuffsPurchased, WeaponPurchased, DistanceTraveled, score;
 
     //create gameobject for each stat
-    public GameObject GoldEarnedUI;
-    public GameObject DamageDealtUI;
-    public GameObject DamageTakenUI;
-    public GameObject TimeSurvivedUI;
-    public GameObject SpiritDefeatedUI;
-    public GameObject ShrinePurifiedUI;
-    public GameObject CursesPurifiedUI;
-    public GameObject BuffsPurchasedUI;
-    public GameObject WeaponPurchasedUI;
-    public GameObject DistanceTraveledUI;
-
+    public GameObject GoldEarnedUI, DamageDealtUI, DamageTakenUI, TimeSurvivedUI, SpiritDefeatedUI, ShrinePurifiedUI, CursesPurifiedUI, BuffsPurchasedUI, WeaponPurchasedUI, DistanceTraveledUI, ScoreUI;
+    [SerializeField] private Enemy_Spawner gameSettings;
     private GameManager gm;
     private float myTime;
+    [SerializeField] private int goldMultiplier, purifiedMultiplier, damagePenalty, timeMultiplier, spiritMultiplier, shrineMultiplier, buffMultiplier, wepMultiplier, hardModeMult;
 
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
-    }
-
-    void FixedUpdate()
-    {
-        myTime += Time.deltaTime;
-        if (myTime > 1.0f && !gm.gameOver)
-        {
-            addTimeSurvived(1);
-            myTime = 0f;
-        }    
+        if (!PlayerPrefs.HasKey("highScoreEasy")) PlayerPrefs.SetInt("highScoreEasy", 0);
+        if (!PlayerPrefs.HasKey("highScoreHard")) PlayerPrefs.SetInt("highScoreHard", 0);
     }
 
     //PlayerData Constructor
@@ -101,25 +76,66 @@ public class PlayerData : MonoBehaviour
     }
     public void addDistanceTraveled(int distance)
     {
-        DistanceTraveled += distance;
+        if (!FindObjectOfType<MainHub>().playerInHub) DistanceTraveled += distance;
     }
 
     void Update()
     {
+        myTime += Time.deltaTime;
+        if (myTime > 1.0f && !gm.gameOver && !FindObjectOfType<MainHub>().playerInHub)
+        {
+            addTimeSurvived(1);
+            myTime = 0f;
+        }
+        else if (gm.gameOver)
+        {
+            gameOverUIUpdate();
+        }
+        //save data
+        // SaveData();
+    }
+
+    private void gameOverUIUpdate () 
+    {
         //update UI
+        string a = "0" + (TimeSurvived%60).ToString();
+        string b = (TimeSurvived%60).ToString();
+        string sec =  ((TimeSurvived%60) < 10) ? a : b;
         GoldEarnedUI.GetComponent<Text>().text = "Gold Earned: " + GoldEarned;
         DamageDealtUI.GetComponent<Text>().text = "Damage Dealt: " + DamageDealt;
         DamageTakenUI.GetComponent<Text>().text = "Damage Taken: " + DamageTaken;
-        TimeSurvivedUI.GetComponent<Text>().text = "Time Survived: " + TimeSurvived/60 + ":" + TimeSurvived%60;
+        TimeSurvivedUI.GetComponent<Text>().text = "Time Survived: " + TimeSurvived/60 + ":" + sec;
         SpiritDefeatedUI.GetComponent<Text>().text = "Spirit Defeated: " + SpiritDefeated;
         ShrinePurifiedUI.GetComponent<Text>().text = "Shrine Purified: " + ShrinePurified;
         CursesPurifiedUI.GetComponent<Text>().text = "Curses Purified: " + CursesPurified;
         BuffsPurchasedUI.GetComponent<Text>().text = "Buffs Purchased: " + BuffsPurchased;
         WeaponPurchasedUI.GetComponent<Text>().text = "Weapons Purchased: " + WeaponPurchased;
         DistanceTraveledUI.GetComponent<Text>().text = "Distance Traveled: " + DistanceTraveled;
-        //save data
-        // SaveData();
 
+        score = GoldEarned * goldMultiplier
+                    + DamageDealt 
+                    - damagePenalty * DamageTaken 
+                    + TimeSurvived * timeMultiplier
+                    + SpiritDefeated * spiritMultiplier
+                    + ShrinePurified * shrineMultiplier
+                    + BuffsPurchased * buffMultiplier
+                    + CursesPurified * purifiedMultiplier
+                    + WeaponPurchased * wepMultiplier
+                    + DistanceTraveled;
+        if (score < 0) score = 0;
+        
+        
+        if (gameSettings.hardMode) {
+            score *= hardModeMult;
+            if (PlayerPrefs.GetInt("highScoreHard") < score) PlayerPrefs.SetInt("highScoreHard", score);
+        }
+        else {
+            if (PlayerPrefs.GetInt("highScoreEasy") < score) PlayerPrefs.SetInt("highScoreEasy", score);
+        }
+        ScoreUI.GetComponent<Text>().text = "SCORE\n" + score;
+
+        
+        this.enabled = false;
     }
 
     //save data

@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<ControlOverlayHandler>().gameObject.SetActive(false); //hide player UI
         FindObjectOfType<PlayerController>().enabled = false;
         FindObjectOfType<PlayerStats>().enabled = false;
+        FindObjectOfType<Inverter>().enabled = false;
 
         switch (fullyCursedShrine.gameObject.name)
         {

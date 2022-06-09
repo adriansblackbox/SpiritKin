@@ -39,19 +39,24 @@ public class PlayerController : MonoBehaviour
     private float input_x, input_y;
     private int input_invert = 1;
     private float dashTimeIter;
+    private float walkDistTimer = 0.0f;
     private float targetRotation = 0.0f;
     private float rotationVelocity = 10f;
     public float Gravity = -30f;
     public float GravityPullRange = 5f;
     private float animationBlend;
     private Vector3 moveDirection;
+    private Vector3 walkOrigin;
     private CharacterController controller;
     private SwordCollision swordScript;
     public Animator animator;
 	private GameObject mainCamera;
+    public GameObject PlayerData;
     
     public Transform A1RayCast, A2RayCast, A3RayCast, A4RayCast, A5RayCast;
     public ParticleSystem[] AttackVFX;
+
+    
 
     void Start()
     {
@@ -64,9 +69,14 @@ public class PlayerController : MonoBehaviour
         CinemachineTargetYaw = 90;
         //CinemachineTargetPitch = 0;
         swordScript = GetComponent<SwordCollision>();
+        walkOrigin = gameObject.transform.position;
     }
     void Update()
     {
+        walkDistTimer += Time.deltaTime;
+        if (walkDistTimer > 0.25f){
+            updateDistanceTravelled();
+        }
         if(!animator.GetBool("Death")) {
             PlayerInput(); 
             RotateCamera();
@@ -82,6 +92,15 @@ public class PlayerController : MonoBehaviour
         if (animator.GetFloat("Dash Cooldown") >= 0) {
             animator.SetFloat("Dash Cooldown", animator.GetFloat("Dash Cooldown") - Time.deltaTime);
         }
+
+    }
+    //===========================================================
+    // Sets distance travelled for PlayerData
+    //===========================================================
+    private void updateDistanceTravelled() {
+        PlayerData.SendMessage("addDistanceTraveled", (int)Vector3.Distance(walkOrigin, gameObject.transform.position));
+        walkOrigin = gameObject.transform.position;
+        walkDistTimer = 0.0f;
     }
     //===========================================================
     // Input getter

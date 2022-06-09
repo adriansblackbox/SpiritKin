@@ -41,7 +41,9 @@ public class teaBlessing : Curse
         for (int i = 0; i < teas.Count; ++i) {
             teas[i].basePower = basePowers[i] * penaltyValue;
             teas[i].updateDescription();
+
             if (teas[i].isApplied) {
+                
                 switch (teas[i].stat) {
                     case (Buff.statType.health):
                         pStats.maxHealth -= teas[i].power;
