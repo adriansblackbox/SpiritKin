@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.63
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1159954109}
-  m_IndirectSpecularColor: {r: 0.20448476, g: 0.21803653, b: 0.35919762, a: 0.63}
+  m_IndirectSpecularColor: {r: 0.20448467, g: 0.21801916, b: 0.35912338, a: 0.63}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -29098,6 +29098,11 @@ BoxCollider:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 576a369fdce6b554d9795af94da52377, type: 3}
   m_PrefabInstance: {fileID: 850961415}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &737980760 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7370128049588107498, guid: 340c11d7cadea46438f228ea4114948b, type: 3}
+  m_PrefabInstance: {fileID: 3390130814995969327}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &739179692 stripped
 Transform:
@@ -82685,6 +82690,10 @@ PrefabInstance:
       propertyPath: resolutionDropdown
       value: 
       objectReference: {fileID: 1301644631}
+    - target: {fileID: 3390130816118139503, guid: 340c11d7cadea46438f228ea4114948b, type: 3}
+      propertyPath: settingsFirstButton
+      value: 
+      objectReference: {fileID: 737980760}
     - target: {fileID: 3462907912268567539, guid: 340c11d7cadea46438f228ea4114948b, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -89155,6 +89164,10 @@ PrefabInstance:
       propertyPath: Shrine
       value: 
       objectReference: {fileID: 1030450228}
+    - target: {fileID: 6935098706201428844, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.00012207031
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc2833a398733eb4fbf1b56881d629ad, type: 3}
 --- !u!1 &5503858658224013209 stripped

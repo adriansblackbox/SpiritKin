@@ -277,7 +277,6 @@ public class MainMenu : MonoBehaviour
         if (keyboard)
         {
             //clear selected button
-            Debug.Log("using keyboard");
             EventSystem.current.SetSelectedGameObject(null);
             buttonSet = false;
         }
@@ -288,35 +287,27 @@ public class MainMenu : MonoBehaviour
                 SetFirstButton (playButton);
                 if (playMode.activeSelf)
                 {
-                    EventSystem.current.SetSelectedGameObject (playButton);
+                    SetFirstButton(playModeFirstButton);
                 }
                 if (options.activeSelf)
                 {
-                    EventSystem.current.SetSelectedGameObject (
-                        optionsFirstButton
-                    );
+                    SetFirstButton(optionsFirstButton);
                 }
                 if (graphics.activeSelf)
                 {
-                    EventSystem.current.SetSelectedGameObject (
-                        graphicsFirstButton
-                    );
+                    SetFirstButton(graphicsFirstButton);
                 }
                 if (settings.activeSelf)
                 {
-                    EventSystem.current.SetSelectedGameObject (
-                        settingsFirstButton
-                    );
+                    SetFirstButton(settingsFirstButton);
                 }
                 if (credit.activeSelf)
                 {
-                    EventSystem.current.SetSelectedGameObject (
-                        creditFirstButton
-                    );
+                    SetFirstButton(creditFirstButton);
                 }
                 if (exit.activeSelf)
                 {
-                    EventSystem.current.SetSelectedGameObject (exitFirstButton);
+                    SetFirstButton(exitFirstButton);
                 }
                 buttonSet = true;
             }
