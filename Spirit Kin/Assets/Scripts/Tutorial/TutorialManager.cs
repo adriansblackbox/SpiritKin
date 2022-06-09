@@ -92,6 +92,8 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
+        if (!PlayerPrefs.HasKey("hasDoneTutorial")) PlayerPrefs.SetInt("hasDoneTutorial", 0);
+        tutorialOn = (0 == PlayerPrefs.GetInt("hasDoneTutorial"));
         if (tutorialOn)
         {
             es.curseShrine(true); //curse the tutorial shrine
@@ -149,7 +151,7 @@ public class TutorialManager : MonoBehaviour
                 secondShrine.SetActive(true);
                 thirdShrine.SetActive(true);
                 fourthShrine.SetActive(true);
-                
+                PlayerPrefs.SetInt("hasDoneTutorial", 1);
                 pc.enabled = true;
             }
             //Stop typing and show entirety of NPC's line
