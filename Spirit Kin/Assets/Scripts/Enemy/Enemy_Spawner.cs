@@ -177,7 +177,7 @@ public class Enemy_Spawner : MonoBehaviour
             difficulty += 0.167f;
         else
             difficulty += 0.0417f;
-        Debug.Log("Difficulty is: " + difficulty);
+        //Debug.Log("Difficulty is: " + difficulty);
     }
 
     private void selectShrineEnemyCount()

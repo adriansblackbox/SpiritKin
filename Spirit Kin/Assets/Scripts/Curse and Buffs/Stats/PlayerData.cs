@@ -89,7 +89,6 @@ public class PlayerData : MonoBehaviour
         }
         else if (gm.gameOver)
         {
-            Debug.Log("Game Over!");
             gameOverUIUpdate();
         }
         //save data
