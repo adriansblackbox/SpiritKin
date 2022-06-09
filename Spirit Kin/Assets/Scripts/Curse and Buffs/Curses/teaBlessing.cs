@@ -46,7 +46,6 @@ public class teaBlessing : Curse
                 
                 switch (teas[i].stat) {
                     case (Buff.statType.health):
-                        Debug.Log("Before Update: " + pStats.maxHealth);
                         pStats.maxHealth -= teas[i].power;
                         pStats.currentHealth -= teas[i].power;
                         teas[i].power = (teas[i].level + 1) * teas[i].basePower;

@@ -151,7 +151,7 @@ public class CurseMeter : MonoBehaviour
     public void removeCurse()
     {
         if (activeCurses.Count == 0) {
-            Debug.Log("No curses to clear!");
+            //Debug.Log("No curses to clear!");
             return;
         }
         int i = Random.Range(0, activeCurses.Count - 1);
@@ -184,12 +184,12 @@ public class CurseMeter : MonoBehaviour
 
     public void updateCurses () {
         activeCurses.ForEach(x => x.updateCurse());
-        Debug.Log("Curses updated after buying a buff!");
+        //Debug.Log("Curses updated after buying a buff!");
     }
 
     public void difficultyUpdateCurse (float difficulty) {
         activeCurses.ForEach(x => x.updateCurse(difficulty));
-        Debug.Log("Curse difficulty updated!");
+        //Debug.Log("Curse difficulty updated!");
     }
 
     public void CurseHandler()

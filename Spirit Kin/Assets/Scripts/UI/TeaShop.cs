@@ -161,7 +161,7 @@ public class TeaShop : MonoBehaviour
         //shop is now open
         isOpen = true;
         Enter();
-        Debug.Log ("opened menu");
+        //Debug.Log ("opened menu");
     }
 
     public void Enter()
@@ -181,7 +181,7 @@ public class TeaShop : MonoBehaviour
         teaCamera.SetActive(false);
         isOpen = false;
         playerController.enabled = true;
-        Debug.Log ("closed menu");
+        //Debug.Log ("closed menu");
     }
 
     private void OnTriggerExit(Collider other)
