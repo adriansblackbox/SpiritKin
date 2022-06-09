@@ -33,10 +33,12 @@ public class PlayerStats : CharacterStats
 
     public int moneyCurseLock = 0;
 
+    [SerializeField] GameObject specialAbility;
+
     void Start()
     {
         //set player starting coins here
-        //coins = 1000;
+        coins = 1000;
         pd = FindObjectOfType<PlayerData>();
         currentHealth = maxHealth;
         for (int i = 0; i < BuffsUI.Count; i++)
@@ -310,9 +312,20 @@ public class PlayerStats : CharacterStats
         {
             Equipment[i].isEquipped = true;
             if (!FindObjectOfType<MainHub>().playerInHub)
-                Equipment[i].duration -= Time.deltaTime;
-            Debug.Log(Equipment[i].duration);
-            if (Equipment[i].duration <= 0)
+            {
+                Equipment[i].timeActive += Time.deltaTime;
+                specialAbility
+                            .transform
+                            .Find("Bar")
+                            .gameObject
+                            .GetComponent<Image>()
+                            .fillAmount =
+                            1 - Equipment[i].timeActive / Equipment[i].duration;
+            }
+
+            Debug.Log(Equipment[i].timeActive);
+            
+            if (Equipment[i].timeActive >= Equipment[i].duration)
             {
                 removeEquip (Equipment[i]);
             }
@@ -324,7 +337,14 @@ public class PlayerStats : CharacterStats
         if (Equipment.Count < 3)
         {
             Equipment.Add (x);
-            //Debug.Log(x.equipName);
+            specialAbility.transform.Find("Curse").gameObject.SetActive(true);
+            specialAbility
+                            .transform
+                            .Find("Bar")
+                            .gameObject
+                            .GetComponent<Image>()
+                            .fillAmount =
+                            1;
         }
     }
 
@@ -333,7 +353,7 @@ public class PlayerStats : CharacterStats
         int i = Equipment.FindIndex(y => y.equipName == x.equipName);
         Equipment.RemoveAt (i);
         x.isEquipped = false;
-        //Debug.Log(x.equipName + "removed");
+        specialAbility.transform.Find("Curse").gameObject.SetActive(false);
     }
 
     public override void TakeDamage(float damage, float knockBackStrength)

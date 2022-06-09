@@ -44,6 +44,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] GameObject buffDescriptor;
     [SerializeField] GameObject healthDescriptor;
     [SerializeField] GameObject shrineDescriptor;
+    [SerializeField] GameObject specialAbilityDescriptor;
     [SerializeField] GameObject controlsLayout;
 
 
@@ -55,6 +56,7 @@ public class TutorialManager : MonoBehaviour
     private Vector2 startPositionForCurses;
     private Vector2 startPositionForShrines;
     private Vector2 startPositionForHealth;
+    private Vector2 startPositionForAbility;
 
     [SerializeField] GameObject healthCircle;
     public Vector2 healthIntendedPosition;
@@ -68,6 +70,9 @@ public class TutorialManager : MonoBehaviour
     public Vector2 secondBuffIntendedPosition;
     [SerializeField] GameObject thirdBuff;
     public Vector2 thirdBuffIntendedPosition;
+
+    [SerializeField] GameObject  specialAbility;
+    public Vector2 intendedPositionForAbility;
     
     [SerializeField] GameObject firstCurse;
     public Vector2 firstCurseIntendedPosition;
@@ -118,6 +123,7 @@ public class TutorialManager : MonoBehaviour
             secondShrine.SetActive(true);
             thirdShrine.SetActive(true);
             fourthShrine.SetActive(true);
+            specialAbility.SetActive(true);
         }
     }
 
@@ -141,7 +147,7 @@ public class TutorialManager : MonoBehaviour
                 dialogueObject.SetActive(false);
                 healthDescriptor.SetActive(false);
                 shrineDescriptor.SetActive(false);
-
+                specialAbilityDescriptor.SetActive(false);
                 
                 controlsLayout.SetActive(true);
                 healthCircle.SetActive(true);
@@ -201,6 +207,7 @@ public class TutorialManager : MonoBehaviour
         startPositionForShrines = new Vector2(-iconSize, canvasY / 2);
         startPositionForHealth = new Vector2(healthCircle.GetComponent<RectTransform>().anchoredPosition.x, 
                                              -canvasY / 2 - healthCircle.GetComponent<RectTransform>().sizeDelta.y / 4);
+        startPositionForAbility = new Vector2(-canvasX / 2, canvasY / 2);
     }
 
     private bool CheckForInput()
@@ -360,7 +367,22 @@ public class TutorialManager : MonoBehaviour
     {
         movingUIElement = true;
 
-        yield return new WaitForSeconds(0.5f);
+        specialAbility.SetActive(true);
+        specialAbility.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForAbility.x, startPositionForAbility.y, 0f);
+
+        yield return new WaitForSeconds(0.25f);
+
+        while (moveTime < durationOfMove)
+        {
+            moveTime += Time.deltaTime;
+            specialAbility.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(startPositionForAbility, new Vector3(intendedPositionForAbility.x, intendedPositionForAbility.y, 0f), moveTime/durationOfMove);
+            yield return new WaitForSeconds(0.001f);
+        }
+        moveTime = 0f;
+
+        yield return new WaitForSeconds(0.25f);
+        specialAbilityDescriptor.SetActive(true);
+        yield return new WaitForSeconds(0.75f);
 
         firstBuff.SetActive(true);
         firstBuff.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPositionForBuffs.x, startPositionForBuffs.y, 0f);
