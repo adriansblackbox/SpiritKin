@@ -64,6 +64,8 @@ public class Shrine : MonoBehaviour
             transform.parent = nonCursedContainer.transform;
             es.currentCursedShrines--;
             pd.addShrinePurified(1);
+            gameObject.GetComponent<GenerateLoot>().spawnLoot = true;
+            gameObject.GetComponent<GenerateLoot>().hasBeenCollected = false;
             StopCurseVFX();
         }
 

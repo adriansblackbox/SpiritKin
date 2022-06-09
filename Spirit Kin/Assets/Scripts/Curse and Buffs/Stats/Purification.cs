@@ -66,7 +66,7 @@ public class Purification : MonoBehaviour
         if(FindObjectOfType<CurseMeter>().activeCurses.Count == 0){
             PurificationMeter.enabled = false;
         }
-        if(isPurifying && player.GetComponent<PlayerStats>().currentHealth < player.GetComponent<PlayerStats>().maxHealth) {
+        if(isPurifying && player.GetComponent<PlayerStats>().currentHealth < player.GetComponent<PlayerStats>().currentHealthCap * player.GetComponent<PlayerStats>().maxHealth) {
             player.GetComponent<PlayerStats>().currentHealth += Time.deltaTime * HealingRate;
         }
     }
