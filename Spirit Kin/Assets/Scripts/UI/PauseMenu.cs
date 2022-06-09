@@ -99,6 +99,15 @@ public class PauseMenu : MonoBehaviour
                     Pause();
             }
         }
+        // if(UICanvas.GetComponent<ControlOverlayHandler>().keyboard){
+        //     if(keyboard){
+        //         //clear selected buttons
+        //         EventSystem.current.SetSelectedGameObject(null);
+        //     }else{
+                
+        //     }
+
+        // }
     }
 
     public void Resume (){
