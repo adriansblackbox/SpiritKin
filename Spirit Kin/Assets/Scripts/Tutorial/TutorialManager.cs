@@ -95,10 +95,14 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] AudioClip heyAudio;
     [SerializeField] AudioClip[] loopingDialogueAudio;
 
-    void Start()
+    void Awake()
     {
         if (!PlayerPrefs.HasKey("hasDoneTutorial")) PlayerPrefs.SetInt("hasDoneTutorial", 0);
         tutorialOn = (0 == PlayerPrefs.GetInt("hasDoneTutorial"));
+    }
+
+    void Start()
+    {
         if (tutorialOn)
         {
             es.curseShrine(true); //curse the tutorial shrine

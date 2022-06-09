@@ -104,9 +104,17 @@ public class Enemy_Spawner : MonoBehaviour
                 if (cursedContainer.transform.GetChild(i).GetComponent<AI_Manager>().enemiesInCombat.Count > 0)
                     cmm.playerInCombat = true;
         }
-        else if (shrinePlayerIsAt.amountAlreadySpawned >= shrinePlayerIsAt.enemiesToSpawn && shrinePlayerIsAt.transform.GetChild(0).childCount == 0)
+        else
         {
-            cmm.playerInCombat = false;
+            if (cursedContainer.transform.childCount == 0)
+                cmm.playerInCombat = false;
+            else
+            {
+                cmm.playerInCombat = false;
+                for (int i = 0; i < cursedContainer.transform.childCount; i++)
+                    if (cursedContainer.transform.GetChild(i).GetComponent<AI_Manager>().enemiesInCombat.Count > 0 && shrinePlayerIsAt.transform.GetChild(0).childCount != 0)
+                        cmm.playerInCombat = true;
+            }
         }
     }
 

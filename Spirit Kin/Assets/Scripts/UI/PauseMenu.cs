@@ -78,7 +78,7 @@ public class PauseMenu : MonoBehaviour
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
+        // resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
     }
 
@@ -91,10 +91,8 @@ public class PauseMenu : MonoBehaviour
             }else if(teaShopMenu.isOpen || equipMenu.isOpen){
                 teaShopMenu.CloseMenu();
                 equipMenu.CloseMenu();
-                
-                
             }else{
-                if (!gm.gameOver)
+                if (!gm.gameOver && !FindObjectOfType<TutorialManager>().tutorialOn)
                     Pause();
             }
         }

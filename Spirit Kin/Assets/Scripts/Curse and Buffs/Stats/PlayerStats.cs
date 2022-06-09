@@ -33,7 +33,13 @@ public class PlayerStats : CharacterStats
 
     public int moneyCurseLock = 0;
 
+    [SerializeField] Text coinText;
+    
     [SerializeField] GameObject specialAbility;
+    [SerializeField] GameObject abilityControlOverlay;
+    [SerializeField] GameObject abilityControlOverlayTwo;
+    [SerializeField] GameObject abilityText;
+
 
     void Start()
     {
@@ -345,6 +351,9 @@ public class PlayerStats : CharacterStats
                             .GetComponent<Image>()
                             .fillAmount =
                             1;
+            abilityControlOverlay.SetActive(true);
+            abilityControlOverlayTwo.SetActive(true);
+            abilityText.SetActive(true);
         }
     }
 
@@ -354,6 +363,9 @@ public class PlayerStats : CharacterStats
         Equipment.RemoveAt (i);
         x.isEquipped = false;
         specialAbility.transform.Find("Curse").gameObject.SetActive(false);
+        abilityControlOverlay.SetActive(false);
+        abilityControlOverlayTwo.SetActive(false);
+        abilityText.SetActive(false);
     }
 
     public override void TakeDamage(float damage, float knockBackStrength)
@@ -384,7 +396,7 @@ public class PlayerStats : CharacterStats
     {
         coins += coinage;
         pd.addGoldEarned (coinage);
-        //update UI
+        coinText.text = coins.ToString();
     }
 
     public IEnumerator PlayerDeath(GameObject player)

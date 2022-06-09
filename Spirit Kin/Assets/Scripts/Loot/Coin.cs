@@ -14,7 +14,7 @@ public class Coin : MonoBehaviour
 
     void Start()
     {
-        coinValue = Random.Range(1, 3);
+        coinValue = Random.Range(1, 2);
         coinValue = coinValue + (int) (coinValue * FindObjectOfType<Enemy_Spawner>().difficulty);
         
         startPosition = this.transform.position;

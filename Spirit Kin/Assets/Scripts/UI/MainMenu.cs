@@ -9,6 +9,10 @@ using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
+    [Header("High Score Text")]
+    [SerializeField] TMP_Text easyHighScore;
+    [SerializeField] TMP_Text hardHighScore;
+
     [Header("Volume Settings")]
     [SerializeField] private TMP_Text masterVolumeValue = null;
     [SerializeField] private Slider masterVolumeSlider = null;
@@ -47,6 +51,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject playButton;
 
     private void Start(){
+
+        if (PlayerPrefs.HasKey("highScoreEasy")) easyHighScore.text = "High Score\n" + PlayerPrefs.GetInt("highScoreEasy").ToString();
+        if (PlayerPrefs.HasKey("highScoreHard")) hardHighScore.text = "High Score\n" + PlayerPrefs.GetInt("highScoreHard").ToString();
+
         SetFirstButton(playButton);
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
@@ -58,8 +66,8 @@ public class MainMenu : MonoBehaviour
         for(int i = 0; i < resolutions.Length; i++)
         {
             string option = resolutions[i].width + " x " + resolutions[i].height;
-            if (!options.Contains(option))
-                options.Add(option);
+            // if (!options.Contains(option))
+            options.Add(option);
 
             if(resolutions[i].width == Screen.width && resolutions[i].height == Screen.height){
                 currentResolutionIndex = i;
@@ -69,6 +77,9 @@ public class MainMenu : MonoBehaviour
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
+
+        SetFullScreen(true);
+        GraphicsApply();
     }
 
     public void SetResolution(int resolutionIndex){
