@@ -31,16 +31,22 @@ public class EquipShopManager : MonoBehaviour
 
     public GameObject display;
 
-    [SerializeField] Text playerCoins;
-
     // public SpriteRenderer currentSprite;
     public int selectedOption = 0;
 
-    public AudioClip purchase;
+    public AudioClip purchase, cantafford, hover;
 
-    public AudioClip cantafford;
+    [SerializeField]
+    private AudioClip[] shopexits;
+
+    [SerializeField]
+    private AudioClip[] shopchanges;
 
     public AudioSource audioSource;
+
+    private PlayerData pd;
+
+    [SerializeField] Text playerCoins;
 
     // Start is called before the first frame update
     void Start()
@@ -197,12 +203,19 @@ public class EquipShopManager : MonoBehaviour
     //Ethan's code:
     public void Purchase()
     {
-        audioSource.pitch = Random.Range(1f, 1.1f);
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.PlayOneShot(purchase);
+    }
+
+    public void Hover()
+    {
+        audioSource.pitch = 1f;
+        audioSource.PlayOneShot(hover);
     }
 
     public void Cantafford()
     {
+        audioSource.pitch = 1f;
         audioSource.PlayOneShot(cantafford);
     }
 

@@ -79,7 +79,6 @@ public class TeaShop : MonoBehaviour
     {
         if (UI.GetComponent<ControlOverlayHandler>().keyboard)
         {   
-            //disable texts
             LeftInstruct.GetComponent<Image>().sprite = AButton;
             LeftInstruct.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 60);
             RightInstruct.GetComponent<Image>().sprite = DButton;

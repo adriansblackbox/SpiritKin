@@ -265,6 +265,9 @@ public class Enemy_Controller : MonoBehaviour
                 if (path.status == NavMeshPathStatus.PathComplete) {
                     ThisEnemy.SetDestination(player.transform.position);
                 }
+                else {
+                    exitedArena = true;
+                }
                 break;
 
             case MotionState.Surrounding:

@@ -30,7 +30,12 @@ public class equipmentShop : MonoBehaviour
 
     public EventSystem eventSystem;
 
+    public AudioClip shopenter;
+    public AudioSource audioSource;
+
     public Text playerCoins;
+
+    [SerializeField] GameObject UICanvas;
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +72,7 @@ public class equipmentShop : MonoBehaviour
         if (UI.GetComponent<ControlOverlayHandler>().keyboard)
         {          
             triggerText.GetComponent<TextMeshProUGUI>().text = "Press F to open shop";
-            
+
             if(eventSystem.currentSelectedGameObject != null){
                 // ShopFirstButton = eventSystem.currentSelectedGameObject;
                 EventSystem.current.SetSelectedGameObject(null);
@@ -142,6 +147,11 @@ public class equipmentShop : MonoBehaviour
         //shop is now open
         isOpen = true;
         Debug.Log ("opened menu");
+    }
+
+    public void Enter()
+    {
+        audioSource.PlayOneShot(shopenter);
     }
 
     public void CloseMenu()
