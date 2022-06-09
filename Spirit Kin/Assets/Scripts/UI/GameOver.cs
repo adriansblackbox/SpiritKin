@@ -30,7 +30,7 @@ public class GameOver : MonoBehaviour
     public void LoadGameOver()
     {
         //update leaderboard
-        playfabManager.SendLeaderboard(100);
+        // playfabManager.SendLeaderboard(100);
 
         sounds.PlayOneShot (gameOverSound);
         Cursor.lockState = CursorLockMode.None;

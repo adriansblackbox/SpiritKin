@@ -89,7 +89,6 @@ public class EquipShopManager : MonoBehaviour
         if (
             playStats.coins >= currentEquip.Cost &&
             !currentEquip.isEquipped &&
-            playStats.Equipment.Count < 3 &&
             GameObject
                 .FindGameObjectWithTag("EquipmentShop")
                 .GetComponent<equipmentShop>()

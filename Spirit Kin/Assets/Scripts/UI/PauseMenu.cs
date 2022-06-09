@@ -55,6 +55,10 @@ public class PauseMenu : MonoBehaviour
 
     [SerializeField]
     private GameObject settingsFirstButton;
+    [SerializeField]
+    private GameObject gameover;
+    [SerializeField]
+    private GameObject GameOverFirstButton;
 
     [SerializeField]
     private bool buttonSet = false;
@@ -188,6 +192,10 @@ public class PauseMenu : MonoBehaviour
                 if(settingsMenu.activeSelf)
                 {
                     SetButton(settingsFirstButton);
+                }
+                if (gameover.activeSelf)
+                {
+                    SetButton(GameOverFirstButton);
                 }
                 buttonSet = true;
             }
