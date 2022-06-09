@@ -11,9 +11,11 @@ public class Coin : MonoBehaviour
 
     private int coinValue;
 
+
     void Start()
     {
         coinValue = Random.Range(1, 3);
+        coinValue = coinValue + (int) (coinValue * FindObjectOfType<Enemy_Spawner>().difficulty);
         
         startPosition = this.transform.position;
         velocity *= Random.Range(4f, 6f);//random upward velocity

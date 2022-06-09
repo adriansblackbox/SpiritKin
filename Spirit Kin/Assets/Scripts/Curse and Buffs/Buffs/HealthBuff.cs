@@ -10,7 +10,7 @@ public class HealthBuff : Buff
         baseTimeActive = 0f;      
         baseLevel = 0;
 
-        teaName = "Health Buff";
+        teaName = "Health Tea";
         type = "health";
         Cost = 25;
         baseInvestCost = 100;
@@ -26,6 +26,6 @@ public class HealthBuff : Buff
         investCost = baseInvestCost;
         level = baseLevel;
 
-        description = "Increases health by " + basePower;  
+        description = "Increases health by " + basePower + "\n Lasts " + duration + "s";
     }
 }

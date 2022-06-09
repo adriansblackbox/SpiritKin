@@ -10,7 +10,7 @@ public class SpeedBuff : Buff
         baseTimeActive = 0f;
         baseLevel = 0;
 
-        teaName = "Speed Buff";
+        teaName = "Speed Tea";
         type = "speed";
         Cost = 25;
         baseInvestCost = 100;
@@ -26,6 +26,6 @@ public class SpeedBuff : Buff
         timeActive = baseTimeActive;
         level = baseLevel;
 
-        description = "Increases speed by " + basePower;
+        description = "Increases speed by " + basePower + "\n Lasts " + duration + "s";
     }
 }

@@ -6,12 +6,12 @@ public class testWeapon : Equipment
 {
     public testWeapon(Sprite sprite)
     {
-        equipName = "testWeapon";
-        description = "testWeapon";
+        equipName = "Aether Pull";
+        description = "Imbues weapon with Aether Pull\nLasts 90s";
         equipSprite = sprite;
-        duration = 100f;
-        Cost = 25;
-        InvestCost = 100;
+        duration = 90f;
+        Cost = 75;
+        investCost = 100;
         isEquipped = false;
     }
 }

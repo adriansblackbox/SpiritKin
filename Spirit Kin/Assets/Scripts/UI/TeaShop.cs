@@ -41,6 +41,10 @@ public class TeaShop : MonoBehaviour
     public Sprite LeftBumperButton;
     public Sprite RightBumperButton;
 
+    public Text playerCoins;
+
+    [SerializeField] GameObject UICanvas;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -130,6 +134,8 @@ public class TeaShop : MonoBehaviour
     }
     public void OpenMenu()
     {
+        playerCoins.text = FindObjectOfType<PlayerStats>().coins.ToString();
+
         if (FindObjectOfType<ControlOverlayHandler>().keyboard)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -138,6 +144,8 @@ public class TeaShop : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
+
+        UICanvas.SetActive(false);
         
 
         //disable player controller
@@ -171,6 +179,7 @@ public class TeaShop : MonoBehaviour
 
     public void CloseMenu()
     {
+        UICanvas.SetActive(true);
         if (FindObjectOfType<ControlOverlayHandler>().keyboard)
         {
             Cursor.lockState = CursorLockMode.Locked;

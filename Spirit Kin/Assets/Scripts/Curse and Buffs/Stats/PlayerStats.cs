@@ -36,7 +36,7 @@ public class PlayerStats : CharacterStats
     void Start()
     {
         //set player starting coins here
-        //coins = 1000;
+        coins = 1000;
         pd = FindObjectOfType<PlayerData>();
         currentHealth = maxHealth;
         for (int i = 0; i < BuffsUI.Count; i++)
@@ -273,10 +273,9 @@ public class PlayerStats : CharacterStats
     {
         for (int i = Equipment.Count-1; i >= 0; i--)
         {
-            Debug.Log(i);
             Equipment[i].isEquipped = true;
-
-            Equipment[i].duration -= Time.deltaTime;
+            if (!FindObjectOfType<MainHub>().playerInHub)
+                Equipment[i].duration -= Time.deltaTime;
             Debug.Log(Equipment[i].duration);
             if (Equipment[i].duration <= 0)
             {
